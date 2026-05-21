@@ -1,97 +1,123 @@
-# 01A · types.ts
+# 01A · models.py
 > 🤖 **Модель: `qwen/qwen3-coder:free`** | кодинг
 > 💰 **Бюджет:** читать max 1–3 файла · не читать `./data`, `.venv`, `node_modules` · логи: 20–50 строк
 > ⚠️ **Один промпт = одна сессия Cherry Studio.** Не запускать параллельно.
 
 > Волна 1
 
-**Файл:** `code/frontend/src/types.ts`
+**Файл:** `app/models.py`
 **Только этот файл.**
 
-Передавать: `data/mock/incidents.json` — поля должны совпадать.
+Поля должны совпадать с CSV-колонками из `data/`: `selected_video_alarms.csv`, `video_files.csv`, `track_points.csv`, `track_summary.csv`, `vehicles.csv`.
 
-```ts
-// Уровень риска
-export type RiskLevel = 'critical' | 'high' | 'medium' | 'low';
+```python
+from __future__ import annotations
 
-// Тип источника данных
-export type EventSource = 'DMS' | 'ADAS' | 'TELEMATICS' | 'COMBINED';
+from dataclasses import dataclass, field
+from typing import Literal, Optional
 
-// Статус источника
-export type SourceStatus = 'online' | 'offline' | 'warning' | 'unknown';
+import pandas as pd
 
-// Действия диспетчера
-export type ActionType =
-  | 'request_archive' | 'create_ticket'
-  | 'generate_report'  | 'call_driver';
+# Type aliases
+ActionType = Literal["mark_reviewed", "create_task", "export_report"]
+Datasets = dict[str, pd.DataFrame]
 
-// Типы событий (совпадает с alarm_type в incidents.json)
-// Покрывают все 5 демо-кейсов из hackathon/ideas/00-product-concept.md:
-// DMS_DROWSY (А777ВВ 77), CRASH_SENSOR (В345КМ 97), DMS_PHONE (Е902СТ 150),
-// HARSH_BRAKING (Н124УУ 199), DRIVER_SUBSTITUTION (К451МА 77)
-export type EventType =
-  | 'DMS_DROWSY' | 'DMS_PHONE' | 'DMS_SEATBELT' | 'DMS_SMOKING'
-  | 'ADAS_FCW'   | 'ADAS_HMW'  | 'ADAS_LDW'
-  | 'CRASH_SENSOR'
-  | 'HARSH_BRAKING' | 'HARSH_CORNERING' | 'OVERSPEED'
-  | 'CAMERA_OFFLINE' | 'DRIVER_SUBSTITUTION';
+@dataclass
+class Alarm:
+    """Событие видеоаналитики — одна строка из selected_video_alarms.csv."""
+    alarm_id: str
+    unit_state_number: str
+    unit_name: str
+    event_type: str
+    event_begin_utc: str
+    event_end_utc: str
+    speed: Optional[float] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    video_count: int = 0
+    video_size_bytes: int = 0
+    camera_ids: str = ""
+    address: Optional[str] = None
+    telemetry_id: str = ""
+    terminal_id: str = ""
+    unit_id: str = ""
 
-// Точка телеметрии — поля совпадают с incidents.json[].telemetry[]
-export interface TelemetryPoint {
-  ts_offset:  number;   // offsetSec от момента события
-  speed:      number;   // км/ч (из CAN)
-  ax:         number;   // акселерометр X, м/с²
-  ay:         number;   // акселерометр Y, м/с²
-}
+@dataclass
+class VideoFile:
+    """Видеофайл — одна строка из video_files.csv."""
+    alarm_id: str
+    video_file_id: str
+    channel: int
+    media_relative_path: str
+    duration_seconds: float = 0.0
+    video_width: int = 0
+    video_height: int = 0
+    video_codec: str = ""
+    download_status: str = ""
+    size_bytes: int = 0
 
-export interface Camera {
-  id:       string;      // 'CAM-01'
-  label:    string;      // 'ADAS · Передняя'
-  status:   SourceStatus;
-  hasVideo: boolean;
-}
+@dataclass
+class TrackPoint:
+    """Точка трека — одна строка из track_points.csv."""
+    alarm_id: str
+    timestamp_utc: str
+    latitude: float
+    longitude: float
+    speed_kmh: float
+    angle: float = 0.0
+    course: str = ""
+    period_type: str = ""
+    point_index: int = 0
+    unit_state_number: str = ""
 
-export interface Vehicle {
-  id:                   string;
-  plate:                string;
-  model:                string;
-  driver:               string;
-  cameras:              Camera[];
-  telematics_status:    SourceStatus;
-  archive_status:       SourceStatus;
-  calibration_required: boolean;
-  connection_status:    SourceStatus;
-}
+@dataclass
+class TrackSummary:
+    """Сводка трека — одна строка из track_summary.csv."""
+    alarm_id: str
+    unit_state_number: str
+    event_type: str
+    total_mileage_km: float = 0.0
+    total_movement_duration: str = ""
+    track_point_count: int = 0
+    max_speed_point_count: int = 0
 
-// Инцидент — поля совпадают с data/mock/incidents.json
-export interface Incident {
-  id:                    string;      // 'inc-001'
-  alarm_type:            EventType;
-  alarm_type_label:      string;      // 'Засыпание за рулём (микросон)'
-  vehicle_plate:         string;      // 'А777ВВ 77'
-  vehicle_model:         string;
-  driver:                string;      // 'Иванов Алексей Петрович'
-  driver_id:             string;
-  ts:                    string;      // ISO datetime
-  speed_kmh:             number;
-  speed_limit_kmh:       number;
-  lat:                   number;
-  lon:                   number;
-  address:               string;
-  continuous_driving_min: number;
-  is_night:              boolean;
-  events_last_7d:        number;
-  score:                 number;      // 0–100
-  score_breakdown:       object;
-  status:                'active' | 'in_progress' | 'validated' | 'closed';
-  video_available:       boolean;     // ключевое поле для кейса А/Б
-  cam_front_url:         string;
-  cam_dms_url:           string;
-  telemetry:             TelemetryPoint[];
-  evidence_summary:      string;
-  risk_level:            RiskLevel;
-  event_source:          EventSource;
-}
+@dataclass
+class Vehicle:
+    """Сводка по ТС — одна строка из vehicles.csv."""
+    unit_state_number: str
+    unit_name: str
+    alarm_count: int = 0
+    alarm_types: str = ""
+    downloaded_video_count: int = 0
+    track_point_count: int = 0
+    total_track_mileage_km: float = 0.0
+
+@dataclass
+class DashboardMetric:
+    """Одна KPI-метрика для дашборда."""
+    label: str
+    value: str
+    delta: Optional[str] = None
+
+@dataclass
+class Action:
+    """Запись действия диспетчера."""
+    created_at: str
+    row_id: str
+    action: ActionType
+    comment: str = ""
+
+__all__ = [
+    "Alarm",
+    "VideoFile",
+    "TrackPoint",
+    "TrackSummary",
+    "Vehicle",
+    "DashboardMetric",
+    "Action",
+    "ActionType",
+    "Datasets",
+]
 ```
 
-**Check:** `tsc --noEmit` без ошибок. Поля совпадают с `data/mock/incidents.json`.
+**Check:** `python -c "from app.models import Alarm, VideoFile, TrackPoint, TrackSummary, Vehicle"` без ошибок. Поля совпадают с CSV-колонками из `data/`.

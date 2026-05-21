@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Отчёт «Безопасное вождение» — NL-сценарий</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+      colors: {
+        navy: { 700: '#1E40AF', 800: '#1E3A8A', 900: '#172554' },
+      },
+      boxShadow: {
+        'soft': '0 1px 2px rgba(15,23,42,.04), 0 1px 3px rgba(15,23,42,.06)',
+        'pop': '0 10px 25px -5px rgba(15,23,42,.18), 0 6px 12px -8px rgba(15,23,42,.10)',
+        'xl2': '0 25px 50px -12px rgba(15,23,42,.28)',
+      },
+    },
+  },
+};
+</script>
+<style>
+  html, body { background:#E2E8F0; font-family:'Inter',system-ui,sans-serif; color:#0F172A; }
+  body { margin:0; }
+  .screen { width:1440px; height:900px; background:#F8FAFC; box-shadow:0 30px 60px -20px rgba(15,23,42,.25), 0 8px 20px -10px rgba(15,23,42,.18); border-radius:6px; overflow:hidden; position:relative; }
+  .screens-wrap { display:flex; flex-direction:column; align-items:center; gap:64px; padding:64px 32px 96px; }
+  .frame-label { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#64748B; font-weight:600; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .frame-label .dot { width:6px; height:6px; border-radius:999px; background:#1E3A8A; }
+  /* hide scrollbars inside left column */
+  .no-scrollbar::-webkit-scrollbar { width:0; height:0; }
+  .no-scrollbar { scrollbar-width:none; }
+  /* subtle row hover */
+  .row { transition: background .12s ease; }
+  .row:hover { background:#F1F5F9; }
+  .preset:hover { background:#EFF6FF; border-color:#1E3A8A; color:#1E3A8A; }
+  .ghost-btn:hover { background:#F1F5F9; }
+  .primary-btn { background:#1E3A8A; }
+  .primary-btn:hover { background:#1E40AF; }
+  /* video play pulse */
+  @keyframes pulse-soft { 0%,100%{opacity:.85} 50%{opacity:.55} }
+  .pulse { animation: pulse-soft 1.6s ease-in-out infinite; }
+  @keyframes pulseRing { 0%{transform:scale(.6); opacity:.55} 80%,100%{transform:scale(2.4); opacity:0} }
+  .pulse-ring { animation: pulseRing 1.4s ease-out infinite; }
+  @keyframes pulseDot { 0%,100%{transform:scale(1); opacity:1} 50%{transform:scale(.85); opacity:.7} }
+  .pulse-dot { animation: pulseDot 1.4s ease-in-out infinite; }
+  @keyframes caret { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+  @keyframes waveAnim { 0%{height:2px} 100%{height:16px} }
+  .wave-bar { height:4px; min-height:2px; }
+  /* table cell vertical alignment */
+  td, th { vertical-align:middle; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useMemo, useEffect } = React;
+
+/* ─────────────────────────────  ICONS  ───────────────────────────── */
+const I = {
+  map:    (p={}) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg>,
+  bell:   (p={}) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9Z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>,
+  inbox:  (p={}) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 13h5l2 3h4l2-3h5"/><path d="M5 4h14l2 9v7H3v-7l2-9Z"/></svg>,
+  chart:  (p={}) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>,
+  gear:   (p={}) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>,
+  send:   (p={}) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="M22 2 11 13"/></svg>,
+  download:(p={}) => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>,
+  edit:   (p={}) => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>,
+  user:   (p={}) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>,
+  cal:    (p={}) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg>,
+  truck:  (p={}) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="1" y="6" width="14" height="11" rx="1"/><path d="M15 9h4l3 4v4h-7"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>,
+  ruler:  (p={}) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="2" y="9" width="20" height="7" rx="1" transform="rotate(-12 12 12)"/><path d="M6 11v2M9 10.5v3M12 10v3M15 9.5v3M18 9v3"/></svg>,
+  route:  (p={}) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M6 16V8a4 4 0 0 1 8 0v8a4 4 0 0 0 8 0V8"/></svg>,
+  clock:  (p={}) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>,
+  bot:    (p={}) => <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1E3A8A" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="4" y="7" width="16" height="12" rx="3" fill="#EFF6FF"/><circle cx="9" cy="13" r="1.2" fill="#1E3A8A"/><circle cx="15" cy="13" r="1.2" fill="#1E3A8A"/><path d="M12 4v3M8 19v2M16 19v2"/></svg>,
+  doc:    (p={}) => <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/><path d="M14 2v6h6"/><path d="M8 13h2v5H8zM12 11h2v7h-2zM16 15h2v3h-2z" fill="#CBD5E1" stroke="none"/></svg>,
+  play:   (p={}) => <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M8 5v14l11-7L8 5Z"/></svg>,
+  pause:  (p={}) => <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>,
+  full:   (p={}) => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"/></svg>,
+  mic:    (p={}) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8"/></svg>,
+  stop:   (p={}) => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" {...p}><rect x="6" y="6" width="12" height="12" rx="2"/></svg>,
+  sparkle:(p={}) => <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" {...p}><path d="m12 2 2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2Z"/></svg>,
+  check:  (p={}) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m5 12 5 5L20 7"/></svg>,
+  arrowR: (p={}) => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 12h14M13 5l7 7-7 7"/></svg>,
+  warn:   (p={}) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M10.3 3.86 1.82 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.86a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>,
+  camera: (p={}) => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M23 7 16 12l7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>,
+  signal: (p={}) => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2 12a10 10 0 0 1 20 0M6 12a6 6 0 0 1 12 0M10 12a2 2 0 0 1 4 0"/></svg>,
+};
+
+/* ─────────────────────────────  CHROME  ───────────────────────────── */
+function Sidebar({ active='reports' }) {
+  const items = [
+    { k:'map',     icon:I.map,   label:'Карта' },
+    { k:'events',  icon:I.bell,  label:'События' },
+    { k:'inbox',   icon:I.inbox, label:'Заявки' },
+    { k:'reports', icon:I.chart, label:'Отчёты' },
+  ];
+  return (
+    <div style={{width:48, background:'#1E3A8A'}} className="h-full flex flex-col items-center pt-3">
+      <div className="w-7 h-7 rounded-md bg-white/15 grid place-items-center text-white font-bold text-[12px] mb-3">S</div>
+      {items.map(it=>{
+        const isActive = it.k === active;
+        const Ico = it.icon;
+        return (
+          <div key={it.k} title={it.label}
+               className="w-9 h-9 my-0.5 rounded-md grid place-items-center cursor-pointer"
+               style={{background: isActive ? '#1E40AF' : 'transparent', color: isActive ? '#fff' : 'rgba(255,255,255,.65)'}}>
+            <Ico/>
+          </div>
+        );
+      })}
+      <div className="mt-auto mb-3 w-9 h-9 rounded-md grid place-items-center text-white/65"><I.gear/></div>
+    </div>
+  );
+}
+
+function TopBar() {
+  return (
+    <div className="flex items-center px-6" style={{height:56, background:'#fff', borderBottom:'1px solid #E2E8F0'}}>
+      <div className="text-[18px] font-bold text-slate-900">Диалог аналитики</div>
+      <span className="ml-3 inline-flex items-center gap-1 text-[11px] font-semibold tracking-wide px-2 py-[3px] rounded-md"
+            style={{background:'#EFF6FF', color:'#1E3A8A'}}>
+        <span className="w-1.5 h-1.5 rounded-full" style={{background:'#1E3A8A'}}/>SKAI AI
+      </span>
+      <div className="ml-auto flex items-center gap-3 text-[13px] text-slate-500">
+        <div className="px-2 py-1 rounded-md hover:bg-slate-100 cursor-pointer">История</div>
+        <div className="w-8 h-8 rounded-full bg-slate-200 grid place-items-center text-slate-600 text-[12px] font-semibold">ДП</div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────  STATE A — EMPTY  ───────────────────────────── */
+const PRESETS = [
+  { e:'📊', t:'Нарушения Иванова за последние 3 дня' },
+  { e:'📷', t:'Все нарушения по компании за 3 дня' },
+  { e:'⚡', t:'Топ-5 нарушителей за май' },
+  { e:'🔴', t:'Грубые нарушения за квартал' },
+  { e:'📷', t:'Водители с видео-детекциями' },
+  { e:'🌙', t:'Ночные поездки этой недели' },
+  { e:'📋', t:'Сравнить двух водителей' },
+];
+
+/* Two mic states for the input block:
+   - mode='typed'  : user typed text by keyboard, mic idle
+   - mode='voice'  : voice recording, textarea passive */
+function InputBlock({ mode }) {
+  const isRec   = mode === 'voice';
+  const isTyped = mode === 'typed';
+  const typedText = 'Покажи нарушения по ВА и телематике у Иванова за последние три дня';
+
+  // textarea visual state
+  const taActive = isTyped;             // typed → blue focus ring on textarea
+  const taBorder = taActive ? '2px solid #1E3A8A' : '1px solid #E2E8F0';
+  const taBg     = isRec    ? '#F8FAFC' : '#fff';
+  const taOpacity= isRec    ? .55       : 1;
+
+  // mic button visual state
+  const micBorder = isRec ? '2px solid #DC2626' : '1px solid #E2E8F0';
+  const micBg     = isRec ? '#FEF2F2'           : '#fff';
+  const micColor  = isRec ? '#DC2626'           : '#94A3B8';
+
+  // submit
+  const submitDisabled = isRec;
+  const submitBg = submitDisabled ? '#CBD5E1' : '#1E3A8A';
+
+  return (
+    <div className="w-full relative">
+      {/* Recording label row */}
+      {isRec && (
+        <div className="flex items-center justify-end mb-1.5">
+          <span className="inline-flex items-center gap-1.5 text-[13px] italic font-semibold" style={{color:'#DC2626'}}>
+            <span className="relative grid place-items-center" style={{width:10, height:10}}>
+              <span className="absolute inset-0 rounded-full pulse-ring" style={{background:'#DC2626'}}/>
+              <span style={{width:8, height:8, borderRadius:999, background:'#DC2626'}} className="pulse-dot"/>
+            </span>
+            Слушаю...
+          </span>
+        </div>
+      )}
+
+      {/* Textarea */}
+      <div className="relative">
+        <textarea
+          rows={3}
+          readOnly
+          value={isTyped ? typedText : ''}
+          placeholder={isRec
+            ? 'Говорите — речь появится здесь...'
+            : 'Например: «Покажи нарушения по ВА и телематике у Иванова за последние три дня»\nили «Все засыпания за май по подразделению Север-1»'}
+          className="w-full text-[14px] outline-none resize-none text-slate-900 text-left"
+          style={{border:taBorder, borderRadius:8, background:taBg, padding:14, lineHeight:'1.55', minHeight:96, opacity:taOpacity, transition:'all .2s ease'}}
+        />
+        {/* fake caret on typed mode */}
+        {isTyped && (
+          <span aria-hidden="true" style={{
+            position:'absolute',
+            // place caret at end of typed line — approximate
+            left: 'calc(14px + 67ch)', top: 14, width:1.5, height:18,
+            background:'#1E3A8A',
+            animation:'caret 1.05s steps(1) infinite',
+          }}/>
+        )}
+        {/* recording waveform overlay at the bottom of textarea */}
+        {isRec && (
+          <div style={{position:'absolute', left:14, right:14, bottom:10, height:18, display:'flex', alignItems:'flex-end', gap:2, pointerEvents:'none'}}>
+            {Array.from({length:48}).map((_,i)=>(
+              <span key={i} className="wave-bar" style={{
+                flex:1,
+                background:'#DC2626',
+                borderRadius:1,
+                opacity:.85,
+                animation:`waveAnim 0.9s ease-in-out ${(i%12)*0.05}s infinite alternate`,
+              }}/>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Row: mic + submit */}
+      <div className="flex items-start gap-2 mt-[10px]">
+        {/* Mic button + helper label below */}
+        <div className="flex flex-col items-center shrink-0" style={{width:60}}>
+          <button
+            className="grid place-items-center relative shrink-0"
+            style={{
+              height:44, width:44,
+              borderRadius:6,
+              border:micBorder,
+              background:micBg,
+              color:micColor,
+              position:'relative',
+              transition:'all .15s ease',
+              boxShadow: isRec ? '0 0 0 4px rgba(220,38,38,.12)' : 'none',
+            }}
+            aria-label={isRec ? 'Остановить запись' : 'Голосовой ввод'}>
+            {isRec && (
+              <span className="absolute" style={{top:5, left:5, width:8, height:8}}>
+                <span className="absolute inset-0 rounded-full pulse-ring" style={{background:'#DC2626'}}/>
+                <span style={{width:8, height:8, borderRadius:999, background:'#DC2626', display:'block'}} className="pulse-dot"/>
+              </span>
+            )}
+            {isRec ? <I.stop style={{color:'#DC2626'}}/> : <I.mic style={{color:'#94A3B8'}}/>}
+          </button>
+          <div className="text-[9px] mt-1 leading-tight text-center font-medium" style={{color: isRec ? '#DC2626' : '#94A3B8'}}>
+            faster-whisper<br/>RU · KK · EN
+          </div>
+        </div>
+
+        {/* Submit button */}
+        <button
+          disabled={submitDisabled}
+          className="flex-1 text-white font-semibold inline-flex items-center justify-center gap-2 relative"
+          style={{
+            height:44, borderRadius:6, fontSize:14,
+            background:submitBg,
+            cursor: submitDisabled ? 'not-allowed' : 'pointer',
+            transition:'all .15s ease',
+          }}>
+          <I.send/> Сформировать отчёт
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function StateA({mode='typed'}) {
+  const label = mode==='typed' ? 'A1 — текст введён' : 'A2 — голосовой ввод';
+  return (
+    <div className="screen" data-screen-label={label}>
+      <div className="flex h-full">
+        <Sidebar/>
+        <div className="flex-1 flex flex-col">
+          <TopBar/>
+          <div className="flex-1 flex justify-center overflow-hidden" style={{background:'#F8FAFC'}}>
+            <div style={{maxWidth:560, width:'100%', paddingTop:96}} className="flex flex-col items-center text-center px-6">
+              <div className="w-12 h-12 grid place-items-center"><I.doc/></div>
+              <h1 className="text-[24px] font-bold mt-4 text-slate-900 tracking-tight">Сформируйте отчёт</h1>
+              <p className="text-[15px] mt-2" style={{color:'#64748B'}}>Опишите что хотите увидеть — система построит отчёт автоматически</p>
+
+              <div className="w-full mt-8 text-left">
+                <InputBlock mode={mode}/>
+              </div>
+
+              <div className="w-full mt-8">
+                <div className="text-[10px] font-semibold tracking-[.18em] uppercase mb-3" style={{color:'#94A3B8'}}>или выберите готовый:</div>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {PRESETS.map((p,i)=>(
+                    <button key={i} className="preset inline-flex items-center gap-1.5 text-[13px]"
+                            style={{border:'1px solid #E2E8F0', background:'#fff', borderRadius:20, padding:'8px 14px', color:'#475569', transition:'all .12s ease'}}>
+                      <span>{p.e}</span><span>{p.t}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────  STATE B — CONFIRM MODAL  ───────────────────────────── */
+function StateB() {
+  return (
+    <div className="screen" data-screen-label="B — подтверждение">
+      <div className="flex h-full">
+        <Sidebar/>
+        <div className="flex-1 flex flex-col">
+          <TopBar/>
+          {/* dimmed background showing the empty screen behind */}
+          <div className="flex-1 relative overflow-hidden" style={{background:'#F8FAFC'}}>
+            <div className="absolute inset-0 flex justify-center" style={{opacity:.5}}>
+              <div style={{maxWidth:560, width:'100%', paddingTop:80}} className="flex flex-col items-center text-center px-6">
+                <div className="w-12 h-12 grid place-items-center"><I.doc/></div>
+                <h1 className="text-[24px] font-bold mt-4 text-slate-900">Сформируйте отчёт</h1>
+                <div className="w-full mt-8" style={{height:96, border:'1px solid #E2E8F0', borderRadius:8, background:'#fff'}}>
+                  <div className="text-[14px] text-left p-3.5 text-slate-900">
+                    Покажи нарушения по ВА и телематике у Иванова за последние три дня
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* overlay */}
+            <div className="absolute inset-0" style={{background:'rgba(15,23,42,.30)'}}/>
+            {/* modal */}
+            <div className="absolute inset-0 grid place-items-center px-6">
+              <div className="bg-white shadow-xl2" style={{borderRadius:12, padding:32, maxWidth:480, width:'100%'}}>
+                <div className="flex items-start gap-3">
+                  <I.bot/>
+                  <div className="flex-1">
+                    <div className="text-[18px] font-bold text-slate-900 leading-tight">Вот как я понял ваш запрос</div>
+                    <div className="text-[13px] mt-1" style={{color:'#64748B'}}>Проверьте параметры перед построением отчёта</div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-col" style={{gap:10}}>
+                  <ParamRow icon={<I.user/>} label="Водитель" value={<>Иванов Алексей Петрович <span className="font-medium text-slate-500">·</span> <span className="font-mono">А777ВВ 77</span></>} />
+                  <ParamRow icon={<I.cal/>}  label="Период"    value="Последние 3 дня · 14.05 – 16.05.2026" />
+                  <ParamRow icon={<I.chart/>} label="Тип данных" value={
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span>Нарушения ВА + Телематика</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded" style={{background:'#F3E8FF', color:'#7C3AED'}}><I.camera/> ВА</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded" style={{background:'#E0F2FE', color:'#0369A1'}}><I.signal/> Телематика</span>
+                    </div>
+                  } />
+                </div>
+
+                <div className="my-5" style={{height:1, background:'#E2E8F0'}}/>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button className="ghost-btn inline-flex items-center justify-center gap-2 font-semibold text-[14px]"
+                          style={{border:'1px solid #E2E8F0', color:'#475569', height:44, borderRadius:8, background:'#fff'}}>
+                    <I.edit/> Уточнить запрос
+                  </button>
+                  <button className="primary-btn inline-flex items-center justify-center gap-2 text-white font-semibold text-[14px]"
+                          style={{height:44, borderRadius:8}}>
+                    <I.check/> Всё верно — показать отчёт
+                  </button>
+                </div>
+
+                <div className="mt-4 text-[11px] flex items-center gap-1.5" style={{color:'#94A3B8'}}>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{background:'#10B981'}}/>
+                  Уверенность распознавания: 96%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ParamRow({icon, label, value}) {
+  return (
+    <div className="flex items-start gap-3" style={{background:'#F8FAFC', border:'1px solid #E2E8F0', borderRadius:8, padding:12}}>
+      <div className="w-7 h-7 rounded-md grid place-items-center" style={{background:'#fff', border:'1px solid #E2E8F0', color:'#1E3A8A'}}>{icon}</div>
+      <div className="flex-1 min-w-0">
+        <div className="text-[11px] font-medium" style={{color:'#64748B'}}>{label}</div>
+        <div className="text-[14px] font-bold text-slate-900 mt-0.5">{value}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────  STATE C — FULL REPORT  ───────────────────────────── */
+
+const VIOLATIONS = [
+  { n:1, d:'14.05', t:'08:14', name:'Превышение скорости +18 км/ч', src:'telematics', sev:'high',   speed:78, limit:60 },
+  { n:2, d:'14.05', t:'10:32', name:'Курение за рулём',              src:'video-dms',  sev:'severe', speed:76, limit:60, video:true, cam:'CAM-02 · DMS · Салон', cause:'distracted' },
+  { n:3, d:'14.05', t:'14:51', name:'Резкое торможение',             src:'telematics', sev:'high' },
+  { n:4, d:'15.05', t:'00:36', name:'Засыпание за рулём',            src:'video-dms',  sev:'high',   video:true, cam:'CAM-02 · DMS · Салон' },
+  { n:5, d:'15.05', t:'09:05', name:'Ремень безопасности',           src:'video',      sev:'high',   video:true, cam:'CAM-02 · DMS · Салон' },
+  { n:6, d:'15.05', t:'21:15', name:'Превышение скорости +9 км/ч',   src:'telematics', sev:'medium', speed:69, limit:60 },
+  { n:7, d:'16.05', t:'13:40', name:'Отвлечение внимания',           src:'video-dms',  sev:'high',   video:true, cam:'CAM-02 · DMS · Салон' },
+];
+
+const CAUSE = {
+  drowsy:     { e:'😴', label:'Засыпал',     fg:'#DC2626' },
+  distracted: { e:'📱', label:'Отвлёкся',    fg:'#B45309' },
+  cutoff:     { e:'🚗', label:'Подрезали',   fg:'#16A34A' },
+  malfunction:{ e:'⚙',  label:'Техн. сбой',  fg:'#64748B' },
+};
+
+const SEV = {
+  severe: { dot:'#DC2626', bg:'#FEF2F2', fg:'#991B1B', label:'Грубое' },
+  high:   { dot:'#F59E0B', bg:'#FEF3C7', fg:'#92400E', label:'Высокое' },
+  medium: { dot:'#10B981', bg:'#D1FAE5', fg:'#065F46', label:'Среднее' },
+};
+const SRC = {
+  'telematics': { icon:'📡', label:'Телематика',   bg:'#E0F2FE', fg:'#0369A1' },
+  'video-dms':  { icon:'📹', label:'Видео (DMS)',  bg:'#F3E8FF', fg:'#7C3AED' },
+  'video':      { icon:'📹', label:'Видео',         bg:'#F3E8FF', fg:'#7C3AED' },
+};
+
+function StateC() {
+  const [selected, setSelected] = useState(2); // row 2 (Курение) is pre-selected per spec
+
+  return (
+    <div className="screen" data-screen-label="C — отчёт">
+      <div className="flex h-full">
+        <Sidebar/>
+        <div className="flex-1 flex flex-col min-w-0">
+          <TopBar/>
+          <SubHeader/>
+          <div className="flex flex-1 min-h-0">
+            {/* LEFT COLUMN ~55% */}
+            <div className="overflow-y-auto no-scrollbar" style={{flex:'0 0 55%', padding:24, background:'#F8FAFC'}}>
+              <DriverCard/>
+              <KpiRow/>
+              <SevereBanner/>
+              <ViolationsTable selected={selected} onSelect={setSelected}/>
+            </div>
+            {/* RIGHT COLUMN ~45% */}
+            <div style={{flex:'0 0 45%', borderLeft:'1px solid #E2E8F0', background:'#fff', padding:20, overflowY:'auto'}} className="no-scrollbar">
+              {selected ? <DetailPanel v={VIOLATIONS.find(x=>x.n===selected)}/> : <DefaultPanel/>}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SubHeader() {
+  return (
+    <div className="flex items-center" style={{padding:'12px 24px', background:'#F8FAFC', borderBottom:'1px solid #E2E8F0'}}>
+      <div className="min-w-0">
+        <div className="text-[13px] italic flex items-center gap-1.5" style={{color:'#64748B'}}>
+          <span style={{color:'#94A3B8'}}>💬</span>
+          <span className="truncate">«Покажи нарушения по ВА и телематике у Иванова за последние три дня»</span>
+        </div>
+        <div className="text-[14px] font-bold text-slate-900 mt-0.5">
+          Иванов А.П. <span className="text-slate-400 font-normal mx-1">·</span> 14–16.05.2026 <span className="text-slate-400 font-normal mx-1">·</span> 7 нарушений <span className="text-slate-400 font-normal mx-1">·</span> 487 км
+        </div>
+      </div>
+      <div className="ml-auto flex items-center gap-2">
+        <button className="ghost-btn inline-flex items-center gap-1.5 text-[12px] font-medium"
+                style={{border:'1px solid #E2E8F0', background:'#fff', color:'#475569', padding:'7px 12px', borderRadius:6}}>
+          <I.edit/> Изменить запрос
+        </button>
+        <button className="ghost-btn inline-flex items-center gap-1.5 text-[12px] font-medium"
+                style={{border:'1px solid #E2E8F0', background:'#fff', color:'#475569', padding:'7px 12px', borderRadius:6}}>
+          <I.download/> Скачать PDF
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function DriverCard() {
+  return (
+    <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:8, padding:16, marginBottom:16}}>
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 rounded-full grid place-items-center text-white font-bold text-[16px] shrink-0"
+             style={{background:'linear-gradient(135deg,#1E40AF,#3B82F6)'}}>ИА</div>
+        <div className="flex-1 min-w-0">
+          <div className="text-[16px] font-bold text-slate-900">Иванов Алексей Петрович</div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-[12px] font-medium" style={{color:'#64748B'}}>Рейтинг безопасности</span>
+            <span className="text-[13px] font-bold" style={{color:'#0F172A'}}>68 / 100</span>
+          </div>
+          <div className="mt-1.5 h-1.5 rounded-full overflow-hidden" style={{background:'#F1F5F9'}}>
+            <div style={{width:'68%', height:'100%', background:'#EAB308', borderRadius:999}}/>
+          </div>
+        </div>
+        <div className="text-right shrink-0">
+          <div className="text-[11px] font-semibold uppercase tracking-wider" style={{color:'#94A3B8'}}>В компании</div>
+          <div className="text-[14px] font-bold text-slate-700">4 г 2 мес</div>
+        </div>
+      </div>
+
+      <div style={{height:1, background:'#E2E8F0', margin:'14px 0'}}/>
+
+      <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[13px]" style={{color:'#475569'}}>
+        <InfoItem icon={<I.truck/>}  label="ТС"               value={<><span className="font-mono">А777ВВ 77</span></>}/>
+        <InfoItem icon={<I.user/>}   label="Модель"           value="Scania R450"/>
+        <InfoItem icon={<I.cal/>}    label="Период"           value="14–16.05.2026"/>
+        <InfoItem icon={<I.ruler/>}  label="Пробег"           value="487 км"/>
+        <InfoItem icon={<I.clock/>}  label="Время в рейсах"   value="9ч 42мин"/>
+        <InfoItem icon={<I.route/>}  label="Рейсов"           value="4"/>
+      </div>
+    </div>
+  );
+}
+
+function InfoItem({icon, label, value}) {
+  return (
+    <div className="flex items-center gap-2 min-w-0">
+      <span className="shrink-0" style={{color:'#94A3B8'}}>{icon}</span>
+      <span className="shrink-0" style={{color:'#94A3B8'}}>{label}:</span>
+      <span className="font-semibold text-slate-800 truncate">{value}</span>
+    </div>
+  );
+}
+
+function KpiRow() {
+  const items = [
+    { n:7, label:'Всего нарушений', color:'#1E3A8A' },
+    { n:4, label:'Видео-детекции (ВА)', color:'#7C3AED', badge:'📹' },
+    { n:3, label:'Телематика', color:'#0EA5E9', badge:'📡' },
+    { n:1, label:'Грубых', color:'#DC2626', bg:'#FEF2F2' },
+  ];
+  return (
+    <div className="flex gap-3" style={{marginBottom:16}}>
+      {items.map((it,i)=>(
+        <div key={i} className="flex-1"
+             style={{background:it.bg||'#fff', border:'1px solid '+(it.bg?'#FECACA':'#E2E8F0'), borderRadius:8, padding:'12px 14px'}}>
+          <div className="flex items-baseline gap-2">
+            <div className="text-[28px] font-extrabold leading-none" style={{color:it.color}}>{it.n}</div>
+            {it.badge && <div className="text-[12px]">{it.badge}</div>}
+          </div>
+          <div className="text-[10px] font-semibold uppercase tracking-wider mt-1.5" style={{color:'#64748B'}}>{it.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SevereBanner() {
+  return (
+    <div className="flex items-start gap-2" style={{background:'#FEF3C7', borderLeft:'4px solid #F59E0B', padding:12, borderRadius:6, marginBottom:16}}>
+      <span style={{color:'#B45309', marginTop:1}}><I.warn/></span>
+      <div className="text-[13px]" style={{color:'#78350F'}}>
+        <span className="font-bold">1 грубое нарушение</span> за период. При повторении в течение 30 дней — дисциплинарное взыскание.
+      </div>
+    </div>
+  );
+}
+
+function ViolationsTable({selected, onSelect}) {
+  return (
+    <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:8, overflow:'hidden'}}>
+      <table className="w-full text-[13px]" style={{borderCollapse:'collapse'}}>
+        <thead>
+          <tr style={{background:'#F8FAFC', borderBottom:'1px solid #E2E8F0'}}>
+            <th className="text-left font-semibold uppercase tracking-wider" style={{fontSize:11, color:'#64748B', padding:'10px 12px', width:36}}>#</th>
+            <th className="text-left font-semibold uppercase tracking-wider" style={{fontSize:11, color:'#64748B', padding:'10px 8px', width:120}}>Дата · Время</th>
+            <th className="text-left font-semibold uppercase tracking-wider" style={{fontSize:11, color:'#64748B', padding:'10px 8px'}}>Нарушение</th>
+            <th className="text-left font-semibold uppercase tracking-wider" style={{fontSize:11, color:'#64748B', padding:'10px 8px', width:118}}>Источник</th>
+            <th className="text-left font-semibold uppercase tracking-wider" style={{fontSize:11, color:'#64748B', padding:'10px 8px', width:96}}>Severity</th>
+            <th className="text-left font-semibold uppercase tracking-wider" style={{fontSize:11, color:'#64748B', padding:'10px 12px', width:128}}>Причина</th>
+          </tr>
+        </thead>
+        <tbody>
+          {VIOLATIONS.map((v,idx)=>{
+            const sev = SEV[v.sev];
+            const src = SRC[v.src];
+            const isSel = v.n === selected;
+            const isLast = idx === VIOLATIONS.length-1;
+            const baseBorderL = v.sev==='severe' ? '4px solid #DC2626' : '4px solid transparent';
+            return (
+              <tr key={v.n}
+                  onClick={()=>onSelect(v.n)}
+                  className="row cursor-pointer"
+                  style={{
+                    background: isSel ? '#EFF6FF' : (v.sev==='severe' ? '#FFFBFB' : '#fff'),
+                    borderBottom: isLast ? 'none' : '1px solid #F1F5F9',
+                    borderLeft: isSel ? '4px solid #1E3A8A' : baseBorderL,
+                  }}>
+                <td style={{padding:'12px', color:'#94A3B8', fontWeight:600}}>{v.n}</td>
+                <td style={{padding:'12px 8px'}}>
+                  <div className="font-semibold text-slate-900">{v.d}</div>
+                  <div className="text-[12px]" style={{color:'#64748B'}}>{v.t}</div>
+                </td>
+                <td style={{padding:'12px 8px'}}>
+                  <div className="font-semibold text-slate-900 flex items-center gap-2">
+                    {v.name}
+                    {v.sev==='severe' && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded"
+                            style={{background:'#FEE2E2', color:'#991B1B'}}>⚠ Грубое</span>
+                    )}
+                  </div>
+                </td>
+                <td style={{padding:'12px 8px'}}>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded"
+                        style={{background:src.bg, color:src.fg}}>
+                    <span>{src.icon}</span> {src.label}
+                  </span>
+                </td>
+                <td style={{padding:'12px 8px'}}>
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-1 rounded"
+                        style={{background:sev.bg, color:sev.fg}}>
+                    <span className="w-1.5 h-1.5 rounded-full" style={{background:sev.dot}}/>
+                    {sev.label}
+                  </span>
+                </td>
+                <td style={{padding:'12px'}}>
+                  {v.cause ? (
+                    <span className="inline-flex items-center gap-1 text-[12px] font-semibold"
+                          style={{color: CAUSE[v.cause].fg}}>
+                      <span style={{fontSize:13, lineHeight:1}}>{CAUSE[v.cause].e}</span>
+                      <span>{CAUSE[v.cause].label}</span>
+                    </span>
+                  ) : (
+                    <span className="text-[13px]" style={{color:'#CBD5E1'}}>—</span>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ── default right panel: map + chart ── */
+function DefaultPanel() {
+  return (
+    <>
+      <RouteMap/>
+      <SpeedChart/>
+    </>
+  );
+}
+
+function RouteMap() {
+  return (
+    <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:8, padding:12, marginBottom:12}}>
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-[11px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>Маршрут за период</div>
+        <div className="text-[11px]" style={{color:'#94A3B8'}}>4 события на треке</div>
+      </div>
+      <div style={{height:220, borderRadius:6, overflow:'hidden', position:'relative', background:'linear-gradient(180deg,#E8F0F7,#DBE7F2)'}}>
+        <MapSVG/>
+      </div>
+      <div className="flex items-center gap-4 mt-2.5 text-[11px]" style={{color:'#64748B'}}>
+        <Legend dot="#DC2626" label="Грубое"/>
+        <Legend dot="#F59E0B" label="Высокое"/>
+        <Legend dot="#10B981" label="Среднее"/>
+        <div className="ml-auto inline-flex items-center gap-1.5">
+          <span style={{width:14, height:2, background:'#1E3A8A', borderRadius:2}}/>
+          <span>Маршрут</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MapSVG() {
+  // pseudo OSM look
+  return (
+    <svg viewBox="0 0 480 220" width="100%" height="100%" preserveAspectRatio="none">
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#CBD5E1" strokeWidth=".5" opacity=".7"/>
+        </pattern>
+      </defs>
+      <rect width="480" height="220" fill="url(#grid)"/>
+      {/* roads */}
+      <path d="M -10 160 C 80 150, 120 80, 200 70 S 340 100, 380 150 S 470 180, 500 160" stroke="#fff" strokeWidth="10" fill="none"/>
+      <path d="M -10 160 C 80 150, 120 80, 200 70 S 340 100, 380 150 S 470 180, 500 160" stroke="#CBD5E1" strokeWidth="1" fill="none"/>
+      <path d="M 60 230 L 90 120 L 160 60 L 240 30" stroke="#fff" strokeWidth="6" fill="none"/>
+      <path d="M 60 230 L 90 120 L 160 60 L 240 30" stroke="#CBD5E1" strokeWidth=".7" fill="none"/>
+      <path d="M 300 0 L 320 60 L 360 110" stroke="#fff" strokeWidth="5" fill="none"/>
+      {/* parks / districts */}
+      <path d="M 50 30 L 130 20 L 150 60 L 90 80 Z" fill="#D1FAE5" opacity=".6"/>
+      <path d="M 340 130 L 430 120 L 460 175 L 360 190 Z" fill="#FEF3C7" opacity=".5"/>
+
+      {/* route polyline */}
+      <path d="M 40 180 C 100 170, 130 90, 200 80 S 320 110, 360 140 S 430 165, 450 130"
+            stroke="#1E3A8A" strokeWidth="3" fill="none" strokeLinecap="round" strokeDasharray="0"/>
+      <path d="M 40 180 C 100 170, 130 90, 200 80 S 320 110, 360 140 S 430 165, 450 130"
+            stroke="#3B82F6" strokeWidth="1" fill="none" strokeLinecap="round" opacity=".7"/>
+      {/* start / end */}
+      <g>
+        <circle cx="40" cy="180" r="6" fill="#fff" stroke="#1E3A8A" strokeWidth="2.5"/>
+        <text x="50" y="184" fontSize="10" fill="#1E3A8A" fontWeight="700">A</text>
+      </g>
+      <g>
+        <circle cx="450" cy="130" r="6" fill="#1E3A8A"/>
+        <text x="437" y="118" fontSize="10" fill="#1E3A8A" fontWeight="700">B</text>
+      </g>
+
+      {/* event markers */}
+      <EventMarker x={120} y={140} color="#F59E0B" time="14.05 · 08:14" label="Превышение +18"/>
+      <EventMarker x={210} y={82}  color="#DC2626" time="14.05 · 10:32" label="Курение"/>
+      <EventMarker x={310} y={118} color="#F59E0B" time="15.05 · 00:36" label="Засыпание"/>
+      <EventMarker x={395} y={150} color="#F59E0B" time="15.05 · 09:05" label="Ремень"/>
+    </svg>
+  );
+}
+
+function EventMarker({x,y,color,time,label}) {
+  return (
+    <g>
+      <circle cx={x} cy={y} r="12" fill={color} opacity=".18"/>
+      <circle cx={x} cy={y} r="7"  fill="#fff"/>
+      <circle cx={x} cy={y} r="5"  fill={color}/>
+    </g>
+  );
+}
+
+function Legend({dot,label}) {
+  return (
+    <div className="inline-flex items-center gap-1.5">
+      <span className="w-2 h-2 rounded-full" style={{background:dot}}/><span>{label}</span>
+    </div>
+  );
+}
+
+function SpeedChart() {
+  return (
+    <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:8, padding:12}}>
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-[11px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>Скорость за период</div>
+        <div className="text-[11px] inline-flex items-center gap-3" style={{color:'#64748B'}}>
+          <span className="inline-flex items-center gap-1"><span style={{width:12,height:2,background:'#1E3A8A',borderRadius:2}}/>скорость</span>
+          <span className="inline-flex items-center gap-1"><span style={{width:12,height:0,borderTop:'2px dashed #DC2626'}}/>лимит 60</span>
+        </div>
+      </div>
+      <div style={{height:160}}>
+        <SpeedSVG/>
+      </div>
+    </div>
+  );
+}
+
+function SpeedSVG() {
+  // x: 0..540, y: 0..150  (0..120 km/h)
+  const W=540,H=150, padL=28, padR=12, padT=8, padB=22;
+  const yFor = v => padT + (1 - v/120) * (H - padT - padB);
+  const xFor = t => padL + t * (W - padL - padR);
+  const limitY = yFor(60);
+
+  // generate a wavy speed line with three peaks (spikes at events)
+  const points = [];
+  const N = 80;
+  for (let i=0;i<=N;i++){
+    const t = i/N;
+    // base wave around 50, three peaks at t=0.1 (08:14, 78), t=0.25 (10:32, 76), t=0.58 (00:36 dip), t=0.78 (09:05), t=0.93 (21:15 +9)
+    let s = 48 + Math.sin(t*Math.PI*4)*6 + Math.sin(t*Math.PI*9)*3;
+    const gauss = (m,w,h)=>h*Math.exp(-Math.pow((t-m)/w,2));
+    s += gauss(0.10,0.025,30); // 78
+    s += gauss(0.25,0.022,28); // 76
+    s += gauss(0.58,0.030,-30); // low (night)
+    s += gauss(0.78,0.025,18); // 68
+    s += gauss(0.93,0.022,19); // 69
+    s = Math.max(0, Math.min(115, s));
+    points.push([xFor(t), yFor(s)]);
+  }
+  const path = points.map((p,i)=> (i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const fillPath = path + ` L ${xFor(1)} ${yFor(0)} L ${xFor(0)} ${yFor(0)} Z`;
+
+  const events = [
+    { t:0.10, label:'08:14 · 78 км/ч', color:'#DC2626', day:'14.05', tooltip:true },
+    { t:0.25, label:'10:32 · 76 км/ч', color:'#DC2626', day:'14.05' },
+    { t:0.78, label:'09:05 · 68 км/ч', color:'#F59E0B', day:'15.05' },
+    { t:0.93, label:'21:15 · 69 км/ч', color:'#F59E0B', day:'15.05' },
+  ];
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="spdFill" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor="#1E3A8A" stopOpacity=".22"/>
+          <stop offset="100%" stopColor="#1E3A8A" stopOpacity="0"/>
+        </linearGradient>
+      </defs>
+      {/* y grid */}
+      {[0,30,60,90,120].map(v=>(
+        <g key={v}>
+          <line x1={padL} x2={W-padR} y1={yFor(v)} y2={yFor(v)} stroke="#F1F5F9"/>
+          <text x={padL-6} y={yFor(v)+3} fontSize="9" fill="#94A3B8" textAnchor="end">{v}</text>
+        </g>
+      ))}
+      {/* limit */}
+      <line x1={padL} x2={W-padR} y1={limitY} y2={limitY} stroke="#DC2626" strokeWidth="1.2" strokeDasharray="4 3"/>
+      <text x={W-padR-2} y={limitY-3} fontSize="9" fill="#DC2626" fontWeight="700" textAnchor="end">60 км/ч</text>
+      {/* fill */}
+      <path d={fillPath} fill="url(#spdFill)"/>
+      {/* line */}
+      <path d={path} stroke="#1E3A8A" strokeWidth="2" fill="none" strokeLinejoin="round" strokeLinecap="round"/>
+      {/* events */}
+      {events.map((e,i)=>{
+        const x = xFor(e.t);
+        const t = 48 + 30*Math.exp(0); // not used; we sample
+        // pull approximate y by re-running formula
+        let s = 48 + Math.sin(e.t*Math.PI*4)*6 + Math.sin(e.t*Math.PI*9)*3;
+        const gauss = (m,w,h)=>h*Math.exp(-Math.pow((e.t-m)/w,2));
+        s += gauss(0.10,0.025,30) + gauss(0.25,0.022,28) + gauss(0.58,0.030,-30) + gauss(0.78,0.025,18) + gauss(0.93,0.022,19);
+        const y = yFor(Math.max(0,Math.min(115,s)));
+        return (
+          <g key={i}>
+            <line x1={x} x2={x} y1={y} y2={H-padB} stroke={e.color} strokeWidth="1" strokeDasharray="2 2" opacity=".7"/>
+            <circle cx={x} cy={y} r="4" fill={e.color} stroke="#fff" strokeWidth="1.5"/>
+          </g>
+        );
+      })}
+      {/* tooltip on first spike */}
+      {(() => {
+        const e = events[0];
+        const x = xFor(e.t);
+        let s = 48 + Math.sin(e.t*Math.PI*4)*6 + Math.sin(e.t*Math.PI*9)*3;
+        const gauss = (m,w,h)=>h*Math.exp(-Math.pow((e.t-m)/w,2));
+        s += gauss(0.10,0.025,30) + gauss(0.25,0.022,28) + gauss(0.58,0.030,-30) + gauss(0.78,0.025,18) + gauss(0.93,0.022,19);
+        const y = yFor(s);
+        const tw=128, th=32;
+        const tx = x + 8, ty = y - th - 6;
+        return (
+          <g>
+            <rect x={tx} y={ty} width={tw} height={th} rx="6" fill="#0F172A"/>
+            <text x={tx+8} y={ty+13} fontSize="9.5" fill="#fff" fontWeight="700">14.05 · 08:14 · 78 км/ч</text>
+            <text x={tx+8} y={ty+25} fontSize="9" fill="#FCA5A5">+18 км/ч превышение</text>
+          </g>
+        );
+      })()}
+      {/* x labels */}
+      <text x={xFor(0)} y={H-6} fontSize="9.5" fill="#64748B" fontWeight="600">14.05</text>
+      <text x={xFor(0.5)} y={H-6} fontSize="9.5" fill="#64748B" fontWeight="600" textAnchor="middle">15.05</text>
+      <text x={xFor(1)} y={H-6} fontSize="9.5" fill="#64748B" fontWeight="600" textAnchor="end">16.05</text>
+    </svg>
+  );
+}
+
+/* ── slide-in detail panel for selected violation ── */
+function DetailPanel({v}) {
+  const sev = SEV[v.sev];
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-[11px] uppercase font-semibold tracking-wider" style={{color:'#94A3B8'}}>Деталь нарушения</span>
+        <span className="text-[11px]" style={{color:'#CBD5E1'}}>·</span>
+        <span className="text-[11px] font-semibold" style={{color:'#1E3A8A'}}>#{v.n}</span>
+      </div>
+      <div className="text-[14px] font-bold text-slate-900 leading-snug">{v.d}.2026 · {v.t} · {v.name}</div>
+      <div className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-bold px-2 py-1 rounded"
+           style={{background:sev.bg, color:sev.fg}}>
+        <span className="w-1.5 h-1.5 rounded-full" style={{background:sev.dot}}/>
+        {v.sev==='severe' ? '🔴 Грубое нарушение' : sev.label+' нарушение'}
+      </div>
+
+      {/* Map of event location — primary context */}
+      <div className="mt-3">
+        <div className="flex items-center justify-between mb-1.5">
+          <div className="text-[11px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>Место события на маршруте</div>
+          <div className="text-[11px] font-mono" style={{color:'#94A3B8'}}>55.7423, 37.6156</div>
+        </div>
+        <div style={{height:260, borderRadius:8, overflow:'hidden', position:'relative', border:'1px solid #E2E8F0', background:'linear-gradient(180deg,#E8F0F7,#DBE7F2)'}}>
+          <MiniMapPin/>
+        </div>
+      </div>
+
+      {/* Video players — two synced channels */}
+      <div className="mt-3">
+        <div className="flex items-center justify-between mb-1.5">
+          <div className="text-[11px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>Видео — 2 канала</div>
+          <div className="text-[10px] inline-flex items-center gap-1" style={{color:'#94A3B8'}}>
+            <span style={{width:6,height:6,borderRadius:999,background:'#22D3EE'}}/> синхронизированы по времени
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div style={{position:'relative', borderRadius:8, overflow:'hidden', height:170, background:'#0F172A'}}>
+            <VideoMock cam="CAM-01 · Дорога" kind="road"/>
+          </div>
+          <div style={{position:'relative', borderRadius:8, overflow:'hidden', height:170, background:'#0F172A'}}>
+            <VideoMock cam={v.cam || 'CAM-02 · DMS · Салон'} kind="cabin"/>
+          </div>
+        </div>
+      </div>
+
+      {/* Data */}
+      <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-[13px]">
+        {v.speed && (
+          <>
+            <DataLine label="Скорость" value={<span className="font-bold">{v.speed} км/ч</span>}/>
+            <DataLine label="Лимит" value={<span className="font-bold">{v.limit} км/ч</span>}/>
+            <DataLine label="Превышение" value={<span className="font-bold" style={{color:'#EA580C'}}>+{v.speed-v.limit} км/ч</span>}/>
+          </>
+        )}
+        {!v.speed && (
+          <>
+            <DataLine label="Скорость в момент" value={<span className="font-bold">76 км/ч</span>}/>
+            <DataLine label="Лимит" value={<span className="font-bold">60 км/ч</span>}/>
+            <DataLine label="Превышение" value={<span className="font-bold" style={{color:'#EA580C'}}>+16 км/ч</span>}/>
+          </>
+        )}
+        <DataLine label="Координаты" value="55.7423, 37.6156"/>
+        <DataLine label="Камера" value={<span className="font-mono text-[12px]">{v.cam || 'CAM-02'}</span>}/>
+      </div>
+
+      {/* Call-via-camera action — direct two-way audio through the DMS camera */}
+      <button className="mt-3 w-full inline-flex items-center justify-center gap-2 text-white text-[14px] font-semibold"
+              style={{height:44, borderRadius:8, background:'#0369A1', boxShadow:'0 1px 2px rgba(3,105,161,.3)'}}
+              onMouseEnter={e=>e.currentTarget.style.background='#075985'}
+              onMouseLeave={e=>e.currentTarget.style.background='#0369A1'}>
+        <span style={{fontSize:16, lineHeight:1}}>📹</span>
+        <span>Позвонить через камеру</span>
+      </button>
+      <div className="mt-1.5 text-[11px] font-semibold inline-flex items-center gap-1.5" style={{color:'#16A34A'}}>
+        <span className="pulse-dot" style={{width:7, height:7, borderRadius:999, background:'#16A34A', display:'inline-block'}}/>
+        Онлайн · {(v.cam || 'CAM-02 · DMS').split(' · ').slice(0,2).join(' · ')}
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        <Chip>⏱ Непрерывное вождение: 2ч 18мин</Chip>
+        <Chip>🛣 Трасса М-4</Chip>
+        <Chip>☀ День</Chip>
+        <Chip>🌤 Облачно</Chip>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <button className="ghost-btn inline-flex items-center justify-center gap-2 text-[13px] font-semibold"
+                style={{border:'1px solid #E2E8F0', color:'#475569', height:40, borderRadius:8, background:'#fff'}}>
+          <I.download/> Скачать видео
+        </button>
+        <button className="primary-btn inline-flex items-center justify-center gap-2 text-white text-[13px] font-semibold"
+                style={{height:40, borderRadius:8}}>
+          Открыть карточку <I.arrowR/>
+        </button>
+      </div>
+
+
+    </div>
+  );
+}
+
+function Chip({children}) {
+  return (
+    <span className="inline-flex items-center text-[11px] font-medium px-2 py-1 rounded-full"
+          style={{background:'#F1F5F9', color:'#475569', border:'1px solid #E2E8F0'}}>{children}</span>
+  );
+}
+function DataLine({label,value}) {
+  return (
+    <div className="flex items-baseline justify-between gap-2" style={{borderBottom:'1px dashed #E2E8F0', padding:'4px 0'}}>
+      <span className="text-[12px]" style={{color:'#64748B'}}>{label}</span>
+      <span className="text-slate-900">{value}</span>
+    </div>
+  );
+}
+
+function MiniMapPin() {
+  return (
+    <svg viewBox="0 0 480 260" width="100%" height="100%" preserveAspectRatio="none">
+      <defs>
+        <pattern id="grid2" width="36" height="36" patternUnits="userSpaceOnUse">
+          <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#CBD5E1" strokeWidth=".4"/>
+        </pattern>
+      </defs>
+      <rect width="480" height="260" fill="url(#grid2)"/>
+
+      {/* districts / parks */}
+      <path d="M 30 30 L 150 20 L 180 80 L 90 100 Z" fill="#D1FAE5" opacity=".55"/>
+      <path d="M 340 170 L 460 160 L 470 235 L 360 240 Z" fill="#FEF3C7" opacity=".45"/>
+      <circle cx="380" cy="60" r="34" fill="#DBEAFE" opacity=".55"/>
+
+      {/* secondary roads */}
+      <path d="M -10 200 C 80 195, 130 130, 220 130 S 360 175, 500 165" stroke="#fff" strokeWidth="9" fill="none"/>
+      <path d="M -10 200 C 80 195, 130 130, 220 130 S 360 175, 500 165" stroke="#CBD5E1" strokeWidth=".8" fill="none"/>
+      <path d="M 60 -10 L 90 90 L 160 160 L 250 180 L 360 240" stroke="#fff" strokeWidth="6" fill="none"/>
+      <path d="M 60 -10 L 90 90 L 160 160 L 250 180 L 360 240" stroke="#CBD5E1" strokeWidth=".6" fill="none"/>
+      <path d="M 300 -10 L 320 80 L 360 150 L 390 220" stroke="#fff" strokeWidth="5" fill="none"/>
+      <path d="M 300 -10 L 320 80 L 360 150 L 390 220" stroke="#CBD5E1" strokeWidth=".5" fill="none"/>
+
+      {/* primary road (M-4) — wider, named */}
+      <path d="M -10 110 C 90 105, 160 70, 240 80 S 380 130, 500 115" stroke="#fff" strokeWidth="12" fill="none"/>
+      <path d="M -10 110 C 90 105, 160 70, 240 80 S 380 130, 500 115" stroke="#FACC15" strokeWidth="6" fill="none" opacity=".55"/>
+      <path d="M -10 110 C 90 105, 160 70, 240 80 S 380 130, 500 115" stroke="#fff" strokeWidth="1.2" fill="none" strokeDasharray="6 6"/>
+
+      {/* route taken (driver) */}
+      <path d="M 30 230 C 100 230, 140 180, 180 150 S 230 95, 260 88 S 380 105, 460 90"
+            stroke="#1E3A8A" strokeWidth="3" fill="none" strokeLinecap="round"/>
+      <path d="M 30 230 C 100 230, 140 180, 180 150 S 230 95, 260 88 S 380 105, 460 90"
+            stroke="#3B82F6" strokeWidth="1" fill="none" strokeLinecap="round" opacity=".8"/>
+
+      {/* start / end */}
+      <g>
+        <circle cx="30" cy="230" r="6" fill="#fff" stroke="#1E3A8A" strokeWidth="2.5"/>
+        <text x="42" y="234" fontSize="10" fill="#1E3A8A" fontWeight="700">Старт · 09:48</text>
+      </g>
+      <g>
+        <circle cx="460" cy="90" r="6" fill="#1E3A8A"/>
+        <text x="402" y="80" fontSize="10" fill="#1E3A8A" fontWeight="700">База · 11:20</text>
+      </g>
+
+      {/* M-4 label */}
+      <g transform="translate(150 60)">
+        <rect x="0" y="0" width="38" height="16" rx="2" fill="#facc15" stroke="#a16207" strokeWidth=".8"/>
+        <text x="19" y="12" fontSize="10" fontWeight="800" fill="#422006" textAnchor="middle">М-4</text>
+      </g>
+
+      {/* event pin — larger, centered-ish */}
+      <g>
+        <circle cx="260" cy="88" r="26" fill="#DC2626" opacity=".12"/>
+        <circle cx="260" cy="88" r="16" fill="#DC2626" opacity=".22"/>
+        <circle cx="260" cy="88" r="10" fill="#fff"/>
+        <circle cx="260" cy="88" r="6"  fill="#DC2626"/>
+        {/* callout */}
+        <line x1="266" y1="84" x2="296" y2="46" stroke="#0F172A" strokeWidth="1" strokeDasharray="2 2" opacity=".5"/>
+        <rect x="296" y="30" width="152" height="34" rx="6" fill="#0F172A"/>
+        <text x="304" y="46" fontSize="10.5" fill="#fff" fontWeight="700">⚠ Курение за рулём · 10:32</text>
+        <text x="304" y="58" fontSize="9.5" fill="#FCA5A5">76 км/ч · М-4 · 412 км от Москвы</text>
+      </g>
+
+      {/* north arrow */}
+      <g transform="translate(440 220)">
+        <circle r="14" fill="#fff" stroke="#CBD5E1" strokeWidth=".8"/>
+        <path d="M 0 -8 L 4 6 L 0 3 L -4 6 Z" fill="#0F172A"/>
+        <text y="-10" fontSize="8" fill="#64748B" textAnchor="middle" fontWeight="700">N</text>
+      </g>
+
+      {/* scale bar */}
+      <g transform="translate(20 240)">
+        <rect width="60" height="3" fill="#0F172A"/>
+        <text x="0" y="-3" fontSize="9" fill="#64748B" fontWeight="600">500 м</text>
+      </g>
+    </svg>
+  );
+}
+
+function VideoMock({cam, kind='cabin'}) {
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(38);
+  const isRoad = kind === 'road';
+  return (
+    <>
+      {/* backdrop */}
+      <div style={{position:'absolute', inset:0, background: isRoad
+        ? 'linear-gradient(180deg, #1E3A5F 0%, #4A6585 38%, #5B5547 60%, #2A2522 100%)'
+        : 'radial-gradient(ellipse at 60% 50%, #2A2438 0%, #0F172A 70%)'}}/>
+
+      <svg viewBox="0 0 320 180" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" style={{position:'absolute',inset:0}}>
+        {isRoad ? (
+          <g>
+            {/* sun haze */}
+            <circle cx="240" cy="55" r="20" fill="#F8DFA0" opacity=".35"/>
+            {/* distant mountains */}
+            <path d="M 0 80 L 60 60 L 110 78 L 170 55 L 240 75 L 320 65 L 320 100 L 0 100 Z" fill="#3F4E66" opacity=".75"/>
+            {/* asphalt — perspective trapezoid */}
+            <path d="M -20 180 L 140 90 L 180 90 L 340 180 Z" fill="#2A2522"/>
+            {/* shoulders */}
+            <path d="M 140 90 L 180 90 L 340 180 L 320 180 L 175 95 L 145 95 L 0 180 L -20 180 Z" fill="#1F1A18" opacity=".4"/>
+            {/* lane markings — dashed */}
+            <path d="M 160 92 L 160 180" stroke="#E5E7EB" strokeWidth="3" strokeDasharray="6 9" opacity=".85"/>
+            {/* edge lines */}
+            <path d="M 142 96 L 0 180" stroke="#E5E7EB" strokeWidth="1.2" opacity=".7"/>
+            <path d="M 178 96 L 320 180" stroke="#E5E7EB" strokeWidth="1.2" opacity=".7"/>
+            {/* leading vehicle */}
+            <g>
+              <rect x="146" y="92" width="28" height="22" rx="2" fill="#7C2D12"/>
+              <rect x="148" y="95" width="24" height="9"  rx="1" fill="#0F172A" opacity=".6"/>
+              <rect x="149" y="111" width="3" height="3" fill="#FB923C"/>
+              <rect x="168" y="111" width="3" height="3" fill="#FB923C"/>
+              {/* detection box */}
+              <rect x="142" y="88" width="36" height="30" rx="2" stroke="#22D3EE" strokeWidth="1.2" fill="none" strokeDasharray="3 2"/>
+              <rect x="142" y="76" width="56" height="11" rx="2" fill="#22D3EE"/>
+              <text x="146" y="84.5" fontSize="7.5" fill="#0F172A" fontWeight="800">VEHICLE 0.91</text>
+            </g>
+            {/* dashboard bottom */}
+            <path d="M 0 160 L 320 160 L 320 180 L 0 180 Z" fill="#0F172A" opacity=".55"/>
+            {/* speed HUD baked in road */}
+            <g transform="translate(14 130)">
+              <rect width="62" height="26" rx="4" fill="rgba(0,0,0,.55)"/>
+              <text x="8" y="13" fontSize="8" fill="#94A3B8" fontWeight="700">СКОРОСТЬ</text>
+              <text x="8" y="22.5" fontSize="11" fill="#fff" fontWeight="800">76 км/ч</text>
+              <text x="42" y="22.5" fontSize="9" fill="#FCA5A5" fontWeight="800">+16</text>
+            </g>
+          </g>
+        ) : (
+          <g>
+            {/* steering wheel */}
+            <circle cx="80" cy="170" r="55" fill="none" stroke="#1f2937" strokeWidth="6" opacity=".7"/>
+            <circle cx="80" cy="170" r="40" fill="none" stroke="#374151" strokeWidth="3" opacity=".7"/>
+            {/* head / shoulders */}
+            <ellipse cx="170" cy="78" rx="32" ry="36" fill="#3B2F2A" opacity=".95"/>
+            <path d="M 110 200 Q 170 130 230 200 Z" fill="#1F2937" opacity=".95"/>
+            {/* cigarette glow */}
+            <circle cx="148" cy="92" r="4" fill="#FB923C"/>
+            <circle cx="148" cy="92" r="9" fill="#FB923C" opacity=".22" className="pulse"/>
+            {/* smoke */}
+            <path d="M 148 88 Q 140 70 152 60 Q 160 50 150 38" stroke="#CBD5E1" strokeWidth="2" fill="none" opacity=".35"/>
+            {/* face landmark dots */}
+            {[[160,68],[180,68],[155,80],[185,80],[170,92],[165,100],[175,100]].map((p,i)=>(
+              <circle key={i} cx={p[0]} cy={p[1]} r="1.4" fill="#22D3EE" opacity=".9"/>
+            ))}
+            <rect x="142" y="46" width="58" height="68" rx="3" stroke="#22D3EE" strokeWidth="1.2" fill="none" strokeDasharray="3 2" opacity=".9"/>
+            <rect x="142" y="34" width="74" height="11" rx="2" fill="#22D3EE"/>
+            <text x="146" y="42.5" fontSize="7.5" fill="#0F172A" fontWeight="800">SMOKING 0.94</text>
+          </g>
+        )}
+      </svg>
+
+      {/* top chrome */}
+      <div style={{position:'absolute', top:6, left:8, right:8, display:'flex', alignItems:'center', gap:5, color:'#fff', fontSize:10, fontWeight:600}}>
+        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded" style={{background:'#DC2626'}}>
+          <span className="w-1.5 h-1.5 rounded-full bg-white pulse"/> REC
+        </span>
+        <span className="px-1.5 py-0.5 rounded truncate" style={{background:'rgba(0,0,0,.55)', maxWidth:'58%'}}>{cam}</span>
+        <span className="ml-auto px-1.5 py-0.5 rounded font-mono text-[9px]" style={{background:'rgba(0,0,0,.55)'}}>10:32:08</span>
+      </div>
+
+      {/* event flag — only the road player carries the bottom-right tag, cabin shows the DMS detection inline */}
+      {isRoad && (
+        <div style={{position:'absolute', top:30, right:8, padding:'3px 6px', background:'rgba(220,38,38,.92)', color:'#fff', borderRadius:3, fontSize:9, fontWeight:700, letterSpacing:'.04em'}}>
+          ⚠ T=0
+        </div>
+      )}
+
+      {/* bottom controls — compact */}
+      <div style={{position:'absolute', left:8, right:8, bottom:8, color:'#fff'}}>
+        <div style={{height:3, borderRadius:999, background:'rgba(255,255,255,.22)', position:'relative', cursor:'pointer'}}
+             onClick={e=>{const r=e.currentTarget.getBoundingClientRect(); setProgress(Math.max(0,Math.min(100,Math.round((e.clientX-r.left)/r.width*100))));}}>
+          <div style={{position:'absolute', left:0, top:0, bottom:0, width:progress+'%', background:'#3B82F6', borderRadius:999}}/>
+          <div style={{position:'absolute', left:'40%', top:-2, width:2, height:7, background:'#DC2626'}}/>
+          <div style={{position:'absolute', left:`calc(${progress}% - 4px)`, top:-2, width:8, height:8, borderRadius:999, background:'#fff'}}/>
+        </div>
+        <div className="flex items-center mt-1.5 gap-2">
+          <button onClick={()=>setPlaying(p=>!p)} className="grid place-items-center" style={{width:24, height:24, borderRadius:999, background:'#1E3A8A', color:'#fff'}}>
+            {playing ? <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+                     : <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5Z"/></svg>}
+          </button>
+          <span className="text-[10px] font-mono opacity-85">00:38 / 01:24</span>
+          <span className="ml-auto text-[9px] inline-flex items-center gap-1 opacity-80">
+            <span style={{width:5,height:5,borderRadius:999,background:'#22D3EE'}}/> {isRoad ? 'ADAS' : 'DMS'} · 25fps
+          </span>
+          <button className="opacity-80 hover:opacity-100"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"/></svg></button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─────────────────────────────  STATE C2 — FLEET RESULT  ───────────────────────────── */
+
+const DRIVERS = [
+  { id:1, name:'Иванов А.П.',  plate:'А777ВВ 77',  count:7, score:68, severe:1, sources:['video','telematics'], video:4, telem:3 },
+  { id:2, name:'Петров Д.С.',  plate:'В345КМ 97',  count:6, score:72, severe:2, sources:['video','telematics'], video:3, telem:3 },
+  { id:3, name:'Сидоров В.Н.', plate:'Е902СТ 150', count:4, score:76, severe:0, sources:['video'],              video:3, telem:1 },
+  { id:4, name:'Козлов И.А.',  plate:'Н124УУ 199', count:3, score:81, severe:0, sources:['telematics'],         video:0, telem:3 },
+  { id:5, name:'Степанов Д.В.',plate:'М213ОО 77',  count:3, score:84, severe:0, sources:['video','telematics'], video:2, telem:1 },
+];
+
+const VEHICLES = [
+  { id:1, plate:'А777ВВ 77',  model:'Scania R450',  driver:'Иванов А.П.',  km:487, count:7, risk:68, severe:1, video:4, telem:3, cams:{state:'partial', label:'2/3 работают', detail:'CAM-03 нестабильно'} },
+  { id:2, plate:'В345КМ 97',  model:'MAN TGX',      driver:'Петров Д.С.',  km:612, count:6, risk:72, severe:2, video:3, telem:3, cams:{state:'ok',      label:'3/3 работают', detail:''} },
+  { id:3, plate:'Е902СТ 150', model:'Volvo FH',     driver:'Сидоров В.Н.', km:534, count:4, risk:76, severe:0, video:2, telem:2, cams:{state:'offline', label:'CAM-03 offline', detail:'нет сигнала 8ч'} },
+  { id:4, plate:'Н124УУ 199', model:'DAF XF',       driver:'Козлов И.А.',  km:698, count:3, risk:81, severe:0, video:0, telem:3, cams:{state:'ok',      label:'3/3 работают', detail:''} },
+  { id:5, plate:'М213ОО 77',  model:'Kamaz 5490',   driver:'Степанов Д.В.',km:509, count:3, risk:84, severe:0, video:1, telem:2, cams:{state:'partial', label:'2/3 работают', detail:'CAM-02 перезагружена 14.05'} },
+];
+
+const CAM_BADGE = {
+  ok:      { bg:'#DCFCE7', fg:'#16A34A', dot:'#16A34A' },
+  partial: { bg:'#FEF3C7', fg:'#B45309', dot:'#F59E0B' },
+  offline: { bg:'#FEE2E2', fg:'#DC2626', dot:'#DC2626' },
+};
+
+const scoreColor = s => s >= 80 ? '#10B981' : s >= 70 ? '#EAB308' : '#DC2626';
+
+function StateC2({mode='drivers'}) {
+  const isVeh = mode === 'vehicles';
+  const [selDriver,  setSelDriver]  = useState(1);
+  const [selVehicle, setSelVehicle] = useState(1);
+
+  const d = DRIVERS.find(x=>x.id===selDriver);
+  const v = VEHICLES.find(x=>x.id===selVehicle);
+
+  return (
+    <div className="screen" data-screen-label={isVeh ? 'В-2 — парк · ТС' : 'В-2 — парк · водители'}>
+      <div className="flex h-full">
+        <Sidebar/>
+        <div className="flex-1 flex flex-col min-w-0">
+          <TopBar/>
+          <FleetSubHeader/>
+          <div className="flex" style={{padding:'12px 24px', background:'#F8FAFC', borderBottom:'1px solid #E2E8F0', gap:10}}>
+            <FleetKpi n={23} label="Всего нарушений" color="#1E3A8A"/>
+            <FleetKpi n={12} label="Видео-детекции (ВА)" color="#7C3AED" badge="📹"/>
+            <FleetKpi n={11} label="Телематика" color="#0EA5E9" badge="📡"/>
+            <FleetKpi n={3}  label="Грубых" color="#DC2626" bg="#FEF2F2"/>
+            <FleetKpi n={isVeh ? 5 : 5}  label={isVeh ? 'ТС' : 'Водителей'} color="#1E3A8A" badge={isVeh ? '🚛' : '👤'}/>
+          </div>
+          <div className="flex flex-1 min-h-0">
+            {/* LEFT 55% */}
+            <div className="overflow-y-auto no-scrollbar" style={{flex:'0 0 55%', padding:'16px 24px 20px', background:'#F8FAFC'}}>
+              {/* pill toggle */}
+              <div className="flex items-center justify-between mb-3">
+                <PillToggle mode={mode}/>
+                <div className="text-[11px]" style={{color:'#94A3B8'}}>сортировка: по числу нарушений ↓</div>
+              </div>
+              <div className="text-[11px] font-semibold uppercase tracking-wider mb-2" style={{color:'#64748B'}}>
+                {isVeh ? 'Топ ТС по нарушениям' : 'Топ водителей по нарушениям'}
+              </div>
+              <div className="flex flex-col gap-2">
+                {isVeh
+                  ? VEHICLES.map(vh => <VehicleRow  key={vh.id} v={vh} selected={vh.id===selVehicle} onClick={()=>setSelVehicle(vh.id)}/>)
+                  : DRIVERS .map(dr => <DriverRow  key={dr.id} d={dr} selected={dr.id===selDriver}  onClick={()=>setSelDriver(dr.id)}/>)
+                }
+              </div>
+              <div className="mt-3 text-[11px] text-center" style={{color:'#94A3B8'}}>
+                Показано 5 из 5 {isVeh ? 'ТС с нарушениями' : 'водителей с нарушениями'} за период · всего в парке {isVeh ? '53 ТС' : '47 водителей'}
+              </div>
+            </div>
+            {/* RIGHT 45% */}
+            <div style={{flex:'0 0 45%', borderLeft:'1px solid #E2E8F0', background:'#fff', padding:'14px 16px', overflowY:'auto'}} className="no-scrollbar">
+              {isVeh
+                ? (v ? <VehicleMiniDash v={v}/> : <FleetSummaryPanel/>)
+                : (d ? <DriverMiniDash  d={d}/> : <FleetSummaryPanel/>)
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PillToggle({mode}) {
+  const tabs = [
+    { k:'drivers', icon:'👤', label:'По водителям' },
+    { k:'vehicles', icon:'🚛', label:'По ТС' },
+  ];
+  return (
+    <div className="inline-flex items-center p-0.5" style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:999}}>
+      {tabs.map(t=>{
+        const active = t.k === mode;
+        return (
+          <span key={t.k}
+                className="inline-flex items-center gap-1.5 text-[12px] font-semibold cursor-pointer"
+                style={{
+                  padding:'6px 14px', borderRadius:999,
+                  background: active ? '#1E3A8A' : 'transparent',
+                  color: active ? '#fff' : '#475569',
+                  transition:'all .15s ease',
+                }}>
+            <span>{t.icon}</span><span>{t.label}</span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function FleetSubHeader() {
+  return (
+    <div className="flex items-center" style={{padding:'12px 24px', background:'#fff', borderBottom:'1px solid #E2E8F0'}}>
+      <div className="min-w-0">
+        <div className="text-[13px] italic flex items-center gap-1.5" style={{color:'#64748B'}}>
+          <span style={{color:'#94A3B8'}}>💬</span>
+          <span className="truncate">«Все нарушения по компании за последние три дня»</span>
+        </div>
+        <div className="text-[14px] font-bold text-slate-900 mt-0.5">
+          14–16.05.2026 <span className="text-slate-400 font-normal mx-1">·</span> 5 водителей <span className="text-slate-400 font-normal mx-1">·</span> 23 нарушения <span className="text-slate-400 font-normal mx-1">·</span> 2 840 км
+        </div>
+      </div>
+      <div className="ml-auto flex items-center gap-2">
+        <button className="ghost-btn inline-flex items-center gap-1.5 text-[12px] font-medium"
+                style={{border:'1px solid #E2E8F0', background:'#fff', color:'#475569', padding:'7px 12px', borderRadius:6}}>
+          <I.edit/> Изменить
+        </button>
+        <button className="ghost-btn inline-flex items-center gap-1.5 text-[12px] font-medium"
+                style={{border:'1px solid #E2E8F0', background:'#fff', color:'#475569', padding:'7px 12px', borderRadius:6}}>
+          <I.download/> Скачать PDF
+        </button>
+        <button className="ghost-btn inline-flex items-center gap-1.5 text-[12px] font-medium"
+                style={{border:'1px solid #E2E8F0', background:'#fff', color:'#475569', padding:'7px 12px', borderRadius:6}}>
+          <I.download/> Скачать CSV
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function FleetKpi({n, label, color, badge, bg}) {
+  return (
+    <div className="flex-1"
+         style={{background:bg||'#fff', border:'1px solid '+(bg?'#FECACA':'#E2E8F0'), borderRadius:8, padding:'10px 12px'}}>
+      <div className="flex items-baseline gap-2">
+        <div className="text-[24px] font-extrabold leading-none" style={{color}}>{n}</div>
+        {badge && <div className="text-[12px]">{badge}</div>}
+      </div>
+      <div className="text-[10px] font-semibold uppercase tracking-wider mt-1" style={{color:'#64748B'}}>{label}</div>
+    </div>
+  );
+}
+
+function DriverRow({d, selected, onClick}) {
+  const sc = scoreColor(d.score);
+  const initials = d.name.split(' ').slice(0,2).map(p=>p[0]).join('');
+  return (
+    <div onClick={onClick}
+         className="row cursor-pointer flex items-center gap-3"
+         style={{
+           background: selected ? '#EFF6FF' : '#fff',
+           border:'1px solid '+(selected ? '#1E3A8A' : '#E2E8F0'),
+           borderLeft:'4px solid '+(d.count>=6 ? '#DC2626' : d.count>=4 ? '#F59E0B' : '#94A3B8'),
+           borderRadius:8, padding:'12px 14px',
+         }}>
+      <div className="w-10 h-10 rounded-full grid place-items-center text-white font-bold text-[13px] shrink-0"
+           style={{background: selected ? 'linear-gradient(135deg,#1E40AF,#3B82F6)' : 'linear-gradient(135deg,#475569,#64748B)'}}>
+        {initials}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-[14px] font-bold text-slate-900 truncate">{d.name}</span>
+          <span className="text-[11px] font-mono" style={{color:'#64748B'}}>· {d.plate}</span>
+          {d.severe>0 && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded ml-1"
+                  style={{background:'#FEE2E2', color:'#991B1B'}}>⚠ {d.severe} груб.</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex-1 max-w-[180px] h-1.5 rounded-full overflow-hidden" style={{background:'#F1F5F9'}}>
+            <div style={{width:d.score+'%', height:'100%', background:sc}}/>
+          </div>
+          <span className="text-[11px] font-bold" style={{color:sc}}>Score {d.score}</span>
+          <span className="text-[11px]" style={{color:'#CBD5E1'}}>·</span>
+          <div className="flex items-center gap-1">
+            {d.sources.includes('video') && <SrcChip kind="video" n={d.video}/>}
+            {d.sources.includes('telematics') && <SrcChip kind="telem" n={d.telem}/>}
+          </div>
+        </div>
+      </div>
+      <div className="text-right shrink-0">
+        <div className="text-[20px] font-extrabold leading-none" style={{color:'#0F172A'}}>{d.count}</div>
+        <div className="text-[10px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>наруш.</div>
+      </div>
+    </div>
+  );
+}
+
+function SrcChip({kind, n}) {
+  const cfg = kind==='video'
+    ? { bg:'#F3E8FF', fg:'#7C3AED', icon:'📹' }
+    : { bg:'#E0F2FE', fg:'#0369A1', icon:'📡' };
+  return (
+    <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1 py-0.5 rounded"
+          style={{background:cfg.bg, color:cfg.fg}}>
+      <span>{cfg.icon}</span>
+      <span>{n}</span>
+    </span>
+  );
+}
+
+/* ── Vehicle row (По ТС) ── */
+function VehicleRow({v, selected, onClick}) {
+  const rc = scoreColor(v.risk);
+  const cam = CAM_BADGE[v.cams.state];
+  return (
+    <div onClick={onClick}
+         className="row cursor-pointer flex items-center gap-3"
+         style={{
+           background: selected ? '#EFF6FF' : '#fff',
+           border:'1px solid '+(selected ? '#1E3A8A' : '#E2E8F0'),
+           borderLeft:'4px solid '+(v.count>=6 ? '#DC2626' : v.count>=4 ? '#F59E0B' : '#94A3B8'),
+           borderRadius:8, padding:'12px 14px',
+         }}>
+      <div className="w-10 h-10 rounded-lg grid place-items-center text-[18px] shrink-0"
+           style={{background: v.cams.state==='offline' ? '#FEF2F2' : '#F1F5F9', border:'1px solid '+(v.cams.state==='offline'?'#FECACA':'#E2E8F0')}}>
+        <span>🚛</span>
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-0.5">
+          <span className="text-[14px] font-bold text-slate-900 font-mono">{v.plate}</span>
+          <span className="text-[12px]" style={{color:'#64748B'}}>· {v.model}</span>
+          {v.severe>0 && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded ml-1"
+                  style={{background:'#FEE2E2', color:'#991B1B'}}>⚠ {v.severe} груб.</span>
+          )}
+        </div>
+        <div className="text-[12px] mb-1 flex items-center gap-1.5" style={{color:'#64748B'}}>
+          <span>👤 {v.driver}</span>
+          <span style={{color:'#CBD5E1'}}>·</span>
+          <span>📏 Пробег: <span className="font-semibold text-slate-700">{v.km} км</span></span>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex-1 max-w-[140px] h-1.5 rounded-full overflow-hidden" style={{background:'#F1F5F9'}}>
+            <div style={{width:v.risk+'%', height:'100%', background:rc}}/>
+          </div>
+          <span className="text-[11px] font-bold" style={{color:rc}}>Риск {v.risk}</span>
+          <span className="text-[11px]" style={{color:'#CBD5E1'}}>·</span>
+          {v.video>0 && <SrcChip kind="video" n={v.video}/>}
+          {v.telem>0 && <SrcChip kind="telem" n={v.telem}/>}
+          <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded ml-auto"
+                style={{background:cam.bg, color:cam.fg}}>
+            <span className="w-1.5 h-1.5 rounded-full" style={{background:cam.dot}}/>
+            📷 {v.cams.label}
+          </span>
+        </div>
+      </div>
+      <div className="text-right shrink-0">
+        <div className="text-[20px] font-extrabold leading-none" style={{color:'#0F172A'}}>{v.count}</div>
+        <div className="text-[10px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>наруш.</div>
+      </div>
+    </div>
+  );
+}
+
+/* ─ default right panel: violations by day + summary map ─ */
+function FleetSummaryPanel() {
+  return (
+    <>
+      <ByDayChart/>
+      <FleetMap/>
+      <FleetLegend/>
+    </>
+  );
+}
+
+function ByDayChart() {
+  const days = [
+    { d:'14.05', v:5, t:4 },
+    { d:'15.05', v:4, t:5 },
+    { d:'16.05', v:3, t:2 },
+  ];
+  const maxStack = 12;
+  const W=480, H=160, padL=32, padR=12, padT=18, padB=30;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const bandW = innerW / days.length;
+  const barW = 56;
+  const yFor = v => padT + (1 - v/maxStack) * innerH;
+  return (
+    <div style={{marginBottom:14}}>
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-[11px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>Нарушения по дням</div>
+        <div className="text-[11px] inline-flex items-center gap-3" style={{color:'#64748B'}}>
+          <span className="inline-flex items-center gap-1"><span style={{width:10,height:10,background:'#0EA5E9',borderRadius:2}}/>Телематика</span>
+          <span className="inline-flex items-center gap-1"><span style={{width:10,height:10,background:'#7C3AED',borderRadius:2}}/>ВА</span>
+        </div>
+      </div>
+      <div style={{height:160, border:'1px solid #E2E8F0', borderRadius:8, padding:'4px 4px 0', background:'#fff'}}>
+        <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%" preserveAspectRatio="none">
+          {/* y grid */}
+          {[0,3,6,9,12].map(v=>(
+            <g key={v}>
+              <line x1={padL} x2={W-padR} y1={yFor(v)} y2={yFor(v)} stroke="#F1F5F9"/>
+              <text x={padL-6} y={yFor(v)+3} fontSize="9" fill="#94A3B8" textAnchor="end">{v}</text>
+            </g>
+          ))}
+          {days.map((day,i)=>{
+            const cx = padL + bandW*(i+0.5);
+            const x  = cx - barW/2;
+            const total = day.v + day.t;
+            const yTel = yFor(day.t);
+            const hTel = yFor(0) - yFor(day.t);
+            const yVA  = yFor(total);
+            const hVA  = yFor(day.t) - yFor(total);
+            const isHover = i===0;
+            return (
+              <g key={day.d}>
+                {/* telematics bottom */}
+                <rect x={x} y={yTel} width={barW} height={hTel} fill="#0EA5E9" rx="2"/>
+                {/* video top */}
+                <rect x={x} y={yVA} width={barW} height={hVA} fill="#7C3AED" rx="2"/>
+                {/* total label */}
+                <text x={cx} y={yVA-4} fontSize="11" fontWeight="800" fill="#0F172A" textAnchor="middle">{total}</text>
+                {/* split inside bars */}
+                <text x={cx} y={yTel + hTel/2 + 3} fontSize="9" fontWeight="700" fill="#fff" textAnchor="middle">{day.t}</text>
+                <text x={cx} y={yVA + hVA/2 + 3} fontSize="9" fontWeight="700" fill="#fff" textAnchor="middle">{day.v}</text>
+                {/* x label */}
+                <text x={cx} y={H-12} fontSize="10" fontWeight="600" fill="#64748B" textAnchor="middle">{day.d}</text>
+                {/* tooltip on first */}
+                {isHover && (
+                  <g>
+                    <rect x={cx-66} y={yVA-46} width="132" height="36" rx="6" fill="#0F172A"/>
+                    <text x={cx-58} y={yVA-32} fontSize="10" fill="#fff" fontWeight="700">14.05 · всего {total}</text>
+                    <text x={cx-58} y={yVA-20} fontSize="9" fill="#A78BFA">ВА: {day.v}</text>
+                    <text x={cx-22} y={yVA-20} fontSize="9" fill="#67E8F9">Телематика: {day.t}</text>
+                  </g>
+                )}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function FleetMap() {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-[11px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>Карта событий</div>
+        <div className="text-[11px]" style={{color:'#94A3B8'}}>23 события за 3 дня</div>
+      </div>
+      <div style={{height:180, borderRadius:8, overflow:'hidden', position:'relative', border:'1px solid #E2E8F0', background:'linear-gradient(180deg,#E8F0F7,#DBE7F2)'}}>
+        <FleetMapSVG/>
+      </div>
+    </div>
+  );
+}
+
+function FleetMapSVG() {
+  // pin clusters & individual events
+  const items = [
+    { x:80,  y:130, c:'#DC2626', n:1 },
+    { x:135, y:90,  c:'#F59E0B', n:1 },
+    { x:175, y:60,  c:'cluster', count:6, sev:'#DC2626' },
+    { x:230, y:115, c:'#F59E0B', n:1 },
+    { x:285, y:85,  c:'cluster', count:4, sev:'#F59E0B' },
+    { x:325, y:140, c:'#10B981', n:1 },
+    { x:380, y:70,  c:'cluster', count:3, sev:'#F59E0B' },
+    { x:420, y:110, c:'#DC2626', n:1 },
+    { x:455, y:130, c:'#10B981', n:1 },
+    { x:55,  y:55,  c:'#F59E0B', n:1 },
+    { x:265, y:35,  c:'#10B981', n:1 },
+  ];
+  return (
+    <svg viewBox="0 0 480 180" width="100%" height="100%" preserveAspectRatio="none">
+      <defs>
+        <pattern id="fleetGrid" width="36" height="36" patternUnits="userSpaceOnUse">
+          <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#CBD5E1" strokeWidth=".4"/>
+        </pattern>
+      </defs>
+      <rect width="480" height="180" fill="url(#fleetGrid)"/>
+      {/* districts */}
+      <path d="M 30 30 L 160 20 L 180 70 L 70 90 Z" fill="#D1FAE5" opacity=".5"/>
+      <path d="M 320 110 L 460 100 L 470 175 L 340 180 Z" fill="#FEF3C7" opacity=".4"/>
+      <circle cx="280" cy="50" r="28" fill="#DBEAFE" opacity=".55"/>
+      {/* highways */}
+      <path d="M -10 130 C 100 125, 200 95, 300 105 S 460 140, 500 125" stroke="#fff" strokeWidth="10" fill="none"/>
+      <path d="M -10 130 C 100 125, 200 95, 300 105 S 460 140, 500 125" stroke="#FACC15" strokeWidth="5" fill="none" opacity=".5"/>
+      <path d="M 70 -10 L 120 60 L 200 100 L 320 130 L 420 180" stroke="#fff" strokeWidth="6" fill="none"/>
+      <path d="M 70 -10 L 120 60 L 200 100 L 320 130 L 420 180" stroke="#CBD5E1" strokeWidth=".6" fill="none"/>
+      <path d="M 250 -10 L 280 90 L 360 150" stroke="#fff" strokeWidth="5" fill="none"/>
+      <path d="M 250 -10 L 280 90 L 360 150" stroke="#CBD5E1" strokeWidth=".5" fill="none"/>
+
+      {items.map((p,i)=>{
+        if (p.c === 'cluster') {
+          return (
+            <g key={i}>
+              <circle cx={p.x} cy={p.y} r="18" fill={p.sev} opacity=".15"/>
+              <circle cx={p.x} cy={p.y} r="12" fill={p.sev}/>
+              <text x={p.x} y={p.y+4} fontSize="11" fontWeight="800" fill="#fff" textAnchor="middle">{p.count}</text>
+            </g>
+          );
+        }
+        return (
+          <g key={i}>
+            <circle cx={p.x} cy={p.y} r="6" fill={p.c} opacity=".22"/>
+            <circle cx={p.x} cy={p.y} r="3.5" fill={p.c} stroke="#fff" strokeWidth="1"/>
+          </g>
+        );
+      })}
+
+      {/* north arrow */}
+      <g transform="translate(450 150)">
+        <circle r="12" fill="#fff" stroke="#CBD5E1" strokeWidth=".8"/>
+        <path d="M 0 -7 L 3 5 L 0 2 L -3 5 Z" fill="#0F172A"/>
+        <text y="-9" fontSize="7" fill="#64748B" textAnchor="middle" fontWeight="700">N</text>
+      </g>
+    </svg>
+  );
+}
+
+function FleetLegend() {
+  return (
+    <div className="flex items-center gap-4 mt-2 text-[11px]" style={{color:'#64748B'}}>
+      <Legend dot="#DC2626" label="Грубое"/>
+      <Legend dot="#F59E0B" label="Высокое"/>
+      <Legend dot="#10B981" label="Среднее"/>
+      <div className="ml-auto inline-flex items-center gap-1.5">
+        <span className="grid place-items-center text-white text-[9px] font-bold" style={{width:14, height:14, borderRadius:999, background:'#F59E0B'}}>N</span>
+        <span>кластер из N событий</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─ driver mini-dashboard panel ─ */
+function DriverMiniDash({d}) {
+  const sc = scoreColor(d.score);
+  const initials = d.name.split(' ').slice(0,2).map(p=>p[0]).join('');
+  const recentViolations = d.id === 1 ? [
+    { d:'16.05', t:'13:40', name:'Отвлечение внимания', sev:'high', src:'video-dms' },
+    { d:'15.05', t:'21:15', name:'Превышение +9 км/ч', sev:'medium', src:'telematics' },
+    { d:'15.05', t:'09:05', name:'Ремень безопасности', sev:'high', src:'video' },
+  ] : d.id === 2 ? [
+    { d:'16.05', t:'07:22', name:'Резкое перестроение', sev:'high', src:'telematics' },
+    { d:'15.05', t:'18:11', name:'Использование телефона', sev:'severe', src:'video-dms' },
+    { d:'14.05', t:'04:08', name:'Сонливость', sev:'severe', src:'video-dms' },
+  ] : [
+    { d:'15.05', t:'11:30', name:'Превышение +12 км/ч', sev:'high', src:'telematics' },
+    { d:'14.05', t:'16:42', name:'Резкое торможение', sev:'high', src:'telematics' },
+    { d:'14.05', t:'10:15', name:'Отвлечение внимания', sev:'high', src:'video-dms' },
+  ];
+
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-[11px] uppercase font-semibold tracking-wider" style={{color:'#94A3B8'}}>Мини-дашборд водителя</span>
+        <span className="text-[11px]" style={{color:'#CBD5E1'}}>·</span>
+        <span className="text-[11px] font-semibold" style={{color:'#1E3A8A'}}>#{d.id}</span>
+      </div>
+
+      {/* header card */}
+      <div style={{background:'#F8FAFC', border:'1px solid #E2E8F0', borderRadius:8, padding:14}}>
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full grid place-items-center text-white font-bold text-[14px] shrink-0"
+               style={{background:'linear-gradient(135deg,#1E40AF,#3B82F6)'}}>{initials}</div>
+          <div className="flex-1 min-w-0">
+            <div className="text-[15px] font-bold text-slate-900">{d.name}</div>
+            <div className="text-[12px] font-mono mt-0.5" style={{color:'#64748B'}}>{d.plate}</div>
+          </div>
+          <div className="text-right shrink-0">
+            <div className="text-[10px] font-semibold uppercase tracking-wider" style={{color:'#94A3B8'}}>Score</div>
+            <div className="text-[22px] font-extrabold leading-none" style={{color:sc}}>{d.score}</div>
+          </div>
+        </div>
+        <div className="mt-2.5 h-1.5 rounded-full overflow-hidden" style={{background:'#E2E8F0'}}>
+          <div style={{width:d.score+'%', height:'100%', background:sc}}/>
+        </div>
+      </div>
+
+      {/* KPIs */}
+      <div className="grid grid-cols-4 gap-2 mt-3">
+        <MiniKpi n={d.count} label="Наруш." color="#1E3A8A"/>
+        <MiniKpi n={d.video} label="ВА 📹" color="#7C3AED"/>
+        <MiniKpi n={d.telem} label="Телем. 📡" color="#0EA5E9"/>
+        <MiniKpi n={d.severe} label="Грубых" color={d.severe>0 ? '#DC2626' : '#94A3B8'} bg={d.severe>0 ? '#FEF2F2' : undefined}/>
+      </div>
+
+      {/* trip stats */}
+      <div className="grid grid-cols-3 gap-2 mt-3 text-[12px]" style={{color:'#64748B'}}>
+        <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:6, padding:'8px 10px'}}>
+          <div className="text-[10px] uppercase tracking-wider font-semibold mb-0.5" style={{color:'#94A3B8'}}>Пробег</div>
+          <div className="text-[13px] font-bold text-slate-900">{d.id===1?'487':d.id===2?'612':d.id===3?'528':d.id===4?'445':d.id===5?'768':'500'} км</div>
+        </div>
+        <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:6, padding:'8px 10px'}}>
+          <div className="text-[10px] uppercase tracking-wider font-semibold mb-0.5" style={{color:'#94A3B8'}}>Рейсов</div>
+          <div className="text-[13px] font-bold text-slate-900">{d.id===1?'4':d.id===2?'6':'5'}</div>
+        </div>
+        <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:6, padding:'8px 10px'}}>
+          <div className="text-[10px] uppercase tracking-wider font-semibold mb-0.5" style={{color:'#94A3B8'}}>В рейсе</div>
+          <div className="text-[13px] font-bold text-slate-900">{d.id===1?'9ч 42м':d.id===2?'12ч 18м':'8ч 06м'}</div>
+        </div>
+      </div>
+
+      {/* last 3 violations */}
+      <div className="mt-4">
+        <div className="text-[11px] font-semibold uppercase tracking-wider mb-1.5" style={{color:'#64748B'}}>3 последних нарушения</div>
+        <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:8, overflow:'hidden'}}>
+          {recentViolations.map((v,i)=>{
+            const sev = SEV[v.sev];
+            const src = SRC[v.src];
+            const isLast = i === recentViolations.length-1;
+            return (
+              <div key={i} className="row flex items-center gap-2"
+                   style={{padding:'10px 12px', borderBottom: isLast ? 'none' : '1px solid #F1F5F9', borderLeft: v.sev==='severe' ? '3px solid #DC2626' : '3px solid transparent'}}>
+                <div className="shrink-0" style={{width:50}}>
+                  <div className="text-[12px] font-bold text-slate-900">{v.d}</div>
+                  <div className="text-[11px]" style={{color:'#64748B'}}>{v.t}</div>
+                </div>
+                <div className="flex-1 min-w-0 text-[13px] font-semibold text-slate-900 truncate">{v.name}</div>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0"
+                      style={{background:src.bg, color:src.fg}}>{src.icon}</span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0"
+                      style={{background:sev.bg, color:sev.fg}}>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{background:sev.dot}}/> {sev.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <button className="primary-btn inline-flex items-center justify-center gap-2 text-white text-[13px] font-semibold w-full mt-3"
+              style={{height:42, borderRadius:8}}>
+        Открыть полный отчёт по {d.name.split(' ')[0]} <I.arrowR/>
+      </button>
+    </div>
+  );
+}
+
+/* ─ vehicle mini-dashboard ─ */
+function VehicleMiniDash({v}) {
+  const rc = scoreColor(v.risk);
+  const cams = [
+    { id:'CAM-01', kind:'ADAS · фронт', state: v.cams.state==='offline' || v.id===3 ? 'ok' : 'ok' },
+    { id:'CAM-02', kind:'DMS · салон',  state: v.id===5 ? 'partial' : 'ok' },
+    { id:'CAM-03', kind:'CH3 · кузов',  state: v.id===3 ? 'offline' : v.id===1 ? 'partial' : 'ok' },
+  ];
+  // Drivers on the vehicle during the period
+  const driversOn = v.id===1 ? [
+    { name:'Иванов А.П.',  primary:true,  rides:4, dates:'14–16.05' },
+    { name:'Козлов И.А.',  primary:false, rides:1, dates:'14.05'    },
+  ] : v.id===2 ? [
+    { name:'Петров Д.С.',  primary:true,  rides:6, dates:'14–16.05' },
+  ] : v.id===3 ? [
+    { name:'Сидоров В.Н.', primary:true,  rides:3, dates:'14–16.05' },
+    { name:'Степанов Д.В.',primary:false, rides:1, dates:'16.05'    },
+  ] : v.id===4 ? [
+    { name:'Козлов И.А.',  primary:true,  rides:5, dates:'14–16.05' },
+  ] : [
+    { name:'Степанов Д.В.',primary:true,  rides:3, dates:'14–16.05' },
+    { name:'Сидоров В.Н.', primary:false, rides:1, dates:'15.05'    },
+  ];
+  const recent = v.id===1 ? [
+    { d:'16.05', t:'13:40', name:'Отвлечение внимания', sev:'high',   src:'video-dms' },
+    { d:'14.05', t:'10:32', name:'Курение за рулём',    sev:'severe', src:'video-dms' },
+    { d:'15.05', t:'00:36', name:'Засыпание за рулём',  sev:'high',   src:'video-dms' },
+  ] : v.id===2 ? [
+    { d:'15.05', t:'18:11', name:'Использование телефона', sev:'severe', src:'video-dms' },
+    { d:'14.05', t:'04:08', name:'Сонливость',             sev:'severe', src:'video-dms' },
+    { d:'16.05', t:'07:22', name:'Резкое перестроение',    sev:'high',   src:'telematics' },
+  ] : v.id===3 ? [
+    { d:'15.05', t:'11:30', name:'Превышение +14 км/ч',    sev:'high', src:'telematics' },
+    { d:'14.05', t:'16:42', name:'Резкое торможение',       sev:'high', src:'telematics' },
+    { d:'14.05', t:'10:15', name:'Отвлечение внимания',     sev:'high', src:'video-dms' },
+  ] : v.id===4 ? [
+    { d:'16.05', t:'09:18', name:'Превышение +9 км/ч',     sev:'medium', src:'telematics' },
+    { d:'15.05', t:'14:33', name:'Резкое ускорение',        sev:'high',   src:'telematics' },
+    { d:'14.05', t:'19:50', name:'Резкое торможение',       sev:'high',   src:'telematics' },
+  ] : [
+    { d:'15.05', t:'08:12', name:'Превышение +8 км/ч',     sev:'medium', src:'telematics' },
+    { d:'14.05', t:'13:24', name:'Ремень безопасности',     sev:'high',   src:'video' },
+    { d:'14.05', t:'06:45', name:'Резкое торможение',       sev:'high',   src:'telematics' },
+  ];
+  const rides = v.id===1 ? 4 : v.id===2 ? 6 : v.id===3 ? 4 : v.id===4 ? 5 : 4;
+  const time  = v.id===1 ? '9ч 42м' : v.id===2 ? '12ч 18м' : v.id===3 ? '8ч 54м' : v.id===4 ? '11ч 06м' : '8ч 30м';
+
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-[11px] uppercase font-semibold tracking-wider" style={{color:'#94A3B8'}}>Мини-дашборд ТС</span>
+        <span className="text-[11px]" style={{color:'#CBD5E1'}}>·</span>
+        <span className="text-[11px] font-semibold" style={{color:'#1E3A8A'}}>#{v.id}</span>
+      </div>
+
+      {/* header card */}
+      <div style={{background:'#F8FAFC', border:'1px solid #E2E8F0', borderRadius:8, padding:'10px 12px'}}>
+        <div className="flex items-center gap-2.5">
+          <div className="rounded-lg grid place-items-center text-[18px] shrink-0"
+               style={{width:36, height:36, background:'#fff', border:'1px solid #E2E8F0'}}>🚛</div>
+          <div className="flex-1 min-w-0">
+            <div className="text-[15px] font-bold text-slate-900 font-mono leading-tight">{v.plate}</div>
+            <div className="text-[12px]" style={{color:'#64748B'}}>{v.model}</div>
+          </div>
+          <div className="text-right shrink-0">
+            <div className="text-[9px] font-semibold uppercase tracking-wider leading-none" style={{color:'#94A3B8'}}>Риск</div>
+            <div className="text-[20px] font-extrabold leading-none mt-0.5" style={{color:rc}}>{v.risk}</div>
+          </div>
+        </div>
+        <div className="mt-2 h-1 rounded-full overflow-hidden" style={{background:'#E2E8F0'}}>
+          <div style={{width:v.risk+'%', height:'100%', background:rc}}/>
+        </div>
+      </div>
+
+      {/* Camera status — compact one-liners */}
+      <div className="mt-2.5">
+        <div className="flex items-end justify-between mb-1">
+          <div className="text-[11px] font-semibold uppercase tracking-wider" style={{color:'#64748B'}}>Состояние камер</div>
+          {v.cams.detail && (
+            <div className="text-[10px] italic" style={{color:'#94A3B8'}}>{v.cams.detail}</div>
+          )}
+        </div>
+        <div className="flex flex-col" style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:8, overflow:'hidden'}}>
+          {cams.map((c,i)=>{
+            const cfg = CAM_BADGE[c.state];
+            const label = c.state==='ok' ? 'Работает' : c.state==='partial' ? 'Нестабильно' : 'Нет сигнала';
+            const isLast = i===cams.length-1;
+            return (
+              <div key={c.id} className="flex items-center gap-2"
+                   style={{padding:'6px 10px', borderBottom: isLast ? 'none' : '1px solid #F1F5F9'}}>
+                <span className="grid place-items-center text-[11px]" style={{width:22, height:22, borderRadius:5, background:cfg.bg}}>📷</span>
+                <span className="text-[12px] font-bold text-slate-900 font-mono">{c.id}</span>
+                <span className="text-[11px]" style={{color:'#64748B'}}>· {c.kind}</span>
+                <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded"
+                      style={{background:cfg.bg, color:cfg.fg}}>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{background:cfg.dot}}/>{label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Drivers on this vehicle — compact */}
+      <div className="mt-2.5">
+        <div className="text-[11px] font-semibold uppercase tracking-wider mb-1" style={{color:'#64748B'}}>Водители за период</div>
+        <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:8, padding:'4px 10px'}}>
+          {driversOn.map((dr,i)=>(
+            <div key={i} className="flex items-center gap-2" style={{padding:'3px 0'}}>
+              <span className="w-2 h-2 rounded-full shrink-0" style={{background: dr.primary ? '#1E3A8A' : '#CBD5E1'}}/>
+              <span className="text-[12px] font-semibold text-slate-900">{dr.name}</span>
+              {dr.primary && <span className="text-[9px] font-bold px-1 py-0.5 rounded" style={{background:'#EFF6FF', color:'#1E3A8A'}}>ОСНОВНОЙ</span>}
+              <span className="ml-auto text-[11px]" style={{color:'#64748B'}}>{dr.rides} {dr.rides===1?'рейс':'рейсов'} · {dr.dates}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* KPI row */}
+      <div className="grid grid-cols-4 gap-1.5 mt-2.5">
+        <MiniKpi n={v.count} label="Наруш."  color="#1E3A8A"/>
+        <MiniKpi n={v.km}    label="км"      color="#0F172A"/>
+        <MiniKpi n={rides}   label="Рейсов"  color="#0F172A"/>
+        <MiniKpi n={time}    label="В рейсе" color="#0F172A"/>
+      </div>
+
+      {/* 3 last violations */}
+      <div className="mt-2.5">
+        <div className="text-[11px] font-semibold uppercase tracking-wider mb-1" style={{color:'#64748B'}}>3 последних нарушения</div>
+        <div style={{background:'#fff', border:'1px solid #E2E8F0', borderRadius:8, overflow:'hidden'}}>
+          {recent.map((vi,i)=>{
+            const sev = SEV[vi.sev];
+            const src = SRC[vi.src];
+            const isLast = i === recent.length-1;
+            return (
+              <div key={i} className="row flex items-center gap-2"
+                   style={{padding:'6px 10px', borderBottom: isLast ? 'none' : '1px solid #F1F5F9', borderLeft: vi.sev==='severe' ? '3px solid #DC2626' : '3px solid transparent'}}>
+                <div className="shrink-0" style={{width:46}}>
+                  <div className="text-[11px] font-bold text-slate-900 leading-tight">{vi.d}</div>
+                  <div className="text-[10px]" style={{color:'#64748B'}}>{vi.t}</div>
+                </div>
+                <div className="flex-1 min-w-0 text-[12px] font-semibold text-slate-900 truncate">{vi.name}</div>
+                <span className="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0"
+                      style={{background:src.bg, color:src.fg}}>{src.icon}</span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0"
+                      style={{background:sev.bg, color:sev.fg}}>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{background:sev.dot}}/> {sev.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <button className="primary-btn inline-flex items-center justify-center gap-2 text-white text-[12px] font-semibold w-full mt-2.5"
+              style={{height:36, borderRadius:8}}>
+        Открыть историю ТС {v.plate} <I.arrowR/>
+      </button>
+    </div>
+  );
+}
+
+function MiniKpi({n, label, color, bg}) {
+  return (
+    <div style={{background:bg||'#fff', border:'1px solid '+(bg?'#FECACA':'#E2E8F0'), borderRadius:6, padding:'6px 8px'}}>
+      <div className="text-[17px] font-extrabold leading-none" style={{color}}>{n}</div>
+      <div className="text-[9px] font-semibold uppercase tracking-wider mt-1" style={{color:'#64748B'}}>{label}</div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────  ROOT  ───────────────────────────── */
+function App() {
+  return (
+    <div className="screens-wrap">
+      <div>
+        <div className="frame-label"><span className="dot"/>Состояние А1 · Текст введён вручную · голосовой ввод выключен · 1440 × 900</div>
+        <StateA mode="typed"/>
+      </div>
+      <div>
+        <div className="frame-label"><span className="dot"/>Состояние А2 · Текстовый ввод неактивен · голосовое распознавание активно · 1440 × 900</div>
+        <StateA mode="voice"/>
+      </div>
+      <div>
+        <div className="frame-label"><span className="dot"/>Состояние Б · Подтверждение запроса — система показывает как поняла · 1440 × 900</div>
+        <StateB/>
+      </div>
+      <div>
+        <div className="frame-label"><span className="dot"/>Состояние В · Полный отчёт — водитель, нарушения, трек и видео · 1440 × 900</div>
+        <StateC/>
+      </div>
+      <div>
+        <div className="frame-label">
+          <span className="dot"/>Состояние В-2 · Результат по парку — когда запрос касается компании или нескольких водителей · 1440 × 900
+        </div>
+        <StateC2/>
+      </div>
+      <div>
+        <div className="frame-label">
+          <span className="dot"/>Состояние В-2 · Тот же запрос в разрезе ТС — переключатель «По ТС» · 1440 × 900
+        </div>
+        <StateC2 mode="vehicles"/>
+      </div>
+      <div className="text-center text-[12px] mt-2" style={{color:'#94A3B8'}}>
+        Killer feature: клик по строке нарушения → справа открывается видеофрагмент DMS-камеры с меткой события
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

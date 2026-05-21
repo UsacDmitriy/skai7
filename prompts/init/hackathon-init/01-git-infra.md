@@ -1,25 +1,92 @@
-# Промпт 1 — Git & Infra
+# Промпт 1 — Git & Infra (Streamlit MVP)
 
-Задача: синхронизировать репозиторий и проверить AI-инфраструктуру.
+Задача: настроить Git-репозиторий и проектную инфраструктуру для Streamlit-приложения «05. Единое окно видео и телематики».
 
-Рабочая директория: /Users/dimausac/Yandex.Disk.localized/SKAI/Хакатон/hackaton
+Рабочая директория: `05_video_telematics_single_window/`
 
-1. Git:
-   - Локальный репозиторий был переинициализирован и отстает от origin/main.
-   - Выполни `git log origin/main --oneline -5` и `git log main --oneline -5`.
-   - Если истории разошлись: сделай `git push --force` (согласовано с командой), либо создай новую ветку `hackathon-day` и push в нее.
-   - Убедись, что `.gitignore` покрывает `.venv/`, `node_modules/`, `.DS_Store`, `frontend/dist/`.
+## 1. Синхронизация Git
 
-2. Проверь `.codex/config.toml`:
-   - Поле `model` — если там `gpt-5.3-codex`, замени на реально доступную модель (`o3`, `gpt-4.1`, `claude-sonnet-4-20250514` и т.д., уточни у команды).
-   - Проверь путь `skills = [".agents/skills"]` — он должен указывать на существующую директорию.
+- Проверь remote-репозиторий: `git remote -v`
+- Получи последние изменения: `git fetch origin`
+- Выполни `git status`, чтобы понять текущее состояние.
+- Создай feature-ветку: `git checkout -b hackathon/streamlit-mvp`
+- Если есть незакоммиченные изменения — закоммить их в новой ветке.
 
-3. Проверь `.mcp/config.json`:
-   - Убедись, что все пути к SQLite/Postgres корректны для новой структуры (без `ml_ideas/`).
-   - Удали или закомментируй MCP-серверы, которые не будут использоваться на хакатоне.
+## 2. Структура проекта
 
-4. Проверь `.env.example`:
-   - Добавь переменные для frontend (`VITE_API_URL=http://localhost:8000`).
-   - Удали устаревшие ключи, если есть.
+Убедись, что структура соответствует схеме:
 
-Результат: чистый `git status`, рабочий `.codex/config.toml`, актуальный `.env.example`.
+```
+05_video_telematics_single_window/
+├── app/               # Модули Streamlit (app.py, pages/, utils/)
+├── data/              # CSV-файлы (уже существуют — не изменять)
+├── sample_data/       # Демо-CSV (уже существуют — не изменять)
+├── output/            # Сгенерированные отчеты (создать mkdir, если нет)
+├── requirements.txt   # Зависимости Python
+└── README.md          # Инструкция по запуску
+```
+
+Создай недостающие директории (`app/`, `output/`) и базовые файлы (`requirements.txt`, `README.md`), только если они отсутствуют.
+
+## 3. `.gitignore`
+
+Проверь и дополни `.gitignore` — он должен содержать:
+
+```
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+output/actions.csv
+output/incident_reports.csv
+```
+
+## 4. Проверка Python
+
+- Проверь версию: `python3 --version` или `python3.12 --version`
+- Требуется Python 3.12+. Если нет — установи через `pyenv` или системный пакетный менеджер.
+
+## 5. Виртуальное окружение
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+```
+
+## 6. Зависимости
+
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Минимальный `requirements.txt` для старта:
+
+```
+streamlit>=1.28.0
+pandas>=2.0.0
+```
+
+## 7. Проверка запуска
+
+Убедись, что `streamlit run app/app.py` стартует (даже с заглушкой-плейсхолдером).
+
+Минимальный `app/app.py`:
+
+```python
+import streamlit as st
+
+st.set_page_config(page_title="Единое окно видео и телематики", layout="wide")
+st.title("SKAI Hackathon: Единое окно видео и телематики")
+st.write("MVP готова к наполнению.")
+```
+
+## Запрещено
+
+- Делать force-push в main.
+- Удалять или изменять существующие наборы данных в `data/` и `sample_data/`.
+- Менять файлы за пределами `05_video_telematics_single_window/` без явного согласования.
+
+## Результат
+
+Чистый `git status` на ветке `hackathon/streamlit-mvp`, готовое виртуальное окружение, `streamlit run app/app.py` стартует без ошибок.

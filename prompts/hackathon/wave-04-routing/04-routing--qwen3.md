@@ -1,52 +1,120 @@
-# 04 · Роутинг — заменить заглушки в App.tsx
-> 💰 **Бюджет:** читать max 1–3 файла · не читать `./data`, `.venv`, `node_modules` · логи: 20–50 строк
+# 04 · Финальная проверка интеграции Streamlit-приложения
+> 💰 **Бюджет:** читать max 8 файлов · не читать `./data`, `.venv`, `node_modules` · логи: 20–50 строк
 > ⚠️ **Один промпт = одна сессия. Не запускать параллельно.**
 # Модель: qwen/qwen3-coder:free · $0 · Волна 4
-> ✅ Передать: текущий code/frontend/src/App.tsx (только этот файл)
-> ❌ НЕ читать AGENTS.md, не читать все экраны целиком
+> ✅ Передать: `app/app.py`, `app/data_loader.py`, `app/metrics.py`, `app/charts.py`, `app/data_overview.py`, `app/actions.py`, `app/risk_table.py`, `app/constants.py`, `app/models.py`, `requirements.txt`
+> ❌ НЕ читать AGENTS.md, не читать все файлы data/ целиком
 
 ## Задача
 
-Открыть `code/frontend/src/App.tsx`.
+Финальная интеграционная проверка Streamlit-приложения перед демонстрацией. Убедиться, что все импорты корректны, все функции модулей вызываются правильно, и приложение запускается без ошибок.
 
-Заменить 5 inline-заглушек на реальные импорты из `./screens/`:
+### Шаг 1: Проверить импорты в `app/app.py`
 
-```tsx
-import EventFeedScreen       from './screens/EventFeedScreen'
-import LiveMonitorScreen     from './screens/LiveMonitorScreen'
-import UnifiedIncidentWindow from './screens/UnifiedIncidentWindow'
-import AnalyticsScreen       from './screens/AnalyticsScreen'
-import TicketsScreen         from './screens/TicketsScreen'
+Прочитать `app/app.py` и сверить, что **все** импорты корректны:
+
+```python
+from app.data_loader import ...
+from app.metrics import ...
+from app.charts import ...
+from app.data_overview import ...
+from app.actions import ...
+from app.risk_table import ...
+from app.constants import ...
+from app.models import ...
 ```
 
-Убрать строки `const EventFeedScreen = () => ...` и другие inline-заглушки.
+Каждый импортированный объект должен реально существовать в соответствующем модуле.
 
-Маршруты в `<Routes>` оставить без изменений:
-```tsx
-<Route path="/"             element={<EventFeedScreen />} />
-<Route path="/monitor"      element={<LiveMonitorScreen />} />
-<Route path="/incident/:id" element={<UnifiedIncidentWindow />} />
-<Route path="/analytics"    element={<AnalyticsScreen />} />
-<Route path="/tickets"      element={<TicketsScreen />} />
+### Шаг 2: Проверить существование всех импортируемых модулей
+
+Убедиться, что физически существуют файлы:
+- `app/data_loader.py`
+- `app/metrics.py`
+- `app/charts.py`
+- `app/data_overview.py`
+- `app/actions.py`
+- `app/risk_table.py`
+- `app/constants.py`
+- `app/models.py`
+
+### Шаг 3: Проверить вызовы функций в трёх вкладках
+
+Сверить, что каждая вкладка вызывает правильные функции из правильных модулей:
+
+**Вкладка «Data»** (`render_data_tab`):
+- `build_dataset_overview` → из `data_overview.py`
+- `pick_dataset` → из `data_overview.py`
+- `render_dataset_preview` → из `data_overview.py`
+
+**Вкладка «Dashboard»** (`render_dashboard_tab`):
+- `build_dashboard_metrics` → из `metrics.py`
+- `pick_dataset` → из `data_overview.py`
+- `build_scatter_chart` → из `charts.py`
+- `build_speed_chart` → из `charts.py`
+- `build_track_map` → из `charts.py`
+
+**Вкладка «Details»** (`render_details_tab`):
+- `render_risk_table` → из `risk_table.py`
+- `render_action_form` → из `actions.py`
+
+Если какая-то функция вызывается, но отсутствует в модуле — найти её правильное имя и исправить. Если функция есть, но с другим именем — обновить вызов.
+
+### Шаг 4: Исправить отсутствующие импорты или неправильные имена функций
+
+- Добавить недостающие импорты в `app/app.py`.
+- Исправить несовпадения имён функций между вызовами в app.py и определениями в модулях.
+- **НЕ менять** структуру вкладок (3 вкладки: Data, Dashboard, Details).
+- **НЕ добавлять** новые фичи.
+- Исправлять **только** ошибки импортов, отсутствующие переменные, несовпадения имён функций.
+
+### Шаг 5: Проверить `OUTPUT_DIR`
+
+Убедиться, что переменная `OUTPUT_DIR` (или аналогичная константа для пути сохранения отчетов) определена в `app/constants.py` или `app/app.py` и используется корректно.
+
+### Шаг 6: Проверить `requirements.txt`
+
+Убедиться, что файл `requirements.txt` существует и содержит все необходимые зависимости с корректными версиями (streamlit, pandas, altair — минимум).
+
+### Шаг 7: Запустить приложение
+
+```bash
+streamlit run app/app.py
 ```
 
-Всё остальное (sidebar, стили, NavLink) — не трогать.
+Убедиться, что:
+- Нет ошибок импорта (ModuleNotFoundError, ImportError)
+- Нет ошибок AttributeError (функция не найдена в модуле)
+- Нет ошибок NameError (переменная не определена)
 
-## Перед заменой убедиться что файлы существуют
+### Шаг 8: Если есть ошибки — исправить и перезапустить
 
-```
-code/frontend/src/screens/EventFeedScreen.tsx       ← wave-03A
-code/frontend/src/screens/LiveMonitorScreen.tsx     ← wave-03E
-code/frontend/src/screens/UnifiedIncidentWindow.tsx ← wave-03B
-code/frontend/src/screens/AnalyticsScreen.tsx       ← wave-03D
-code/frontend/src/screens/TicketsScreen.tsx         ← wave-05B
-```
+При обнаружении любой ошибки:
+1. Найти источник ошибки.
+2. Исправить **минимальными** правками.
+3. Перезапустить `streamlit run app/app.py`.
+4. Повторять до отсутствия ошибок.
 
-Если какой-то файл ещё не создан — подождать пока завершится его волна.
+## Что запрещено
+
+- ❌ Менять структуру вкладок (должно остаться 3: Data, Dashboard, Details)
+- ❌ Добавлять новые фичи, экраны, графики, таблицы
+- ❌ Переписывать логику модулей
+- ❌ Менять структуру данных или формат CSV
+- ❌ Удалять существующий код (кроме неработающих/некорректных импортов)
+
+## Что можно
+
+- ✅ Исправлять импорты (добавлять, удалять, менять пути)
+- ✅ Исправлять имена функций в вызовах (если в модуле функция называется иначе)
+- ✅ Добавлять отсутствующие переменные (например, OUTPUT_DIR)
+- ✅ Исправлять синтаксические ошибки
 
 ## Acceptance criteria
 
-- В App.tsx нет inline-заглушек (`const X = () => <div>...`)
-- Есть 5 import строк из `./screens/`
-- `npm run build` → нет ошибок TypeScript
-- `npm run dev` → все 5 маршрутов открываются
+- `app/app.py` запускается через `streamlit run app/app.py` без ошибок импорта
+- Все три вкладки рендерятся без AttributeError и NameError
+- Все импорты в `app/app.py` соответствуют реальным объектам в модулях
+- `requirements.txt` существует с корректными версиями пакетов
+- Если при запуске ошибок нет — подтвердить успех, вывести «Интеграционная проверка пройдена успешно»
+- Если потребовались правки — приложить итоговый `app/app.py` (если менялся) и список исправлений

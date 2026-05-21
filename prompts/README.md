@@ -1,7 +1,7 @@
 # Prompts — SKAI Hackathon: Единое окно видео и телематики
 
-**Стек:** Python 3.12 + Streamlit + Pandas + Altair  
-**Приложение:** 3 вкладки — Data, Dashboard, Details  
+**Стек:** Python 3.12 + Streamlit + Pandas + Altair
+**Приложение:** 3 вкладки — Data, Dashboard, Details
 **Правило:** один промпт = один файл
 
 ```
@@ -9,12 +9,14 @@ prompts/
 │
 ├── hackathon/              ← технические промпты по волнам для сборки Streamlit-приложения
 │   ├── wave-00/            1 агент  — прочитать контекст
-│   ├── wave-00a-architecture/ 3 агента — tech-design, data-контракт, design-tokens
-│   ├── wave-01-foundation/ 9 агентов — types, constants, mock-данные, App-инфраструктура
-│   ├── wave-02-components/ 9 агентов — Streamlit-компоненты (по одному файлу каждый)
-│   ├── wave-03-screens/    5 агентов — экраны / вкладки (сборка)
-│   ├── wave-04-routing/    1 агент   — навигация между вкладками
-│   └── wave-05-polish/     4 агента  — таблица заявок, smoke, демо-скрипт
+│   ├── wave-00a-architecture/ 4 агента — tech-design, data-контракт, design-tokens
+│   ├── wave-01-foundation/ 4 агента — Python dataclasses, constants, data_loader, app skeleton + requirements
+│   ├── wave-02-components/ 5 агентов — Python модули: metrics, charts, data_overview, actions, risk_table
+│   ├── wave-03-screens/    3 агента  — три вкладки Streamlit: Data, Dashboard, Details
+│   ├── wave-04-routing/    1 агент   — финальная интеграция и проверка импортов
+│   └── wave-05-polish/     2 агента  — smoke-тест, демо-сценарий
+│
+│   Всего: 20 агентов/промптов
 │
 └── init/                   ← инициализационные промпты (запускаются до хакатона / на старте)
     ├── discovery-prompt.md       дискавери: 12 вопросов системного аналитика → черновик AGENTS.md

@@ -1,35 +1,73 @@
-# 01C · incidents.json
+# 01C · data_loader.py
 > 🤖 **Модель: `qwen/qwen3-coder:free`** | кодинг
 > 💰 **Бюджет:** читать max 1–3 файла · не читать `./data`, `.venv`, `node_modules` · логи: 20–50 строк
 > ⚠️ **Один промпт = одна сессия Cherry Studio.** Не запускать параллельно.
 
 > Волна 1
 
-**Файл:** `data/mock/incidents.json`
-**Файл уже существует** — он богатый (701 строка). НЕ пересоздавай с нуля.
+**Файл:** `app/data_loader.py`
+**Только этот файл.**
 
-Прочитай `data/mock/incidents.json` и убедись что:
+Создай модуль загрузки CSV и сохранения действий диспетчера. Функции:
 
-1. Есть ровно **5 демо-кейсов** в массиве `incidents`:
+1. `load_csv_files(data_dir: Path) -> dict[str, pd.DataFrame]` — рекурсивно обходит `data_dir`, читает все CSV в DataFrame, возвращает словарь `{относительный_путь: DataFrame}`.
+2. `save_action(output_dir, row_id, action, comment="")` — дописывает одну строку в `output/actions.csv` в режиме `append`, с полями: `created_at`, `row_id`, `action`, `comment`.
 
-| id | alarm_type | vehicle_plate | driver | video_available | Назначение |
-|----|-----------|---------------|--------|-----------------|------------|
-| inc-001 | DMS_DROWSY | А777ВВ 77 | Иванов А.П. | true | Засыпание за рулём, ночь |
-| inc-002 | CRASH_SENSOR | В345КМ 97 | Петров Д.С. | true | **Flow 1** — ДТП без DMS |
-| inc-003 | DMS_PHONE | Е902СТ 150 | Сидоров В.Н. | **false** | **Flow 2** — кейс без видео |
-| inc-004 | HARSH_BRAKING | Н124УУ 199 | Козлов И.А. | true | Резкое торможение, 108 км/ч при лимите 60 |
-| inc-005 | DRIVER_SUBSTITUTION | К451МА 77 | Новиков А.В. | true | Замена водителя, ночь |
+Требования:
+- `from __future__ import annotations`
+- Аннотации типов на всех функциях
+- Докстринги на русском языке
+- `comment` — опциональный параметр со значением по умолчанию `""`
+- `__all__` с именами экспортируемых функций
+- Использовать `Path.mkdir(parents=True, exist_ok=True)` для создания директорий
+- CSV создаётся с заголовком только если файла ещё нет (`header=not path.exists()`)
 
-2. У каждого инцидента есть поле `risk_level` ('critical' / 'high' / 'medium' / 'low').
-   Если отсутствует — добавь на основе score:
-   score ≥ 80 → 'critical', 60–79 → 'high', 40–59 → 'medium', < 40 → 'low'
+```python
+from __future__ import annotations
 
-3. У inc-003 `video_available: false` (это критично для кейса Б / Flow 2).
+from datetime import datetime
+from pathlib import Path
 
-4. У каждого инцидента есть `evidence_summary` — текст 3–5 предложений для блока анализа.
+import pandas as pd
 
-5. Удали из `_comment` упоминания "тема 8" — это не наша тема.
 
-Если чего-то нет — добавь. Если всё есть — просто подтверди без изменений.
+def load_csv_files(data_dir: Path) -> dict[str, pd.DataFrame]:
+    """Загружает все CSV-файлы из дерева директорий.
 
-**Check:** `python3 -c "import json; d=json.load(open('data/mock/incidents.json')); print(len(d['incidents']), 'incidents')"`
+    Возвращает словарь, где ключи — относительные пути, значения — DataFrame.
+    Поддерживает вложенные директории (например, work_rest_single_vehicle/).
+    """
+    data_dir.mkdir(parents=True, exist_ok=True)
+    datasets: dict[str, pd.DataFrame] = {}
+    for path in sorted(data_dir.rglob("*.csv")):
+        key = path.relative_to(data_dir).as_posix()
+        datasets[key] = pd.read_csv(path)
+    return datasets
+
+
+def save_action(
+    output_dir: Path,
+    row_id: str,
+    action: str,
+    comment: str = "",
+) -> None:
+    """Добавляет запись действия в output/actions.csv."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / "actions.csv"
+    record = pd.DataFrame(
+        [
+            {
+                "created_at": datetime.now().isoformat(timespec="seconds"),
+                "row_id": row_id,
+                "action": action,
+                "comment": comment,
+            }
+        ]
+    )
+    record.to_csv(path, mode="a", header=not path.exists(), index=False)
+
+
+__all__ = ["load_csv_files", "save_action"]
+```
+
+**Check:** `python -c "from app.data_loader import load_csv_files, save_action"` без ошибок.
