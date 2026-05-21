@@ -30,7 +30,56 @@ def _init_session_state() -> None:
 
 
 def render_data_tab(datasets: dict) -> None:
-    st.info("Вкладка «Данные» — загрузка и просмотр CSV файлов")
+    alarms_df = datasets.get("selected_video_alarms")
+    if alarms_df is None or alarms_df.empty:
+        st.info("Вкладка «Данные» — загрузка и просмотр CSV файлов")
+        if datasets:
+            for name, df in datasets.items():
+                with st.expander(name, expanded=False):
+                    st.dataframe(df.head(20), use_container_width=True)
+        return
+
+    # Event list for quick access
+    if "AlarmId" in alarms_df.columns and "UnitStateNumber" in alarms_df.columns:
+        st.subheader("Список событий")
+        sorted_df = alarms_df.dropna(subset=["Speed"]).sort_values("Speed", ascending=False)
+        event_options = []
+        event_map = {}
+        for _, row in sorted_df.iterrows():
+            aid = str(row.get("AlarmId", ""))
+            veh = str(row.get("UnitStateNumber", "—"))
+            typ = str(row.get("Type", ""))
+            spd = float(row.get("Speed", 0))
+            lbl = f"{veh} · {typ} · {spd:.0f} км/ч"
+            event_options.append(lbl)
+            event_map[lbl] = aid
+
+        sel_lbl = st.selectbox("Событие", options=event_options, key="data_event_select")
+        c1, c2, c3 = st.columns([1, 1, 1])
+        with c1:
+            if st.button("🔍 Открыть карточку"):
+                st.session_state["selected_alarm_id"] = event_map[sel_lbl]
+                st.session_state["active_tab"] = "🔍 Карточка инцидента"
+                st.rerun()
+        with c2:
+            if st.button("📊 Отчёт по водителю"):
+                aid = event_map[sel_lbl]
+                unit_sn = str(alarms_df[alarms_df["AlarmId"] == aid]["UnitStateNumber"].values[0])
+                st.session_state["report_driver_id"] = unit_sn
+                st.session_state["report_preset"] = "driver_3d"
+                st.session_state["report_query_text"] = f"Нарушения {unit_sn}"
+                st.session_state["report_confirmed"] = True
+                st.session_state["report_show_confirm"] = False
+                st.session_state["active_tab"] = "📊 Интерактивный отчёт"
+                st.rerun()
+        with c3:
+            if st.button("🛡 Открыть в мониторе"):
+                st.session_state["selected_alarm_id"] = event_map[sel_lbl]
+                st.session_state["active_tab"] = "🛡 Живой мониторинг"
+                st.rerun()
+
+    st.markdown("---")
+    st.info("Просмотр CSV файлов")
     if datasets:
         for name, df in datasets.items():
             with st.expander(name, expanded=False):
@@ -70,7 +119,7 @@ def main() -> None:
     elif active == "🛡 Живой мониторинг":
         render_monitor_tab(datasets, ALARM_TYPE_LABELS)
     elif active == "🔍 Карточка инцидента":
-        render_incident_card_screen()
+        render_incident_tab(datasets, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH)
     elif active == "📊 Интерактивный отчёт":
         render_interactive_report(datasets, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH)
     elif active == "📝 Заявки":

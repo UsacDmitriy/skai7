@@ -10,6 +10,7 @@ import streamlit as st
 
 from backend.constants import ALARM_TYPE_LABELS, SPEED_LIMIT_KMH
 from backend.data_loader import save_action
+from backend.charts import build_track_speed_chart
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data"
@@ -480,37 +481,94 @@ def _render_incident_card(alarm_id: str, datasets, type_labels) -> None:
         st.warning(f"Аларм '{alarm_id}' не найден.")
         return
 
-    unit_sn = str(alarm.get("UnitStateNumber","—"))
-    raw_type = str(alarm.get("Type","—"))
-    speed_val = float(alarm["Speed"]) if pd.notna(alarm.get("Speed")) else 0.0
-    begin = str(alarm.get("Begin","—"))
-    end = str(alarm.get("End","—"))
-    address = str(alarm.get("Address",""))
+    # --- Left sidebar: event list + navigation ---
+    alarms_df = datasets.get("selected_video_alarms")
+    left_col, right_col = st.columns([1, 3])
 
-    label, badge_class, badge_emoji = _alarm_badge(raw_type, speed_val)
-    videos = detail["videos"]
-    track_summary = detail["track_summary"]
-    track_points = detail["track_points"]
-    has_videos = not videos.empty
-    first_video_path = _get_video_path(videos.iloc[0]) if has_videos else None
+    with left_col:
+        st.markdown("#### Лента событий")
+        if alarms_df is not None and not alarms_df.empty and "AlarmId" in alarms_df.columns:
+            sorted_alarms = alarms_df.dropna(subset=["Speed"]).sort_values("Speed", ascending=False)
+            event_options = []
+            event_map = {}
+            for _, row in sorted_alarms.iterrows():
+                aid = str(row.get("AlarmId", ""))
+                veh = str(row.get("UnitStateNumber", "—"))
+                typ = type_labels.get(row.get("Type", ""), row.get("Type", ""))
+                spd = float(row.get("Speed", 0))
+                lbl = f"{veh} · {typ} · {spd:.0f} км/ч"
+                event_options.append(lbl)
+                event_map[lbl] = aid
 
-    total_mileage = float(track_summary.get("total_mileage_km",0)) if track_summary is not None and pd.notna(track_summary.get("total_mileage_km")) else 0.0
-    total_duration = track_summary.get("total_movement_duration","—") if track_summary is not None else "—"
-    parking_duration = track_summary.get("total_parking_duration","—") if track_summary is not None else "—"
+            current_lbl = None
+            for lbl, aid in event_map.items():
+                if aid == alarm_id:
+                    current_lbl = lbl
+                    break
 
-    total_video_size = int(videos["size_bytes"].sum()) if has_videos and "size_bytes" in videos.columns else 0
-    total_video_duration = float(videos["duration_seconds"].sum()) if has_videos and "duration_seconds" in videos.columns else 0.0
-    video_count = int(alarm.get("VideoCount",0)) if pd.notna(alarm.get("VideoCount")) else 0
+            sel_lbl = st.selectbox(
+                "Событие",
+                options=event_options,
+                index=event_options.index(current_lbl) if current_lbl else 0,
+                key="incident_card_event_select",
+                label_visibility="collapsed",
+            )
+            if sel_lbl and event_map.get(sel_lbl) != alarm_id:
+                st.session_state["selected_alarm_id"] = event_map[sel_lbl]
+                st.rerun()
 
-    risk_level = "high" if speed_val > SPEED_LIMIT_KMH else ("medium" if speed_val > 60 else "low")
-    risk_color = {"high":"#DC2626","medium":"#EAB308","low":"#16A34A"}[risk_level]
-    risk_label = {"high":"Высокий риск","medium":"Средний риск","low":"Низкий риск"}[risk_level]
+            # Navigation buttons
+            alarm_ids = list(event_map.values())
+            current_idx = alarm_ids.index(alarm_id) if alarm_id in alarm_ids else -1
+            nav1, nav2 = st.columns(2)
+            with nav1:
+                if st.button("← Предыдущий", disabled=(current_idx <= 0), use_container_width=True):
+                    st.session_state["selected_alarm_id"] = alarm_ids[current_idx - 1]
+                    st.rerun()
+            with nav2:
+                if st.button("Следующий →", disabled=(current_idx < 0 or current_idx >= len(alarm_ids) - 1), use_container_width=True):
+                    st.session_state["selected_alarm_id"] = alarm_ids[current_idx + 1]
+                    st.rerun()
+        else:
+            st.caption("Нет данных для ленты")
 
-    analysis = _ANALYSIS.get(raw_type, _DEFAULT_ANALYSIS)
-    chips_html = _build_chips(raw_type, speed_val, total_mileage, begin)
-    timeline_pct = _calc_timeline(track_points, begin, end)
+        if st.button("← Назад к списку", use_container_width=True):
+            st.session_state["selected_alarm_id"] = None
+            st.rerun()
 
-    html = f"""<div class="kilo-incident-card">
+    # --- Right side: incident card (HTML) ---
+    with right_col:
+        unit_sn = str(alarm.get("UnitStateNumber","—"))
+        raw_type = str(alarm.get("Type","—"))
+        speed_val = float(alarm["Speed"]) if pd.notna(alarm.get("Speed")) else 0.0
+        begin = str(alarm.get("Begin","—"))
+        end = str(alarm.get("End","—"))
+        address = str(alarm.get("Address",""))
+
+        label, badge_class, badge_emoji = _alarm_badge(raw_type, speed_val)
+        videos = detail["videos"]
+        track_summary = detail["track_summary"]
+        track_points = detail["track_points"]
+        has_videos = not videos.empty
+        first_video_path = _get_video_path(videos.iloc[0]) if has_videos else None
+
+        total_mileage = float(track_summary.get("total_mileage_km",0)) if track_summary is not None and pd.notna(track_summary.get("total_mileage_km")) else 0.0
+        total_duration = track_summary.get("total_movement_duration","—") if track_summary is not None else "—"
+        parking_duration = track_summary.get("total_parking_duration","—") if track_summary is not None else "—"
+
+        total_video_size = int(videos["size_bytes"].sum()) if has_videos and "size_bytes" in videos.columns else 0
+        total_video_duration = float(videos["duration_seconds"].sum()) if has_videos and "duration_seconds" in videos.columns else 0.0
+        video_count = int(alarm.get("VideoCount",0)) if pd.notna(alarm.get("VideoCount")) else 0
+
+        risk_level = "high" if speed_val > SPEED_LIMIT_KMH else ("medium" if speed_val > 60 else "low")
+        risk_color = {"high":"#DC2626","medium":"#EAB308","low":"#16A34A"}[risk_level]
+        risk_label = {"high":"Высокий риск","medium":"Средний риск","low":"Низкий риск"}[risk_level]
+
+        analysis = _ANALYSIS.get(raw_type, _DEFAULT_ANALYSIS)
+        chips_html = _build_chips(raw_type, speed_val, total_mileage, begin)
+        timeline_pct = _calc_timeline(track_points, begin, end)
+
+        html = f"""<div class="kilo-incident-card">
   <div class="kilo-card-header">
     <div class="kilo-card-header-left">
       <div class="kilo-header-icon">📺</div>
@@ -523,30 +581,30 @@ def _render_incident_card(alarm_id: str, datasets, type_labels) -> None:
       <div class="kilo-video-area">
         <div class="kilo-live-badge"><div class="kilo-live-dot"></div>LIVE</div>"""
 
-    if first_video_path:
-        data_url = _encode_video_base64(first_video_path)
-        if data_url:
-            html += f'<video controls style="max-width:100%;border-radius:8px;" preload="metadata"><source src="{data_url}" type="video/mp4">Видео не поддерживается.</video>'
+        if first_video_path:
+            data_url = _encode_video_base64(first_video_path)
+            if data_url:
+                html += f'<video controls style="max-width:100%;border-radius:8px;" preload="metadata"><source src="{data_url}" type="video/mp4">Видео не поддерживается.</video>'
+            else:
+                html += '<div class="kilo-video-placeholder"><div class="kilo-video-placeholder-icon">📷</div><div>Видео слишком большое для предпросмотра</div></div>'
         else:
-            html += '<div class="kilo-video-placeholder"><div class="kilo-video-placeholder-icon">📷</div><div>Видео слишком большое для предпросмотра</div></div>'
-    else:
-        html += '<div class="kilo-video-placeholder"><div class="kilo-video-placeholder-icon">📷</div><div>Нет видео для предпросмотра</div></div>'
+            html += '<div class="kilo-video-placeholder"><div class="kilo-video-placeholder-icon">📷</div><div>Нет видео для предпросмотра</div></div>'
 
-    html += '</div>'
+        html += '</div>'
 
-    if has_videos:
-        html += '<table class="kilo-video-table">'
-        for _, v in videos.head(5).iterrows():
-            ch = int(v.get("channel",0))
-            dur = _format_duration(v.get("duration_seconds",0))
-            sz_bytes = int(v.get("size_bytes",0))
-            sz = f"{sz_bytes/1024/1024:.1f} МБ" if sz_bytes > 0 else "—"
-            html += f"<tr><td>Канал {ch}</td><td>{dur}</td><td>{sz}</td></tr>"
-        html += '</table>'
-    else:
-        html += '<p style="color:#64748B;font-size:13px;margin-top:8px;">Нет связанных видео</p>'
+        if has_videos:
+            html += '<table class="kilo-video-table">'
+            for _, v in videos.head(5).iterrows():
+                ch = int(v.get("channel",0))
+                dur = _format_duration(v.get("duration_seconds",0))
+                sz_bytes = int(v.get("size_bytes",0))
+                sz = f"{sz_bytes/1024/1024:.1f} МБ" if sz_bytes > 0 else "—"
+                html += f"<tr><td>Канал {ch}</td><td>{dur}</td><td>{sz}</td></tr>"
+            html += '</table>'
+        else:
+            html += '<p style="color:#64748B;font-size:13px;margin-top:8px;">Нет связанных видео</p>'
 
-    html += f"""<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+        html += f"""<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
       <span class="kilo-chip kilo-chip-blue">📹 Камер: {video_count}</span>
       <span class="kilo-chip kilo-chip-blue">💾 {total_video_size/1024/1024:.1f} МБ</span>
       <span class="kilo-chip kilo-chip-blue">⏱ {_format_duration(total_video_duration)}</span>
@@ -557,10 +615,10 @@ def _render_incident_card(alarm_id: str, datasets, type_labels) -> None:
     <div class="kilo-field"><span class="kilo-field-label">Скорость</span><span class="kilo-field-value" style="color:{risk_color};">{speed_val:.0f} км/ч</span></div>
     <div class="kilo-field"><span class="kilo-field-label">Время</span><span class="kilo-field-value">{begin} — {end}</span></div>"""
 
-    if address and address != "nan":
-        html += f'<div class="kilo-field"><span class="kilo-field-label">Адрес</span><span class="kilo-field-value">{address}</span></div>'
+        if address and address != "nan":
+            html += f'<div class="kilo-field"><span class="kilo-field-label">Адрес</span><span class="kilo-field-value">{address}</span></div>'
 
-    html += f"""
+        html += f"""
     <div class="kilo-field"><span class="kilo-field-label">Пробег трека</span><span class="kilo-field-value">{total_mileage:.1f} км</span></div>
     <div class="kilo-field"><span class="kilo-field-label">Движение</span><span class="kilo-field-value">{total_duration}</span></div>
     <div class="kilo-field"><span class="kilo-field-label">Стоянка</span><span class="kilo-field-value">{parking_duration}</span></div>
@@ -571,31 +629,39 @@ def _render_incident_card(alarm_id: str, datasets, type_labels) -> None:
       <div class="kilo-alert-text" style="color:{risk_color}">{analysis}</div>
     </div></div></div></div>"""
 
-    st.markdown(_CSS, unsafe_allow_html=True)
-    st.markdown(html, unsafe_allow_html=True)
+        st.markdown(_CSS, unsafe_allow_html=True)
+        st.markdown(html, unsafe_allow_html=True)
 
-    # Actions
-    st.markdown("### Действия")
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        if st.button("✅ Проверено", use_container_width=True):
-            save_action(OUTPUT_DIR, row_id=f"{alarm_id[:8]}_{unit_sn}", action="mark_reviewed")
-            st.toast("Помечено")
-    with col2:
-        if st.button("📋 Заявка", use_container_width=True):
-            save_action(OUTPUT_DIR, row_id=f"{alarm_id[:8]}_{unit_sn}", action="create_task")
-            st.toast("Заявка создана")
-    with col3:
-        if st.button("📄 Отчёт", use_container_width=True):
-            save_action(OUTPUT_DIR, row_id=f"{alarm_id[:8]}_{unit_sn}", action="export_report")
-            _export_report(alarm_id)
-            st.toast("Отчёт сохранён")
-    with col4:
-        if st.button("← К списку", use_container_width=True):
-            st.session_state["selected_alarm_id"] = None
-            st.rerun()
+        # Speed chart
+        if not track_points.empty and "speed_kmh" in track_points.columns:
+            st.markdown("#### График скорости")
+            chart = build_track_speed_chart(track_points, alarm_id, ["#3B82F6"])
+            st.altair_chart(chart, use_container_width=True)
+        else:
+            st.caption("Нет данных трека для графика скорости")
 
-    _render_voice_comment_box()
+        # Actions
+        st.markdown("### Действия")
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            if st.button("✅ Проверено", use_container_width=True):
+                save_action(OUTPUT_DIR, row_id=f"{alarm_id[:8]}_{unit_sn}", action="mark_reviewed")
+                st.toast("Помечено")
+        with col2:
+            if st.button("📋 Заявка", use_container_width=True):
+                save_action(OUTPUT_DIR, row_id=f"{alarm_id[:8]}_{unit_sn}", action="create_task")
+                st.toast("Заявка создана")
+        with col3:
+            if st.button("📄 Отчёт", use_container_width=True):
+                save_action(OUTPUT_DIR, row_id=f"{alarm_id[:8]}_{unit_sn}", action="export_report")
+                _export_report(alarm_id)
+                st.toast("Отчёт сохранён")
+        with col4:
+            if st.button("← К списку", use_container_width=True):
+                st.session_state["selected_alarm_id"] = None
+                st.rerun()
+
+        _render_voice_comment_box()
 
 
 def _build_chips(raw_type: str, speed: float, mileage: float, begin: str) -> str:

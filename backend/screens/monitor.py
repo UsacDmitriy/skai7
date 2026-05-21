@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import streamlit as st
 import pandas as pd
 
@@ -352,7 +354,7 @@ def render_monitor_tab(datasets: dict[str, pd.DataFrame], alarm_type_labels: dic
         if st.button("📋 Открыть карточку", use_container_width=True):
             if sel_lbl != event_options[0]:
                 st.session_state["selected_alarm_id"] = event_map[sel_lbl]
-                st.toast("Перейдите во вкладку 🔍 Карточка инцидента")
+                st.session_state["active_tab"] = "🔍 Карточка инцидента"
                 st.rerun()
             else:
                 st.warning("Сначала выберите событие")
@@ -369,12 +371,18 @@ def render_monitor_tab(datasets: dict[str, pd.DataFrame], alarm_type_labels: dic
         if st.button("🎬 Запросить видео", use_container_width=True):
             st.info("Демо-режим: запрос видео недоступен")
     with c4:
-        if st.button("📊 Создать отчёт", use_container_width=True):
+        if st.button("📊 Отчёт по водителю", use_container_width=True):
             if sel_lbl != event_options[0]:
-                from backend.data_loader import save_action
                 aid = event_map[sel_lbl]
-                save_action(Path("output"), row_id=aid[:8], action="export_report")
-                st.success("Отчёт сохранён в output/")
+                alarm_row = alarms_df[alarms_df["AlarmId"] == aid].iloc[0]
+                unit_sn = str(alarm_row.get("UnitStateNumber", ""))
+                st.session_state["report_driver_id"] = unit_sn
+                st.session_state["report_preset"] = "driver_3d"
+                st.session_state["report_query_text"] = f"Нарушения {unit_sn}"
+                st.session_state["report_confirmed"] = True
+                st.session_state["report_show_confirm"] = False
+                st.session_state["active_tab"] = "📊 Интерактивный отчёт"
+                st.rerun()
             else:
                 st.warning("Сначала выберите событие")
 

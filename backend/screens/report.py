@@ -9,6 +9,7 @@ import streamlit as st
 from backend.metrics import get_alarm_details
 from backend.risk_table import build_risk_table, build_vehicle_summary
 from backend.charts import build_track_speed_chart
+from backend.voice_input import render_voice_input_block
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
@@ -310,6 +311,38 @@ _CSS = """
         font-weight: 600;
         margin-left: 6px;
     }
+    /* compact detail panel: keep map + video visible without scrolling */
+    .detail-track + div [data-testid="stIFrame"],
+    .detail-track ~ div iframe {
+        border-radius: 8px;
+    }
+    /* this CSS block is injected only on the report screen, so a broad
+       video selector here stays scoped to this page */
+    [data-testid="stVideo"] video,
+    .stVideo video,
+    video {
+        max-height: 180px !important;
+        width: 100% !important;
+        object-fit: cover;
+        border-radius: 8px;
+        background: #000;
+    }
+    [data-testid="stVideo"] {
+        margin-bottom: 4px;
+    }
+    /* clickable fleet rows: overlay invisible button on top of HTML card */
+    div[class*="st-key-_fleet_sel_"] {
+        margin-top: -66px;
+        margin-bottom: 8px;
+    }
+    div[class*="st-key-_fleet_sel_"] button {
+        height: 64px;
+        opacity: 0;
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        cursor: pointer;
+    }
 </style>
 """
 
@@ -322,9 +355,9 @@ def _init_report_session() -> None:
         "report_query_text": "",
         "report_confirmed": False,
         "report_show_confirm": False,
-        "report_mic_active": False,
         "report_fleet_view_mode": "Водители",
         "report_fleet_selected_driver": None,
+        "report_fleet_alarm": None,
     }
     for key, default in defaults.items():
         if key not in st.session_state:
@@ -644,31 +677,42 @@ def _render_detail_panel(
         and "latitude" in track_points.columns
         and "longitude" in track_points.columns
     )
+    st.markdown('<div class="detail-track">', unsafe_allow_html=True)
     if has_coords:
         map_df = track_points[["latitude", "longitude"]].dropna()
         if not map_df.empty:
-            st.map(map_df, use_container_width=True)
+            st.map(map_df, use_container_width=True, height=170)
     else:
         lat = alarm_row.get("Latitude")
         lon = alarm_row.get("Longitude")
         if pd.notna(lat) and pd.notna(lon):
-            st.map(pd.DataFrame({"latitude": [float(lat)], "longitude": [float(lon)]}), use_container_width=True)
+            st.map(
+                pd.DataFrame({"latitude": [float(lat)], "longitude": [float(lon)]}),
+                use_container_width=True,
+                height=170,
+            )
         else:
             st.caption("Координаты недоступны")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     videos = details.get("videos", pd.DataFrame())
     st.markdown("**📹 Видео**")
     if not videos.empty and "media_relative_path" in videos.columns:
-        for _, vrow in videos.iterrows():
-            rel_path = str(vrow.get("media_relative_path", ""))
-            channel = str(vrow.get("channel", "?"))
-            duration = float(vrow.get("duration_seconds", 0)) if pd.notna(vrow.get("duration_seconds")) else 0
-            local_path = PROJECT_ROOT / rel_path
-            st.caption(f"Канал {channel} — {duration:.1f} сек")
-            if local_path.exists():
-                st.video(str(local_path), format="video/mp4", start_time=0)
-            else:
-                st.caption(f"(файл не найден: {rel_path})")
+        # Show up to 2 videos side-by-side (matching the mockup: CAM-01 road + CAM-02 cabin)
+        video_rows = [videos.iloc[i : i + 2] for i in range(0, min(len(videos), 4), 2)]
+        for row_df in video_rows:
+            cols = st.columns(len(row_df))
+            for col, (_, vrow) in zip(cols, row_df.iterrows()):
+                rel_path = str(vrow.get("media_relative_path", ""))
+                channel = str(vrow.get("channel", "?"))
+                duration = float(vrow.get("duration_seconds", 0)) if pd.notna(vrow.get("duration_seconds")) else 0
+                local_path = PROJECT_ROOT / rel_path
+                with col:
+                    st.caption(f"Канал {channel} — {duration:.1f} сек")
+                    if local_path.exists():
+                        st.video(str(local_path), format="video/mp4", start_time=0)
+                    else:
+                        st.caption(f"(файл не найден: {rel_path})")
     else:
         st.caption("Нет видеофайлов для этого аларма.")
 
@@ -755,8 +799,6 @@ def _render_track_overview(
 
 
 def _state_a(datasets: dict[str, pd.DataFrame]) -> None:
-    mic_active = st.session_state.get("report_mic_active", False)
-
     st.markdown(
         """
         <div class="report-empty">
@@ -770,39 +812,16 @@ def _state_a(datasets: dict[str, pd.DataFrame]) -> None:
 
     _, mid, _ = st.columns([1, 3, 1])
     with mid:
-        if mic_active:
-            st.markdown(
-                '<div style="text-align:right;color:#DC2626;font-size:12px;">● Слушаю…</div>',
-                unsafe_allow_html=True,
-            )
-            placeholder = "Говорите — речь появится здесь..."
-        else:
-            placeholder = "Покажи нарушения по ВА и телематике у Иванова за последние три дня"
+        # Sync existing query text into voice block state so it isn't lost on tab switch
+        if st.session_state.get("report_query_text") and not st.session_state.get("_voice_text"):
+            st.session_state["_voice_text"] = st.session_state["report_query_text"]
 
-        query = st.text_area(
-            "NL-запрос",
-            value=st.session_state.get("report_query_text", ""),
-            placeholder=placeholder,
-            label_visibility="collapsed",
-            height=80,
-            key="_report_query_input",
-        )
+        result = render_voice_input_block()
+        query = result["text"]
+        submitted = result["submitted"]
 
-        col_mic, col_submit = st.columns([1, 5])
-        with col_mic:
-            mic_cls = "mic-btn-active" if mic_active else ""
-            st.markdown(f'<div class="{mic_cls}">', unsafe_allow_html=True)
-            if st.button("🎤", key="_report_mic", help="Голосовой ввод (демо)", use_container_width=True):
-                st.session_state["report_mic_active"] = not mic_active
-                if st.session_state["report_mic_active"]:
-                    st.toast("🎤 Запись голосового запроса началась (демо)")
-                st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
-            st.markdown('<div class="mic-hint">faster-whisper<br>RU · KK · EN</div>', unsafe_allow_html=True)
-        with col_submit:
-            submitted = st.button(
-                "✈ Сформировать отчёт", type="primary", use_container_width=True, key="_report_submit"
-            )
+        if query and not st.session_state.get("_voice_recording", False):
+            st.session_state["report_query_text"] = query
 
         st.markdown('<div class="preset-divider">или выберите готовый:</div>', unsafe_allow_html=True)
 
@@ -963,6 +982,20 @@ def _state_c(
     mileage = float(vehicle_row.get("total_track_mileage_km", 0) or 0) if vehicle_row is not None else 0.0
     period = _format_period(driver_alarms)
 
+    # Pre-select first alarm with video so detail panel (and video) is visible immediately
+    selected_id = st.session_state.get("report_selected_alarm_id")
+    if not selected_id and not driver_alarms.empty:
+        df_sorted = driver_alarms.sort_values("Begin", ascending=False)
+        if "VideoCount" in df_sorted.columns:
+            with_video = df_sorted[df_sorted["VideoCount"] > 0]
+            if not with_video.empty:
+                selected_id = str(with_video.iloc[0]["AlarmId"])
+            else:
+                selected_id = str(df_sorted.iloc[0]["AlarmId"])
+        else:
+            selected_id = str(df_sorted.iloc[0]["AlarmId"])
+        st.session_state["report_selected_alarm_id"] = selected_id
+
     st.markdown(f"**{query_text}**")
     st.caption(f"Период: {period} | Нарушений: {total_alarms} | Пробег: {mileage:.1f} км")
 
@@ -988,7 +1021,6 @@ def _state_c(
             st.session_state["report_selected_alarm_id"] = selected_alarm
 
     with right_col:
-        selected_id = st.session_state.get("report_selected_alarm_id")
         if selected_id:
             _render_detail_panel(selected_id, datasets, alarm_type_labels, colors, speed_limit)
         else:
@@ -1119,9 +1151,8 @@ def _state_c2(
 
             st.markdown(
                 f"""
-                <div style="background:#FFFFFF;border:1px solid {border_color};border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;"
-                     onclick="">
-                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="background:#FFFFFF;border:1px solid {border_color};border-radius:10px;padding:10px 12px;height:64px;box-sizing:border-box;cursor:pointer;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
                         <div style="display:flex;align-items:center;">
                             <span class="fleet-initials">{initials}</span>
                             <div>
@@ -1138,9 +1169,10 @@ def _state_c2(
                 """,
                 unsafe_allow_html=True,
             )
-            # Use a tiny button below each card for selection (HTML onclick unreliable in Streamlit)
+            # Transparent button overlaid on the card via CSS — whole row is clickable
             if st.button("Выбрать", key=f"_fleet_sel_{unit_sn}", use_container_width=True):
                 st.session_state["report_fleet_selected_driver"] = unit_sn
+                st.session_state["report_fleet_alarm"] = None
                 st.rerun()
 
     with right_col:
@@ -1149,13 +1181,31 @@ def _state_c2(
             sel_alarms = _get_driver_alarms(datasets, selected_driver)
             sel_vehicle = _get_vehicle_row(datasets, selected_driver)
             _render_driver_card(selected_driver, sel_alarms, sel_vehicle, speed_limit)
-            # mini violations (last 5)
+
             st.markdown("**Последние нарушения**")
-            mini = _build_violations_table_df(sel_alarms, alarm_type_labels, speed_limit).head(5)
-            if not mini.empty:
-                st.dataframe(mini, use_container_width=True)
+            picked = _render_violations_table(
+                sel_alarms, alarm_type_labels, speed_limit, f"_fleet_mini_{selected_driver}"
+            )
+            if picked:
+                st.session_state["report_fleet_alarm"] = picked
+                st.rerun()
+
+            # Resolve which alarm to show video for: picked row, else latest video alarm
+            alarm_ids = set(sel_alarms["AlarmId"].astype(str)) if "AlarmId" in sel_alarms.columns else set()
+            alarm_to_show = st.session_state.get("report_fleet_alarm")
+            if alarm_to_show not in alarm_ids:
+                alarm_to_show = None
+            if alarm_to_show is None and "VideoCount" in sel_alarms.columns:
+                vids = sel_alarms[sel_alarms["VideoCount"] > 0]
+                if not vids.empty:
+                    vids = vids.sort_values("Begin", ascending=False)
+                    alarm_to_show = str(vids.iloc[0]["AlarmId"])
+
+            if alarm_to_show:
+                st.markdown("---")
+                _render_detail_panel(alarm_to_show, datasets, alarm_type_labels, colors, speed_limit)
             else:
-                st.caption("Нет нарушений")
+                st.caption("📹 Видеофрагменты появятся при выборе нарушения с видео.")
         else:
             st.info("Выберите водителя или ТС из списка слева для просмотра мини-дашборда.")
 
