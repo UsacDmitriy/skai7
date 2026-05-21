@@ -9,3 +9,4 @@ __pycache__/
 datasets/ready/sensor_diagnostics/*
 *.png
 .playwright-mcp/
+skai7_clean/

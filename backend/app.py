@@ -4,12 +4,12 @@ from pathlib import Path
 
 import streamlit as st
 
-from app.constants import PAGE_TITLE, PAGE_ICON, LAYOUT, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH
-from app.data_loader import load_csv_files
-from app.screens.incident_card import render_incident_card_screen
-from app.screens.incident import render_incident_tab
-from app.screens.monitor import render_monitor_tab
-from app.screens.report import render_interactive_report
+from backend.constants import PAGE_TITLE, PAGE_ICON, LAYOUT, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH
+from backend.data_loader import load_csv_files
+from backend.screens.incident_card import render_incident_card_screen
+from backend.screens.incident import render_incident_tab
+from backend.screens.monitor import render_monitor_tab
+from backend.screens.report import render_interactive_report
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data"
@@ -71,7 +71,7 @@ def main() -> None:
     with live_tab:
         render_monitor_tab(datasets, ALARM_TYPE_LABELS)
     with detail_tab:
-        render_incident_tab(datasets, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH)
+        render_incident_card_screen()
     with report_tab:
         render_interactive_report(datasets, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH)
     with actions_tab:

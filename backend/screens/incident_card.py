@@ -152,13 +152,14 @@ def _render_selection(datasets: dict[str, pd.DataFrame]) -> None:
         st.warning("Нет AlarmId в данных.")
         return
 
+    count = len(alarm_ids)
     st.markdown(
         '<div style="background:#0F172A;padding:24px;'
         'border-radius:12px;margin-bottom:16px;">'
         '<h2 style="color:#F1F5F9;font-family:-apple-system,'
         'sans-serif;margin:0 0 8px 0;">Выберите инцидент</h2>'
         '<p style="color:#94A3B8;font-size:14px;margin:0;">'
-        f"Доступно: {len(alarm_ids)} событий</p></div>',
+        'Доступно: ' + str(count) + ' событий</p></div>',
         unsafe_allow_html=True,
     )
 
