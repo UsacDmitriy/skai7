@@ -6,3 +6,6 @@ __pycache__/
 .venv/
 .DS_Store
 05_video_telematics_single_window/
+datasets/ready/sensor_diagnostics/*
+*.png
+.playwright-mcp/
