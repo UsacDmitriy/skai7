@@ -7,6 +7,7 @@ import pandas as pd
 import streamlit as st
 
 from backend.charts import build_track_speed_chart
+from backend.components.driver_call import render_driver_call_button
 from backend.data_loader import save_action
 from backend.metrics import get_alarm_details
 from backend.risk_table import get_incident_report
@@ -420,8 +421,11 @@ def _render_analysis_section(alarm_row: pd.Series) -> None:
             st.toast(f"Причина '{reason}' зафиксирована")
 
 
-def _render_action_form(alarm_id: str, unit_sn: str) -> None:
+def _render_action_form(alarm_id: str, unit_sn: str, datasets: dict) -> None:
     st.markdown("### ДЕЙСТВИЯ")
+
+    if unit_sn:
+        render_driver_call_button(unit_sn, datasets, key_prefix="incident_action")
 
     output_dir = Path(__file__).resolve().parents[2] / "output"
 
@@ -475,6 +479,9 @@ def render_incident_tab(
 
     _render_top_panel(alarm_row, alarm_type_labels, speed_limit_kmh, has_video, has_track)
 
+    if unit_sn:
+        render_driver_call_button(unit_sn, datasets, key_prefix="incident_top")
+
     st.markdown("---")
 
     left_col, right_col = st.columns([0.4, 0.6])
@@ -491,7 +498,7 @@ def render_incident_tab(
 
     st.markdown("---")
 
-    _render_action_form(selected_id, unit_sn)
+    _render_action_form(selected_id, unit_sn, datasets)
 
     if st.session_state.get("_incident_action_submitted"):
         st.session_state["_incident_action_submitted"] = False

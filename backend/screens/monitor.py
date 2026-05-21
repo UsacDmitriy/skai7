@@ -22,25 +22,25 @@ _RISK_TONES = {
     "crit": {
         "dot": "#EF4444",
         "bg": "rgba(239,68,68,0.12)",
-        "fg": "#FCA5A5",
+        "fg": "#DC2626",
         "label": "Критический",
     },
     "high": {
         "dot": "#F97316",
         "bg": "rgba(249,115,22,0.12)",
-        "fg": "#FDBA74",
+        "fg": "#C2410C",
         "label": "Высокий",
     },
     "med": {
         "dot": "#F59E0B",
         "bg": "rgba(245,158,11,0.12)",
-        "fg": "#FDE68A",
+        "fg": "#B45309",
         "label": "Средний",
     },
     "normal": {
         "dot": "#3B82F6",
         "bg": "rgba(59,130,246,0.12)",
-        "fg": "#93C5FD",
+        "fg": "#1D4ED8",
         "label": "Нормальный",
     },
 }
@@ -613,7 +613,7 @@ def render_monitor_tab(datasets: dict[str, pd.DataFrame], alarm_type_labels: dic
     )
 
     # Main columns
-    left_col, center_col, right_col = st.columns([1.0, 2.2, 1.2])
+    left_col, center_col, right_col = st.columns([0.9, 2.0, 1.5])
 
     with left_col:
         # Filter pills
