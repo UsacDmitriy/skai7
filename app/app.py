@@ -1,111 +1,91 @@
 from __future__ import annotations
 
-import logging
 from pathlib import Path
 
 import streamlit as st
 
-from constants import (
-    ACTION_LABELS,
-    ACTION_TYPES,
-    ALARM_TYPE_LABELS,
-    COLORS,
-    LAYOUT,
-    PAGE_ICON,
-    PAGE_TITLE,
-    SPEED_LIMIT_KMH,
-)
-from data_loader import load_csv_files, save_action
-
-try:
-    from screens.analytics import render_analytics_tab
-    from screens.incident import render_incident_tab
-    from screens.monitor import render_monitor_tab
-except ImportError as exc:
-    st.error(f"Не удалось загрузить модули экранов: {exc}")
+from app.constants import PAGE_TITLE, PAGE_ICON, LAYOUT, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH
+from app.data_loader import load_csv_files, save_action
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data"
 SAMPLE_DATA_DIR = PROJECT_ROOT / "sample_data"
 OUTPUT_DIR = PROJECT_ROOT / "output"
 
-st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout=LAYOUT)
 
-
-def init_session() -> None:
+def _init_session_state() -> None:
     defaults = {
         "datasets": {},
-        "selected_alarm_id": None,
-        "last_action": None,
+        "active_tab": "📋 Лента событий",
+        "selected_incident": None,
     }
     for key, default in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = default
 
 
-def render_sidebar(datasets, data_source):
-    st.sidebar.caption(f"Источник: {data_source.relative_to(PROJECT_ROOT)}")
-    st.sidebar.caption(f"Загружено: {len(datasets)} файлов")
+def render_data_tab(datasets: dict) -> None:
+    st.info("Вкладка «Данные» — загрузка и просмотр CSV файлов")
+    if datasets:
+        for name, df in datasets.items():
+            with st.expander(name, expanded=False):
+                st.dataframe(df.head(20), use_container_width=True)
 
+
+def render_dashboard_tab(datasets: dict) -> None:
+    st.info("Вкладка «Dashboard» — появится в wave-03")
     alarms_df = datasets.get("selected_video_alarms")
-    vehicles_df = datasets.get("vehicles")
-    video_df = datasets.get("video_files")
-    if alarms_df is not None:
-        st.sidebar.metric("Алармов", len(alarms_df))
-    if vehicles_df is not None:
-        st.sidebar.metric("Машин", len(vehicles_df))
-    if video_df is not None:
-        st.sidebar.metric("Видео", len(video_df))
-
-    if st.session_state.get("last_action"):
-        st.sidebar.success(f"Действие: {st.session_state['last_action']}")
+    if alarms_df is not None and not alarms_df.empty:
+        st.metric("Всего алармов", len(alarms_df))
 
 
-def main():
-    init_session()
+def render_analysis_tab(datasets: dict) -> None:
+    st.info("Вкладка «Аналитика» — появится в wave-04")
+
+
+def render_incidents_tab(datasets: dict) -> None:
+    st.info("Вкладка «Инциденты» — появится в wave-04")
+
+
+def render_actions_tab(datasets: dict) -> None:
+    st.info("Вкладка «Заявки» — появится в wave-05")
+
+
+def main() -> None:
+    _init_session_state()
+
+    st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout=LAYOUT)
 
     st.title(PAGE_TITLE)
-    st.caption("Телематика + Видео → Контекст → Действие. MVP единого окна инцидентов.")
+    st.caption("Data → Logic → UI → Action. Keep it small, explainable, and demo-ready.")
 
     data_source = DATA_DIR if any(DATA_DIR.glob("*.csv")) else SAMPLE_DATA_DIR
     if not st.session_state["datasets"]:
         st.session_state["datasets"] = load_csv_files(data_source)
     datasets = st.session_state["datasets"]
 
-    render_sidebar(datasets, data_source)
+    st.sidebar.caption(f"Чтение CSV из: {data_source.relative_to(PROJECT_ROOT)}")
 
-    monitor_tab, analytics_tab, incident_tab = st.tabs([
-        "🗺 Мониторинг",
-        "📊 Отчёты",
-        "📋 Инцидент",
-    ])
+    tabs = [
+        "📋 Лента событий",
+        "🛡 Живой мониторинг",
+        "🔍 Карточка инцидента",
+        "📊 Аналитика",
+        "📝 Заявки",
+    ]
+    active = st.sidebar.radio("Навигация", tabs, key="active_tab")
 
-    with monitor_tab:
-        render_monitor_tab(datasets, ALARM_TYPE_LABELS)
-
+    data_tab, live_tab, detail_tab, analytics_tab, actions_tab = st.tabs(tabs)
+    with data_tab:
+        render_data_tab(datasets)
+    with live_tab:
+        render_dashboard_tab(datasets)
+    with detail_tab:
+        render_analysis_tab(datasets)
     with analytics_tab:
-        render_analytics_tab(datasets, ALARM_TYPE_LABELS, COLORS)
-
-    with incident_tab:
-        result = render_incident_tab(datasets, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH)
-        if result:
-            alarm_id, unit_sn = result
-            with st.form("incident_action_form", clear_on_submit=True):
-                st.markdown("### Действие")
-                prefix = f"{alarm_id[:8]}_{unit_sn}" if alarm_id else ""
-                row_id = st.text_input("ID записи", value=prefix)
-                action_type = st.selectbox(
-                    "Тип действия",
-                    options=ACTION_TYPES,
-                    format_func=lambda t: ACTION_LABELS.get(t, t),
-                )
-                comment = st.text_area("Комментарий", height=80)
-                submitted = st.form_submit_button("Сохранить")
-
-            if submitted:
-                save_action(OUTPUT_DIR, row_id=row_id, action=action_type, comment=comment)
-                st.session_state["last_action"] = action_type
-                st.success("Действие сохранено в ./output/actions.csv")
+        render_incidents_tab(datasets)
+    with actions_tab:
+        render_actions_tab(datasets)
 
 
 if __name__ == "__main__":
