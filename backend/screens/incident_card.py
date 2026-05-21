@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from backend.components.driver_call import render_driver_call_button
 from backend.constants import ALARM_TYPE_LABELS, SPEED_LIMIT_KMH
 from backend.data_loader import save_action
 from backend.charts import build_track_speed_chart
@@ -660,6 +661,9 @@ def _render_incident_card(alarm_id: str, datasets, type_labels) -> None:
             if st.button("← К списку", use_container_width=True):
                 st.session_state["selected_alarm_id"] = None
                 st.rerun()
+
+        if unit_sn and unit_sn != "—":
+            render_driver_call_button(unit_sn, datasets, key_prefix="card")
 
         _render_voice_comment_box()
 

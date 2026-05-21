@@ -8,6 +8,8 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 
+from backend.components.action_buttons import render_action_bar
+from backend.components.driver_call import render_driver_call_button
 from backend.constants import ALARM_TYPE_LABELS, SPEED_LIMIT_KMH
 from backend.data_loader import save_action
 
@@ -135,9 +137,6 @@ _CSS_RAW = """
 .m-btm .bad { color:var(--danger-ink); }
 .m-btm .val { color:var(--fg-1); font-weight:600; font-variant-numeric:tabular-nums; }
 """
-
-_CSS = f"<style>{_CSS_RAW}</style>"
-
 
 def _embed_css(fragment: str) -> str:
     return f"<style>{_CSS_RAW}</style>\n{fragment}"
@@ -617,24 +616,20 @@ def render_monitor_tab(datasets: dict[str, pd.DataFrame], alarm_type_labels: dic
     left_col, center_col, right_col = st.columns([1.0, 2.2, 1.2])
 
     with left_col:
-        # Filter buttons (streamlit)
-        c1, c2, c3, c4 = st.columns(4)
-        with c1:
-            if st.button("Все", key="mf_all", use_container_width=True):
-                st.session_state["monitor_filter"] = "all"
-                st.rerun()
-        with c2:
-            if st.button("Крит.", key="mf_crit", use_container_width=True):
-                st.session_state["monitor_filter"] = "crit"
-                st.rerun()
-        with c3:
-            if st.button("Высок.", key="mf_high", use_container_width=True):
-                st.session_state["monitor_filter"] = "high"
-                st.rerun()
-        with c4:
-            if st.button("Сред.", key="mf_med", use_container_width=True):
-                st.session_state["monitor_filter"] = "med"
-                st.rerun()
+        # Filter pills
+        _filter_labels = {"all": "Все", "crit": "Крит.", "high": "Высок.", "med": "Сред."}
+        _selected = st.pills(
+            "Фильтр",
+            options=["all", "crit", "high", "med"],
+            format_func=lambda x: _filter_labels.get(x, x),
+            selection_mode="single",
+            default=filter_level,
+            key="monitor_filter_pills",
+            label_visibility="collapsed",
+        )
+        if _selected and _selected != filter_level:
+            st.session_state["monitor_filter"] = _selected
+            st.rerun()
 
         # Timeline HTML
         timeline_html = _build_left_timeline(alarms_df, alarm_type_labels, selected_aid, filter_level)
@@ -671,6 +666,16 @@ def render_monitor_tab(datasets: dict[str, pd.DataFrame], alarm_type_labels: dic
             st.session_state["selected_alarm_id"] = event_map[sel_lbl]
             st.rerun()
 
+    # Precompute alarm coordinates from track_points for map markers
+    track_points_df = datasets.get("track_points")
+    alarm_coords: dict[str, tuple[float, float]] = {}
+    if track_points_df is not None and not track_points_df.empty:
+        for aid, grp in track_points_df.groupby("alarm_id"):
+            lat = grp["latitude"].mean() if "latitude" in grp.columns else None
+            lon = grp["longitude"].mean() if "longitude" in grp.columns else None
+            if pd.notna(lat) and pd.notna(lon):
+                alarm_coords[str(aid)] = (float(lat), float(lon))
+
     with center_col:
         detail = _get_alarm_detail(datasets, selected_aid) if selected_aid else {"alarm": None, "videos": pd.DataFrame(), "track_summary": None, "track_points": pd.DataFrame()}
         alarm = detail["alarm"]
@@ -691,13 +696,28 @@ def render_monitor_tab(datasets: dict[str, pd.DataFrame], alarm_type_labels: dic
         map_col, cam_col = st.columns([3, 1])
         with map_col:
             # Leaflet map HTML
+            alarm_coords: dict[str, tuple[float, float]] = {}
+            for _, r in alarms_df.iterrows():
+                aid = str(r.get("AlarmId", ""))
+                lat = r.get("Latitude")
+                lon = r.get("Longitude")
+                if pd.notna(lat) and pd.notna(lon):
+                    alarm_coords[aid] = (float(lat), float(lon))
             center_lat, center_lon = 55.7558, 37.6173
             if alarm is not None:
                 lat = alarm.get("Latitude")
                 lon = alarm.get("Longitude")
                 if pd.notna(lat) and pd.notna(lon):
                     center_lat, center_lon = float(lat), float(lon)
-            map_html = _build_map_leaflet(alarms_df, selected_aid, center_lat, center_lon)
+            # Build track line for selected alarm
+            track_line = None
+            if not track_points.empty and "latitude" in track_points.columns and "longitude" in track_points.columns:
+                track_line = [
+                    (float(row["latitude"]), float(row["longitude"]))
+                    for _, row in track_points.iterrows()
+                    if pd.notna(row.get("latitude")) and pd.notna(row.get("longitude"))
+                ]
+            map_html = _build_map_leaflet(alarms_df, alarm_coords, selected_aid, center_lat, center_lon, track_line)
             st.components.v1.html(_embed_css(map_html), height=260)
 
         with cam_col:
@@ -720,23 +740,9 @@ def render_monitor_tab(datasets: dict[str, pd.DataFrame], alarm_type_labels: dic
 
         if selected_aid and detail["alarm"] is not None:
             unit_sn = str(detail["alarm"].get("UnitStateNumber", ""))
-            c1, c2, c3 = st.columns(3)
-            with c1:
-                if st.button("📋 Отчёт", use_container_width=True, key="mon_report"):
-                    save_action(OUTPUT_DIR, row_id=f"{selected_aid[:8]}_{unit_sn}", action="export_report")
-                    st.toast("Отчёт сохранён")
-            with c2:
-                if st.button("✅ Проверено", use_container_width=True, key="mon_verify"):
-                    save_action(OUTPUT_DIR, row_id=f"{selected_aid[:8]}_{unit_sn}", action="mark_reviewed")
-                    st.toast("Помечено как проверено")
-            with c3:
-                if st.button("🔍 Карточка", use_container_width=True, key="mon_card"):
-                    st.session_state["active_tab"] = "🔍 Карточка инцидента"
-                    st.rerun()
+            render_action_bar(selected_aid, unit_sn, OUTPUT_DIR, show_card=True)
         else:
-            st.button("📋 Отчёт", use_container_width=True, disabled=True, key="mon_report_d")
-            st.button("✅ Проверено", use_container_width=True, disabled=True, key="mon_verify_d")
-            st.button("🔍 Карточка", use_container_width=True, disabled=True, key="mon_card_d")
+            st.caption("Выберите событие для действий")
 
     # Bottom bar
     st.components.v1.html(_embed_css(_build_bottom_bar(total_alarms, unique_vehicles)), height=40)

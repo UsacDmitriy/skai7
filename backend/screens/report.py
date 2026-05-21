@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from backend.components.driver_call import render_driver_call_button
 from backend.metrics import get_alarm_details
 from backend.risk_table import build_risk_table, build_vehicle_summary
 from backend.charts import build_track_speed_chart
@@ -809,6 +810,10 @@ def _render_detail_panel(
             st.session_state["active_tab"] = "🔍 Карточка инцидента"
             st.rerun()
 
+    unit_sn_detail = str(alarm_row.get("UnitStateNumber", ""))
+    if unit_sn_detail and unit_sn_detail != "—":
+        render_driver_call_button(unit_sn_detail, datasets, key_prefix=f"report_detail_{alarm_id}")
+
 
 def _render_track_overview(
     datasets: dict[str, pd.DataFrame],
@@ -1077,6 +1082,8 @@ def _state_c(
 
     with left_col:
         _render_driver_card(driver_id, driver_alarms, vehicle_row, speed_limit)
+        if driver_id and driver_id != "__fleet__":
+            render_driver_call_button(driver_id, datasets, key_prefix="report_c")
         _render_severe_banner(critical_count)
 
         st.markdown("#### Нарушения")
@@ -1247,6 +1254,7 @@ def _state_c2(
             sel_alarms = _get_driver_alarms(datasets, selected_driver)
             sel_vehicle = _get_vehicle_row(datasets, selected_driver)
             _render_driver_card(selected_driver, sel_alarms, sel_vehicle, speed_limit)
+            render_driver_call_button(selected_driver, datasets, key_prefix="report_c2")
 
             st.markdown("**Последние нарушения**")
             picked = _render_violations_table(

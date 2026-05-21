@@ -4,10 +4,10 @@ from pathlib import Path
 
 import streamlit as st
 
+from backend.components.driver_call import render_driver_call_button
 from backend.constants import PAGE_TITLE, PAGE_ICON, LAYOUT, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH
 from backend.data_loader import load_csv_files
 from backend.screens.incident_card import render_incident_card_screen
-from backend.screens.incident import render_incident_tab
 from backend.screens.monitor import render_monitor_tab
 from backend.screens.report import render_interactive_report
 
@@ -78,7 +78,15 @@ def render_data_tab(datasets: dict) -> None:
                 st.session_state["active_tab"] = "🛡 Живой мониторинг"
                 st.rerun()
 
-    st.markdown("---")
+        # Call driver button for selected event
+        aid = event_map.get(sel_lbl)
+        if aid and "UnitStateNumber" in alarms_df.columns:
+            matched = alarms_df[alarms_df["AlarmId"] == aid]
+            if not matched.empty:
+                unit_sn = str(matched["UnitStateNumber"].values[0])
+                if unit_sn:
+                    render_driver_call_button(unit_sn, datasets, key_prefix="data_tab")
+
     st.info("Просмотр CSV файлов (фильтр по выбранному событию)")
     selected_alarm_id = event_map.get(sel_lbl) if "sel_lbl" in locals() else None
     if datasets:
@@ -137,7 +145,7 @@ def main() -> None:
     elif active == "🛡 Живой мониторинг":
         render_monitor_tab(datasets, ALARM_TYPE_LABELS)
     elif active == "🔍 Карточка инцидента":
-        render_incident_tab(datasets, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH)
+        render_incident_card_screen()
     elif active == "📊 Интерактивный отчёт":
         render_interactive_report(datasets, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH)
     elif active == "📝 Заявки":
