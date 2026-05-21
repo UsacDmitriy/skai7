@@ -107,27 +107,148 @@ _VOICE_CSS = """<style>
 </style>"""
 
 
-def _voice_widget(tid: str, placeholder: str = "Нажмите на микрофон...") -> str:
-    return _VOICE_CSS + f'''
-<div class="kv-wrap">
-  <div class="kv-row">
-    <textarea id="{tid}" class="kv-ta" placeholder="{placeholder}"></textarea>
-    <button id="{tid}-btn" class="kv-mic" onclick="window._kiloVoiceStart('{tid}')">
-      <svg id="{tid}-mic" width="22" height="22" viewBox="0 0 24 24" fill="none"
-        stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="1" width="6" height="12" rx="3"/>
-        <path d="M5 10a7 7 0 0 0 14 0"/>
-        <line x1="12" y1="17" x2="12" y2="21"/>
-        <line x1="8" y1="21" x2="16" y2="21"/>
-      </svg>
-      <div id="{tid}-ring1" class="kv-ring1"></div>
-      <div id="{tid}-ring2" class="kv-ring2"></div>
-    </button>
-  </div>
-  <div id="{tid}-st" class="kv-st">🎤 Нажмите для голосового ввода</div>
+def _voice_recording_card(widget_id: str, placeholder: str = "Нажмите микрофон и скажите...") -> str:
+    return f"""
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#{widget_id}_wrap{{display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;background:#1E293B;border-radius:16px;border:1px solid #334155;margin:12px 0;max-width:400px;}}
+#{widget_id}_timer{{font-family:-apple-system,sans-serif;font-size:24px;font-weight:700;color:#F1F5F9;letter-spacing:2px;min-height:32px;}}
+#{widget_id}_mic_btn{{width:80px;height:80px;border-radius:50%;background:#DC2626;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .15s;flex-shrink:0;}}
+#{widget_id}_mic_btn:hover{{transform:scale(1.05);}}
+#{widget_id}_mic_btn:active{{transform:scale(0.95);}}
+#{widget_id}_pulse1,#{widget_id}_pulse2{{position:absolute;width:80px;height:80px;border-radius:50%;border:2px solid #DC2626;opacity:0;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);}}
+#{widget_id}_pulse2{{width:110px;height:110px;}}
+#{widget_id}_waveform{{display:flex;align-items:center;gap:3px;height:40px;justify-content:center;}}
+#{widget_id}_wave_bar{{width:3px;background:#fff;border-radius:2px;transition:height .1s;}}
+#{widget_id}_status{{font-family:-apple-system,sans-serif;font-size:13px;color:#94A3B8;}}
+#{widget_id}_result{{width:100%;min-height:60px;background:#0F172A;border:1px solid #334155;border-radius:12px;padding:12px 16px;font-size:14px;font-family:-apple-system,sans-serif;color:#E2E8F0;resize:vertical;outline:none;line-height:1.5;}}
+#{widget_id}_result::placeholder{{color:#64748B;}}
+</style>
+</head>
+<body>
+<div id="{widget_id}_wrap" class="vrc-wrap">
+  <div id="{widget_id}_timer" class="vrc-timer"></div>
+  <button id="{widget_id}_mic_btn" onclick="window._vrcToggle('{widget_id}')" aria-label="Voice record">
+    <svg id="{widget_id}_mic_icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+      stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="1" width="6" height="12" rx="3"/>
+      <path d="M5 10a7 7 0 0 0 14 0"/>
+      <line x1="12" y1="17" x2="12" y2="21"/>
+      <line x1="8" y1="21" x2="16" y2="21"/>
+    </svg>
+    <div id="{widget_id}_pulse1" class="vrc-pulse1"></div>
+    <div id="{widget_id}_pulse2" class="vrc-pulse2"></div>
+  </button>
+  <div id="{widget_id}_waveform" class="vrc-waveform"></div>
+  <div id="{widget_id}_status" class="vrc-status">Нажмите для записи</div>
+  <textarea id="{widget_id}_result" class="vrc-result" placeholder="{placeholder}" rows="3"></textarea>
 </div>
-{_VOICE_JS}
-'''
+<script>
+(function(){{
+  if(!window.__VRC_INSTANCES)window.__VRC_INSTANCES={{}};
+  if(!window.__VRC_SR){{
+    window.__VRC_SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    window.__VRC_GLOBAL_REC=null;
+    window.__VRC_ACTIVE_ID=null;
+    if(window.__VRC_SR){{
+      var rec=new window.__VRC_SR();
+      rec.lang='ru-RU';rec.interimResults=true;rec.continuous=true;
+      window.__VRC_GLOBAL_REC=rec;
+      rec.onresult=function(e){{
+        if(!window.__VRC_ACTIVE_ID)return;
+        var id=window.__VRC_ACTIVE_ID;
+        var inst=window.__VRC_INSTANCES[id];if(!inst)return;
+        var f='';for(var i=0;i<e.results.length;i++)f+=e.results[i][0].transcript;
+        inst.transcript=f;
+        var ra=document.getElementById(id+'_result');if(ra)ra.value=f;
+      }};
+      rec.onerror=function(ev){{
+        var id=window.__VRC_ACTIVE_ID;
+        var st2=document.getElementById(id+'_status');
+        if(st2){{if(ev.error==='not-allowed')st2.textContent='Микрофон не доступен';
+          else st2.textContent='Ошибка распознавания';}}
+        var inst=window.__VRC_INSTANCES[id];if(inst){{inst.listening=false;}}
+        stopAnim(id);
+        var btn3=document.getElementById(id+'_mic_btn');if(btn3)btn3.style.background='#DC2626';
+        var p7=document.getElementById(id+'_pulse1');if(p7)p7.style.animation='none';
+        var p8=document.getElementById(id+'_pulse2');if(p8)p8.style.animation='none';
+        window.__VRC_ACTIVE_ID=null;
+      }};
+    }}
+    if(!document.getElementById('__vrc_pulse_style')){{
+      var style=document.createElement('style');style.id='__vrc_pulse_style';
+      style.textContent='@keyframes vrcPulse{{0%{{transform:translate(-50%,-50%) scale(1);opacity:.6;}}100%{{transform:translate(-50%,-50%) scale(1.8);opacity:0;}}}}';
+      document.head.appendChild(style);
+    }}
+  }}
+  function stopAnim(id){{
+    var inst=window.__VRC_INSTANCES[id];if(!inst)return;
+    if(inst.timerInt){{clearTimeout(inst.timerInt);inst.timerInt=null;}}
+    if(inst.animId){{cancelAnimationFrame(inst.animId);inst.animId=null;}}
+  }}
+  function startUI(id){{
+    var inst=window.__VRC_INSTANCES[id];if(!inst)return;
+    inst.listening=true;inst.timerStart=Date.now();inst.transcript='';
+    var ra2=document.getElementById(id+'_result');if(ra2)ra2.value='';
+    var btn=document.getElementById(id+'_mic_btn');if(btn)btn.style.background='#991B1B';
+    var st=document.getElementById(id+'_status');if(st)st.textContent='Нажмите чтобы остановить запись';
+    var pulse1=document.getElementById(id+'_pulse1');if(pulse1)pulse1.style.animation='vrcPulse 1s ease-out infinite';
+    var pulse2=document.getElementById(id+'_pulse2');if(pulse2)pulse2.style.animation='vrcPulse 1s ease-out infinite .5s';
+    function tick(){{if(!inst.listening)return;
+      var elapsed=Math.floor((Date.now()-inst.timerStart)/1000);
+      var m=String(Math.floor(elapsed/60)).padStart(2,'0');
+      var s=String(elapsed%60).padStart(2,'0');
+      var te=document.getElementById(id+'_timer');if(te)te.textContent=m+':'+s;
+      inst.timerInt=setTimeout(tick,500);}}tick();
+    var t=0;function anim(){{if(!inst.listening)return;t+=0.06;
+      for(var i=0;i<inst.waveformBars.length;i++){{
+        var h=6+Math.abs(Math.sin(t+i*0.5))*24+Math.random()*6;
+        if(inst.waveformBars[i])inst.waveformBars[i].style.height=h+'px';}}
+      inst.animId=requestAnimationFrame(anim);}}anim();
+  }}
+  function stopUI(id){{
+    var inst=window.__VRC_INSTANCES[id];if(!inst)return;
+    inst.listening=false;
+    stopAnim(id);
+    var btn2=document.getElementById(id+'_mic_btn');if(btn2)btn2.style.background='#DC2626';
+    var st3=document.getElementById(id+'_status');if(st3){{
+      st3.textContent=inst.transcript?'Распознано: ✓ Нажмите для новой записи':'Нажмите для записи';}}
+    var p3=document.getElementById(id+'_pulse1');if(p3)p3.style.animation='none';
+    var p4=document.getElementById(id+'_pulse2');if(p4)p4.style.animation='none';
+    for(var i=0;i<inst.waveformBars.length;i++){{
+      if(inst.waveformBars[i])inst.waveformBars[i].style.height='6px';}}
+  }}
+  window._vrcToggle=function(id){{
+    var inst=window.__VRC_INSTANCES[id];if(!inst)return;
+    if(!window.__VRC_GLOBAL_REC){{
+      var st4=document.getElementById(id+'_status');
+      if(st4)st4.textContent='Распознавание речи не поддерживается браузером';return;}}
+    if(inst.listening){{
+      stopUI(id);
+      try{{window.__VRC_GLOBAL_REC.stop();}}catch(e){{}}
+      window.__VRC_ACTIVE_ID=null;
+    }}else{{
+      window.__VRC_ACTIVE_ID=id;
+      try{{window.__VRC_GLOBAL_REC.start();}}catch(e){{}}
+      startUI(id);
+    }}
+  }};
+  window._vrcRegister=function(id){{
+    if(window.__VRC_INSTANCES[id])return;
+    var d={{id:id,listening:false,timerInt:null,timerStart:null,animId:null,
+      waveformBars:[],transcript:''}};
+    var wrap=document.getElementById(id+'_waveform');
+    if(wrap){{for(var i=0;i<20;i++){{var bar=document.createElement('div');
+      bar.style.cssText='width:3px;background:#fff;border-radius:2px;transition:height .1s;height:6px;';
+      wrap.appendChild(bar);d.waveformBars.push(bar);}}}}
+    window.__VRC_INSTANCES[id]=d;
+  }};
+}})();
+(function(){{_vrcRegister('{widget_id}');}})();
+</script>
+"""
 
 
 def _load_csv_max_50(path: Path) -> pd.DataFrame:
@@ -264,9 +385,9 @@ def _render_selection(datasets) -> None:
     if st.session_state.get("voice_search"):
         st.markdown(
             '<p style="color:#94A3B8;font-size:13px;font-family:-apple-system,sans-serif;'
-            'margin:4px 0 8px;">Скажите госномер или тип, например: "М477" или "Зевание"</p>',
+            'margin:-8px 0 8px;">Скажите госномер или тип, например: "М477" или "Зевание"</p>',
             unsafe_allow_html=True)
-        st.markdown(_voice_widget("voice_search_ta", "Нажмите микрофон и скажите..."), unsafe_allow_html=True)
+        st.markdown(_voice_recording_card("voice_search_card", "Нажмите микрофон и скажите госномер или тип..."), unsafe_allow_html=True)
         voice_q = st.text_input("Или введите запрос текстом:", key="voice_manual_q",
                                 placeholder='Например: М477, Дросс, Курение')
         if voice_q.strip():
@@ -292,7 +413,7 @@ def _render_voice_comment_box() -> None:
         '<p style="color:#94A3B8;font-size:12px;font-family:-apple-system,sans-serif;'
         'margin:-8px 0 10px;">Запишите голосом комментарий к инциденту</p>',
         unsafe_allow_html=True)
-    st.markdown(_voice_widget("voice_comment", "Комментарий к инциденту..."), unsafe_allow_html=True)
+    st.markdown(_voice_recording_card("voice_comment", "Комментарий к инциденту..."), unsafe_allow_html=True)
     st.text_input("Voice comment store", key="_voice_comment_store", label_visibility="collapsed")
 
 

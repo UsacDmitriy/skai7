@@ -317,6 +317,67 @@ def render_monitor_tab(datasets: dict[str, pd.DataFrame], alarm_type_labels: dic
 
     st.components.v1.html(monitor_html, height=700, scrolling=True)
 
+    # --- Functional controls below HTML (HTML onclick/postMessage does not work in Streamlit) ---
+    alarms_sorted = alarms_df.dropna(subset=["Speed"]).sort_values("Speed", ascending=False)
+
+    event_options = ["— Выберите событие —"]
+    event_map = {}
+    for _, row in alarms_sorted.iterrows():
+        aid = str(row.get("AlarmId", ""))
+        veh = str(row.get("UnitStateNumber", "—"))
+        typ = alarm_type_labels.get(row.get("Type", ""), row.get("Type", ""))
+        spd = float(row.get("Speed", 0))
+        lbl = f"{veh} · {typ} · {spd:.0f} км/ч"
+        event_options.append(lbl)
+        event_map[lbl] = aid
+
+    # Pre-select current event if any
+    current_lbl = None
+    if selected_aid:
+        for lbl, aid in event_map.items():
+            if aid == selected_aid:
+                current_lbl = lbl
+                break
+
+    sel_lbl = st.selectbox(
+        "Событие в ленте",
+        options=event_options,
+        index=event_options.index(current_lbl) if current_lbl else 0,
+        key="monitor_event_select",
+        label_visibility="collapsed",
+    )
+
+    c1, c2, c3, c4 = st.columns([1, 1, 1, 1])
+    with c1:
+        if st.button("📋 Открыть карточку", use_container_width=True):
+            if sel_lbl != event_options[0]:
+                st.session_state["selected_alarm_id"] = event_map[sel_lbl]
+                st.toast("Перейдите во вкладку 🔍 Карточка инцидента")
+                st.rerun()
+            else:
+                st.warning("Сначала выберите событие")
+    with c2:
+        if st.button("✅ Отметить проверкой", use_container_width=True):
+            if sel_lbl != event_options[0]:
+                from backend.data_loader import save_action
+                aid = event_map[sel_lbl]
+                save_action(Path("output"), row_id=aid[:8], action="mark_reviewed")
+                st.success("Помечено как проверено")
+            else:
+                st.warning("Сначала выберите событие")
+    with c3:
+        if st.button("🎬 Запросить видео", use_container_width=True):
+            st.info("Демо-режим: запрос видео недоступен")
+    with c4:
+        if st.button("📊 Создать отчёт", use_container_width=True):
+            if sel_lbl != event_options[0]:
+                from backend.data_loader import save_action
+                aid = event_map[sel_lbl]
+                save_action(Path("output"), row_id=aid[:8], action="export_report")
+                st.success("Отчёт сохранён в output/")
+            else:
+                st.warning("Сначала выберите событие")
+
     with st.expander("Карта (интерактивная)", expanded=False):
         lat_col = None
         lon_col = None

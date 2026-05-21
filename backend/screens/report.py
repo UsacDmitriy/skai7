@@ -507,10 +507,8 @@ def _render_driver_card(
         ("Телематика", track_detections, "telemetry"),
         ("Грубых", critical_count, "critical"),
     ]
-    st.markdown('<div class="kpi-row-custom">', unsafe_allow_html=True)
-    for label, value, kind in kpi_items:
-        st.markdown(_kpi_card(label, value, kind), unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    cards_html = "".join(_kpi_card(label, value, kind) for label, value, kind in kpi_items)
+    st.markdown(f'<div class="kpi-row-custom">{cards_html}</div>', unsafe_allow_html=True)
 
 
 def _render_severe_banner(critical_count: int) -> None:
@@ -1049,10 +1047,8 @@ def _state_c2(
         ("Грубых", critical_count, "critical"),
         ("Водителей" if not toggle_val else "ТС", drivers_or_vehicles, "default"),
     ]
-    st.markdown('<div class="kpi-row-custom">', unsafe_allow_html=True)
-    for label, value, kind in kpi_items:
-        st.markdown(_kpi_card(label, value, kind), unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    cards_html = "".join(_kpi_card(label, value, kind) for label, value, kind in kpi_items)
+    st.markdown(f'<div class="kpi-row-custom">{cards_html}</div>', unsafe_allow_html=True)
 
     # Build fleet list
     if not risk_table.empty and "UnitStateNumber" in risk_table.columns:
