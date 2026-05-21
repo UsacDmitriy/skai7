@@ -428,6 +428,31 @@ def _format_period(driver_alarms: pd.DataFrame) -> str:
     return f"{begins.min():%d.%m.%Y} — {begins.max():%d.%m.%Y}"
 
 
+def _get_all_vehicle_options(datasets: dict[str, pd.DataFrame]) -> list[tuple[str, str]]:
+    """Возвращает список (label, unit_state_number) для selectbox."""
+    alarms_df = datasets.get("selected_video_alarms")
+    vehicles_df = datasets.get("vehicles")
+    options: list[tuple[str, str]] = []
+    seen: set[str] = set()
+
+    if alarms_df is not None and "UnitStateNumber" in alarms_df.columns:
+        for _, row in alarms_df.iterrows():
+            unit_sn = str(row.get("UnitStateNumber", ""))
+            if not unit_sn or unit_sn in seen:
+                continue
+            seen.add(unit_sn)
+            unit_name = ""
+            if vehicles_df is not None and "unit_state_number" in vehicles_df.columns and "unit_name" in vehicles_df.columns:
+                vmask = vehicles_df["unit_state_number"] == unit_sn
+                if vmask.any():
+                    unit_name = str(vehicles_df[vmask].iloc[0].get("unit_name", ""))
+            label = f"{unit_name} ({unit_sn})" if unit_name else unit_sn
+            options.append((label, unit_sn))
+
+    options.sort(key=lambda x: x[0])
+    return options
+
+
 def _get_driver_alarms(
     datasets: dict[str, pd.DataFrame],
     driver_id: str,
@@ -698,23 +723,36 @@ def _render_detail_panel(
     videos = details.get("videos", pd.DataFrame())
     st.markdown("**📹 Видео**")
     if not videos.empty and "media_relative_path" in videos.columns:
-        # Show up to 2 videos side-by-side (matching the mockup: CAM-01 road + CAM-02 cabin)
-        video_rows = [videos.iloc[i : i + 2] for i in range(0, min(len(videos), 4), 2)]
-        for row_df in video_rows:
-            cols = st.columns(len(row_df))
-            for col, (_, vrow) in zip(cols, row_df.iterrows()):
-                rel_path = str(vrow.get("media_relative_path", ""))
-                channel = str(vrow.get("channel", "?"))
-                duration = float(vrow.get("duration_seconds", 0)) if pd.notna(vrow.get("duration_seconds")) else 0
-                local_path = PROJECT_ROOT / rel_path
-                with col:
-                    st.caption(f"Канал {channel} — {duration:.1f} сек")
-                    if local_path.exists():
-                        st.video(str(local_path), format="video/mp4", start_time=0)
-                    else:
-                        st.caption(f"(файл не найден: {rel_path})")
+        video_options = []
+        video_map = {}
+        for _, vrow in videos.iterrows():
+            rel_path = str(vrow.get("media_relative_path", ""))
+            channel = str(vrow.get("channel", "?"))
+            duration = float(vrow.get("duration_seconds", 0)) if pd.notna(vrow.get("duration_seconds")) else 0
+            label = f"Канал {channel} — {duration:.1f} сек"
+            video_options.append(label)
+            video_map[label] = rel_path
+
+        selected_video_label = st.selectbox(
+            "Выберите видео",
+            options=video_options,
+            key=f"_report_video_sel_{alarm_id}",
+            label_visibility="collapsed",
+        )
+        rel_path = video_map.get(selected_video_label, "")
+        local_path = PROJECT_ROOT / rel_path if rel_path else None
+        if local_path and local_path.exists():
+            st.video(str(local_path), format="video/mp4", start_time=0)
+        else:
+            st.info(f"Видео не найдено: {rel_path or '—'}")
     else:
-        st.caption("Нет видеофайлов для этого аларма.")
+        st.markdown(
+            '<div style="background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:8px;'
+            'padding:24px 16px;text-align:center;color:#64748B;">'
+            '<span style="font-size:36px;">📷</span><br>'
+            '<span>Нет видео для этого аларма</span></div>',
+            unsafe_allow_html=True,
+        )
 
     st.markdown("**📊 Данные**")
     c1, c2, c3 = st.columns(3)
@@ -812,6 +850,34 @@ def _state_a(datasets: dict[str, pd.DataFrame]) -> None:
 
     _, mid, _ = st.columns([1, 3, 1])
     with mid:
+        # Vehicle selector
+        vehicle_options = _get_all_vehicle_options(datasets)
+        if vehicle_options:
+            sel_labels = ["— Выберите ТС —"] + [label for label, _ in vehicle_options]
+            sel_values = [""] + [val for _, val in vehicle_options]
+            current_sn = st.session_state.get("report_driver_id", "")
+            try:
+                current_idx = sel_values.index(current_sn) if current_sn else 0
+            except ValueError:
+                current_idx = 0
+            selected_label = st.selectbox(
+                "ТС",
+                options=sel_labels,
+                index=current_idx,
+                key="_report_vehicle_select",
+                label_visibility="collapsed",
+            )
+            selected_sn = sel_values[sel_labels.index(selected_label)]
+            if selected_sn:
+                st.session_state["report_driver_id"] = selected_sn
+                st.session_state["report_preset"] = "manual_vehicle"
+                st.session_state["report_query_text"] = f"Отчёт по {selected_sn}"
+                st.session_state["report_show_confirm"] = True
+                st.session_state["report_confirmed"] = False
+                st.rerun()
+
+        st.markdown('<div class="preset-divider">или опишите запрос:</div>', unsafe_allow_html=True)
+
         # Sync existing query text into voice block state so it isn't lost on tab switch
         if st.session_state.get("report_query_text") and not st.session_state.get("_voice_text"):
             st.session_state["_voice_text"] = st.session_state["report_query_text"]

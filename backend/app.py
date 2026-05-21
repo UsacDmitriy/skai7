@@ -79,11 +79,19 @@ def render_data_tab(datasets: dict) -> None:
                 st.rerun()
 
     st.markdown("---")
-    st.info("Просмотр CSV файлов")
+    st.info("Просмотр CSV файлов (фильтр по выбранному событию)")
+    selected_alarm_id = event_map.get(sel_lbl) if "sel_lbl" in locals() else None
     if datasets:
         for name, df in datasets.items():
+            display_df = df
+            if selected_alarm_id and name in ("max_speed_points", "track_points", "track_summary", "track_periods", "video_files"):
+                if "alarm_id" in df.columns:
+                    display_df = df[df["alarm_id"] == selected_alarm_id]
+            if selected_alarm_id and name == "selected_video_alarms":
+                if "AlarmId" in df.columns:
+                    display_df = df[df["AlarmId"] == selected_alarm_id]
             with st.expander(name, expanded=False):
-                st.dataframe(df.head(20), use_container_width=True)
+                st.dataframe(display_df.head(20), use_container_width=True)
 
 
 def render_actions_tab(datasets: dict) -> None:
@@ -112,7 +120,17 @@ def main() -> None:
         "📊 Интерактивный отчёт",
         "📝 Заявки",
     ]
-    active = st.sidebar.radio("Навигация", tabs, key="active_tab")
+    active_tab = st.session_state.get("active_tab", tabs[0])
+    try:
+        active_index = tabs.index(active_tab)
+    except ValueError:
+        active_index = 0
+
+    active = st.sidebar.radio("Навигация", tabs, index=active_index)
+
+    if active != active_tab:
+        st.session_state["active_tab"] = active
+        st.rerun()
 
     if active == "📋 Лента событий":
         render_data_tab(datasets)

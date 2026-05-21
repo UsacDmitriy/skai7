@@ -11,6 +11,8 @@ from backend.data_loader import save_action
 from backend.metrics import get_alarm_details
 from backend.risk_table import get_incident_report
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
 _AI_ANALYSIS: dict[str, str] = {
     "Drowsiness": (
         "Водитель не менял положение руля 40+ секунд. Возможен микросон. "
@@ -215,27 +217,76 @@ def _render_video_section(datasets: dict[str, pd.DataFrame], alarm_id: str, alar
             unsafe_allow_html=True,
         )
 
-        has_any_video = False
-    else:
-        has_any_video = True
-        display_videos = videos.copy()
-        column_map = {}
-        if "channel" in display_videos.columns:
-            column_map["channel"] = "Канал"
-        if "media_relative_path" in display_videos.columns:
-            column_map["media_relative_path"] = "Путь к медиа"
-        if "duration_seconds" in display_videos.columns:
-            column_map["duration_seconds"] = "Длит. (сек)"
-        if "size_bytes" in display_videos.columns:
-            display_videos["size_mb"] = (display_videos["size_bytes"] / (1024 * 1024)).round(2)
-            column_map["size_mb"] = "Размер (МБ)"
-
-        if column_map:
-            st.dataframe(
-                display_videos[list(column_map)].rename(columns=column_map),
-                use_container_width=True,
-                hide_index=True,
+        st.markdown("**Статус камер:**")
+        camera_ids_raw = alarm_row.get("CameraIds")
+        cameras = _parse_camera_ids(camera_ids_raw)
+        if cameras:
+            active_count = len(cameras)
+            st.markdown(
+                f"Активно камер: {active_count} — "
+                + ", ".join(f"`{c}`" for c in cameras[:10])
+                + ("…" if len(cameras) > 10 else "")
             )
+        else:
+            st.caption("Нет данных о камерах")
+
+        st.button(
+            "Запросить архивное видео",
+            disabled=True,
+            help="Демо-режим: запрос архивного видео недоступен.",
+            key="_incident_request_archive",
+        )
+        return
+
+    # Build selector options
+    video_options = []
+    video_map = {}
+    for _, vrow in videos.iterrows():
+        rel_path = str(vrow.get("media_relative_path", ""))
+        channel = str(vrow.get("channel", "?"))
+        duration = float(vrow.get("duration_seconds", 0)) if pd.notna(vrow.get("duration_seconds")) else 0
+        size_mb = 0.0
+        if "size_bytes" in vrow.index and pd.notna(vrow.get("size_bytes")):
+            size_mb = float(vrow.get("size_bytes", 0)) / (1024 * 1024)
+        label = f"Канал {channel} — {duration:.1f} сек"
+        if size_mb > 0:
+            label += f" ({size_mb:.1f} МБ)"
+        video_options.append(label)
+        video_map[label] = rel_path
+
+    selected_label = st.selectbox(
+        "Выберите видео",
+        options=video_options,
+        key=f"_incident_video_sel_{alarm_id}",
+        label_visibility="collapsed",
+    )
+
+    rel_path = video_map.get(selected_label, "")
+    local_path = PROJECT_ROOT / rel_path if rel_path else None
+    if local_path and local_path.exists():
+        st.video(str(local_path), format="video/mp4", start_time=0)
+    else:
+        st.info(f"Видео не найдено: {rel_path or '—'}")
+
+    # Metadata table
+    display_videos = videos.copy()
+    column_map = {}
+    if "channel" in display_videos.columns:
+        column_map["channel"] = "Канал"
+    if "media_relative_path" in display_videos.columns:
+        column_map["media_relative_path"] = "Путь к медиа"
+    if "duration_seconds" in display_videos.columns:
+        column_map["duration_seconds"] = "Длит. (сек)"
+    if "size_bytes" in display_videos.columns:
+        display_videos["size_mb"] = (display_videos["size_bytes"] / (1024 * 1024)).round(2)
+        column_map["size_mb"] = "Размер (МБ)"
+
+    if column_map:
+        st.dataframe(
+            display_videos[list(column_map)].rename(columns=column_map),
+            use_container_width=True,
+            hide_index=True,
+        )
 
     st.markdown("**Статус камер:**")
     camera_ids_raw = alarm_row.get("CameraIds")
@@ -249,14 +300,6 @@ def _render_video_section(datasets: dict[str, pd.DataFrame], alarm_id: str, alar
         )
     else:
         st.caption("Нет данных о камерах")
-
-    if not has_any_video:
-        st.button(
-            "Запросить архивное видео",
-            disabled=True,
-            help="Демо-режим: запрос архивного видео недоступен.",
-            key="_incident_request_archive",
-        )
 
 
 def _render_telemetry_section(

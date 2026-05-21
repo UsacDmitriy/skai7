@@ -21,7 +21,7 @@ def render_incident_topbar(incident: dict) -> None:
 
     with col1:
         if st.button("← Назад", key="back_to_feed"):
-            st.session_state["active_tab"] = "Лента событий"
+            st.session_state["active_tab"] = "📋 Лента событий"
             st.rerun()
         st.markdown(f"### {plate} — {driver}")
 
