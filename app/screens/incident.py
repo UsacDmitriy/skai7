@@ -6,10 +6,10 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from charts import build_track_speed_chart
-from data_loader import save_action
-from metrics import get_alarm_details
-from risk_table import get_incident_report
+from app.charts import build_track_speed_chart
+from app.data_loader import save_action
+from app.metrics import get_alarm_details
+from app.risk_table import get_incident_report
 
 _AI_ANALYSIS: dict[str, str] = {
     "Drowsiness": (

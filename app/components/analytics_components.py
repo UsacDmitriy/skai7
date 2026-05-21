@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-"""Компоненты аналитики для SKAI Hackathon."""
+from collections import Counter
 
+import altair as alt
+import pandas as pd
 import streamlit as st
-
 from app.constants import COLORS
 
 
 def render_driver_report_card(incident: dict, vehicle: dict | None = None) -> None:
-    """Карточка водителя: имя, ID, стаж, ТС, score безопасности."""
+    """Карточка водителя."""
     with st.container(border=True):
         col1, col2 = st.columns([1, 3])
         with col1:
@@ -18,7 +19,7 @@ def render_driver_report_card(incident: dict, vehicle: dict | None = None) -> No
             driver_id = incident.get("driver_id", "—")
             plate = incident.get("vehicle_plate", "—")
             st.markdown(f"### {driver}")
-            st.caption(f"ID: {driver_id} · Стаж: 12 лет · ТС: {plate}")
+            st.caption(f"ID: {driver_id} · ТС: {plate}")
 
         score = incident.get("score", 0)
         st.markdown(f"**Score безопасности:** {score} / 100")
@@ -26,9 +27,7 @@ def render_driver_report_card(incident: dict, vehicle: dict | None = None) -> No
 
 
 def render_violations_table(incidents: list[dict]) -> None:
-    """Таблица нарушений: дата, время, тип, скорость, score, видео."""
-    import pandas as pd
-
+    """Таблица нарушений."""
     rows = []
     for inc in incidents:
         rows.append({
@@ -45,17 +44,15 @@ def render_violations_table(incidents: list[dict]) -> None:
 
 
 def render_fleet_bar_chart(incidents: list[dict]) -> None:
-    """Столбчатая диаграмма: топ ТС по количеству нарушений."""
-    import altair as alt
-    import pandas as pd
-    from collections import Counter
-
+    """Столбчатая диаграмма топ-10 ТС по нарушениям."""
     plates = Counter(i["vehicle_plate"] for i in incidents)
+    df = pd.DataFrame(
+        [{"plate": plate, "count": count} for plate, count in plates.most_common(10)]
+    )
 
-    df = pd.DataFrame([
-        {"plate": plate, "count": count}
-        for plate, count in plates.most_common(10)
-    ])
+    if df.empty:
+        st.info("Нет данных для графика")
+        return
 
     chart = (
         alt.Chart(df)
@@ -63,7 +60,7 @@ def render_fleet_bar_chart(incidents: list[dict]) -> None:
         .encode(
             x=alt.X("plate:N", sort="-y", title="Госномер"),
             y=alt.Y("count:Q", title="Нарушений"),
-            color=alt.Color("count:Q", legend=None),
+            color=alt.Color("count:Q", legend=None, scale=alt.Scale(scheme="blues")),
             tooltip=["plate", "count"],
         )
         .properties(height=320, title="Топ ТС по нарушениям")
@@ -72,7 +69,7 @@ def render_fleet_bar_chart(incidents: list[dict]) -> None:
 
 
 def render_confirmation_modal(query: str, params: dict) -> bool:
-    """Модальное окно подтверждения NL-запроса. Возвращает True если подтверждено."""
+    """Модальное окно подтверждения NL-запроса."""
     with st.container(border=True):
         st.markdown("### Я понял запрос так:")
         for key, value in params.items():
@@ -80,19 +77,18 @@ def render_confirmation_modal(query: str, params: dict) -> bool:
 
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("✅ Подтвердить", use_container_width=True):
-                return True
+            confirm = st.button("✅ Подтвердить", use_container_width=True)
         with col2:
-            if st.button("✏ Исправить", use_container_width=True):
-                return False
-    return False
+            cancel = st.button("✏ Исправить", use_container_width=True)
+        return confirm
 
 
-def render_speed_chart(telemetry: list[dict], speed_limit: int = 90) -> None:
-    """График скорости по данным телеметрии."""
-    import altair as alt
-    import pandas as pd
-
+def render_speed_chart(
+    telemetry: list[dict],
+    speed_limit: int = 90,
+    title: str = "Скорость",
+) -> None:
+    """График скорости."""
     df = pd.DataFrame(telemetry)
     if df.empty:
         st.info("Нет данных телеметрии")
@@ -102,7 +98,7 @@ def render_speed_chart(telemetry: list[dict], speed_limit: int = 90) -> None:
         alt.Chart(df)
         .mark_line(point=True, color=COLORS["primary"])
         .encode(
-            x=alt.X("ts_offset:Q", title="Смещение от события (сек)"),
+            x=alt.X("ts_offset:Q", title="Смещение (сек)"),
             y=alt.Y("speed:Q", title="Скорость (км/ч)"),
             tooltip=["ts_offset", "speed"],
         )
@@ -120,20 +116,55 @@ def render_speed_chart(telemetry: list[dict], speed_limit: int = 90) -> None:
         .encode(x="x")
     )
 
-    chart = (line + limit_line + event_line).properties(
-        height=300, title="Скорость и акселерометр"
-    )
+    chart = (line + limit_line + event_line).properties(height=300, title=title)
     st.altair_chart(chart, use_container_width=True)
 
 
-def render_video_slide_panel(incident: dict) -> None:
-    """Панель с видео при клике на нарушение."""
-    if not incident.get("video_available"):
-        st.warning("Видео недоступно для этого инцидента")
+def render_fleet_map(incidents: list[dict]) -> None:
+    """Карта парка с маркерами ТС."""
+    points = []
+    for inc in incidents:
+        lat = inc.get("lat")
+        lon = inc.get("lon")
+        if lat and lon:
+            points.append({
+                "lat": lat,
+                "lon": lon,
+                "plate": inc.get("vehicle_plate", ""),
+                "risk": inc.get("risk_level", "low"),
+                "score": inc.get("score", 0),
+            })
+
+    if not points:
+        st.info("Нет координат для отображения на карте")
         return
 
-    video_path = incident.get("cam_front_url", "")
-    if video_path:
-        st.video(video_path)
-    else:
-        st.info("Путь к видео не указан")
+    df = pd.DataFrame(points)
+    st.map(df, latitude="lat", longitude="lon", size=10)
+
+
+def render_fleet_drivers_list(incidents: list[dict]) -> None:
+    """Список водителей с рейтингом."""
+    rows = []
+    for inc in incidents:
+        rows.append({
+            "Водитель": inc.get("driver", ""),
+            "ТС": inc.get("vehicle_plate", ""),
+            "Score": inc.get("score", 0),
+            "Нарушений за 7д": inc.get("events_last_7d", 0),
+            "Статус": inc.get("status", ""),
+        })
+
+    df = pd.DataFrame(rows).sort_values("Score", ascending=False)
+    st.dataframe(df, use_container_width=True, hide_index=True)
+
+
+__all__ = [
+    "render_driver_report_card",
+    "render_violations_table",
+    "render_fleet_bar_chart",
+    "render_confirmation_modal",
+    "render_speed_chart",
+    "render_fleet_map",
+    "render_fleet_drivers_list",
+]

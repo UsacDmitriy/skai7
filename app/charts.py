@@ -5,12 +5,94 @@ import pandas as pd
 
 __all__ = [
     "build_alarm_type_bar_chart",
+    "build_scatter_chart",
+    "build_speed_chart",
+    "build_track_map",
     "build_speed_scatter_chart",
     "build_track_speed_chart",
     "build_vehicle_mileage_bar_chart",
 ]
 
 CHART_HEIGHT = 320
+
+
+def build_scatter_chart(
+    df: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    height: int = 320,
+    max_rows: int = 5000,
+) -> alt.Chart:
+    """Универсальный scatter/line чарт Altair.
+    
+    Сэмплирует до max_rows для производительности.
+    """
+    data = df.head(max_rows)
+    chart = (
+        alt.Chart(data)
+        .mark_line(point=False)
+        .encode(
+            x=alt.X(x_col, title=x_col),
+            y=alt.Y(y_col, title=y_col),
+        )
+        .properties(height=height)
+    )
+    return chart
+
+
+def build_speed_chart(
+    df: pd.DataFrame,
+    height: int = 300,
+) -> alt.Chart | None:
+    """График скорости по времени для данных track_points.
+    
+    Требует колонки: timestamp_utc, speed_kmh.
+    Возвращает None, если обязательные колонки отсутствуют.
+    """
+    required = {"timestamp_utc", "speed_kmh"}
+    if not required.issubset(df.columns):
+        return None
+    
+    chart = (
+        alt.Chart(df)
+        .mark_line(color="#3B82F6")
+        .encode(
+            x=alt.X("timestamp_utc:T", title="Время"),
+            y=alt.Y("speed_kmh:Q", title="Скорость, км/ч"),
+            tooltip=["timestamp_utc", "speed_kmh"],
+        )
+        .properties(height=height, title="График скорости")
+    )
+    return chart
+
+
+def build_track_map(
+    df: pd.DataFrame,
+    height: int = 400,
+) -> alt.Chart | None:
+    """Scatter-график трековых точек на сетке широта/долгота.
+    
+    Требует колонки: latitude, longitude.
+    Возвращает None, если обязательные колонки отсутствуют.
+    """
+    required = {"latitude", "longitude"}
+    if not required.issubset(df.columns):
+        return None
+    
+    color = alt.Color("speed_kmh:Q", scale=alt.Scale(scheme="redyellowgreen"), title="Скорость") if "speed_kmh" in df.columns else alt.value("#3B82F6")
+    
+    chart = (
+        alt.Chart(df)
+        .mark_circle(size=30, opacity=0.7)
+        .encode(
+            x=alt.X("longitude:Q", title="Долгота"),
+            y=alt.Y("latitude:Q", title="Широта"),
+            color=color,
+            tooltip=["latitude", "longitude", "speed_kmh", "timestamp_utc"],
+        )
+        .properties(height=height, title="Трек маршрута")
+    )
+    return chart
 
 
 def _empty_chart(message: str = "Нет данных") -> alt.Chart:

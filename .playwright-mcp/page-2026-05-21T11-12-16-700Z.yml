@@ -1,0 +1,21 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e7]:
+      - button "Deploy" [ref=e9] [cursor=pointer]:
+        - generic [ref=e11]: Deploy
+      - button "Main menu" [ref=e13] [cursor=pointer]:
+        - img [ref=e14]
+  - alert [ref=e22]:
+    - generic [ref=e25]:
+      - generic [ref=e26]: "ModuleNotFoundError: No module named 'app.constants'; 'app' is not a package"
+      - generic [ref=e27]:
+        - generic [ref=e28]: "Traceback:"
+        - code [ref=e31]:
+          - generic [ref=e32]: File "/Users/dimausac/projects/skai_7/app/app.py", line 7, in <module> from app.constants import PAGE_TITLE, PAGE_ICON, LAYOUT, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH
+          - generic [ref=e33]: File "/Users/dimausac/projects/skai_7/app/app.py", line 7, in <module> from app.constants import PAGE_TITLE, PAGE_ICON, LAYOUT, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH
+      - generic [ref=e34]:
+        - button "Copy" [ref=e35] [cursor=pointer]
+        - link "Ask Google" [ref=e36] [cursor=pointer]:
+          - /url: https://www.google.com/search?q=ModuleNotFoundError%3A%20No%20module%20named%20'app.constants'%3B%20'app'%20is%20not%20a%20package
+        - link "Ask ChatGPT" [ref=e37] [cursor=pointer]:
+          - /url: https://chatgpt.com/?q=ModuleNotFoundError%3A%20No%20module%20named%20'app.constants'%3B%20'app'%20is%20not%20a%20package%0A%0AFile%20%22%2FUsers%2Fdimausac%2Fprojects%2Fskai_7%2Fapp%2Fapp.py%22%2C%20line%207%2C%20in%20%3Cmodule%3E%0A%20%20%20%20from%20app.constants%20import%20PAGE_TITLE%2C%20PAGE_ICON%2C%20LAYOUT%2C%20ALARM_TYPE_LABELS%2C%20COLORS%2C%20SPEED_LIMIT_KMH%0AFile%20%22%2FUsers%2Fdimausac%2Fprojects%2Fskai_7%2Fapp%2Fapp.py%22%2C%20line%207%2C%20in%20%3Cmodule%3E%0A%20%20%20%20from%20app.constants%20import%20PAGE_TITLE%2C%20PAGE_ICON%2C%20LAYOUT%2C%20ALARM_TYPE_LABELS%2C%20COLORS%2C%20SPEED_LIMIT_KMH
