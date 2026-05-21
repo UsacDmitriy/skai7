@@ -1,0 +1,122 @@
+- generic [ref=e2]:
+  - generic [ref=e11]:
+    - paragraph [ref=e16]: "Чтение CSV из: data"
+    - generic [ref=e18]:
+      - paragraph [ref=e22]: Навигация
+      - radiogroup "Навигация" [ref=e23] [cursor=pointer]:
+        - generic [ref=e24]:
+          - radio "📋 Лента событий" [checked]
+          - paragraph [ref=e29]: 📋 Лента событий
+        - generic [ref=e30]:
+          - radio "🛡 Живой мониторинг"
+          - paragraph [ref=e35]: 🛡 Живой мониторинг
+        - generic [ref=e36]:
+          - radio "🔍 Карточка инцидента"
+          - paragraph [ref=e41]: 🔍 Карточка инцидента
+        - generic [ref=e42]:
+          - radio "📊 Интерактивный отчёт"
+          - paragraph [ref=e47]: 📊 Интерактивный отчёт
+        - generic [ref=e48]:
+          - radio "📝 Заявки"
+          - paragraph [ref=e53]: 📝 Заявки
+  - generic [ref=e3]:
+    - banner [ref=e56]:
+      - generic [ref=e59]:
+        - button "Deploy" [ref=e61] [cursor=pointer]:
+          - generic [ref=e63]: Deploy
+        - button "Main menu" [ref=e65] [cursor=pointer]:
+          - img [ref=e66]
+    - generic [ref=e69]:
+      - heading "SKAI — Единое окно видео и телематики" [level=1] [ref=e74]:
+        - text: SKAI — Единое окно видео и телематики
+        - generic [ref=e75]:
+          - link "Link to heading":
+            - /url: "#skai-edinoe-okno-video-i-telematiki"
+            - img
+      - paragraph [ref=e80]: Data → Logic → UI → Action. Keep it small, explainable, and demo-ready.
+      - generic [ref=e82]:
+        - tablist [ref=e84]:
+          - tab "📋 Лента событий" [selected] [ref=e85] [cursor=pointer]:
+            - paragraph [ref=e87]: 📋 Лента событий
+          - tab "🛡 Живой мониторинг" [ref=e88] [cursor=pointer]:
+            - paragraph [ref=e90]: 🛡 Живой мониторинг
+          - tab "🔍 Карточка инцидента" [ref=e91] [cursor=pointer]:
+            - paragraph [ref=e93]: 🔍 Карточка инцидента
+          - tab "📊 Интерактивный отчёт" [ref=e94] [cursor=pointer]:
+            - paragraph [ref=e96]: 📊 Интерактивный отчёт
+          - tab "📝 Заявки" [ref=e97] [cursor=pointer]:
+            - paragraph [ref=e99]: 📝 Заявки
+        - tabpanel "📋 Лента событий" [ref=e102]:
+          - generic [ref=e103]:
+            - alert [ref=e106]:
+              - paragraph [ref=e111]: Вкладка «Данные» — загрузка и просмотр CSV файлов
+            - group [ref=e114]:
+              - generic "keyboard_arrow_right max_speed_points" [ref=e115] [cursor=pointer]:
+                - generic [ref=e116]:
+                  - generic [ref=e118]: keyboard_arrow_right
+                  - paragraph [ref=e121]: max_speed_points
+            - group [ref=e124]:
+              - generic "keyboard_arrow_right selected_video_alarms" [ref=e125] [cursor=pointer]:
+                - generic [ref=e126]:
+                  - generic [ref=e128]: keyboard_arrow_right
+                  - paragraph [ref=e131]: selected_video_alarms
+            - group [ref=e134]:
+              - generic "keyboard_arrow_right track_periods" [ref=e135] [cursor=pointer]:
+                - generic [ref=e136]:
+                  - generic [ref=e138]: keyboard_arrow_right
+                  - paragraph [ref=e141]: track_periods
+            - group [ref=e144]:
+              - generic "keyboard_arrow_right track_points" [ref=e145] [cursor=pointer]:
+                - generic [ref=e146]:
+                  - generic [ref=e148]: keyboard_arrow_right
+                  - paragraph [ref=e151]: track_points
+            - group [ref=e154]:
+              - generic "keyboard_arrow_right track_summary" [ref=e155] [cursor=pointer]:
+                - generic [ref=e156]:
+                  - generic [ref=e158]: keyboard_arrow_right
+                  - paragraph [ref=e161]: track_summary
+            - group [ref=e164]:
+              - generic "keyboard_arrow_right vehicles" [ref=e165] [cursor=pointer]:
+                - generic [ref=e166]:
+                  - generic [ref=e168]: keyboard_arrow_right
+                  - paragraph [ref=e171]: vehicles
+            - group [ref=e174]:
+              - generic "keyboard_arrow_right video_files" [ref=e175] [cursor=pointer]:
+                - generic [ref=e176]:
+                  - generic [ref=e178]: keyboard_arrow_right
+                  - paragraph [ref=e181]: video_files
+            - group [ref=e184]:
+              - generic "keyboard_arrow_right work_rest_single_vehicle/max_speed_points" [ref=e185] [cursor=pointer]:
+                - generic [ref=e186]:
+                  - generic [ref=e188]: keyboard_arrow_right
+                  - paragraph [ref=e191]: work_rest_single_vehicle/max_speed_points
+            - group [ref=e194]:
+              - generic "keyboard_arrow_right work_rest_single_vehicle/selected_video_alarms" [ref=e195] [cursor=pointer]:
+                - generic [ref=e196]:
+                  - generic [ref=e198]: keyboard_arrow_right
+                  - paragraph [ref=e201]: work_rest_single_vehicle/selected_video_alarms
+            - group [ref=e204]:
+              - generic "keyboard_arrow_right work_rest_single_vehicle/track_periods" [ref=e205] [cursor=pointer]:
+                - generic [ref=e206]:
+                  - generic [ref=e208]: keyboard_arrow_right
+                  - paragraph [ref=e211]: work_rest_single_vehicle/track_periods
+            - group [ref=e214]:
+              - generic "keyboard_arrow_right work_rest_single_vehicle/track_points" [ref=e215] [cursor=pointer]:
+                - generic [ref=e216]:
+                  - generic [ref=e218]: keyboard_arrow_right
+                  - paragraph [ref=e221]: work_rest_single_vehicle/track_points
+            - group [ref=e224]:
+              - generic "keyboard_arrow_right work_rest_single_vehicle/track_summary" [ref=e225] [cursor=pointer]:
+                - generic [ref=e226]:
+                  - generic [ref=e228]: keyboard_arrow_right
+                  - paragraph [ref=e231]: work_rest_single_vehicle/track_summary
+            - group [ref=e234]:
+              - generic "keyboard_arrow_right work_rest_single_vehicle/vehicles" [ref=e235] [cursor=pointer]:
+                - generic [ref=e236]:
+                  - generic [ref=e238]: keyboard_arrow_right
+                  - paragraph [ref=e241]: work_rest_single_vehicle/vehicles
+            - group [ref=e244]:
+              - generic "keyboard_arrow_right work_rest_single_vehicle/video_files" [ref=e245] [cursor=pointer]:
+                - generic [ref=e246]:
+                  - generic [ref=e248]: keyboard_arrow_right
+                  - paragraph [ref=e251]: work_rest_single_vehicle/video_files

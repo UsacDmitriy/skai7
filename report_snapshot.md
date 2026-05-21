@@ -1,0 +1,991 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: Состояние А1 · Текст введён вручную · голосовой ввод выключен · 1440 × 900
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]: S
+        - generic "Карта" [ref=e11] [cursor=pointer]:
+          - img [ref=e12]
+        - generic "События" [ref=e15] [cursor=pointer]:
+          - img [ref=e16]
+        - generic "Заявки" [ref=e19] [cursor=pointer]:
+          - img [ref=e20]
+        - generic "Отчёты" [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+        - img [ref=e27]
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: Диалог аналитики
+          - generic [ref=e33]: SKAI AI
+          - generic [ref=e35]:
+            - generic [ref=e36] [cursor=pointer]: История
+            - generic [ref=e37]: ДП
+        - generic [ref=e39]:
+          - img [ref=e41]
+          - heading "Сформируйте отчёт" [level=1] [ref=e45]
+          - paragraph [ref=e46]: Опишите что хотите увидеть — система построит отчёт автоматически
+          - generic [ref=e48]:
+            - 'textbox "Например: «Покажи нарушения по ВА и телематике у Иванова за последние три дня» или «Все засыпания за май по подразделению Север-1»" [ref=e50]':
+              - /placeholder: "Например: «Покажи нарушения по ВА и телематике у Иванова за последние три дня»\nили «Все засыпания за май по подразделению Север-1»"
+              - text: Покажи нарушения по ВА и телематике у Иванова за последние три дня
+            - generic [ref=e52]:
+              - generic [ref=e53]:
+                - button "Голосовой ввод" [ref=e54] [cursor=pointer]:
+                  - img [ref=e55]
+                - generic [ref=e58]:
+                  - text: faster-whisper
+                  - text: RU · KK · EN
+              - button "Сформировать отчёт" [ref=e59] [cursor=pointer]:
+                - img [ref=e60]
+                - text: Сформировать отчёт
+          - generic [ref=e63]:
+            - generic [ref=e64]: "или выберите готовый:"
+            - generic [ref=e65]:
+              - button "📊 Нарушения Иванова за последние 3 дня" [ref=e66] [cursor=pointer]:
+                - generic [ref=e67]: 📊
+                - generic [ref=e68]: Нарушения Иванова за последние 3 дня
+              - button "📷 Все нарушения по компании за 3 дня" [ref=e69] [cursor=pointer]:
+                - generic [ref=e70]: 📷
+                - generic [ref=e71]: Все нарушения по компании за 3 дня
+              - button "⚡ Топ-5 нарушителей за май" [ref=e72] [cursor=pointer]:
+                - generic [ref=e73]: ⚡
+                - generic [ref=e74]: Топ-5 нарушителей за май
+              - button "🔴 Грубые нарушения за квартал" [ref=e75] [cursor=pointer]:
+                - generic [ref=e76]: 🔴
+                - generic [ref=e77]: Грубые нарушения за квартал
+              - button "📷 Водители с видео-детекциями" [ref=e78] [cursor=pointer]:
+                - generic [ref=e79]: 📷
+                - generic [ref=e80]: Водители с видео-детекциями
+              - button "🌙 Ночные поездки этой недели" [ref=e81] [cursor=pointer]:
+                - generic [ref=e82]: 🌙
+                - generic [ref=e83]: Ночные поездки этой недели
+              - button "📋 Сравнить двух водителей" [ref=e84] [cursor=pointer]:
+                - generic [ref=e85]: 📋
+                - generic [ref=e86]: Сравнить двух водителей
+  - generic [ref=e87]:
+    - generic [ref=e88]: Состояние А2 · Текстовый ввод неактивен · голосовое распознавание активно · 1440 × 900
+    - generic [ref=e91]:
+      - generic [ref=e92]:
+        - generic [ref=e93]: S
+        - generic "Карта" [ref=e94] [cursor=pointer]:
+          - img [ref=e95]
+        - generic "События" [ref=e98] [cursor=pointer]:
+          - img [ref=e99]
+        - generic "Заявки" [ref=e102] [cursor=pointer]:
+          - img [ref=e103]
+        - generic "Отчёты" [ref=e106] [cursor=pointer]:
+          - img [ref=e107]
+        - img [ref=e110]
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]: Диалог аналитики
+          - generic [ref=e116]: SKAI AI
+          - generic [ref=e118]:
+            - generic [ref=e119] [cursor=pointer]: История
+            - generic [ref=e120]: ДП
+        - generic [ref=e122]:
+          - img [ref=e124]
+          - heading "Сформируйте отчёт" [level=1] [ref=e128]
+          - paragraph [ref=e129]: Опишите что хотите увидеть — система построит отчёт автоматически
+          - generic [ref=e131]:
+            - generic [ref=e133]: Слушаю...
+            - textbox "Говорите — речь появится здесь..." [ref=e138]
+            - generic [ref=e139]:
+              - generic [ref=e140]:
+                - button "Остановить запись" [ref=e141] [cursor=pointer]:
+                  - img [ref=e145]
+                - generic [ref=e147]:
+                  - text: faster-whisper
+                  - text: RU · KK · EN
+              - button "Сформировать отчёт" [disabled] [ref=e148]:
+                - img [ref=e149]
+                - text: Сформировать отчёт
+          - generic [ref=e152]:
+            - generic [ref=e153]: "или выберите готовый:"
+            - generic [ref=e154]:
+              - button "📊 Нарушения Иванова за последние 3 дня" [ref=e155] [cursor=pointer]:
+                - generic [ref=e156]: 📊
+                - generic [ref=e157]: Нарушения Иванова за последние 3 дня
+              - button "📷 Все нарушения по компании за 3 дня" [ref=e158] [cursor=pointer]:
+                - generic [ref=e159]: 📷
+                - generic [ref=e160]: Все нарушения по компании за 3 дня
+              - button "⚡ Топ-5 нарушителей за май" [ref=e161] [cursor=pointer]:
+                - generic [ref=e162]: ⚡
+                - generic [ref=e163]: Топ-5 нарушителей за май
+              - button "🔴 Грубые нарушения за квартал" [ref=e164] [cursor=pointer]:
+                - generic [ref=e165]: 🔴
+                - generic [ref=e166]: Грубые нарушения за квартал
+              - button "📷 Водители с видео-детекциями" [ref=e167] [cursor=pointer]:
+                - generic [ref=e168]: 📷
+                - generic [ref=e169]: Водители с видео-детекциями
+              - button "🌙 Ночные поездки этой недели" [ref=e170] [cursor=pointer]:
+                - generic [ref=e171]: 🌙
+                - generic [ref=e172]: Ночные поездки этой недели
+              - button "📋 Сравнить двух водителей" [ref=e173] [cursor=pointer]:
+                - generic [ref=e174]: 📋
+                - generic [ref=e175]: Сравнить двух водителей
+  - generic [ref=e176]:
+    - generic [ref=e177]: Состояние Б · Подтверждение запроса — система показывает как поняла · 1440 × 900
+    - generic [ref=e180]:
+      - generic [ref=e181]:
+        - generic [ref=e182]: S
+        - generic "Карта" [ref=e183] [cursor=pointer]:
+          - img [ref=e184]
+        - generic "События" [ref=e187] [cursor=pointer]:
+          - img [ref=e188]
+        - generic "Заявки" [ref=e191] [cursor=pointer]:
+          - img [ref=e192]
+        - generic "Отчёты" [ref=e195] [cursor=pointer]:
+          - img [ref=e196]
+        - img [ref=e199]
+      - generic [ref=e202]:
+        - generic [ref=e203]:
+          - generic [ref=e204]: Диалог аналитики
+          - generic [ref=e205]: SKAI AI
+          - generic [ref=e207]:
+            - generic [ref=e208] [cursor=pointer]: История
+            - generic [ref=e209]: ДП
+        - generic [ref=e210]:
+          - generic [ref=e212]:
+            - img [ref=e214]
+            - heading "Сформируйте отчёт" [level=1] [ref=e218]
+            - generic [ref=e220]: Покажи нарушения по ВА и телематике у Иванова за последние три дня
+          - generic [ref=e223]:
+            - generic [ref=e224]:
+              - img [ref=e225]
+              - generic [ref=e230]:
+                - generic [ref=e231]: Вот как я понял ваш запрос
+                - generic [ref=e232]: Проверьте параметры перед построением отчёта
+            - generic [ref=e233]:
+              - generic [ref=e234]:
+                - img [ref=e236]
+                - generic [ref=e239]:
+                  - generic [ref=e240]: Водитель
+                  - generic [ref=e241]: Иванов Алексей Петрович · А777ВВ 77
+              - generic [ref=e242]:
+                - img [ref=e244]
+                - generic [ref=e247]:
+                  - generic [ref=e248]: Период
+                  - generic [ref=e249]: Последние 3 дня · 14.05 – 16.05.2026
+              - generic [ref=e250]:
+                - img [ref=e252]
+                - generic [ref=e254]:
+                  - generic [ref=e255]: Тип данных
+                  - generic [ref=e257]:
+                    - generic [ref=e258]: Нарушения ВА + Телематика
+                    - generic [ref=e259]:
+                      - img [ref=e260]
+                      - text: ВА
+                    - generic [ref=e263]:
+                      - img [ref=e264]
+                      - text: Телематика
+            - generic [ref=e267]:
+              - button "Уточнить запрос" [ref=e268] [cursor=pointer]:
+                - img [ref=e269]
+                - text: Уточнить запрос
+              - button "Всё верно — показать отчёт" [ref=e271] [cursor=pointer]:
+                - img [ref=e272]
+                - text: Всё верно — показать отчёт
+            - generic [ref=e274]: "Уверенность распознавания: 96%"
+  - generic [ref=e276]:
+    - generic [ref=e277]: Состояние В · Полный отчёт — водитель, нарушения, трек и видео · 1440 × 900
+    - generic [ref=e280]:
+      - generic [ref=e281]:
+        - generic [ref=e282]: S
+        - generic "Карта" [ref=e283] [cursor=pointer]:
+          - img [ref=e284]
+        - generic "События" [ref=e287] [cursor=pointer]:
+          - img [ref=e288]
+        - generic "Заявки" [ref=e291] [cursor=pointer]:
+          - img [ref=e292]
+        - generic "Отчёты" [ref=e295] [cursor=pointer]:
+          - img [ref=e296]
+        - img [ref=e299]
+      - generic [ref=e302]:
+        - generic [ref=e303]:
+          - generic [ref=e304]: Диалог аналитики
+          - generic [ref=e305]: SKAI AI
+          - generic [ref=e307]:
+            - generic [ref=e308] [cursor=pointer]: История
+            - generic [ref=e309]: ДП
+        - generic [ref=e310]:
+          - generic [ref=e311]:
+            - generic [ref=e312]:
+              - generic [ref=e313]: 💬
+              - generic [ref=e314]: «Покажи нарушения по ВА и телематике у Иванова за последние три дня»
+            - generic [ref=e315]: Иванов А.П. · 14–16.05.2026 · 7 нарушений · 487 км
+          - generic [ref=e316]:
+            - button "Изменить запрос" [ref=e317] [cursor=pointer]:
+              - img [ref=e318]
+              - text: Изменить запрос
+            - button "Скачать PDF" [ref=e320] [cursor=pointer]:
+              - img [ref=e321]
+              - text: Скачать PDF
+        - generic [ref=e324]:
+          - generic [ref=e325]:
+            - generic [ref=e326]:
+              - generic [ref=e327]:
+                - generic [ref=e328]: ИА
+                - generic [ref=e329]:
+                  - generic [ref=e330]: Иванов Алексей Петрович
+                  - generic [ref=e331]:
+                    - generic [ref=e332]: Рейтинг безопасности
+                    - generic [ref=e333]: 68 / 100
+                - generic [ref=e336]:
+                  - generic [ref=e337]: В компании
+                  - generic [ref=e338]: 4 г 2 мес
+              - generic [ref=e340]:
+                - generic [ref=e341]:
+                  - img [ref=e343]
+                  - generic [ref=e348]: "ТС:"
+                  - generic [ref=e349]: А777ВВ 77
+                - generic [ref=e350]:
+                  - img [ref=e352]
+                  - generic [ref=e355]: "Модель:"
+                  - generic [ref=e356]: Scania R450
+                - generic [ref=e357]:
+                  - img [ref=e359]
+                  - generic [ref=e362]: "Период:"
+                  - generic [ref=e363]: 14–16.05.2026
+                - generic [ref=e364]:
+                  - img [ref=e366]
+                  - generic [ref=e369]: "Пробег:"
+                  - generic [ref=e370]: 487 км
+                - generic [ref=e371]:
+                  - img [ref=e373]
+                  - generic [ref=e376]: "Время в рейсах:"
+                  - generic [ref=e377]: 9ч 42мин
+                - generic [ref=e378]:
+                  - img [ref=e380]
+                  - generic [ref=e384]: "Рейсов:"
+                  - generic [ref=e385]: "4"
+            - generic [ref=e386]:
+              - generic [ref=e387]:
+                - generic [ref=e389]: "7"
+                - generic [ref=e390]: Всего нарушений
+              - generic [ref=e391]:
+                - generic [ref=e392]:
+                  - generic [ref=e393]: "4"
+                  - generic [ref=e394]: 📹
+                - generic [ref=e395]: Видео-детекции (ВА)
+              - generic [ref=e396]:
+                - generic [ref=e397]:
+                  - generic [ref=e398]: "3"
+                  - generic [ref=e399]: 📡
+                - generic [ref=e400]: Телематика
+              - generic [ref=e401]:
+                - generic [ref=e403]: "1"
+                - generic [ref=e404]: Грубых
+            - generic [ref=e405]:
+              - img [ref=e407]
+              - generic [ref=e410]: 1 грубое нарушение за период. При повторении в течение 30 дней — дисциплинарное взыскание.
+            - table [ref=e412]:
+              - rowgroup [ref=e413]:
+                - row "# Дата · Время Нарушение Источник Severity Причина" [ref=e414]:
+                  - columnheader "#" [ref=e415]
+                  - columnheader "Дата · Время" [ref=e416]
+                  - columnheader "Нарушение" [ref=e417]
+                  - columnheader "Источник" [ref=e418]
+                  - columnheader "Severity" [ref=e419]
+                  - columnheader "Причина" [ref=e420]
+              - rowgroup [ref=e421]:
+                - row "1 14.05 08:14 Превышение скорости +18 км/ч 📡 Телематика Высокое —" [ref=e422] [cursor=pointer]:
+                  - cell "1" [ref=e423]
+                  - cell "14.05 08:14" [ref=e424]:
+                    - generic [ref=e425]: "14.05"
+                    - generic [ref=e426]: 08:14
+                  - cell "Превышение скорости +18 км/ч" [ref=e427]:
+                    - generic [ref=e428]: Превышение скорости +18 км/ч
+                  - cell "📡 Телематика" [ref=e429]:
+                    - generic [ref=e430]:
+                      - generic [ref=e431]: 📡
+                      - text: Телематика
+                  - cell "Высокое" [ref=e432]:
+                    - generic [ref=e433]: Высокое
+                  - cell "—" [ref=e435]
+                - row "2 14.05 10:32 Курение за рулём ⚠ Грубое 📹 Видео (DMS) Грубое 📱 Отвлёкся" [ref=e436] [cursor=pointer]:
+                  - cell "2" [ref=e437]
+                  - cell "14.05 10:32" [ref=e438]:
+                    - generic [ref=e439]: "14.05"
+                    - generic [ref=e440]: 10:32
+                  - cell "Курение за рулём ⚠ Грубое" [ref=e441]:
+                    - generic [ref=e442]:
+                      - text: Курение за рулём
+                      - generic [ref=e443]: ⚠ Грубое
+                  - cell "📹 Видео (DMS)" [ref=e444]:
+                    - generic [ref=e445]:
+                      - generic [ref=e446]: 📹
+                      - text: Видео (DMS)
+                  - cell "Грубое" [ref=e447]:
+                    - generic [ref=e448]: Грубое
+                  - cell "📱 Отвлёкся" [ref=e450]:
+                    - generic [ref=e451]:
+                      - generic [ref=e452]: 📱
+                      - generic [ref=e453]: Отвлёкся
+                - row "3 14.05 14:51 Резкое торможение 📡 Телематика Высокое —" [ref=e454] [cursor=pointer]:
+                  - cell "3" [ref=e455]
+                  - cell "14.05 14:51" [ref=e456]:
+                    - generic [ref=e457]: "14.05"
+                    - generic [ref=e458]: 14:51
+                  - cell "Резкое торможение" [ref=e459]:
+                    - generic [ref=e460]: Резкое торможение
+                  - cell "📡 Телематика" [ref=e461]:
+                    - generic [ref=e462]:
+                      - generic [ref=e463]: 📡
+                      - text: Телематика
+                  - cell "Высокое" [ref=e464]:
+                    - generic [ref=e465]: Высокое
+                  - cell "—" [ref=e467]
+                - row "4 15.05 00:36 Засыпание за рулём 📹 Видео (DMS) Высокое —" [ref=e468] [cursor=pointer]:
+                  - cell "4" [ref=e469]
+                  - cell "15.05 00:36" [ref=e470]:
+                    - generic [ref=e471]: "15.05"
+                    - generic [ref=e472]: 00:36
+                  - cell "Засыпание за рулём" [ref=e473]:
+                    - generic [ref=e474]: Засыпание за рулём
+                  - cell "📹 Видео (DMS)" [ref=e475]:
+                    - generic [ref=e476]:
+                      - generic [ref=e477]: 📹
+                      - text: Видео (DMS)
+                  - cell "Высокое" [ref=e478]:
+                    - generic [ref=e479]: Высокое
+                  - cell "—" [ref=e481]
+                - row "5 15.05 09:05 Ремень безопасности 📹 Видео Высокое —" [ref=e482] [cursor=pointer]:
+                  - cell "5" [ref=e483]
+                  - cell "15.05 09:05" [ref=e484]:
+                    - generic [ref=e485]: "15.05"
+                    - generic [ref=e486]: 09:05
+                  - cell "Ремень безопасности" [ref=e487]:
+                    - generic [ref=e488]: Ремень безопасности
+                  - cell "📹 Видео" [ref=e489]:
+                    - generic [ref=e490]:
+                      - generic [ref=e491]: 📹
+                      - text: Видео
+                  - cell "Высокое" [ref=e492]:
+                    - generic [ref=e493]: Высокое
+                  - cell "—" [ref=e495]
+                - row "6 15.05 21:15 Превышение скорости +9 км/ч 📡 Телематика Среднее —" [ref=e496] [cursor=pointer]:
+                  - cell "6" [ref=e497]
+                  - cell "15.05 21:15" [ref=e498]:
+                    - generic [ref=e499]: "15.05"
+                    - generic [ref=e500]: 21:15
+                  - cell "Превышение скорости +9 км/ч" [ref=e501]:
+                    - generic [ref=e502]: Превышение скорости +9 км/ч
+                  - cell "📡 Телематика" [ref=e503]:
+                    - generic [ref=e504]:
+                      - generic [ref=e505]: 📡
+                      - text: Телематика
+                  - cell "Среднее" [ref=e506]:
+                    - generic [ref=e507]: Среднее
+                  - cell "—" [ref=e509]
+                - row "7 16.05 13:40 Отвлечение внимания 📹 Видео (DMS) Высокое —" [ref=e510] [cursor=pointer]:
+                  - cell "7" [ref=e511]
+                  - cell "16.05 13:40" [ref=e512]:
+                    - generic [ref=e513]: "16.05"
+                    - generic [ref=e514]: 13:40
+                  - cell "Отвлечение внимания" [ref=e515]:
+                    - generic [ref=e516]: Отвлечение внимания
+                  - cell "📹 Видео (DMS)" [ref=e517]:
+                    - generic [ref=e518]:
+                      - generic [ref=e519]: 📹
+                      - text: Видео (DMS)
+                  - cell "Высокое" [ref=e520]:
+                    - generic [ref=e521]: Высокое
+                  - cell "—" [ref=e523]
+          - generic [ref=e525]:
+            - generic [ref=e526]:
+              - generic [ref=e527]: Деталь нарушения
+              - generic [ref=e528]: ·
+              - generic [ref=e529]: "#2"
+            - generic [ref=e530]: 14.05.2026 · 10:32 · Курение за рулём
+            - generic [ref=e531]: 🔴 Грубое нарушение
+            - generic [ref=e533]:
+              - generic [ref=e534]:
+                - generic [ref=e535]: Место события на маршруте
+                - generic [ref=e536]: 55.7423, 37.6156
+              - img [ref=e538]:
+                - generic [ref=e556]: Старт · 09:48
+                - generic [ref=e559]: База · 11:20
+                - generic [ref=e562]: М-4
+                - generic [ref=e563]:
+                  - generic [ref=e570]: ⚠ Курение за рулём · 10:32
+                  - generic [ref=e571]: 76 км/ч · М-4 · 412 км от Москвы
+                - generic [ref=e575]: "N"
+                - generic [ref=e578]: 500 м
+            - generic [ref=e579]:
+              - generic [ref=e580]:
+                - generic [ref=e581]: Видео — 2 канала
+                - generic [ref=e582]: синхронизированы по времени
+              - generic [ref=e584]:
+                - generic [ref=e585]:
+                  - img [ref=e587]:
+                    - generic [ref=e588]:
+                      - generic [ref=e602]: VEHICLE 0.91
+                      - generic [ref=e604]:
+                        - generic [ref=e606]: СКОРОСТЬ
+                        - generic [ref=e607]: 76 км/ч
+                        - generic [ref=e608]: "+16"
+                  - generic [ref=e609]:
+                    - generic [ref=e610]: REC
+                    - generic [ref=e612]: CAM-01 · Дорога
+                    - generic [ref=e613]: 10:32:08
+                  - generic [ref=e614]: ⚠ T=0
+                  - generic [ref=e620]:
+                    - button [ref=e621] [cursor=pointer]:
+                      - img [ref=e622]
+                    - generic [ref=e624]: 00:38 / 01:24
+                    - generic [ref=e625]: ADAS · 25fps
+                    - button [ref=e627] [cursor=pointer]:
+                      - img [ref=e628]
+                - generic [ref=e630]:
+                  - img [ref=e632]:
+                    - generic [ref=e650]: SMOKING 0.94
+                  - generic [ref=e651]:
+                    - generic [ref=e652]: REC
+                    - generic [ref=e654]: CAM-02 · DMS · Салон
+                    - generic [ref=e655]: 10:32:08
+                  - generic [ref=e661]:
+                    - button [ref=e662] [cursor=pointer]:
+                      - img [ref=e663]
+                    - generic [ref=e665]: 00:38 / 01:24
+                    - generic [ref=e666]: DMS · 25fps
+                    - button [ref=e668] [cursor=pointer]:
+                      - img [ref=e669]
+            - generic [ref=e671]:
+              - generic [ref=e672]:
+                - generic [ref=e673]: Скорость
+                - generic [ref=e675]: 76 км/ч
+              - generic [ref=e676]:
+                - generic [ref=e677]: Лимит
+                - generic [ref=e679]: 60 км/ч
+              - generic [ref=e680]:
+                - generic [ref=e681]: Превышение
+                - generic [ref=e683]: +16 км/ч
+              - generic [ref=e684]:
+                - generic [ref=e685]: Координаты
+                - generic [ref=e686]: 55.7423, 37.6156
+              - generic [ref=e687]:
+                - generic [ref=e688]: Камера
+                - generic [ref=e689]: CAM-02 · DMS · Салон
+            - button "📹 Позвонить через камеру" [ref=e690] [cursor=pointer]:
+              - generic [ref=e691]: 📹
+              - generic [ref=e692]: Позвонить через камеру
+            - generic [ref=e693]: Онлайн · CAM-02 · DMS
+            - generic [ref=e695]:
+              - generic [ref=e696]: "⏱ Непрерывное вождение: 2ч 18мин"
+              - generic [ref=e697]: 🛣 Трасса М-4
+              - generic [ref=e698]: ☀ День
+              - generic [ref=e699]: 🌤 Облачно
+            - generic [ref=e700]:
+              - button "Скачать видео" [ref=e701] [cursor=pointer]:
+                - img [ref=e702]
+                - text: Скачать видео
+              - button "Открыть карточку" [ref=e705] [cursor=pointer]:
+                - text: Открыть карточку
+                - img [ref=e706]
+  - generic [ref=e708]:
+    - generic [ref=e709]: Состояние В-2 · Результат по парку — когда запрос касается компании или нескольких водителей · 1440 × 900
+    - generic [ref=e712]:
+      - generic [ref=e713]:
+        - generic [ref=e714]: S
+        - generic "Карта" [ref=e715] [cursor=pointer]:
+          - img [ref=e716]
+        - generic "События" [ref=e719] [cursor=pointer]:
+          - img [ref=e720]
+        - generic "Заявки" [ref=e723] [cursor=pointer]:
+          - img [ref=e724]
+        - generic "Отчёты" [ref=e727] [cursor=pointer]:
+          - img [ref=e728]
+        - img [ref=e731]
+      - generic [ref=e734]:
+        - generic [ref=e735]:
+          - generic [ref=e736]: Диалог аналитики
+          - generic [ref=e737]: SKAI AI
+          - generic [ref=e739]:
+            - generic [ref=e740] [cursor=pointer]: История
+            - generic [ref=e741]: ДП
+        - generic [ref=e742]:
+          - generic [ref=e743]:
+            - generic [ref=e744]:
+              - generic [ref=e745]: 💬
+              - generic [ref=e746]: «Все нарушения по компании за последние три дня»
+            - generic [ref=e747]: 14–16.05.2026 · 5 водителей · 23 нарушения · 2 840 км
+          - generic [ref=e748]:
+            - button "Изменить" [ref=e749] [cursor=pointer]:
+              - img [ref=e750]
+              - text: Изменить
+            - button "Скачать PDF" [ref=e752] [cursor=pointer]:
+              - img [ref=e753]
+              - text: Скачать PDF
+            - button "Скачать CSV" [ref=e756] [cursor=pointer]:
+              - img [ref=e757]
+              - text: Скачать CSV
+        - generic [ref=e760]:
+          - generic [ref=e761]:
+            - generic [ref=e763]: "23"
+            - generic [ref=e764]: Всего нарушений
+          - generic [ref=e765]:
+            - generic [ref=e766]:
+              - generic [ref=e767]: "12"
+              - generic [ref=e768]: 📹
+            - generic [ref=e769]: Видео-детекции (ВА)
+          - generic [ref=e770]:
+            - generic [ref=e771]:
+              - generic [ref=e772]: "11"
+              - generic [ref=e773]: 📡
+            - generic [ref=e774]: Телематика
+          - generic [ref=e775]:
+            - generic [ref=e777]: "3"
+            - generic [ref=e778]: Грубых
+          - generic [ref=e779]:
+            - generic [ref=e780]:
+              - generic [ref=e781]: "5"
+              - generic [ref=e782]: 👤
+            - generic [ref=e783]: Водителей
+        - generic [ref=e784]:
+          - generic [ref=e785]:
+            - generic [ref=e786]:
+              - generic [ref=e787]:
+                - generic [ref=e788] [cursor=pointer]:
+                  - generic [ref=e789]: 👤
+                  - generic [ref=e790]: По водителям
+                - generic [ref=e791] [cursor=pointer]:
+                  - generic [ref=e792]: 🚛
+                  - generic [ref=e793]: По ТС
+              - generic [ref=e794]: "сортировка: по числу нарушений ↓"
+            - generic [ref=e795]: Топ водителей по нарушениям
+            - generic [ref=e796]:
+              - generic [ref=e797] [cursor=pointer]:
+                - generic [ref=e798]: ИА
+                - generic [ref=e799]:
+                  - generic [ref=e800]:
+                    - generic [ref=e801]: Иванов А.П.
+                    - generic [ref=e802]: · А777ВВ 77
+                    - generic [ref=e803]: ⚠ 1 груб.
+                  - generic [ref=e804]:
+                    - generic [ref=e807]: Score 68
+                    - generic [ref=e808]: ·
+                    - generic [ref=e809]:
+                      - generic [ref=e810]:
+                        - generic [ref=e811]: 📹
+                        - generic [ref=e812]: "4"
+                      - generic [ref=e813]:
+                        - generic [ref=e814]: 📡
+                        - generic [ref=e815]: "3"
+                - generic [ref=e816]:
+                  - generic [ref=e817]: "7"
+                  - generic [ref=e818]: наруш.
+              - generic [ref=e819] [cursor=pointer]:
+                - generic [ref=e820]: ПД
+                - generic [ref=e821]:
+                  - generic [ref=e822]:
+                    - generic [ref=e823]: Петров Д.С.
+                    - generic [ref=e824]: · В345КМ 97
+                    - generic [ref=e825]: ⚠ 2 груб.
+                  - generic [ref=e826]:
+                    - generic [ref=e829]: Score 72
+                    - generic [ref=e830]: ·
+                    - generic [ref=e831]:
+                      - generic [ref=e832]:
+                        - generic [ref=e833]: 📹
+                        - generic [ref=e834]: "3"
+                      - generic [ref=e835]:
+                        - generic [ref=e836]: 📡
+                        - generic [ref=e837]: "3"
+                - generic [ref=e838]:
+                  - generic [ref=e839]: "6"
+                  - generic [ref=e840]: наруш.
+              - generic [ref=e841] [cursor=pointer]:
+                - generic [ref=e842]: СВ
+                - generic [ref=e843]:
+                  - generic [ref=e844]:
+                    - generic [ref=e845]: Сидоров В.Н.
+                    - generic [ref=e846]: · Е902СТ 150
+                  - generic [ref=e847]:
+                    - generic [ref=e850]: Score 76
+                    - generic [ref=e851]: ·
+                    - generic [ref=e853]:
+                      - generic [ref=e854]: 📹
+                      - generic [ref=e855]: "3"
+                - generic [ref=e856]:
+                  - generic [ref=e857]: "4"
+                  - generic [ref=e858]: наруш.
+              - generic [ref=e859] [cursor=pointer]:
+                - generic [ref=e860]: КИ
+                - generic [ref=e861]:
+                  - generic [ref=e862]:
+                    - generic [ref=e863]: Козлов И.А.
+                    - generic [ref=e864]: · Н124УУ 199
+                  - generic [ref=e865]:
+                    - generic [ref=e868]: Score 81
+                    - generic [ref=e869]: ·
+                    - generic [ref=e871]:
+                      - generic [ref=e872]: 📡
+                      - generic [ref=e873]: "3"
+                - generic [ref=e874]:
+                  - generic [ref=e875]: "3"
+                  - generic [ref=e876]: наруш.
+              - generic [ref=e877] [cursor=pointer]:
+                - generic [ref=e878]: СД
+                - generic [ref=e879]:
+                  - generic [ref=e880]:
+                    - generic [ref=e881]: Степанов Д.В.
+                    - generic [ref=e882]: · М213ОО 77
+                  - generic [ref=e883]:
+                    - generic [ref=e886]: Score 84
+                    - generic [ref=e887]: ·
+                    - generic [ref=e888]:
+                      - generic [ref=e889]:
+                        - generic [ref=e890]: 📹
+                        - generic [ref=e891]: "2"
+                      - generic [ref=e892]:
+                        - generic [ref=e893]: 📡
+                        - generic [ref=e894]: "1"
+                - generic [ref=e895]:
+                  - generic [ref=e896]: "3"
+                  - generic [ref=e897]: наруш.
+            - generic [ref=e898]: Показано 5 из 5 водителей с нарушениями за период · всего в парке 47 водителей
+          - generic [ref=e900]:
+            - generic [ref=e901]:
+              - generic [ref=e902]: Мини-дашборд водителя
+              - generic [ref=e903]: ·
+              - generic [ref=e904]: "#1"
+            - generic [ref=e906]:
+              - generic [ref=e907]: ИА
+              - generic [ref=e908]:
+                - generic [ref=e909]: Иванов А.П.
+                - generic [ref=e910]: А777ВВ 77
+              - generic [ref=e911]:
+                - generic [ref=e912]: Score
+                - generic [ref=e913]: "68"
+            - generic [ref=e916]:
+              - generic [ref=e917]:
+                - generic [ref=e918]: "7"
+                - generic [ref=e919]: Наруш.
+              - generic [ref=e920]:
+                - generic [ref=e921]: "4"
+                - generic [ref=e922]: ВА 📹
+              - generic [ref=e923]:
+                - generic [ref=e924]: "3"
+                - generic [ref=e925]: Телем. 📡
+              - generic [ref=e926]:
+                - generic [ref=e927]: "1"
+                - generic [ref=e928]: Грубых
+            - generic [ref=e929]:
+              - generic [ref=e930]:
+                - generic [ref=e931]: Пробег
+                - generic [ref=e932]: 487 км
+              - generic [ref=e933]:
+                - generic [ref=e934]: Рейсов
+                - generic [ref=e935]: "4"
+              - generic [ref=e936]:
+                - generic [ref=e937]: В рейсе
+                - generic [ref=e938]: 9ч 42м
+            - generic [ref=e939]:
+              - generic [ref=e940]: 3 последних нарушения
+              - generic [ref=e941]:
+                - generic [ref=e942]:
+                  - generic [ref=e943]:
+                    - generic [ref=e944]: "16.05"
+                    - generic [ref=e945]: 13:40
+                  - generic [ref=e946]: Отвлечение внимания
+                  - generic [ref=e947]: 📹
+                  - generic [ref=e948]: Высокое
+                - generic [ref=e950]:
+                  - generic [ref=e951]:
+                    - generic [ref=e952]: "15.05"
+                    - generic [ref=e953]: 21:15
+                  - generic [ref=e954]: Превышение +9 км/ч
+                  - generic [ref=e955]: 📡
+                  - generic [ref=e956]: Среднее
+                - generic [ref=e958]:
+                  - generic [ref=e959]:
+                    - generic [ref=e960]: "15.05"
+                    - generic [ref=e961]: 09:05
+                  - generic [ref=e962]: Ремень безопасности
+                  - generic [ref=e963]: 📹
+                  - generic [ref=e964]: Высокое
+            - button "Открыть полный отчёт по Иванов" [ref=e966] [cursor=pointer]:
+              - text: Открыть полный отчёт по Иванов
+              - img [ref=e967]
+  - generic [ref=e969]:
+    - generic [ref=e970]: Состояние В-2 · Тот же запрос в разрезе ТС — переключатель «По ТС» · 1440 × 900
+    - generic [ref=e973]:
+      - generic [ref=e974]:
+        - generic [ref=e975]: S
+        - generic "Карта" [ref=e976] [cursor=pointer]:
+          - img [ref=e977]
+        - generic "События" [ref=e980] [cursor=pointer]:
+          - img [ref=e981]
+        - generic "Заявки" [ref=e984] [cursor=pointer]:
+          - img [ref=e985]
+        - generic "Отчёты" [ref=e988] [cursor=pointer]:
+          - img [ref=e989]
+        - img [ref=e992]
+      - generic [ref=e995]:
+        - generic [ref=e996]:
+          - generic [ref=e997]: Диалог аналитики
+          - generic [ref=e998]: SKAI AI
+          - generic [ref=e1000]:
+            - generic [ref=e1001] [cursor=pointer]: История
+            - generic [ref=e1002]: ДП
+        - generic [ref=e1003]:
+          - generic [ref=e1004]:
+            - generic [ref=e1005]:
+              - generic [ref=e1006]: 💬
+              - generic [ref=e1007]: «Все нарушения по компании за последние три дня»
+            - generic [ref=e1008]: 14–16.05.2026 · 5 водителей · 23 нарушения · 2 840 км
+          - generic [ref=e1009]:
+            - button "Изменить" [ref=e1010] [cursor=pointer]:
+              - img [ref=e1011]
+              - text: Изменить
+            - button "Скачать PDF" [ref=e1013] [cursor=pointer]:
+              - img [ref=e1014]
+              - text: Скачать PDF
+            - button "Скачать CSV" [ref=e1017] [cursor=pointer]:
+              - img [ref=e1018]
+              - text: Скачать CSV
+        - generic [ref=e1021]:
+          - generic [ref=e1022]:
+            - generic [ref=e1024]: "23"
+            - generic [ref=e1025]: Всего нарушений
+          - generic [ref=e1026]:
+            - generic [ref=e1027]:
+              - generic [ref=e1028]: "12"
+              - generic [ref=e1029]: 📹
+            - generic [ref=e1030]: Видео-детекции (ВА)
+          - generic [ref=e1031]:
+            - generic [ref=e1032]:
+              - generic [ref=e1033]: "11"
+              - generic [ref=e1034]: 📡
+            - generic [ref=e1035]: Телематика
+          - generic [ref=e1036]:
+            - generic [ref=e1038]: "3"
+            - generic [ref=e1039]: Грубых
+          - generic [ref=e1040]:
+            - generic [ref=e1041]:
+              - generic [ref=e1042]: "5"
+              - generic [ref=e1043]: 🚛
+            - generic [ref=e1044]: ТС
+        - generic [ref=e1045]:
+          - generic [ref=e1046]:
+            - generic [ref=e1047]:
+              - generic [ref=e1048]:
+                - generic [ref=e1049] [cursor=pointer]:
+                  - generic [ref=e1050]: 👤
+                  - generic [ref=e1051]: По водителям
+                - generic [ref=e1052] [cursor=pointer]:
+                  - generic [ref=e1053]: 🚛
+                  - generic [ref=e1054]: По ТС
+              - generic [ref=e1055]: "сортировка: по числу нарушений ↓"
+            - generic [ref=e1056]: Топ ТС по нарушениям
+            - generic [ref=e1057]:
+              - generic [ref=e1058] [cursor=pointer]:
+                - generic [ref=e1060]: 🚛
+                - generic [ref=e1061]:
+                  - generic [ref=e1062]:
+                    - generic [ref=e1063]: А777ВВ 77
+                    - generic [ref=e1064]: · Scania R450
+                    - generic [ref=e1065]: ⚠ 1 груб.
+                  - generic [ref=e1066]:
+                    - generic [ref=e1067]: 👤 Иванов А.П.
+                    - generic [ref=e1068]: ·
+                    - generic [ref=e1069]:
+                      - text: "📏 Пробег:"
+                      - generic [ref=e1070]: 487 км
+                  - generic [ref=e1071]:
+                    - generic [ref=e1074]: Риск 68
+                    - generic [ref=e1075]: ·
+                    - generic [ref=e1076]:
+                      - generic [ref=e1077]: 📹
+                      - generic [ref=e1078]: "4"
+                    - generic [ref=e1079]:
+                      - generic [ref=e1080]: 📡
+                      - generic [ref=e1081]: "3"
+                    - generic [ref=e1082]: 📷 2/3 работают
+                - generic [ref=e1084]:
+                  - generic [ref=e1085]: "7"
+                  - generic [ref=e1086]: наруш.
+              - generic [ref=e1087] [cursor=pointer]:
+                - generic [ref=e1089]: 🚛
+                - generic [ref=e1090]:
+                  - generic [ref=e1091]:
+                    - generic [ref=e1092]: В345КМ 97
+                    - generic [ref=e1093]: · MAN TGX
+                    - generic [ref=e1094]: ⚠ 2 груб.
+                  - generic [ref=e1095]:
+                    - generic [ref=e1096]: 👤 Петров Д.С.
+                    - generic [ref=e1097]: ·
+                    - generic [ref=e1098]:
+                      - text: "📏 Пробег:"
+                      - generic [ref=e1099]: 612 км
+                  - generic [ref=e1100]:
+                    - generic [ref=e1103]: Риск 72
+                    - generic [ref=e1104]: ·
+                    - generic [ref=e1105]:
+                      - generic [ref=e1106]: 📹
+                      - generic [ref=e1107]: "3"
+                    - generic [ref=e1108]:
+                      - generic [ref=e1109]: 📡
+                      - generic [ref=e1110]: "3"
+                    - generic [ref=e1111]: 📷 3/3 работают
+                - generic [ref=e1113]:
+                  - generic [ref=e1114]: "6"
+                  - generic [ref=e1115]: наруш.
+              - generic [ref=e1116] [cursor=pointer]:
+                - generic [ref=e1118]: 🚛
+                - generic [ref=e1119]:
+                  - generic [ref=e1120]:
+                    - generic [ref=e1121]: Е902СТ 150
+                    - generic [ref=e1122]: · Volvo FH
+                  - generic [ref=e1123]:
+                    - generic [ref=e1124]: 👤 Сидоров В.Н.
+                    - generic [ref=e1125]: ·
+                    - generic [ref=e1126]:
+                      - text: "📏 Пробег:"
+                      - generic [ref=e1127]: 534 км
+                  - generic [ref=e1128]:
+                    - generic [ref=e1131]: Риск 76
+                    - generic [ref=e1132]: ·
+                    - generic [ref=e1133]:
+                      - generic [ref=e1134]: 📹
+                      - generic [ref=e1135]: "2"
+                    - generic [ref=e1136]:
+                      - generic [ref=e1137]: 📡
+                      - generic [ref=e1138]: "2"
+                    - generic [ref=e1139]: 📷 CAM-03 offline
+                - generic [ref=e1141]:
+                  - generic [ref=e1142]: "4"
+                  - generic [ref=e1143]: наруш.
+              - generic [ref=e1144] [cursor=pointer]:
+                - generic [ref=e1146]: 🚛
+                - generic [ref=e1147]:
+                  - generic [ref=e1148]:
+                    - generic [ref=e1149]: Н124УУ 199
+                    - generic [ref=e1150]: · DAF XF
+                  - generic [ref=e1151]:
+                    - generic [ref=e1152]: 👤 Козлов И.А.
+                    - generic [ref=e1153]: ·
+                    - generic [ref=e1154]:
+                      - text: "📏 Пробег:"
+                      - generic [ref=e1155]: 698 км
+                  - generic [ref=e1156]:
+                    - generic [ref=e1159]: Риск 81
+                    - generic [ref=e1160]: ·
+                    - generic [ref=e1161]:
+                      - generic [ref=e1162]: 📡
+                      - generic [ref=e1163]: "3"
+                    - generic [ref=e1164]: 📷 3/3 работают
+                - generic [ref=e1166]:
+                  - generic [ref=e1167]: "3"
+                  - generic [ref=e1168]: наруш.
+              - generic [ref=e1169] [cursor=pointer]:
+                - generic [ref=e1171]: 🚛
+                - generic [ref=e1172]:
+                  - generic [ref=e1173]:
+                    - generic [ref=e1174]: М213ОО 77
+                    - generic [ref=e1175]: · Kamaz 5490
+                  - generic [ref=e1176]:
+                    - generic [ref=e1177]: 👤 Степанов Д.В.
+                    - generic [ref=e1178]: ·
+                    - generic [ref=e1179]:
+                      - text: "📏 Пробег:"
+                      - generic [ref=e1180]: 509 км
+                  - generic [ref=e1181]:
+                    - generic [ref=e1184]: Риск 84
+                    - generic [ref=e1185]: ·
+                    - generic [ref=e1186]:
+                      - generic [ref=e1187]: 📹
+                      - generic [ref=e1188]: "1"
+                    - generic [ref=e1189]:
+                      - generic [ref=e1190]: 📡
+                      - generic [ref=e1191]: "2"
+                    - generic [ref=e1192]: 📷 2/3 работают
+                - generic [ref=e1194]:
+                  - generic [ref=e1195]: "3"
+                  - generic [ref=e1196]: наруш.
+            - generic [ref=e1197]: Показано 5 из 5 ТС с нарушениями за период · всего в парке 53 ТС
+          - generic [ref=e1199]:
+            - generic [ref=e1200]:
+              - generic [ref=e1201]: Мини-дашборд ТС
+              - generic [ref=e1202]: ·
+              - generic [ref=e1203]: "#1"
+            - generic [ref=e1205]:
+              - generic [ref=e1206]: 🚛
+              - generic [ref=e1207]:
+                - generic [ref=e1208]: А777ВВ 77
+                - generic [ref=e1209]: Scania R450
+              - generic [ref=e1210]:
+                - generic [ref=e1211]: Риск
+                - generic [ref=e1212]: "68"
+            - generic [ref=e1215]:
+              - generic [ref=e1216]:
+                - generic [ref=e1217]: Состояние камер
+                - generic [ref=e1218]: CAM-03 нестабильно
+              - generic [ref=e1219]:
+                - generic [ref=e1220]:
+                  - generic [ref=e1221]: 📷
+                  - generic [ref=e1222]: CAM-01
+                  - generic [ref=e1223]: · ADAS · фронт
+                  - generic [ref=e1224]: Работает
+                - generic [ref=e1226]:
+                  - generic [ref=e1227]: 📷
+                  - generic [ref=e1228]: CAM-02
+                  - generic [ref=e1229]: · DMS · салон
+                  - generic [ref=e1230]: Работает
+                - generic [ref=e1232]:
+                  - generic [ref=e1233]: 📷
+                  - generic [ref=e1234]: CAM-03
+                  - generic [ref=e1235]: · CH3 · кузов
+                  - generic [ref=e1236]: Нестабильно
+            - generic [ref=e1238]:
+              - generic [ref=e1239]: Водители за период
+              - generic [ref=e1240]:
+                - generic [ref=e1241]:
+                  - generic [ref=e1243]: Иванов А.П.
+                  - generic [ref=e1244]: ОСНОВНОЙ
+                  - generic [ref=e1245]: 4 рейсов · 14–16.05
+                - generic [ref=e1246]:
+                  - generic [ref=e1248]: Козлов И.А.
+                  - generic [ref=e1249]: 1 рейс · 14.05
+            - generic [ref=e1250]:
+              - generic [ref=e1251]:
+                - generic [ref=e1252]: "7"
+                - generic [ref=e1253]: Наруш.
+              - generic [ref=e1254]:
+                - generic [ref=e1255]: "487"
+                - generic [ref=e1256]: км
+              - generic [ref=e1257]:
+                - generic [ref=e1258]: "4"
+                - generic [ref=e1259]: Рейсов
+              - generic [ref=e1260]:
+                - generic [ref=e1261]: 9ч 42м
+                - generic [ref=e1262]: В рейсе
+            - generic [ref=e1263]:
+              - generic [ref=e1264]: 3 последних нарушения
+              - generic [ref=e1265]:
+                - generic [ref=e1266]:
+                  - generic [ref=e1267]:
+                    - generic [ref=e1268]: "16.05"
+                    - generic [ref=e1269]: 13:40
+                  - generic [ref=e1270]: Отвлечение внимания
+                  - generic [ref=e1271]: 📹
+                  - generic [ref=e1272]: Высокое
+                - generic [ref=e1274]:
+                  - generic [ref=e1275]:
+                    - generic [ref=e1276]: "14.05"
+                    - generic [ref=e1277]: 10:32
+                  - generic [ref=e1278]: Курение за рулём
+                  - generic [ref=e1279]: 📹
+                  - generic [ref=e1280]: Грубое
+                - generic [ref=e1282]:
+                  - generic [ref=e1283]:
+                    - generic [ref=e1284]: "15.05"
+                    - generic [ref=e1285]: 00:36
+                  - generic [ref=e1286]: Засыпание за рулём
+                  - generic [ref=e1287]: 📹
+                  - generic [ref=e1288]: Высокое
+            - button "Открыть историю ТС А777ВВ 77" [ref=e1290] [cursor=pointer]:
+              - text: Открыть историю ТС А777ВВ 77
+              - img [ref=e1291]
+  - generic [ref=e1293]: "Killer feature: клик по строке нарушения → справа открывается видеофрагмент DMS-камеры с меткой события"

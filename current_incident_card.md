@@ -1,0 +1,51 @@
+- generic [ref=e2]:
+  - generic [ref=e11]:
+    - paragraph [ref=e16]: "Чтение CSV из: data"
+    - generic [ref=e18]:
+      - paragraph [ref=e22]: Навигация
+      - radiogroup "Навигация" [ref=e23] [cursor=pointer]:
+        - generic [ref=e24]:
+          - radio "📋 Лента событий" [checked]
+          - paragraph [ref=e29]: 📋 Лента событий
+        - generic [ref=e30]:
+          - radio "🛡 Живой мониторинг"
+          - paragraph [ref=e35]: 🛡 Живой мониторинг
+        - generic [ref=e36]:
+          - radio "🔍 Карточка инцидента"
+          - paragraph [ref=e41]: 🔍 Карточка инцидента
+        - generic [ref=e42]:
+          - radio "📊 Интерактивный отчёт"
+          - paragraph [ref=e47]: 📊 Интерактивный отчёт
+        - generic [ref=e48]:
+          - radio "📝 Заявки"
+          - paragraph [ref=e53]: 📝 Заявки
+  - generic [ref=e3]:
+    - banner [ref=e56]:
+      - generic [ref=e59]:
+        - button "Deploy" [ref=e61] [cursor=pointer]:
+          - generic [ref=e63]: Deploy
+        - button "Main menu" [ref=e65] [cursor=pointer]:
+          - img [ref=e66]
+    - generic [ref=e69]:
+      - heading "SKAI — Единое окно видео и телематики" [level=1] [ref=e74]:
+        - text: SKAI — Единое окно видео и телематики
+        - generic [ref=e75]:
+          - link "Link to heading":
+            - /url: "#skai-edinoe-okno-video-i-telematiki"
+            - img
+      - paragraph [ref=e80]: Data → Logic → UI → Action. Keep it small, explainable, and demo-ready.
+      - generic [ref=e82]:
+        - tablist [ref=e84]:
+          - tab "📋 Лента событий" [ref=e85] [cursor=pointer]:
+            - paragraph [ref=e87]: 📋 Лента событий
+          - tab "🛡 Живой мониторинг" [ref=e88] [cursor=pointer]:
+            - paragraph [ref=e90]: 🛡 Живой мониторинг
+          - tab "🔍 Карточка инцидента" [active] [selected] [ref=e91] [cursor=pointer]:
+            - paragraph [ref=e93]: 🔍 Карточка инцидента
+          - tab "📊 Интерактивный отчёт" [ref=e94] [cursor=pointer]:
+            - paragraph [ref=e96]: 📊 Интерактивный отчёт
+          - tab "📝 Заявки" [ref=e97] [cursor=pointer]:
+            - paragraph [ref=e99]: 📝 Заявки
+        - tabpanel "🔍 Карточка инцидента" [ref=e567]:
+          - alert [ref=e571]:
+            - paragraph [ref=e576]: Нет данных об алармах в ./data/

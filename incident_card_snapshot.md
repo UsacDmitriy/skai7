@@ -1,0 +1,671 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: S
+      - generic [ref=e7]: SKAI Online · Карточка инцидента
+      - generic [ref=e8]: ·
+      - generic [ref=e9]: Desktop 1440 × 900 · светлая тема · Inter
+    - generic [ref=e10]: 2 варианта · ↓ прокрутите для сравнения
+  - generic [ref=e11]:
+    - generic [ref=e12]: Вариант А
+    - text: Есть видео · ДТП · В345 КМ 97 · Петров Д.С.
+  - generic [ref=e13]:
+    - generic [ref=e14]:
+      - button "Назад" [ref=e15]:
+        - img [ref=e16]
+        - text: Назад
+      - generic [ref=e19]:
+        - generic [ref=e20]: В345 КМ 97
+        - generic [ref=e21]: — Петров Д.С.
+      - generic [ref=e22]: КРИТИЧЕСКИЙ
+      - generic [ref=e24]:
+        - img [ref=e25]
+        - img [ref=e27]
+        - text: Оба
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: Score
+          - generic [ref=e33]: "84"
+        - generic [ref=e34]: ·
+        - generic [ref=e35]: № 4836
+        - generic [ref=e36]: ·
+        - generic [ref=e37]: 03:12
+        - generic [ref=e38]: ·
+        - generic [ref=e39]: 16 мая
+        - generic [ref=e41]: ОЛ
+    - generic [ref=e42]:
+      - complementary [ref=e43]:
+        - generic [ref=e44]:
+          - generic [ref=e45]: Лента событий
+          - generic [ref=e46]: обновлено 03:24
+        - generic [ref=e47]:
+          - button "Все 9" [ref=e48]:
+            - text: Все
+            - generic [ref=e49]: "9"
+          - button "Крит. 2" [ref=e50]:
+            - text: Крит.
+            - generic [ref=e51]: "2"
+          - button "Высок. 3" [ref=e52]:
+            - text: Высок.
+            - generic [ref=e53]: "3"
+          - button "Сред. 4" [ref=e54]:
+            - text: Сред.
+            - generic [ref=e55]: "4"
+        - generic [ref=e56]:
+          - generic [ref=e59] [cursor=pointer]:
+            - generic [ref=e60]:
+              - generic [ref=e61]: А777 ВВ 77
+              - generic [ref=e62]:
+                - img [ref=e63]
+                - generic [ref=e66]: ВА
+              - generic [ref=e67]: 02:48
+            - generic [ref=e68]:
+              - generic [ref=e69]:
+                - img [ref=e70]
+                - generic [ref=e73]: Засыпание (микросон)
+              - generic [ref=e74]: "97"
+          - generic [ref=e77] [cursor=pointer]:
+            - generic [ref=e78]:
+              - generic [ref=e79]: Н124 УУ 199
+              - generic [ref=e80]:
+                - img [ref=e81]
+                - img [ref=e83]
+                - generic [ref=e86]: Оба
+              - generic [ref=e87]: 02:54
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - img [ref=e90]
+                - generic [ref=e92]: Превышение +28 км/ч
+              - generic [ref=e93]: "68"
+          - generic [ref=e96] [cursor=pointer]:
+            - generic [ref=e97]:
+              - generic [ref=e98]: Р788 ОО 52
+              - generic [ref=e99]:
+                - img [ref=e100]
+                - img [ref=e102]
+                - generic [ref=e105]: Оба
+              - generic [ref=e106]: 03:01
+            - generic [ref=e107]:
+              - generic [ref=e108]:
+                - img [ref=e109]
+                - generic [ref=e114]: Резкое торможение
+              - generic [ref=e115]: "54"
+          - generic [ref=e118] [cursor=pointer]:
+            - generic [ref=e119]:
+              - generic [ref=e120]: Е902 СТ 150
+              - generic [ref=e121]:
+                - img [ref=e122]
+                - generic [ref=e124]: Тел
+              - generic [ref=e125]: 📷 Нет
+              - generic [ref=e126]: 03:05
+            - generic [ref=e127]:
+              - generic [ref=e128]:
+                - img [ref=e129]
+                - generic [ref=e131]: Использование телефона
+              - generic [ref=e132]: "76"
+          - generic [ref=e135] [cursor=pointer]:
+            - generic [ref=e136]:
+              - generic [ref=e137]: В345 КМ 97
+              - generic [ref=e138]:
+                - img [ref=e139]
+                - img [ref=e141]
+                - generic [ref=e144]: Оба
+              - generic [ref=e145]: 03:12
+            - generic [ref=e146]:
+              - generic [ref=e147]:
+                - img [ref=e148]
+                - generic [ref=e153]: Удар 2.4g — ДТП
+              - generic [ref=e154]: "84"
+          - generic [ref=e157] [cursor=pointer]:
+            - generic [ref=e158]:
+              - generic [ref=e159]: А777 ВВ 77
+              - generic [ref=e160]:
+                - img [ref=e161]
+                - generic [ref=e164]: ВА
+              - generic [ref=e165]: 03:15
+            - generic [ref=e166]:
+              - generic [ref=e167]:
+                - img [ref=e168]
+                - generic [ref=e171]: Курение в кабине
+              - generic [ref=e172]: "41"
+          - generic [ref=e175] [cursor=pointer]:
+            - generic [ref=e176]:
+              - generic [ref=e177]: М412 ВВ 77
+              - generic [ref=e178]:
+                - img [ref=e179]
+                - text: Закр.
+              - generic [ref=e181]: 03:21
+            - generic [ref=e182]:
+              - generic [ref=e183]:
+                - img [ref=e184]
+                - generic [ref=e186]: Не пристёгнут
+              - generic [ref=e187]: "38"
+          - generic [ref=e190] [cursor=pointer]:
+            - generic [ref=e191]:
+              - generic [ref=e192]: К512 ТР 50
+              - generic [ref=e193]:
+                - img [ref=e194]
+                - generic [ref=e197]: ВА
+              - generic [ref=e198]: 03:24
+            - generic [ref=e199]:
+              - generic [ref=e200]:
+                - img [ref=e201]
+                - generic [ref=e203]: Отвлёкся от дороги
+              - generic [ref=e204]: "62"
+          - generic [ref=e207] [cursor=pointer]:
+            - generic [ref=e208]:
+              - generic [ref=e209]: У311 АР 199
+              - generic [ref=e210]:
+                - img [ref=e211]
+                - img [ref=e213]
+                - generic [ref=e216]: Оба
+              - generic [ref=e217]: 03:30
+            - generic [ref=e218]:
+              - generic [ref=e219]:
+                - img [ref=e220]
+                - generic [ref=e225]: Опасное сближение
+              - generic [ref=e226]: "48"
+      - generic [ref=e227]:
+        - generic [ref=e228]:
+          - img [ref=e230]
+          - generic [ref=e246]:
+            - generic [ref=e247]: DMS 97%
+            - img [ref=e248]
+          - generic [ref=e252]: Cam 1 · фронт
+          - generic [ref=e253]: REC
+          - generic [ref=e255]:
+            - img [ref=e256]
+            - generic [ref=e258]: "0"
+            - generic [ref=e259]: км/ч
+            - generic [ref=e260]: ·
+            - generic [ref=e261]: лим. 80
+          - generic [ref=e262]: 16.05.2026 · 00:34:39
+          - generic [ref=e264]:
+            - button [ref=e265]:
+              - img [ref=e266]
+            - button "1.0×" [ref=e268]
+            - generic [ref=e269]: 00:36 / 01:45
+            - generic [ref=e274]: −15с | событие | +15с
+        - generic [ref=e275]:
+          - generic [ref=e276]:
+            - img [ref=e277]:
+              - generic [ref=e300]: МОСКВА
+              - generic [ref=e301]: Кутузовский просп.
+              - generic [ref=e302]: Очаково-Матвеевское
+              - generic [ref=e303]: Сетунь
+              - generic [ref=e304]: МКАД
+              - generic [ref=e308]: "!"
+            - generic [ref=e310]:
+              - generic [ref=e311]:
+                - generic [ref=e312]: В345 КМ 97
+                - generic [ref=e313]: КРИТ.
+              - generic [ref=e314]: Петров Д.С. · 0 км/ч
+              - generic [ref=e315]: МКАД, 27 км · 16.05 · 00:36:43
+            - generic [ref=e317]:
+              - img [ref=e318]
+              - text: МКАД, внешняя · 27 км
+            - generic [ref=e321]:
+              - button "Карта" [ref=e322]
+              - button "Спутник" [ref=e323]
+              - button "Гибрид" [ref=e324]
+            - generic [ref=e325]:
+              - button "+" [ref=e326]
+              - button "−" [ref=e328]
+            - generic [ref=e329]: 500 м
+          - generic [ref=e331]:
+            - generic [ref=e332]:
+              - generic [ref=e333]: Другие камеры
+              - generic [ref=e334]: 4/4 онлайн
+            - generic [ref=e336]:
+              - img [ref=e337]
+              - generic [ref=e342]: Cam 2 · салон
+              - generic [ref=e343]: REC
+              - generic [ref=e345]: 00:36:43
+              - generic [ref=e346]: CH2
+            - generic [ref=e347]:
+              - img [ref=e348]
+              - generic [ref=e353]: Cam 3 · правая
+              - generic [ref=e354]: REC
+              - generic [ref=e356]: 00:36:43
+              - generic [ref=e357]: CH3
+            - generic [ref=e358]:
+              - img [ref=e359]
+              - generic [ref=e364]: Cam 4 · задняя
+              - generic [ref=e365]: REC
+              - generic [ref=e367]: 00:36:43
+              - generic [ref=e368]: CH4
+      - complementary [ref=e369]:
+        - generic [ref=e370]:
+          - generic [ref=e371]:
+            - generic [ref=e372]: Критический
+            - generic [ref=e374]: 3:12 назад
+          - generic [ref=e375]:
+            - generic [ref=e376]: В345 КМ 97
+            - generic [ref=e377]: VIN •••H6243
+          - generic [ref=e378]: Петров Дмитрий Сергеевич
+          - generic [ref=e379]: SKAI Москва · ГЛК · колонна №3 · стаж 6 лет
+        - generic [ref=e380]:
+          - generic [ref=e381]:
+            - img [ref=e382]
+            - generic [ref=e384]: Подозрение на ДТП — датчик удара
+          - generic [ref=e385]: Сработал датчик 2.4g при манёвре уклонения. Водитель не отвечает 22 с. Скорость упала до 0 км/ч.
+        - generic [ref=e386]:
+          - button "Вызвать водителя +7 925 ··· 18-04" [ref=e387]:
+            - img [ref=e388]
+            - text: Вызвать водителя
+            - generic [ref=e390]: +7 925 ··· 18-04
+          - button "Позвонить через камеру" [ref=e391]:
+            - img [ref=e392]
+            - text: Позвонить через камеру
+          - generic [ref=e395]:
+            - button "Валидация" [ref=e396]:
+              - img [ref=e397]
+              - text: Валидация
+              - img [ref=e399]
+            - button "Стоп ТС" [ref=e401]:
+              - img [ref=e402]
+              - text: Стоп ТС
+        - generic [ref=e404]:
+          - generic [ref=e405]:
+            - generic [ref=e406]:
+              - generic [ref=e407]: Скорость
+              - generic [ref=e408]: · 90 сек
+            - generic [ref=e409]: тек. 0 · лим. 80
+          - img [ref=e411]:
+            - generic [ref=e412]: лим. 80
+        - generic [ref=e416]:
+          - generic [ref=e417]:
+            - generic [ref=e418]: Акселерометр
+            - generic [ref=e419]: min -2.40 · max 0.30
+          - img [ref=e421]:
+            - generic [ref=e424]: −2.4g
+        - generic [ref=e425]:
+          - generic [ref=e426]:
+            - img [ref=e427]
+            - text: "Непр. вождение:"
+            - generic [ref=e429]: 1ч 42мин
+            - generic [ref=e430]: / лим. 4ч
+          - generic [ref=e431]:
+            - img [ref=e432]
+            - text: Ночная 04:00–07:00
+            - generic [ref=e434]: ×1.4 риск
+          - generic [ref=e435]:
+            - img [ref=e436]
+            - text: Событие №12 за смену · МКАД 27 км
+        - generic [ref=e439]:
+          - generic [ref=e440]:
+            - img [ref=e441]
+            - generic [ref=e446]: Версия AI · уверенность 86%
+          - generic [ref=e447]: Датчик удара 2.4g + манёвр уклонения на Cam 1 (траектория влево на 18°). DMS показывает реакцию испуга за 0.3с до удара.
+          - generic [ref=e448]:
+            - button "Засыпал" [ref=e449]:
+              - img [ref=e450]
+              - text: Засыпал
+            - button "Отвлёкся" [ref=e453]:
+              - img [ref=e454]
+              - text: Отвлёкся
+            - button "Подрезали" [ref=e456]:
+              - img [ref=e457]
+              - text: Подрезали
+            - button "Техн." [ref=e463]:
+              - img [ref=e464]
+              - text: Техн.
+        - generic [ref=e467]:
+          - generic [ref=e468]:
+            - generic [ref=e469]: Архив ±15 с
+            - button "Скачать" [ref=e470]:
+              - img [ref=e471]
+              - text: Скачать
+          - generic [ref=e478]:
+            - generic [ref=e479]: −15с · 00:36:28
+            - generic [ref=e480]: ● событие 00:36:43
+            - generic [ref=e481]: +15с · 00:36:58
+    - generic [ref=e482]:
+      - generic [ref=e483]:
+        - text: "Здоровье парка:"
+        - generic [ref=e485]: 74.6%
+      - generic [ref=e486]: ·
+      - generic [ref=e487]: На связи 47/63
+      - generic [ref=e488]: ·
+      - generic [ref=e489]:
+        - img [ref=e490]
+        - text: Не на связи
+        - generic [ref=e492]: "9"
+      - generic [ref=e493]: ·
+      - generic [ref=e494]:
+        - img [ref=e495]
+        - text: Камеры офлайн
+        - generic [ref=e498]: "7"
+      - generic [ref=e499]:
+        - generic [ref=e500]: Москва · UTC+3
+        - generic [ref=e501]: Live
+  - generic [ref=e503]:
+    - generic [ref=e504]: Вариант Б
+    - text: Нет видео · Телефон за рулём · Е902 СТ 150 · Сидоров В.Н. · CAM-03 offline
+  - generic [ref=e505]:
+    - generic [ref=e506]:
+      - button "Назад" [ref=e507]:
+        - img [ref=e508]
+        - text: Назад
+      - generic [ref=e511]:
+        - generic [ref=e512]: Е902 СТ 150
+        - generic [ref=e513]: — Сидоров В.Н.
+      - generic [ref=e514]: ВЫСОКИЙ
+      - generic [ref=e516]:
+        - img [ref=e517]
+        - text: Телематика
+      - generic [ref=e519]:
+        - img [ref=e520]
+        - text: Нет видео
+      - generic [ref=e524]:
+        - generic [ref=e525]:
+          - generic [ref=e526]: Score
+          - generic [ref=e527]: "76"
+        - generic [ref=e528]: ·
+        - generic [ref=e529]: № 4841
+        - generic [ref=e530]: ·
+        - generic [ref=e531]: 10:15
+        - generic [ref=e532]: ·
+        - generic [ref=e533]: 16 мая
+        - generic [ref=e535]: ОЛ
+    - generic [ref=e536]:
+      - complementary [ref=e537]:
+        - generic [ref=e538]:
+          - generic [ref=e539]: Лента событий
+          - generic [ref=e540]: обновлено 03:24
+        - generic [ref=e541]:
+          - button "Все 9" [ref=e542]:
+            - text: Все
+            - generic [ref=e543]: "9"
+          - button "Крит. 2" [ref=e544]:
+            - text: Крит.
+            - generic [ref=e545]: "2"
+          - button "Высок. 3" [ref=e546]:
+            - text: Высок.
+            - generic [ref=e547]: "3"
+          - button "Сред. 4" [ref=e548]:
+            - text: Сред.
+            - generic [ref=e549]: "4"
+        - generic [ref=e550]:
+          - generic [ref=e553] [cursor=pointer]:
+            - generic [ref=e554]:
+              - generic [ref=e555]: А777 ВВ 77
+              - generic [ref=e556]:
+                - img [ref=e557]
+                - generic [ref=e560]: ВА
+              - generic [ref=e561]: 02:48
+            - generic [ref=e562]:
+              - generic [ref=e563]:
+                - img [ref=e564]
+                - generic [ref=e567]: Засыпание (микросон)
+              - generic [ref=e568]: "97"
+          - generic [ref=e571] [cursor=pointer]:
+            - generic [ref=e572]:
+              - generic [ref=e573]: Н124 УУ 199
+              - generic [ref=e574]:
+                - img [ref=e575]
+                - img [ref=e577]
+                - generic [ref=e580]: Оба
+              - generic [ref=e581]: 02:54
+            - generic [ref=e582]:
+              - generic [ref=e583]:
+                - img [ref=e584]
+                - generic [ref=e586]: Превышение +28 км/ч
+              - generic [ref=e587]: "68"
+          - generic [ref=e590] [cursor=pointer]:
+            - generic [ref=e591]:
+              - generic [ref=e592]: Р788 ОО 52
+              - generic [ref=e593]:
+                - img [ref=e594]
+                - img [ref=e596]
+                - generic [ref=e599]: Оба
+              - generic [ref=e600]: 03:01
+            - generic [ref=e601]:
+              - generic [ref=e602]:
+                - img [ref=e603]
+                - generic [ref=e608]: Резкое торможение
+              - generic [ref=e609]: "54"
+          - generic [ref=e612] [cursor=pointer]:
+            - generic [ref=e613]:
+              - generic [ref=e614]: Е902 СТ 150
+              - generic [ref=e615]:
+                - img [ref=e616]
+                - generic [ref=e618]: Тел
+              - generic [ref=e619]: 📷 Нет
+              - generic [ref=e620]: 03:05
+            - generic [ref=e621]:
+              - generic [ref=e622]:
+                - img [ref=e623]
+                - generic [ref=e625]: Использование телефона
+              - generic [ref=e626]: "76"
+          - generic [ref=e629] [cursor=pointer]:
+            - generic [ref=e630]:
+              - generic [ref=e631]: В345 КМ 97
+              - generic [ref=e632]:
+                - img [ref=e633]
+                - img [ref=e635]
+                - generic [ref=e638]: Оба
+              - generic [ref=e639]: 03:12
+            - generic [ref=e640]:
+              - generic [ref=e641]:
+                - img [ref=e642]
+                - generic [ref=e647]: Удар 2.4g — ДТП
+              - generic [ref=e648]: "84"
+          - generic [ref=e651] [cursor=pointer]:
+            - generic [ref=e652]:
+              - generic [ref=e653]: А777 ВВ 77
+              - generic [ref=e654]:
+                - img [ref=e655]
+                - generic [ref=e658]: ВА
+              - generic [ref=e659]: 03:15
+            - generic [ref=e660]:
+              - generic [ref=e661]:
+                - img [ref=e662]
+                - generic [ref=e665]: Курение в кабине
+              - generic [ref=e666]: "41"
+          - generic [ref=e669] [cursor=pointer]:
+            - generic [ref=e670]:
+              - generic [ref=e671]: М412 ВВ 77
+              - generic [ref=e672]:
+                - img [ref=e673]
+                - text: Закр.
+              - generic [ref=e675]: 03:21
+            - generic [ref=e676]:
+              - generic [ref=e677]:
+                - img [ref=e678]
+                - generic [ref=e680]: Не пристёгнут
+              - generic [ref=e681]: "38"
+          - generic [ref=e684] [cursor=pointer]:
+            - generic [ref=e685]:
+              - generic [ref=e686]: К512 ТР 50
+              - generic [ref=e687]:
+                - img [ref=e688]
+                - generic [ref=e691]: ВА
+              - generic [ref=e692]: 03:24
+            - generic [ref=e693]:
+              - generic [ref=e694]:
+                - img [ref=e695]
+                - generic [ref=e697]: Отвлёкся от дороги
+              - generic [ref=e698]: "62"
+          - generic [ref=e701] [cursor=pointer]:
+            - generic [ref=e702]:
+              - generic [ref=e703]: У311 АР 199
+              - generic [ref=e704]:
+                - img [ref=e705]
+                - img [ref=e707]
+                - generic [ref=e710]: Оба
+              - generic [ref=e711]: 03:30
+            - generic [ref=e712]:
+              - generic [ref=e713]:
+                - img [ref=e714]
+                - generic [ref=e719]: Опасное сближение
+              - generic [ref=e720]: "48"
+      - generic [ref=e721]:
+        - generic [ref=e722]:
+          - img [ref=e725]
+          - generic [ref=e729]: Видео недоступно
+          - generic [ref=e730]: CAM-03 не передала данные — камера была офлайн с 09:48 до 10:22
+          - generic [ref=e731]: "Событие зафиксировано телематикой (DMS-сенсор: лицо отвёрнуто >2 сек)"
+          - generic [ref=e732]:
+            - button "Запросить архивное видео" [ref=e733]:
+              - img [ref=e734]
+              - text: Запросить архивное видео
+            - generic [ref=e737]: Ориентировочное время доставки — 15–30 минут
+          - generic [ref=e738]:
+            - generic [ref=e739]: CAM-03 · нет сигнала
+            - generic [ref=e741]: Терминал на связи · буфер 38%
+        - generic [ref=e742]:
+          - generic [ref=e743]:
+            - img [ref=e744]:
+              - generic [ref=e762]: МОСКОВСКАЯ ОБЛ. · ВОСТОК
+              - generic [ref=e763]: М-7 «Волга»
+              - generic [ref=e764]: Электросталь
+              - generic [ref=e765]: Ногинск
+              - generic [ref=e766]: → Владимир
+              - generic [ref=e767]: р. Клязьма
+              - generic [ref=e770]: "!"
+            - generic [ref=e772]:
+              - generic [ref=e773]:
+                - generic [ref=e774]: Е902 СТ 150
+                - generic [ref=e775]: ВЫСОК.
+              - generic [ref=e776]: Сидоров В.Н. · 88 км/ч
+              - generic [ref=e777]: М-7 «Волга», 124 км · 16.05 · 10:15
+            - generic [ref=e779]:
+              - img [ref=e780]
+              - text: М-7 «Волга» · 124 км
+            - generic [ref=e783]:
+              - button "Карта" [ref=e784]
+              - button "Спутник" [ref=e785]
+              - button "Гибрид" [ref=e786]
+            - generic [ref=e787]:
+              - button "+" [ref=e788]
+              - button "−" [ref=e790]
+            - generic [ref=e791]: 2 км
+          - generic [ref=e793]:
+            - generic [ref=e794]: Статус камер
+            - generic [ref=e795]:
+              - generic [ref=e796]:
+                - img [ref=e797]
+                - generic [ref=e800]: CAM-01
+                - generic [ref=e801]: · ADAS
+                - generic [ref=e802]: Онлайн
+              - generic [ref=e804]:
+                - img [ref=e805]
+                - generic [ref=e808]: CAM-02
+                - generic [ref=e809]: · DMS
+                - generic [ref=e810]: Онлайн
+              - generic [ref=e812]:
+                - img [ref=e813]
+                - generic [ref=e816]: CAM-03
+                - generic [ref=e817]: · CH3
+                - generic [ref=e818]: Нет сигнала
+              - generic [ref=e820]:
+                - img [ref=e821]
+                - generic [ref=e824]: CAM-04
+                - generic [ref=e825]: · Зад.
+                - generic [ref=e826]: Онлайн
+              - generic [ref=e828]: CAM-03 офлайн с 09:48 (~27 мин)
+            - generic [ref=e829]:
+              - img [ref=e830]
+              - generic [ref=e832]: CAM-03 не записывала — часть нарушений за смену могла не зафиксироваться.
+      - complementary [ref=e833]:
+        - generic [ref=e834]:
+          - generic [ref=e835]:
+            - generic [ref=e836]: Высокий
+            - generic [ref=e838]: 4 ч назад
+          - generic [ref=e839]:
+            - generic [ref=e840]: Е902 СТ 150
+            - generic [ref=e841]: VIN •••L9981
+          - generic [ref=e842]: Сидоров Василий Николаевич
+          - generic [ref=e843]: SKAI Москва · ГЛК · колонна №7 · стаж 11 лет
+        - generic [ref=e844]:
+          - generic [ref=e845]:
+            - img [ref=e846]
+            - generic [ref=e848]: Использование телефона за рулём
+          - generic [ref=e849]: Скорость 88 км/ч при лимите 60. Видео с CAM-03 недоступно — событие требует подтверждения.
+        - generic [ref=e850]:
+          - button "Вызвать водителя +7 916 ··· 02-77" [ref=e851]:
+            - img [ref=e852]
+            - text: Вызвать водителя
+            - generic [ref=e854]: +7 916 ··· 02-77
+          - button "Позвонить через камеру" [ref=e855]:
+            - img [ref=e856]
+            - text: Позвонить через камеру
+          - generic [ref=e859]:
+            - button "Запросить архив" [ref=e860]:
+              - img [ref=e861]
+              - text: Запросить архив
+            - button "Валидация" [ref=e864]:
+              - img [ref=e865]
+              - text: Валидация
+              - img [ref=e867]
+        - generic [ref=e869]:
+          - generic [ref=e870]:
+            - generic [ref=e871]:
+              - generic [ref=e872]: Скорость
+              - generic [ref=e873]: · 90 сек
+            - generic [ref=e874]: тек. 89 · лим. 60
+          - img [ref=e876]:
+            - generic [ref=e877]: лим. 60
+        - generic [ref=e881]:
+          - generic [ref=e882]:
+            - generic [ref=e883]: Акселерометр
+            - generic [ref=e884]: min -0.05 · max 0.05
+          - img [ref=e886]
+        - generic [ref=e888]:
+          - generic [ref=e889]:
+            - img [ref=e890]
+            - text: CAM-03 офлайн — видео отсутствует
+          - generic [ref=e894]:
+            - img [ref=e895]
+            - generic [ref=e897]: "88"
+            - text: км/ч · лим. 60
+          - generic [ref=e898]:
+            - img [ref=e899]
+            - text: М-7 «Волга» · 124 км
+        - generic [ref=e902]:
+          - generic [ref=e903]:
+            - img [ref=e904]
+            - generic [ref=e909]: Версия AI · уверенность 64% (низкая)
+          - generic [ref=e910]: "DMS-сенсор: лицо отвёрнуто >2 сек, угол наклона головы 32°. Видео CAM-03 недоступно — визуальное подтверждение телефона невозможно до получения архива."
+          - generic [ref=e911]:
+            - button "Засыпал" [ref=e912]:
+              - img [ref=e913]
+              - text: Засыпал
+            - button "Отвлёкся" [ref=e916]:
+              - img [ref=e917]
+              - text: Отвлёкся
+            - button "Подрезали" [ref=e920]:
+              - img [ref=e921]
+              - text: Подрезали
+            - button "Техн." [ref=e926]:
+              - img [ref=e927]
+              - text: Техн.
+        - generic [ref=e930]:
+          - generic [ref=e931]: Архив ±15 с
+          - generic [ref=e932]:
+            - img [ref=e933]
+            - generic [ref=e935]:
+              - generic [ref=e936]: Архивное видео будет доступно после получения с терминала
+              - generic [ref=e937]: Запрос создан · ожидайте 15–30 мин
+              - generic [ref=e938]: Уведомление придёт автоматически — № 4841-A
+    - generic [ref=e939]:
+      - generic [ref=e940]:
+        - text: "Здоровье парка:"
+        - generic [ref=e942]: 74.6%
+      - generic [ref=e943]: ·
+      - generic [ref=e944]: На связи 47/63
+      - generic [ref=e945]: ·
+      - generic [ref=e946]:
+        - img [ref=e947]
+        - text: Не на связи
+        - generic [ref=e949]: "9"
+      - generic [ref=e950]: ·
+      - generic [ref=e951]:
+        - img [ref=e952]
+        - text: Камеры офлайн
+        - generic [ref=e955]: "7"
+      - generic [ref=e956]:
+        - generic [ref=e957]: Москва · UTC+3
+        - generic [ref=e958]: Live
+  - generic [ref=e960]: Иконография — inline SVG, 1.6 px stroke. Карта — Leaflet + Carto Light. Графики скорости/акселерометра — собственный SVG в стиле Recharts.

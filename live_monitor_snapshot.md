@@ -1,0 +1,332 @@
+- generic [ref=e5]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e8]: S
+      - generic [ref=e9]:
+        - generic [ref=e10]: SKAI Online
+        - generic [ref=e11]: Диспетчерская
+    - generic [ref=e13]:
+      - generic [ref=e14]: Рискованные поездки
+      - generic [ref=e15]: Live
+    - generic [ref=e17]:
+      - button "Активные 47" [ref=e18] [cursor=pointer]:
+        - text: Активные
+        - generic [ref=e20]: "47"
+      - button "Крит. 3" [ref=e21] [cursor=pointer]:
+        - text: Крит.
+        - generic [ref=e23]: "3"
+      - button "Высок. 7" [ref=e24] [cursor=pointer]:
+        - text: Высок.
+        - generic [ref=e26]: "7"
+      - button "Сред. 12" [ref=e27] [cursor=pointer]:
+        - text: Сред.
+        - generic [ref=e29]: "12"
+      - button "Решено 24" [ref=e30] [cursor=pointer]:
+        - text: Решено
+        - generic [ref=e32]: "24"
+    - generic [ref=e33]:
+      - img [ref=e35]
+      - textbox "ТС, водитель, событие…" [ref=e38]
+      - generic [ref=e39]: ⌘K
+    - generic [ref=e40]:
+      - img [ref=e42]
+      - generic [ref=e45]: 00:43:02
+    - button "Настройки темы" [ref=e46] [cursor=pointer]:
+      - img [ref=e47]
+    - generic [ref=e50]:
+      - generic [ref=e51]: МО
+      - generic [ref=e52]: Маслова О.
+  - generic [ref=e53]:
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - generic [ref=e57]: Лента смены
+          - button "Фильтр" [ref=e58] [cursor=pointer]:
+            - img [ref=e59]
+            - text: Фильтр
+        - generic [ref=e61]:
+          - button "Все 9" [ref=e62] [cursor=pointer]:
+            - text: Все
+            - generic [ref=e63]: "9"
+          - button "Крит. 2" [ref=e64] [cursor=pointer]:
+            - text: Крит.
+            - generic [ref=e65]: "2"
+          - button "Высок. 3" [ref=e66] [cursor=pointer]:
+            - text: Высок.
+            - generic [ref=e67]: "3"
+          - button "Сред. 4" [ref=e68] [cursor=pointer]:
+            - text: Сред.
+            - generic [ref=e69]: "4"
+      - generic [ref=e71]:
+        - generic [ref=e73]:
+          - generic [ref=e76]: Сейчас
+          - button "А777ВВ 77 00:36:43 Засыпание (микросон) Score 97" [ref=e78] [cursor=pointer]:
+            - generic [ref=e79]:
+              - generic [ref=e80]: А777ВВ 77
+              - generic [ref=e81]: 00:36:43
+            - generic [ref=e84]: Засыпание (микросон)
+            - generic [ref=e86]: Score 97
+        - button "Н124УУ 199 00:36:51 Превышение +28 км/ч Score 68 Открыто" [ref=e90] [cursor=pointer]:
+          - generic [ref=e91]:
+            - generic [ref=e92]: Н124УУ 199
+            - generic [ref=e93]: 00:36:51
+          - generic [ref=e96]: Превышение +28 км/ч
+          - generic [ref=e97]:
+            - generic [ref=e98]: Score 68
+            - generic [ref=e99]: Открыто
+        - button "Р788ОО 52 00:36:01 Резкое торможение Score 54 Открыто" [ref=e103] [cursor=pointer]:
+          - generic [ref=e104]:
+            - generic [ref=e105]: Р788ОО 52
+            - generic [ref=e106]: 00:36:01
+          - generic [ref=e109]: Резкое торможение
+          - generic [ref=e110]:
+            - generic [ref=e111]: Score 54
+            - generic [ref=e112]: Открыто
+        - button "Е902СТ 150 00:35:25 Использование телефона Score 76 Открыто" [ref=e116] [cursor=pointer]:
+          - generic [ref=e117]:
+            - generic [ref=e118]: Е902СТ 150
+            - generic [ref=e119]: 00:35:25
+          - generic [ref=e122]: Использование телефона
+          - generic [ref=e123]:
+            - generic [ref=e124]: Score 76
+            - generic [ref=e125]: Открыто
+        - button "В345КМ 97 00:34:39 Удар 2.4 g — подозрение на ДТП Score 84 Открыто" [ref=e129] [cursor=pointer]:
+          - generic [ref=e130]:
+            - generic [ref=e131]: В345КМ 97
+            - generic [ref=e132]: 00:34:39
+          - generic [ref=e135]: Удар 2.4 g — подозрение на ДТП
+          - generic [ref=e136]:
+            - generic [ref=e137]: Score 84
+            - generic [ref=e138]: Открыто
+        - button "А777ВВ 77 00:24:11 Курение в кабине Score 41 Открыто" [ref=e142] [cursor=pointer]:
+          - generic [ref=e143]:
+            - generic [ref=e144]: А777ВВ 77
+            - generic [ref=e145]: 00:24:11
+          - generic [ref=e148]: Курение в кабине
+          - generic [ref=e149]:
+            - generic [ref=e150]: Score 41
+            - generic [ref=e151]: Открыто
+        - button "М412ВВ 77 00:18:30 Не пристёгнут Score 38 Закрыто" [ref=e155] [cursor=pointer]:
+          - generic [ref=e156]:
+            - generic [ref=e157]: М412ВВ 77
+            - generic [ref=e158]: 00:18:30
+          - generic [ref=e161]: Не пристёгнут
+          - generic [ref=e162]:
+            - generic [ref=e163]: Score 38
+            - generic [ref=e164]:
+              - img [ref=e165]
+              - text: Закрыто
+        - button "Р201ЕТ 199 00:08:55 Резкое торможение −1.4 g Score 33 Закрыто" [ref=e170] [cursor=pointer]:
+          - generic [ref=e171]:
+            - generic [ref=e172]: Р201ЕТ 199
+            - generic [ref=e173]: 00:08:55
+          - generic [ref=e176]: Резкое торможение −1.4 g
+          - generic [ref=e177]:
+            - generic [ref=e178]: Score 33
+            - generic [ref=e179]:
+              - img [ref=e180]
+              - text: Закрыто
+        - button "Е902СТ 150 23:51:02 Использование телефона 0:42 Score 62 Закрыто" [ref=e185] [cursor=pointer]:
+          - generic [ref=e186]:
+            - generic [ref=e187]: Е902СТ 150
+            - generic [ref=e188]: 23:51:02
+          - generic [ref=e191]: Использование телефона 0:42
+          - generic [ref=e192]:
+            - generic [ref=e193]: Score 62
+            - generic [ref=e194]:
+              - img [ref=e195]
+              - text: Закрыто
+        - generic [ref=e197]: ↑ Начало смены 22:00:00
+    - generic [ref=e198]:
+      - generic [ref=e199]:
+        - img [ref=e201]
+        - generic [ref=e220]:
+          - generic [ref=e221]: Cam 1 · фронт
+          - generic [ref=e222]:
+            - img [ref=e224]
+            - text: REC
+        - generic [ref=e226]:
+          - generic [ref=e227]: 00:36:43
+          - button [ref=e228] [cursor=pointer]:
+            - img [ref=e229]
+        - generic [ref=e234]:
+          - img [ref=e236]
+          - generic [ref=e238]: "72"
+          - generic [ref=e239]: км/ч · лим. 80
+        - generic [ref=e241]:
+          - text: DMS · Микросон
+          - generic [ref=e242]: 97%
+        - button [ref=e243] [cursor=pointer]:
+          - img [ref=e244]
+        - generic [ref=e249]:
+          - button [ref=e250] [cursor=pointer]:
+            - img [ref=e251]
+          - generic [ref=e257]: 00:36 / 01:45
+          - button "1.0×" [ref=e258] [cursor=pointer]
+      - generic [ref=e259]:
+        - generic [ref=e260]:
+          - generic [ref=e261]:
+            - generic:
+              - generic:
+                - button [ref=e262] [cursor=pointer]
+                - button [ref=e266] [cursor=pointer]
+                - button [ref=e269] [cursor=pointer]
+                - button [ref=e272] [cursor=pointer]
+                - button [ref=e275] [cursor=pointer]
+            - generic [ref=e278]:
+              - link "Leaflet" [ref=e279] [cursor=pointer]:
+                - /url: https://leafletjs.com
+                - img [ref=e280]
+                - text: Leaflet
+              - text: "| © OSM · CARTO"
+          - generic [ref=e284]:
+            - button "+" [ref=e285] [cursor=pointer]
+            - button "−" [ref=e287] [cursor=pointer]
+          - generic [ref=e288]:
+            - generic [ref=e289]: Риск
+            - generic [ref=e290]: Крит.
+            - generic [ref=e292]: Высок.
+            - generic [ref=e294]: Сред.
+        - generic [ref=e296]:
+          - generic [ref=e297]:
+            - generic [ref=e298]: Другие камеры
+            - generic [ref=e299]: 4/4 онлайн
+          - generic [ref=e300] [cursor=pointer]:
+            - img [ref=e302]
+            - generic [ref=e306]: Cam 2 · салон
+            - generic [ref=e307]: 00:36:43
+            - generic [ref=e308]: ● REC
+          - generic [ref=e309] [cursor=pointer]:
+            - img [ref=e311]
+            - generic [ref=e314]: Cam 3 · правая
+            - generic [ref=e315]: 00:36:43
+            - generic [ref=e316]: ● REC
+          - generic [ref=e317] [cursor=pointer]:
+            - img [ref=e319]
+            - generic [ref=e324]: Cam 4 · задняя
+            - generic [ref=e325]: 00:36:43
+            - generic [ref=e326]: ● REC
+    - generic [ref=e327]:
+      - generic [ref=e328]:
+        - generic [ref=e329]:
+          - generic [ref=e330]:
+            - generic [ref=e331]: Инцидент
+            - generic [ref=e332]: Критический
+          - generic [ref=e334]: 1:08 назад
+        - generic [ref=e335]:
+          - generic [ref=e336]: А777ВВ 77
+          - generic [ref=e337]:
+            - generic [ref=e338]: Score
+            - generic [ref=e339]: "97"
+        - generic [ref=e340]:
+          - generic [ref=e341]: Иванов Алексей Петрович
+          - generic [ref=e342]: SKAI Москва · ТМ-Логистика
+        - generic [ref=e343]:
+          - img [ref=e345]
+          - generic [ref=e347]:
+            - generic [ref=e348]: Засыпание за рулём (микросон)
+            - generic [ref=e349]: Голова водителя опустилась ниже уровня руля 2.3 с; глаза закрыты > 1.8 с. Поездка продолжается, машина в потоке.
+        - button "Вызвать водителя +7 916 ··· 47-12" [ref=e350] [cursor=pointer]:
+          - img [ref=e351]
+          - generic [ref=e353]: Вызвать водителя
+          - generic [ref=e354]: +7 916 ··· 47-12
+        - generic [ref=e355]:
+          - button "Валидация" [ref=e356] [cursor=pointer]:
+            - img [ref=e357]
+            - text: Валидация
+            - img [ref=e359]
+          - button "Стоп ТС" [ref=e361] [cursor=pointer]:
+            - img [ref=e362]
+            - text: Стоп ТС
+      - generic [ref=e364]:
+        - generic [ref=e365]:
+          - generic [ref=e366]:
+            - generic [ref=e367]: Скорость (км/ч)
+            - generic [ref=e369]: "72"
+          - img [ref=e371]:
+            - generic [ref=e373]: "60"
+            - generic [ref=e375]: "75"
+            - generic [ref=e377]: "90"
+            - generic [ref=e379]: лимит 80
+            - generic [ref=e383]: 00:30:25
+            - generic [ref=e384]: 00:36:43
+        - generic [ref=e385]:
+          - generic [ref=e386]:
+            - generic [ref=e387]: Акселерометр (м/с²)
+            - generic [ref=e388]: min -0.6 · max 1.1
+          - img [ref=e390]:
+            - generic [ref=e392]: "-1"
+            - generic [ref=e394]: "0"
+            - generic [ref=e396]: "1"
+            - generic [ref=e400]: 00:30:25
+            - generic [ref=e401]: 00:36:43
+        - generic [ref=e402]:
+          - generic [ref=e403]:
+            - generic [ref=e404]:
+              - img [ref=e406]
+              - generic [ref=e408]: "Непрерывное вождение: 2ч 58мин"
+            - generic [ref=e409]: лимит 4ч
+          - generic [ref=e410]:
+            - generic [ref=e411]:
+              - img [ref=e413]
+              - generic [ref=e415]: Ночная поездка (04:00–07:00)
+            - generic [ref=e416]: ×1.4 риск
+          - generic [ref=e417]:
+            - generic [ref=e418]:
+              - img [ref=e420]
+              - generic [ref=e423]: №4 · Очаково → Каширка
+            - generic [ref=e424]: 55.7512, 37.6184
+        - generic [ref=e425]:
+          - generic [ref=e426]:
+            - generic [ref=e427]: Просмотр архива · ±15с
+            - button "Скачать" [ref=e428] [cursor=pointer]:
+              - img [ref=e429]
+              - text: Скачать
+          - slider [ref=e438]: "35"
+          - generic [ref=e439]:
+            - generic [ref=e440]: −15с · 00:36:28
+            - generic [ref=e441]: ● событие 00:36:43
+            - generic [ref=e442]: +15с · 00:36:58
+          - generic [ref=e443]:
+            - button [ref=e444] [cursor=pointer]:
+              - img [ref=e445]
+            - button [ref=e448] [cursor=pointer]:
+              - img [ref=e449]
+            - button [ref=e451] [cursor=pointer]:
+              - img [ref=e452]
+            - generic [ref=e455]: 1.0×
+        - generic [ref=e456]:
+          - generic [ref=e457]: Журнал реакции
+          - generic [ref=e458]:
+            - generic [ref=e459]:
+              - generic [ref=e460]: 00:36:44
+              - generic [ref=e462]: "Сигнал AI: «Засыпание 97%»"
+            - generic [ref=e463]:
+              - generic [ref=e464]: 00:36:48
+              - generic [ref=e466]: Маслова О. открыла инцидент
+            - generic [ref=e467]:
+              - generic [ref=e468]: 00:36:52
+              - generic [ref=e470]: Запрошено видео ±15с
+            - generic [ref=e471]:
+              - generic [ref=e472]: —
+              - generic [ref=e474]: Ожидает решения
+  - generic [ref=e475]:
+    - generic [ref=e476]:
+      - generic [ref=e478]: Здоровье
+      - generic [ref=e481]: 74.6%
+    - generic [ref=e483]:
+      - img [ref=e485]
+      - text: На связи
+      - generic [ref=e487]: 47/63
+    - generic [ref=e488]:
+      - img [ref=e490]
+      - generic [ref=e492]: Не на связи
+      - generic [ref=e493]: "9"
+    - generic [ref=e494]:
+      - img [ref=e496]
+      - generic [ref=e499]: Неиспр. камер
+      - generic [ref=e500]: "7"
+    - generic [ref=e502]:
+      - generic [ref=e503]: Средн. реакция
+      - generic [ref=e504]: 3.2 мин
+    - generic [ref=e506]: build 4.12.3 · © SKAI 2026

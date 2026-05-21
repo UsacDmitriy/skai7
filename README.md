@@ -126,28 +126,49 @@ streamlit run app/app.py
 
 ## Запуск
 
+### Через Makefile (рекомендуется)
+
+```bash
+cd /Users/dimausac/projects/skai_7
+make help        # список всех команд
+make install     # установить зависимости (один раз)
+make run         # запуск production-режим на http://localhost:8501
+make dev         # запуск dev-режим с auto-reload
+make clean       # очистить кеш и __pycache__
+```
+
+### Вручную
+
 ```bash
 cd /Users/dimausac/projects/skai_7
 source .venv/bin/activate
-streamlit run app/app.py
+streamlit run run.py
 ```
 
 ## Структура проекта
 
 ```
 .
+├── Makefile               ← команды запуска
 ├── agents.md              ← задача хакатона
 ├── requirements.txt       ← streamlit, pandas, numpy, altair
 ├── README.md              ← этот файл
-├── app/
-│   ├── app.py             ← точка входа Streamlit (три вкладки)
+├── run.py                 ← точка входа для Streamlit
+├── main.py                ← точка входа для прямого запуска
+├── backend/
+│   ├── app.py             ← основное приложение Streamlit (5 вкладок)
 │   ├── constants.py       ← design tokens, метки, конфиг
 │   ├── data_loader.py     ← загрузка CSV + save_action
 │   ├── metrics.py         ← KPI-метрики + build_risk_table
 │   ├── charts.py          ← Altair: scatter, speed, track map
 │   ├── actions.py         ← форма действий диспетчера
 │   ├── risk_table.py      ← расширенная таблица рисков
-│   └── data_overview.py   ← обзор датасетов + превью [ШАГ 1]
+│   ├── data_overview.py   ← обзор датасетов + превью
+│   └── screens/           ← экраны/вкладки приложения
+│       ├── incident.py        ← вкладка «Детали инцидента»
+│       ├── monitor.py         ← вкладка «Живой мониторинг»
+│       ├── report.py          ← вкладка «Интерактивный отчёт»
+│       └── incident_card.py   ← вкладка «Карточка инцидента»
 ├── data/                  ← CSV-файлы (телеметрия + видео-алармы)
 ├── sample_data/           ← демо-данные (fallback)
 ├── output/                ← actions.csv, отчёты (автосоздаётся)
