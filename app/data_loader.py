@@ -10,7 +10,10 @@ def load_csv_files(data_dir: Path) -> dict[str, pd.DataFrame]:
     data_dir.mkdir(parents=True, exist_ok=True)
     datasets: dict[str, pd.DataFrame] = {}
     for path in sorted(data_dir.rglob("*.csv")):
-        datasets[path.relative_to(data_dir).as_posix()] = pd.read_csv(path)
+        key = path.relative_to(data_dir).as_posix()
+        if key.endswith(".csv"):
+            key = key[:-4]
+        datasets[key] = pd.read_csv(path)
     return datasets
 
 

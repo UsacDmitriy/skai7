@@ -1,11 +1,9 @@
 # prompts/hackathon — Плейбук запуска промптов
 
 > 🖥 **Инструмент:** Cherry Studio → OpenRouter (team key)
-> 💰 **Бюджет команды:** $50 · Реальный расход: ~$1.50
-> ⏱ **8 часов** · 5 волн · **32 промпта**
->
-> **Формат имён:** `{приоритет}-{номер}-{название}--{модель}.md` — модель видна из имени.
-> **Правило:** дизайн-спека встроена в промпт — HTML-файлы из `code/clade_design/` НЕ читать.
+> 💰 **Бюджет команды:** $50
+> 🐍 **Стек:** Python 3.12 · Streamlit 1.44 · Pandas 2.2 · Altair 5.5
+> ⏱ **6 часов** · 7 волн · **20 промптов**
 
 ---
 
@@ -14,56 +12,66 @@
 ```
 09:30 ──────────────────── 00 ──── nemotron (1 промпт)
 │
-09:45 ──────────────────── 00a ─── kimi + qwen3 (3 промпта)
-│         ┌─ 00a-A (kimi) ──→ TECH-DESIGN.md ──┐
-│         │                                      ├─ 00a-B (kimi)
-│         └─ 00a-C (qwen3) ──→ constants draft ─┘
+09:40 ──────────────────── 00a ─── qwen (4 промпта параллельно)
+│         ├─ 00a-A ──→ TECH-DESIGN.md
+│         ├─ 00a-B ──→ контракты данных
+│         ├─ 00a-C ──→ design tokens
+│         └─ 00a-D ──→ csv-samples
 │
-10:30 ──────────────────── 01 ──── qwen3 (9 промптов)
-│         ┌─ 01A ── types.ts ────────────────────┐
-│         ├─ 01C ── incidents.json ──────────────┤ все параллельно
-│         ├─ 01D ── vehicles.json ───────────────┤ (разные выходы)
-│         ├─ 01F-A ── driver-report.json ────────┤
-│         └─ 01F-B ── fleet-report.json ─────────┘
-│              │ (ждём 01A)
-│         ┌─ 01B ── constants.ts
-│         ├─ 01F-C ── analyticsPresets.ts
-│         └─ 01F-D ── fleet-vehicles.json
-│              │ (ждём 01A + 01B)
-│         └─ 01E ── App.tsx + конфиги
+10:00 ──────────────────── 01 ──── kimi + qwen (4 промпта)
+│         ├─ 01A ── data_loader.py (kimi) ──────┐
+│         ├─ 01B ── metrics.py (kimi) ──────────┤ параллельно
+│         ├─ 01C ── app.py skeleton (qwen) ─────┤
+│         └─ 01D ── requirements.txt (qwen) ────┘
 │
-11:30 ──────────────────── 02 ──── qwen3 (9 промптов, ВСЕ параллельно)
-│         ├─ 02A IncidentCard       ├─ 02E VoiceQueryBox (сессия 1)
-│         ├─ 02B VideoPanel         ├─ 02E ConfirmationModal (сессия 2)
-│         ├─ 02C TelemetryChart     ├─ 02E DriverReportCard (сессия 3)
-│         ├─ 02D ActionButtons      ├─ 02E ViolationsTable (сессия 4)
-│         ├─ 02F IncidentTopBar     ├─ 02E RouteTrackMap (сессия 5)
-│         ├─ 02G ContextChips       ├─ 02E SpeedChart (сессия 6)
-│         └─ 02H SourceStatusGrid   └─ 02E VideoSlidePanel (сессия 7)
-│                                      02E FleetDriversList (сессия 8)
-│                                      02E FleetBarChart (сессия 9)
-│                                      02E FleetMap (сессия 10)
-│                                      02E DriverMiniDashboard (сессия 11)
-│                                      02E FleetVehiclesList (сессия 12)
-│                                      02E VehicleMiniDashboard (сессия 13)
+10:30 ──────────────────── 02 ──── qwen (5 промптов параллельно)
+│         ├─ 02A ── risk_table.py
+│         ├─ 02B ── charts.py
+│         ├─ 02C ── kpi.py
+│         ├─ 02D ── actions.py
+│         └─ 02E ── data_overview.py
 │
-13:30 ──────────────────── 03 ──── kimi + qwen3 (5 промптов)
-│         P1 (kimi) ──→ LiveMonitorScreen ── главный экран
-│              │
-│         P2 (kimi) ──→ AnalyticsScreen ──── интерактивный отчёт
-│              │
-│         P3 (kimi) ──→ IncidentCard ─────── карточка инцидента
-│              │
-│         P4 (qwen3) ──→ EventFeedScreen ─── лента (параллельно с P1-P3)
-│         P5 (qwen3) ──→ KPIBar ──────────── (параллельно с P1-P3)
+11:30 ──────────────────── 03 ──── kimi (3 промпта, последовательно)
+│         ├─ 03A ── Data tab ── (первый)
+│         ├─ 03B ── Dashboard tab (второй)
+│         └─ 03C ── Details tab (третий)
 │
-14:30 ──────────────────── 04 ──── qwen3 (1 промпт)
-│         замена заглушек в App.tsx на реальные экраны
+13:00 ──────────────────── 04 ──── kimi (1 промпт)
+│         └─ финальная сборка app.py
 │
-14:45 ──────────────────── 05 ──── qwen3 + nemotron + gpt-oss (4 промпта)
-│         ├─ 05A + 05B (qwen3) ── параллельно
-│         └─ 05C (nemotron) + 05D (gpt-oss) ── параллельно
+13:30 ──────────────────── 05 ──── nemotron + gpt-oss (2 промпта параллельно)
+│         ├─ 05A ── smoke-checklist
+│         └─ 05B ── demo-script
 ```
+
+---
+
+## 🎯 Целевое приложение
+
+Streamlit-приложение на Python с тремя вкладками (tabs):
+
+| Вкладка | Назначение | Ключевые элементы |
+|---------|------------|-------------------|
+| **Data** | Обзор загруженных данных | Список CSV-файлов (строки, колонки), превью выбранного датасета (первые 100 строк) |
+| **Dashboard** | Ключевые метрики и графики | 4 KPI-метрики (CSV files, Rows loaded, Candidate events, MVP status) + линейный график Altair (выбор X/Y среди числовых колонок) |
+| **Details** | Риски и действия | Таблица рисков (top-20 строк по risk_score или severity) + форма сохранения действия (row_id, action type, comment) в `output/actions.csv` |
+
+---
+
+## 📊 Данные
+
+CSV-файлы в `data/`:
+
+| Файл | Ключевые колонки |
+|------|-----------------|
+| `selected_video_alarms.csv` | AlarmId, TelemetryId, UnitId, UnitName, UnitStateNumber, Begin, End, Type, Speed, Latitude, Longitude, VideoCount, CameraIds... |
+| `video_files.csv` | alarm_id, video_file_id, channel, media_relative_path, duration_seconds, video_width, video_height, video_codec... |
+| `track_summary.csv` | alarm_id, unit_state_number, event_type, total_mileage_km, track_point_count... |
+| `track_points.csv` | alarm_id, timestamp_utc, latitude, longitude, speed_kmh, angle, course... |
+| `track_periods.csv` | alarm_id, period_index, period_type, period_duration, track_point_count... |
+| `max_speed_points.csv` | alarm_id, timestamp_utc, latitude, longitude, speed_kmh... |
+| `vehicles.csv` | unit_state_number, alarm_count, alarm_types, downloaded_video_count, track_point_count, total_track_mileage_km... |
+| `work_rest_single_vehicle/` | События Drowsiness для одной машины (U126TK124) |
 
 ---
 
@@ -71,16 +79,16 @@
 
 1. Открыть Cherry Studio → Settings → Model Providers → OpenRouter → вставить team key
 2. Добавить модели:
-   - `qwen/qwen3-coder:free` — кодинг (бесплатно, 200 req/day)
-   - `moonshotai/kimi-k2.6` — архитектура + P0-экраны (~$0.065/запрос)
-   - `nvidia/nemotron-3-super-120b-a12b:free` — контекст
-   - `openai/gpt-oss-120b:free` — текст/демо
+   - `moonshotai/kimi-k2.5` — основной кодинг (~$0.03–0.04/запрос)
+   - `qwen/qwen3-coder:free` — простые модули, анализ, декомпозиция (бесплатно)
+   - `nvidia/nemotron-3-super-120b-a12b:free` — чтение контекста (бесплатно)
+   - `openai/gpt-oss-120b:free` — драфты, демо-сценарий (бесплатно)
 3. Создать новую сессию (Cmd+N) → выбрать модель → вставить промпт → Enter
-4. После каждого ответа агента: скопировать код в проект, `npm run build`, проверить ошибки
+4. После каждого ответа агента: скопировать код в проект, проверить `streamlit run app/app.py`
 
 ---
 
-## 🌊 ВОЛНА 00 — Контекст (09:30–09:45)
+## 🌊 ВОЛНА 00 — Контекст (09:30–09:40)
 
 **Цель:** агент читает проект и проверяет понимание.
 
@@ -88,184 +96,147 @@
 |---|--------|--------|----------|-------|------|
 | 1 | `wave-00/00-read-context--nemotron.md` | nemotron:free | только промпт | ответ по шаблону | $0 |
 
-**Как запускать:** 1 сессия. Скопировать промпт целиком, модель nemotron, Enter.
+**Как запускать:** 1 сессия. Скопировать промпт целиком, модель nemotron, Enter. НИЧЕГО дополнительно не передавать — в промпте уже сказано «Прочитай agents.md».
 
-**Что передать:** НИЧЕГО дополнительно. В промпте уже сказано «Прочитай AGENTS.md». Агент сам прочитает файл.
-
-**Чекпоинт 00:** агент правильно назвал 5 mock-кейсов (госномер + ФИО + тип), перечислил ≥7 компонентов, назвал цвета.
+**Чекпоинт 00:** агент правильно назвал 8 CSV-файлов, перечислил 3 вкладки приложения, назвал стек (Python 3.12, Streamlit).
 
 ---
 
-## 🌊 ВОЛНА 00A — Архитектура (09:45–10:30)
+## 🌊 ВОЛНА 00A — Архитектура (09:40–10:00)
 
-**Цель:** создать TECH-DESIGN.md, черновики types.ts и constants.ts.
+**Цель:** создать TECH-DESIGN.md, контракты данных, design tokens, разведать CSV.
 
-### Шаг 1 — Архитектура (1 сессия, kimi)
+**Модель:** все 4 промпта — `qwen/qwen3-coder:free` ($0). Все 4 запускаются параллельно.
+
+| # | Промпт | Передать | Выход | Цена |
+|---|--------|----------|-------|------|
+| 2 | `wave-00a-architecture/00a-A-tech-design--qwen.md` | agents.md (секции Goal, Inputs, Non-goals) | `hackathon/context/TECH-DESIGN.md` | $0 |
+| 3 | `wave-00a-architecture/00a-B-data-contract--qwen.md` | agents.md (секция Inputs) | черновик контрактов данных (схемы колонок) | $0 |
+| 4 | `wave-00a-architecture/00a-C-design-tokens--qwen.md` | только промпт | черновик темы/цветов/шрифтов | $0 |
+| 5 | `wave-00a-architecture/00a-D-csv-samples--qwen.md` | только промпт | samples.csv — по 5 строк из каждого CSV | $0 |
+
+**Чекпоинт 00A:** в проекте есть `hackathon/context/TECH-DESIGN.md`, описаны схемы всех CSV, зафиксированы design tokens.
+
+---
+
+## 🌊 ВОЛНА 01 — Foundation (10:00–10:30)
+
+**Цель:** готовые `data_loader.py`, `metrics.py`, скелет `app.py`, `requirements.txt`.
+
+**Модели:** kimi-k2.5 для основных модулей, qwen:free для скелета и конфига.
+
+### Шаг 1 — Параллельно (4 сессии)
 
 | # | Промпт | Модель | Передать | Выход | Цена |
 |---|--------|--------|----------|-------|------|
-| 2 | `wave-00a-architecture/00a-A-tech-design--kimi-k2.6.md` | kimi-k2.6 | секции 1,5,6 из AGENTS.md + прикрепить verify-standalone.jpg как image | `hackathon/context/TECH-DESIGN.md` | ~$0.032 |
+| 6 | `wave-01-foundation/01A-data-loader--kimi.md` | kimi-k2.5 | TECH-DESIGN.md + csv-samples из 00a-D | `app/data_loader.py` | ~$0.03 |
+| 7 | `wave-01-foundation/01B-metrics--kimi.md` | kimi-k2.5 | TECH-DESIGN.md + agents.md (секция Inputs) | `app/metrics.py` | ~$0.03 |
+| 8 | `wave-01-foundation/01C-app-skeleton--qwen.md` | qwen:free | TECH-DESIGN.md | `app/app.py` (скелет с 3 вкладками) | $0 |
+| 9 | `wave-01-foundation/01D-requirements--qwen.md` | qwen:free | только промпт | `requirements.txt` | $0 |
 
-**Как запускать:**
-1. Скопировать секции 1, 5, 6 из AGENTS.md в начало сессии
-2. Прикрепить `code/clade_design/Интерактивнй отчет/verify-standalone.jpg` как image (НЕ как текст!)
-3. Вставить промпт, Enter
+> ⚠️ Все 4 сессии запускаются одновременно. #6 и #7 используют разных агентов (kimi), #8 и #9 — qwen.
 
-### Шаг 2 — Параллельно (2 сессии)
-
-| # | Промпт | Модель | Передать | Выход | Цена |
-|---|--------|--------|----------|-------|------|
-| 3 | `wave-00a-architecture/00a-B-data-contract--kimi-k2.6.md` | kimi-k2.6 | TECH-DESIGN.md + `data/mock/incidents.json` + `data/mock/driver-report.json` | **черновик** `code/frontend/src/types.ts` | ~$0.034 |
-| 4 | `wave-00a-architecture/00a-C-design-tokens--qwen3.md` | qwen3:free | прикрепить verify-standalone.jpg как image | **черновик** `code/frontend/src/constants.ts` | $0 |
-
-> ⚠️ Сессию #3 запускать ПОСЛЕ #2 — нужен TECH-DESIGN.md.
-> Сессия #4 — независима, можно параллельно с #2.
-
-**Чекпоинт 00A:** в проекте есть `hackathon/context/TECH-DESIGN.md`, черновики `types.ts` и `constants.ts`.
+**Чекпоинт 01:** `python app/data_loader.py` — читает CSV без ошибок. `streamlit run app/app.py` — открываются 3 пустые вкладки.
 
 ---
 
-## 🌊 ВОЛНА 01 — Foundation (10:30–11:30)
+## 🌊 ВОЛНА 02 — Python-модули (10:30–11:30)
 
-**Цель:** финальные `types.ts`, `constants.ts`, `App.tsx`, конфиги и ВСЕ mock JSON-файлы.
+**Цель:** 5 модулей для вкладок приложения.
 
-**Модель:** все 9 промптов — `qwen/qwen3-coder:free` ($0).
+**Модель:** все 5 промптов — `qwen/qwen3-coder:free` ($0).
 
-### Группа A — независимые (5 сессий, ЗАПУСТИТЬ ОДНОВРЕМЕННО)
+**Передавать с каждым промптом:** `app/data_loader.py` + `app/metrics.py` (оба файла суммарно ~2K токенов).
 
-Эти промпты не зависят друг от друга. Открыть 5 вкладок Cherry Studio, запустить разом.
+| # | Промпт | Модуль | Назначение |
+|---|--------|--------|-----------|
+| 10 | `wave-02-components/02A-risk-table--qwen.md` | `risk_table.py` | Таблица рисков: top-20 строк, сортировка по `risk_score` / `severity` |
+| 11 | `wave-02-components/02B-charts--qwen.md` | `charts.py` | Линейный график Altair: выбор оси X и Y среди числовых колонок |
+| 12 | `wave-02-components/02C-kpi--qwen.md` | `kpi.py` | 4 KPI-метрики: CSV files, Rows loaded, Candidate events, MVP status |
+| 13 | `wave-02-components/02D-actions--qwen.md` | `actions.py` | Форма действия: row_id, action_type, comment → сохранение в `output/actions.csv` |
+| 14 | `wave-02-components/02E-data-overview--qwen.md` | `data_overview.py` | Список загруженных CSV (строки × колонки) + превью первых 100 строк |
 
-| # | Промпт | Передать доп. контекст | Выходной файл |
-|---|--------|----------------------|--------------|
-| 5 | `wave-01-foundation/01A-types--qwen3.md` | `data/mock/incidents.json` (поля должны совпадать) | `code/frontend/src/types.ts` |
-| 6 | `wave-01-foundation/01C-incidents-json--qwen3.md` | `data/mock/incidents.json` | `data/mock/incidents.json` (обновить) |
-| 7 | `wave-01-foundation/01D-vehicles-json--qwen3.md` | `data/mock/incidents.json` | `data/mock/vehicles.json` |
-| 8 | `wave-01-foundation/01F-A-driver-report--qwen3.md` | только промпт | `data/mock/driver-report.json` |
-| 9 | `wave-01-foundation/01F-B-fleet-reports--qwen3.md` | только промпт | `data/mock/fleet-report.json` (⚠️ также создаст `fleet-vehicles.json`) |
+**Как запускать:** открыть 5 вкладок Cherry Studio, запустить все 5 одновременно. Каждый промпт — независимый модуль.
 
-> ⚠️ #9 создаёт и `fleet-report.json` и `fleet-vehicles.json`. Не запускать параллельно с #12 (01F-D) — оба пишут `fleet-vehicles.json`.
-
-### Группа B — после 01A (3 сессии параллельно)
-
-Дождаться завершения #5 (types.ts готов). Открыть 3 вкладки, запустить разом.
-
-| # | Промпт | Передать доп. контекст | Выходной файл |
-|---|--------|----------------------|--------------|
-| 10 | `wave-01-foundation/01B-constants--qwen3.md` | `code/frontend/src/types.ts` + `hackathon/context/DESIGN.md` | `code/frontend/src/constants.ts` |
-| 11 | `wave-01-foundation/01F-C-presets-types--qwen3.md` | `code/frontend/src/types.ts` + AGENTS.md | `code/frontend/src/analyticsPresets.ts` |
-| 12 | `wave-01-foundation/01F-D-fleet-vehicles--qwen3.md` | только промпт | `data/mock/fleet-vehicles.json` |
-
-> ⚠️ #12 и #9 — конфликт на `fleet-vehicles.json`. Запускать последовательно: сначала #9, потом #12. Или: в #9 попросить агента создать ТОЛЬКО `fleet-report.json`.
-
-### Группа C — после 01A + 01B (1 сессия)
-
-| # | Промпт | Передать | Выход |
-|---|--------|----------|-------|
-| 13 | `wave-01-foundation/01E-app-infra--qwen3.md` | `code/frontend/src/types.ts` + `code/frontend/src/constants.ts` + секция routing из TECH-DESIGN.md | `App.tsx` + `tailwind.config.js` (тема) |
-
-**Чекпоинт 01:** `npm run dev` → :5173 открывается. `ls code/frontend/src/*.ts` → types.ts + constants.ts + analyticsPresets.ts существуют. `ls data/mock/*.json` → ≥10 файлов.
+**Чекпоинт 02:** `ls app/*.py | wc -l` → ≥7 файлов. Каждый модуль импортируется без ошибок.
 
 ---
 
-## 🌊 ВОЛНА 02 — Компоненты (11:30–13:00)
+## 🌊 ВОЛНА 03 — Вкладки (11:30–13:00)
 
-**Цель:** 20 компонентов React. Все файлы — `qwen/qwen3-coder:free` ($0).
+**Цель:** собрать модули в три вкладки Streamlit.
 
-**Передавать с каждым промптом:** `code/frontend/src/types.ts` + `code/frontend/src/constants.ts` (оба файла маленькие, ~1.7K токенов вместе).
+**Модель:** kimi-k2.5 (~$0.03–0.04 каждый). Запускать **строго последовательно** — каждая следующая вкладка может ссылаться на предыдущую.
 
-### Поток 1 — Идея #1: Единое окно инцидента (7 сессий параллельно)
+| # | Порядок | Промпт | Вкладка | Передать | Цена |
+|---|---------|--------|---------|----------|------|
+| 15 | **#1** | `wave-03-screens/03A-data-tab--kimi.md` | **Data tab** — обзор CSV + превью | `data_overview.py` + `data_loader.py` + TECH-DESIGN.md | ~$0.03 |
+| 16 | **#2** | `wave-03-screens/03B-dashboard-tab--kimi.md` | **Dashboard tab** — KPI + график | `kpi.py` + `charts.py` + `metrics.py` + TECH-DESIGN.md | ~$0.04 |
+| 17 | **#3** | `wave-03-screens/03C-details-tab--kimi.md` | **Details tab** — риски + форма | `risk_table.py` + `actions.py` + `data_loader.py` + TECH-DESIGN.md | ~$0.04 |
 
-| # | Промпт | Компонент | Назначение |
-|---|--------|-----------|-----------|
-| 14 | `wave-02-components/02A-idea1-IncidentCard--qwen3.md` | `IncidentCard.tsx` | Карточка в ленте |
-| 15 | `wave-02-components/02B-idea1-VideoPanel--qwen3.md` | `VideoEvidencePanel.tsx` | Видеоплеер ADAS+DMS |
-| 16 | `wave-02-components/02C-idea1-TelemetryChart--qwen3.md` | `TelemetryChart.tsx` | Recharts скорость+акселерометр |
-| 17 | `wave-02-components/02D-idea1-ActionButtons--qwen3.md` | `ActionButtons.tsx` | Кнопки действий |
-| 18 | `wave-02-components/02F-idea1-IncidentTopBar--qwen3.md` | `IncidentTopBar.tsx` | Шапка карточки |
-| 19 | `wave-02-components/02G-idea1-ContextChips--qwen3.md` | `ContextChips.tsx` | Чипы контекста |
-| 20 | `wave-02-components/02H-idea1-source-status-grid--qwen3.md` | `SourceStatusGrid.tsx` | Статус камер |
+> ⚠️ Запускать строго по очереди. Дождаться завершения #15, потом #16, потом #17.
 
-### Поток 2 — Идея #2: Интерактивный отчёт (13 сессий НЕ параллельно)
-
-Промпт `02E-idea2-analytics-components--qwen3.md` генерирует 13 компонентов. Это ОДИН промпт, но Cherry Studio запускает его 13 РАЗ — каждый раз для отдельного компонента.
-
-**Как запускать:** каждый раз копировать ОДИН И ТОТ ЖЕ промпт, но в начале сессии писать «Создай компонент [ИМЯ]. Следуй инструкции ниже.» — и вставлять промпт.
-
-| # | Имя компонента | Файл |
-|---|---------------|------|
-| 21 | VoiceQueryBox | `analytics/VoiceQueryBox.tsx` |
-| 22 | ConfirmationModal | `analytics/ConfirmationModal.tsx` |
-| 23 | DriverReportCard | `analytics/DriverReportCard.tsx` |
-| 24 | ViolationsTable | `analytics/ViolationsTable.tsx` |
-| 25 | RouteTrackMap | `analytics/RouteTrackMap.tsx` |
-| 26 | SpeedChart | `analytics/SpeedChart.tsx` |
-| 27 | VideoSlidePanel | `analytics/VideoSlidePanel.tsx` |
-| 28 | FleetDriversList | `analytics/FleetDriversList.tsx` |
-| 29 | FleetBarChart | `analytics/FleetBarChart.tsx` |
-| 30 | FleetMap | `analytics/FleetMap.tsx` |
-| 31 | DriverMiniDashboard | `analytics/DriverMiniDashboard.tsx` |
-| 32 | FleetVehiclesList | `analytics/FleetVehiclesList.tsx` |
-| 33 | VehicleMiniDashboard | `analytics/VehicleMiniDashboard.tsx` |
-
-**Оптимизация:** поток 1 и поток 2 НЕЗАВИСИМЫ — можно запускать параллельно (7 сессий идеи #1 + 13 сессий идеи #2 одновременно, если хватает вкладок Cherry Studio).
-
-**Чекпоинт 02:** `ls code/frontend/src/components/*.tsx code/frontend/src/components/analytics/*.tsx | wc -l` → ≥20. `npm run build` — без ошибок.
+**Чекпоинт 03:** `streamlit run app/app.py` — все три вкладки отображаются, загружают данные, показывают контент.
 
 ---
 
-## 🌊 ВОЛНА 03 — Экраны (13:30–14:30)
+## 🌊 ВОЛНА 04 — Интеграция (13:00–13:30)
 
-**Цель:** 5 экранов — собрать компоненты в страницы.
-
-### P1–P3: Главные экраны (kimi-k2.6, ПОСЛЕДОВАТЕЛЬНО)
-
-Эти три промпта используют kimi-k2.6 (~$0.065–0.070 каждый). Запускать строго по очереди: сначала P1, дождаться → P2, дождаться → P3.
-
-| # | Порядок | Промпт | Экран | Передать | Цена |
-|---|---------|--------|-------|----------|------|
-| 34 | **#1** | `wave-03-screens/P1-03E-live-monitor--kimi-k2.6.md` | `LiveMonitorScreen.tsx` — **главный экран** | `types.ts` + промпт | ~$0.062 |
-| 35 | **#2** | `wave-03-screens/P2-03D-analytics-screen--kimi-k2.6.md` | `AnalyticsScreen.tsx` — интерактивный отчёт | `types.ts` + `analyticsPresets.ts` + промпт | ~$0.070 |
-| 36 | **#3** | `wave-03-screens/P3-03B-incident-card--kimi-k2.6.md` | `UnifiedIncidentWindow.tsx` — карточка инцидента | `types.ts` + промпт | ~$0.068 |
-
-> ⚠️ Дизайн-спека УЖЕ встроена в каждый промпт. НЕ читать HTML-файлы из `code/clade_design/`.
-
-### P4–P5: Вспомогательные экраны (qwen3:free, параллельно с P1–P3)
-
-Эти два промпта можно запустить в любой момент во время волны 03, они не зависят от P1–P3.
-
-| # | Промпт | Экран | Передать | Цена |
-|---|--------|-------|----------|------|
-| 37 | `wave-03-screens/P4-03A-events-feed--qwen3.md` | `EventFeedScreen.tsx` | AGENTS.md + `02-live-monitor.md` | $0 |
-| 38 | `wave-03-screens/P5-03C-kpi-bar--qwen3.md` | `KPIBar.tsx` | `types.ts` + `constants.ts` | $0 |
-
-**Чекпоинт 03:** `:5173` — LiveMonitorScreen открывается, можно провалиться в AnalyticsScreen → IncidentCard.
-
----
-
-## 🌊 ВОЛНА 04 — Роутинг (14:30–14:45)
-
-**Цель:** заменить заглушки в App.tsx на реальные экраны.
+**Цель:** собрать три вкладки в финальный `app.py`.
 
 | # | Промпт | Модель | Передать | Цена |
 |---|--------|--------|----------|------|
-| 39 | `wave-04-routing/04-routing--qwen3.md` | qwen3:free | текущий `App.tsx` + секция routing из TECH-DESIGN.md | $0 |
+| 18 | `wave-04-routing/04-integration--kimi.md` | kimi-k2.5 | текущий `app.py` + код трёх вкладок (из волны 03) + TECH-DESIGN.md | ~$0.04 |
 
-**Чекпоинт 04:** все маршруты работают: `/`, `/monitor`, `/incident/:id`, `/analytics`, `/tickets`.
+**Чекпоинт 04:** `streamlit run app/app.py` — приложение запускается, все три вкладки работают как единое целое. Переключение между вкладками без ошибок.
 
 ---
 
-## 🌊 ВОЛНА 05 — Полировка (14:45–15:30)
+## 🌊 ВОЛНА 05 — Полировка (13:30–15:00)
+
+**Цель:** чеклист приёмочного тестирования и демо-сценарий.
 
 | # | Промпт | Модель | Передать | Выход | Цена |
 |---|--------|--------|----------|-------|------|
-| 40 | `wave-05-polish/05A-tickets-table--qwen3.md` | qwen3:free | `types.ts` + `constants.ts` | `TicketsTable.tsx` | $0 |
-| 41 | `wave-05-polish/05B-tickets-screen--qwen3.md` | qwen3:free | `types.ts` + `constants.ts` | `TicketsScreen.tsx` | $0 |
-| 42 | `wave-05-polish/05C-smoke-checklist--nemotron.md` | nemotron:free | только промпт | чеклист (текст) | $0 |
-| 43 | `wave-05-polish/05D-demo-script--gpt-oss.md` | gpt-oss:free | `hackathon/playbook/02-pitch-template.md` | `hackathon/PITCH.md` | $0 |
+| 19 | `wave-05-polish/05A-smoke-checklist--nemotron.md` | nemotron:free | только промпт | чеклист (текст) | $0 |
+| 20 | `wave-05-polish/05B-demo-script--gpt-oss.md` | gpt-oss:free | agents.md (секция Demo script) | `hackathon/DEMO.md` | $0 |
 
-**Запуск:** #40+#41 параллельно. #42+#43 параллельно.
+**Запуск:** обе сессии параллельно, модели разные.
 
-**Чекпоинт 05:** оба Flow работают end-to-end. Flow 1: inc-002 → видео + телеметрия → «Создать заявку». Flow 2: inc-003 → placeholder → «Запросить архив». Flow 3: голос «Нарушения Иванова за 3 дня» → подтверждение → дашборд.
+**Чекпоинт 05:** Flow 1 работает end-to-end: открыть Data → выбрать датасет → превью. Flow 2: Dashboard → все 4 KPI показывают значения → график строится по выбранным колонкам. Flow 3: Details → таблица рисков отсортирована → заполнить форму → действие записано в `output/actions.csv`.
+
+---
+
+## 🧩 Карта зависимостей
+
+```
+ВОЛНА 00 (контекст)
+  │
+  └─→ ВОЛНА 00A (архитектура) — нужен контекст из волны 00
+        │
+        └─→ ВОЛНА 01 (foundation) — нужны TECH-DESIGN + контракты из 00a
+              │
+              ├─ data_loader.py ────┐
+              ├─ metrics.py ────────┤
+              ├─ app.py skeleton ───┤
+              └─ requirements.txt ──┘
+              │
+              └─→ ВОЛНА 02 (модули) — нужны data_loader + metrics из 01
+                    │
+                    ├─ risk_table.py ────┐
+                    ├─ charts.py ────────┤
+                    ├─ kpi.py ───────────┤ все параллельно
+                    ├─ actions.py ───────┤
+                    └─ data_overview.py ─┘
+                    │
+                    └─→ ВОЛНА 03 (вкладки) — нужны модули из 02
+                          │
+                          ├─ 03A Data tab ──→ 03B Dashboard tab ──→ 03C Details tab
+                          │
+                          └─→ ВОЛНА 04 (интеграция) — нужны все три вкладки из 03
+                                │
+                                └─→ ВОЛНА 05 (полировка) — нужно работающее приложение из 04
+```
 
 ---
 
@@ -274,15 +245,15 @@
 | Волна | Промптов | Модели | Цена |
 |-------|---------|--------|------|
 | 00 | 1 | nemotron:free | $0 |
-| 00a | 3 | kimi ×2 + qwen3 ×1 | ~$0.066 |
-| 01 | 9 | qwen3:free ×9 | $0 |
-| 02 | 9 файлов (20 компонентов) | qwen3:free ×20 | $0 |
-| 03 | 5 | kimi ×3 + qwen3 ×2 | ~$0.200 |
-| 04 | 1 | qwen3:free | $0 |
-| 05 | 4 | qwen3+nemotron+gpt-oss (все free) | $0 |
-| **Итого** | **43** | | **~$0.27** |
+| 00a | 4 | qwen:free ×4 | $0 |
+| 01 | 4 | kimi-k2.5 ×2 + qwen:free ×2 | ~$0.06 |
+| 02 | 5 | qwen:free ×5 | $0 |
+| 03 | 3 | kimi-k2.5 ×3 | ~$0.11 |
+| 04 | 1 | kimi-k2.5 ×1 | ~$0.04 |
+| 05 | 2 | nemotron:free + gpt-oss:free | $0 |
+| **Итого** | **20** | | **~$0.21** |
 
-> Запас: $49.73 из $50. Можно заменить часть qwen3 на kimi-k2.6 для сложных компонентов.
+> Запас: $49.79 из $50. Можно заменить часть qwen:free на kimi-k2.5 для сложных модулей при необходимости.
 
 ---
 
@@ -290,12 +261,14 @@
 
 | Ситуация | Действие |
 |----------|----------|
-| **429 (rate limit) на qwen3:free** | Переключить на `deepseek/deepseek-v4-flash:free`. Если тоже 429 → `deepseek/deepseek-v4-flash` ($0.04/M input, копейки) |
-| **kimi-k2.6 ошибка** | Подождать 30 сек, повторить. 3-я ошибка подряд → `deepseek/deepseek-v4-flash` |
+| **429 (rate limit) на qwen:free** | Переключить на `deepseek/deepseek-v4-flash:free`. Если тоже 429 → `deepseek/deepseek-v4-flash` (~$0.04/M input) |
+| **kimi-k2.5 ошибка** | Подождать 30 сек, повторить. 3-я ошибка подряд → заменить на `Devstral` (по agents.md) |
 | **Все free-модели упали** | Все оставшиеся промпты на `deepseek/deepseek-v4-flash` (~$0.10 за всё) |
-| **TypeScript ошибка после промпта** | Копировать ТОЛЬКО файл с ошибкой + первые 30 строк ошибки → qwen3:free «Исправь» |
+| **Python-ошибка после промпта** | Скопировать ТОЛЬКО файл с ошибкой + traceback → qwen:free «Исправь ошибку» |
 | **Агент создал не тот файл** | Перезапустить тот же промпт с уточнением «Путь к файлу: [правильный путь]» |
-| **Дизайн не совпадает с макетом** | Скопировать секцию «ДИЗАЙН-СПЕКА» из промпта волны 03 + проблемный код → kimi-k2.6 |
+| **Streamlit не запускается** | Проверить `requirements.txt` → `pip install -r requirements.txt` → повторить |
+| **Данные не загружаются** | Проверить пути в `data_loader.py` — пути относительны к корню проекта |
+| **Агент пишет слишком длинный код** | Остановить, уточнить «Только [имя модуля], не больше 80 строк» |
 
 ---
 
@@ -303,62 +276,56 @@
 
 | Тип промпта | Всегда передавать | Никогда не передавать |
 |---|---|---|
-| Компоненты (02A–02H) | `types.ts` + `constants.ts` | HTML-файлы, AGENTS.md целиком |
-| Аналитика (02E) | `types.ts` + AGENTS.md (секция 4) | HTML-файлы |
-| Экраны kimi (P1–P3) | `types.ts` + промпт (дизайн внутри) | HTML-файлы |
-| Экраны qwen3 (P4–P5) | `types.ts` + `constants.ts` | HTML-файлы |
-| Роутинг (04) | текущий `App.tsx` | — |
+| Контекст (00) | только промпт | CSV-файлы, agents.md (агент сам прочитает) |
+| Архитектура (00a) | agents.md (секции Goal, Inputs, Non-goals) | полный agents.md |
+| Foundation — kimi (01A, 01B) | TECH-DESIGN.md + csv-samples | полный текст agents.md |
+| Foundation — qwen (01C, 01D) | TECH-DESIGN.md | — |
+| Модули (02) | `data_loader.py` + `metrics.py` | полный agents.md |
+| Вкладки — kimi (03) | модули волны 02 + TECH-DESIGN.md | — |
+| Интеграция (04) | текущий `app.py` + код всех трёх вкладок | — |
+| Полировка (05) | только промпт | — |
 
 ---
 
 ## 📂 Структура выходных файлов (что должно получиться)
 
 ```
-code/frontend/src/
-  types.ts                          ← 01A
-  constants.ts                      ← 01B
-  analyticsPresets.ts               ← 01F-C
-  App.tsx                           ← 01E → 04
-  main.tsx                          ← уже есть
-  index.css                         ← уже есть
-  components/
-    IncidentCard.tsx                ← 02A
-    VideoEvidencePanel.tsx          ← 02B
-    TelemetryChart.tsx              ← 02C
-    ActionButtons.tsx               ← 02D
-    IncidentTopBar.tsx              ← 02F
-    ContextChips.tsx                ← 02G
-    SourceStatusGrid.tsx            ← 02H
-    KPIBar.tsx                      ← P5-03C
-    analytics/
-      VoiceQueryBox.tsx             ← 02E
-      ConfirmationModal.tsx         ← 02E
-      DriverReportCard.tsx          ← 02E
-      ViolationsTable.tsx           ← 02E
-      RouteTrackMap.tsx             ← 02E
-      SpeedChart.tsx                ← 02E
-      VideoSlidePanel.tsx           ← 02E
-      FleetDriversList.tsx          ← 02E
-      FleetVehiclesList.tsx         ← 02E
-      FleetBarChart.tsx             ← 02E
-      FleetMap.tsx                  ← 02E
-      DriverMiniDashboard.tsx       ← 02E
-      VehicleMiniDashboard.tsx      ← 02E
-  screens/
-    LiveMonitorScreen.tsx           ← P1-03E
-    AnalyticsScreen.tsx             ← P2-03D
-    UnifiedIncidentWindow.tsx       ← P3-03B
-    EventFeedScreen.tsx             ← P4-03A
-    TicketsScreen.tsx               ← 05B
-data/mock/
-  incidents.json                    ← 01C (обновить)
-  vehicles.json                     ← 01D
-  driver-report.json                ← 01F-A
-  fleet-report.json                 ← 01F-B
-  fleet-vehicles.json               ← 01F-B + 01F-D
+app/
+  __init__.py                    ← уже есть
+  data_loader.py                 ← 01A
+  metrics.py                     ← 01B
+  app.py                         ← 01C → 04 (финальная сборка)
+  risk_table.py                  ← 02A
+  charts.py                      ← 02B
+  kpi.py                         ← 02C
+  actions.py                     ← 02D
+  data_overview.py               ← 02E
+output/
+  actions.csv                    ← 02D (форма в Details tab)
+requirements.txt                 ← 01D
 hackathon/context/
-  TECH-DESIGN.md                    ← 00a-A
+  TECH-DESIGN.md                 ← 00a-A
+  DATA-CONTRACT.md               ← 00a-B
+  DESIGN-TOKENS.md               ← 00a-C
+  csv-samples.csv                ← 00a-D
+hackathon/
+  DEMO.md                        ← 05B
+  SMOKE-CHECKLIST.md             ← 05A
 ```
+
+---
+
+## 🤖 Рекомендации по моделям (из agents.md)
+
+| Модель | Применение | Цена |
+|--------|-----------|------|
+| **Kimi K2.5** | Основной кодинг: data_loader, metrics, вкладки, интеграция | ~$0.03–0.04/запрос |
+| **Qwen** | Анализ, архитектура, простые модули, декомпозиция | free |
+| **Nemotron** | Чтение контекста, чеклисты | free |
+| **GPT-OSS** | Драфты, демо-сценарий, простые тексты | free |
+| **Devstral** | Резервная модель для кодинга, если Kimi не справляется | ~$0.01–0.02/запрос |
+
+> Не использовать Gemini. Не запускать несколько code-агентов на одном team API key одновременно без явного одобрения.
 
 ---
 
