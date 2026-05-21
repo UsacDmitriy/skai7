@@ -65,16 +65,15 @@ def main() -> None:
     ]
     active = st.sidebar.radio("Навигация", tabs, key="active_tab")
 
-    data_tab, live_tab, detail_tab, report_tab, actions_tab = st.tabs(tabs)
-    with data_tab:
+    if active == "📋 Лента событий":
         render_data_tab(datasets)
-    with live_tab:
+    elif active == "🛡 Живой мониторинг":
         render_monitor_tab(datasets, ALARM_TYPE_LABELS)
-    with detail_tab:
+    elif active == "🔍 Карточка инцидента":
         render_incident_card_screen()
-    with report_tab:
+    elif active == "📊 Интерактивный отчёт":
         render_interactive_report(datasets, ALARM_TYPE_LABELS, COLORS, SPEED_LIMIT_KMH)
-    with actions_tab:
+    elif active == "📝 Заявки":
         render_actions_tab(datasets)
 
 

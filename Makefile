@@ -7,20 +7,16 @@ PIP := .venv/bin/pip
 APP_ENTRY := run.py
 APP_PORT := 8501
 
-help: ## Показать справку по командам
-	@echo "Доступные команды:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
+stop: ## Убить процесс на порту $(APP_PORT)
+	@echo "==> Ищем процесс на порту $(APP_PORT)..."
+	@lsof -ti:$(APP_PORT) | xargs kill -9 2>/dev/null || true
+	@echo "==> Процесс остановлен."
 
-install: ## Установить зависимости в .venv
-	@echo "==> Установка зависимостей..."
-	$(PIP) install -r requirements.txt
-	@echo "==> Готово."
-
-run: ## Запустить Streamlit-приложение (production mode)
+run: stop ## Запустить Streamlit (production mode, убивает старый процесс)
 	@echo "==> Запуск SKAI Единое окно на http://localhost:$(APP_PORT)"
 	$(STREAMLIT) run $(APP_ENTRY) --server.port=$(APP_PORT) --server.headless=true
 
-dev: ## Запустить Streamlit-приложение в dev-режиме (auto-reload)
+dev: stop ## Запустить Streamlit в dev-режиме (auto-reload, убивает старый процесс)
 	@echo "==> Запуск SKAI в dev-режиме на http://localhost:$(APP_PORT)"
 	$(STREAMLIT) run $(APP_ENTRY) --server.port=$(APP_PORT) --server.runOnSave=true --server.fileWatcherType=poll
 
