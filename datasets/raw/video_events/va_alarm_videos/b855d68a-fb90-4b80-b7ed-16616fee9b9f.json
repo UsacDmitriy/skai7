@@ -1,0 +1,1 @@
+{"@odata.context":"http://va/odata/$metadata#VaAlarmVideo","value":[{"Id":"61885e89-52d3-4c3b-8d8f-49843656dddb","Channel":5,"TelemetryId":"9ffebb15-4fa4-404a-8910-6551024bffde","CreatedAt":"2026-05-14T23:23:12.83376Z"},{"Id":"e0dba4f9-19e0-49a4-acd6-1ec407a7da16","Channel":1,"TelemetryId":"9ffebb15-4fa4-404a-8910-6551024bffde","CreatedAt":"2026-05-14T23:23:02.884602Z"}]}

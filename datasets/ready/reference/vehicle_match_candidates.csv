@@ -1,0 +1,16 @@
+source_list,source_vehicle,normalized_vehicle,candidate_rank,match_score,public_unit_id,public_terminal_id,public_name,public_state_number,public_vin,public_brand,source_page,matched_norms
+sensors_bv,В 693 ЕО/550 RUS,В693ЕО550,1,100,39806354-3224-44fa-b475-edc1ae8e41a0,088c3ab0-65ac-4e26-a6ff-acfe04d66552,В 693 ЕО/550 RUS,,XW8AC6NH7MK123614,Шкода,public_units_page_031.json,436069|В693ЕО550|Х8АС6Н7МК123614
+sensors_bv,А 230 КУ/550 RUS,А230КУ550,1,100,15496638-f67f-4170-a300-6a965607ca02,6956df90-ba97-4c80-821b-d0656bc5570a,А 230 КУ/550 RUS,А 230 КУ/550 RUS,EDEDB21B4SC014483,Чери,public_units_page_011.json,432975|А230КУ550|ЕЕВ21В4С014483
+sensors_bv,С725АТ159(ТМ),С725АТ159,1,100,203f2a64-e628-4b54-aa08-724b9a55702a,8c06205a-93a8-4e95-a11a-7f31f4f84d6e,С725АТ159(ТМ),С725АТ159,,Iveco,public_units_page_017.json,С725АТ159
+sensors_bv,О802УЕ198,О802УЕ198,1,100,4733730f-4465-47c3-9e2a-137373cd6c52,ed22b110-93cf-4e66-8fd6-8666d69d586a,О802УЕ198,О802УЕ198,,,public_units_page_038.json,О802УЕ198
+sensors_bv,О802УЕ198,О802УЕ198,2,100,2efda222-ac14-4184-b8c7-f4f6fe6a4a77,dec3e836-4ff9-480f-933b-c46a44e08188,О 802 УЕ 198  6170,О802УЕ198,,,public_units_page_025.json,О802УЕ198|О802УЕ1986170
+sensors_bv,Y982OO-799,У982ОО799,1,100,0c7c5480-d46b-41c9-b7a6-15153fe46df7,53321c8c-60a0-4512-8a9a-358a6ab3821e,Y982OO-799,Y982OO-799,XW8ZZZCKZNG024520,VOLKSWAGEN,public_units_page_006.json,У982ОО799|Х8СК024520
+sensors_bv,Т671КР31(ТМ),Т671КР31,1,100,1d081b43-c7e1-48a0-8d48-6cd97f723de8,0306b2a1-ebb8-443a-ac37-456c2056a6fa,Т671КР31(ТМ),Т671КР31(ТМ),,Mercedes-Benz,public_units_page_015.json,Т671КР31
+sensors_bv,А910АА123,А910АА123,1,100,7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,b72430ae-18b2-4b36-85c7-c41742dcabd1,А910АА123,А910АА123,,Соболь,public_units_page_069.json,А910АА123
+sensors_bv,А910АА123,А910АА123,2,100,6987b745-1c0c-4ef3-bf14-10f72884b9d7,5ccc52c5-0113-44f8-a942-4f2968ba524f,А910АА123 (ВА),А910АА123,,Соболь,public_units_page_057.json,А910АА123
+navigation_problem,А 230 КУ/550 RUS,А230КУ550,1,100,15496638-f67f-4170-a300-6a965607ca02,6956df90-ba97-4c80-821b-d0656bc5570a,А 230 КУ/550 RUS,А 230 КУ/550 RUS,EDEDB21B4SC014483,Чери,public_units_page_011.json,432975|А230КУ550|ЕЕВ21В4С014483
+navigation_problem,С725АТ159(ТМ),С725АТ159,1,100,203f2a64-e628-4b54-aa08-724b9a55702a,8c06205a-93a8-4e95-a11a-7f31f4f84d6e,С725АТ159(ТМ),С725АТ159,,Iveco,public_units_page_017.json,С725АТ159
+navigation_problem,О802УЕ198,О802УЕ198,1,100,4733730f-4465-47c3-9e2a-137373cd6c52,ed22b110-93cf-4e66-8fd6-8666d69d586a,О802УЕ198,О802УЕ198,,,public_units_page_038.json,О802УЕ198
+navigation_problem,О802УЕ198,О802УЕ198,2,100,2efda222-ac14-4184-b8c7-f4f6fe6a4a77,dec3e836-4ff9-480f-933b-c46a44e08188,О 802 УЕ 198  6170,О802УЕ198,,,public_units_page_025.json,О802УЕ198|О802УЕ1986170
+navigation_problem,Т671КР31(ТМ),Т671КР31,1,100,1d081b43-c7e1-48a0-8d48-6cd97f723de8,0306b2a1-ebb8-443a-ac37-456c2056a6fa,Т671КР31(ТМ),Т671КР31(ТМ),,Mercedes-Benz,public_units_page_015.json,Т671КР31
+navigation_problem,О834МР193,О834МР193,1,100,598d5b8e-f7b0-4e7e-b3a4-c816c03d4b8e,05eed538-4e1c-4d58-886f-d122192b8fd1,О834МР193,О834МР193,,YUTONG,public_units_page_049.json,О834МР193

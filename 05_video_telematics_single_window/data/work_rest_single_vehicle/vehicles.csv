@@ -1,0 +1,2 @@
+dataset_vehicle_code,unit_id,unit_name,unit_state_number,alarm_count,alarm_types,video_metadata_count,downloaded_video_count,track_window_count,track_point_count,total_track_mileage_km,downloaded_video_bytes,downloaded_video_duration_seconds
+U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,У126ТК124,У126ТК124,6,Drowsiness,6,6,6,628,157.717902609829,7714820,68.453

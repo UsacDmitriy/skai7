@@ -1,0 +1,7 @@
+driver_id,driver_name,trips,km,eco_score,safety_score,points,risk_group
+D-11,Anna Petrova,8,312.4,91,96,1240,green
+D-21,Ivan Smirnov,7,280.1,94,97,1215,green
+D-07,Maria Volkova,9,335.0,76,82,980,yellow
+D-33,Pavel Orlov,6,190.2,71,78,810,yellow
+D-18,Nikita Sokolov,5,164.7,49,55,430,red
+

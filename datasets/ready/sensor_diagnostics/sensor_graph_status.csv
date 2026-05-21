@@ -1,0 +1,491 @@
+public_unit_id,vehicle_id,date,sensor_id,unit_report_status,graph_status,graph_type,points,api_status,error,source_file
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,__nav.speedKmH,0,0,1,4170,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,__nav.satellitesCount,0,0,2,4170,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,__nav.hardwareValidation,0,0,2,4170,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,__lgc.spd.0,0,0,1,4680,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,__lgc.ign.0,0,0,2,33,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,__lgc.fls.0,0,0,1,32,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,__lgc.vod.1,0,0,1,130,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,__lgc.esp.0,0,0,1,3525,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,6.0.33040.0,0,0,1,32,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,30.0.33042.2,0,0,1,157,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-04,9.0.33041.1,0,0,1,3525,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-04.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,__nav.speedKmH,0,0,1,5490,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,__nav.satellitesCount,0,0,2,5490,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,__nav.hardwareValidation,0,0,2,5490,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,__lgc.spd.0,0,0,1,5768,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,__lgc.ign.0,0,0,2,18,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,__lgc.fls.0,0,0,1,72,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,__lgc.vod.1,0,0,1,213,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,__lgc.esp.0,0,0,1,3981,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,6.0.33040.0,0,0,1,72,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,30.0.33042.2,0,0,1,234,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-05,9.0.33041.1,0,0,1,3981,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-05.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,__nav.speedKmH,0,0,1,4189,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,__nav.satellitesCount,0,0,2,4189,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,__nav.hardwareValidation,0,0,2,4189,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,__lgc.spd.0,0,0,1,4361,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,__lgc.ign.0,0,0,2,22,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,__lgc.fls.0,0,0,1,15,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,__lgc.vod.1,0,0,1,123,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,__lgc.esp.0,0,0,1,3589,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,6.0.33040.0,0,0,1,15,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,30.0.33042.2,0,0,1,137,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-06,9.0.33041.1,0,0,1,3589,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-06.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,__nav.speedKmH,0,0,1,186,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,__nav.satellitesCount,0,0,2,186,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,__nav.hardwareValidation,0,0,2,186,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,__lgc.spd.0,0,0,1,207,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,__lgc.ign.0,0,0,2,1,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,__lgc.fls.0,0,0,1,2,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,__lgc.vod.1,0,0,1,4,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,__lgc.esp.0,0,0,1,1,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,6.0.33040.0,0,0,1,2,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,30.0.33042.2,0,0,1,7,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-07,9.0.33041.1,0,0,1,1,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-07.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,__nav.speedKmH,0,0,1,881,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,__nav.satellitesCount,0,0,2,881,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,__nav.hardwareValidation,0,0,2,881,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,__lgc.spd.0,0,0,1,929,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,__lgc.ign.0,0,0,2,5,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,__lgc.fls.0,0,0,1,6,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,__lgc.vod.1,0,0,1,34,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,__lgc.esp.0,0,0,1,718,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,6.0.33040.0,0,0,1,6,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,30.0.33042.2,0,0,1,35,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-08,9.0.33041.1,0,0,1,718,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-08.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,__nav.speedKmH,0,0,1,627,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,__nav.satellitesCount,0,0,2,627,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,__nav.hardwareValidation,0,0,2,627,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,__lgc.spd.0,0,0,1,766,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,__lgc.ign.0,0,0,2,9,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,__lgc.fls.0,0,0,1,8,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,__lgc.vod.1,0,0,1,33,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,__lgc.esp.0,0,0,1,573,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,6.0.33040.0,0,0,1,8,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,30.0.33042.2,0,0,1,36,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-09,9.0.33041.1,0,0,1,573,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-09.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,__nav.speedKmH,0,0,1,844,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,__nav.satellitesCount,0,0,2,844,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,__nav.hardwareValidation,0,0,2,844,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,__lgc.spd.0,0,0,1,954,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,__lgc.ign.0,0,0,2,10,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,__lgc.fls.0,0,0,1,13,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,__lgc.vod.1,0,0,1,34,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,__lgc.esp.0,0,0,1,629,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,6.0.33040.0,0,0,1,13,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,30.0.33042.2,0,0,1,46,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+0c7c5480-d46b-41c9-b7a6-15153fe46df7,Y982OO-799,2026-05-10,9.0.33041.1,0,0,1,629,ok,,datasets/raw/bo_graph_v2_unit_0c7c5480_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,__nav.speedKmH,0,0,1,598,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,__nav.satellitesCount,0,0,2,598,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,__nav.hardwareValidation,0,0,2,598,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,__lgc.spd.0,0,0,1,1109,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,__lgc.ign.0,0,0,2,16,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,__lgc.fls.0,0,0,1,12,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,__lgc.vod.1,0,0,1,52,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,6.0.32768.0,0,0,1,12,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,30.0.32930.2,0,0,1,52,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-04,9.0.32929.1,0,0,1,1,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-04.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,__nav.speedKmH,0,0,1,161,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,__nav.satellitesCount,0,0,2,161,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,__nav.hardwareValidation,0,0,2,161,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,__lgc.spd.0,0,0,1,1311,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,__lgc.ign.0,0,0,2,5,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,__lgc.fls.0,0,0,1,4,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,__lgc.vod.1,0,0,1,22,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,6.0.32768.0,0,0,1,8,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,30.0.32930.2,0,0,1,22,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-05,9.0.32929.1,0,0,1,1,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-05.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,__nav.speedKmH,0,0,1,741,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,__nav.satellitesCount,0,0,2,741,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,__nav.hardwareValidation,0,0,2,741,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,__lgc.spd.0,0,0,1,1220,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,__lgc.ign.0,0,0,2,20,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,__lgc.fls.0,0,0,1,15,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,__lgc.vod.1,0,0,1,37,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,6.0.32768.0,0,0,1,17,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,30.0.32930.2,0,0,1,37,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-06,9.0.32929.1,0,0,1,3,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-06.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,__nav.speedKmH,0,0,1,442,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,__nav.satellitesCount,0,0,2,442,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,__nav.hardwareValidation,0,0,2,442,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,__lgc.spd.0,0,0,1,955,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,__lgc.ign.0,0,0,2,14,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,__lgc.fls.0,0,0,1,14,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,__lgc.vod.1,0,0,1,24,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,6.0.32768.0,0,0,1,21,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,30.0.32930.2,0,0,1,24,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-07,9.0.32929.1,0,0,1,4,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-07.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,__nav.speedKmH,0,0,1,657,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,__nav.satellitesCount,0,0,2,657,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,__nav.hardwareValidation,0,0,2,657,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,__lgc.spd.0,0,0,1,835,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,__lgc.ign.0,0,0,2,15,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,__lgc.fls.0,0,0,1,9,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,__lgc.vod.1,0,0,1,35,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,6.0.32768.0,0,0,1,15,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,30.0.32930.2,0,0,1,35,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-08,9.0.32929.1,0,0,1,2,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-08.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,__nav.speedKmH,0,0,1,1114,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,__nav.satellitesCount,0,0,2,1114,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,__nav.hardwareValidation,0,0,2,1114,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,__lgc.spd.0,0,0,1,1593,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,__lgc.ign.0,0,0,2,10,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,__lgc.fls.0,0,0,1,8,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,__lgc.vod.1,0,0,1,159,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,6.0.32768.0,0,0,1,9,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,30.0.32930.2,0,0,1,159,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-09,9.0.32929.1,0,0,1,1,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-09.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,__nav.speedKmH,0,0,1,427,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,__nav.satellitesCount,0,0,2,427,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,__nav.hardwareValidation,0,0,2,427,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,__lgc.spd.0,0,0,1,592,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,__lgc.ign.0,0,0,2,10,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,__lgc.fls.0,0,0,1,10,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,__lgc.vod.1,0,0,1,20,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,6.0.32768.0,0,0,1,12,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,30.0.32930.2,0,0,1,20,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+15496638-f67f-4170-a300-6a965607ca02,А 230 КУ/550 RUS,2026-05-10,9.0.32929.1,0,0,1,1,ok,,datasets/raw/bo_graph_v2_unit_15496638_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,__nav.speedKmH,0,0,1,2065,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,__nav.satellitesCount,0,0,2,2065,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,__nav.hardwareValidation,0,0,2,2065,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,__lgc.spd.0,0,0,1,2777,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,__lgc.ign.0,0,0,2,3163,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,__lgc.fls.0,0,0,1,2773,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,__lgc.vod.0,0,0,1,3163,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,53.0,0,0,1,2773,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,69.0,0,0,1,2777,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,15.0,0,0,1,3163,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-04,55.0,0,0,1,3163,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-04.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,__nav.speedKmH,0,0,1,2338,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,__nav.satellitesCount,0,0,2,2338,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,__nav.hardwareValidation,0,0,2,2338,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,__lgc.spd.0,0,0,1,3130,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,__lgc.ign.0,0,0,2,3193,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,__lgc.fls.0,0,0,1,3125,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,__lgc.vod.0,0,0,1,3193,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,53.0,0,0,1,3125,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,69.0,0,0,1,3130,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,15.0,0,0,1,3193,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-05,55.0,0,0,1,3193,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-05.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,__nav.speedKmH,0,0,1,3489,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,__nav.satellitesCount,0,0,2,3489,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,__nav.hardwareValidation,0,0,2,3489,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,__lgc.spd.0,0,0,1,3745,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,__lgc.ign.0,0,0,2,4015,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,__lgc.fls.0,0,0,1,3735,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,__lgc.vod.0,0,0,1,4015,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,53.0,0,0,1,3735,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,69.0,0,0,1,3745,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,15.0,0,0,1,4015,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-06,55.0,0,0,1,4015,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-06.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,__nav.speedKmH,0,0,1,2317,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,__nav.satellitesCount,0,0,2,2317,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,__nav.hardwareValidation,0,0,2,2317,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,__lgc.spd.0,0,0,1,3224,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,__lgc.ign.0,0,0,2,3455,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,__lgc.fls.0,0,0,1,3218,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,__lgc.vod.0,0,0,1,3455,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,53.0,0,0,1,3218,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,69.0,0,0,1,3224,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,15.0,0,0,1,3455,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-07,55.0,0,0,1,3455,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-07.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,__nav.speedKmH,0,0,1,2515,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,__nav.satellitesCount,0,0,2,2515,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,__nav.hardwareValidation,0,0,2,2515,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,__lgc.spd.0,0,0,1,3435,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,__lgc.ign.0,0,0,2,3638,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,__lgc.fls.0,0,0,1,3420,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,__lgc.vod.0,0,0,1,3638,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,53.0,0,0,1,3420,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,69.0,0,0,1,3435,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,15.0,0,0,1,3638,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-08,55.0,0,0,1,3638,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-08.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,__nav.speedKmH,0,0,1,2929,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,__nav.satellitesCount,0,0,2,2929,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,__nav.hardwareValidation,0,0,2,2929,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,__lgc.spd.0,0,0,1,3233,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,__lgc.ign.0,0,0,2,3344,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,__lgc.fls.0,0,0,1,3226,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,__lgc.vod.0,0,0,1,3344,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,53.0,0,0,1,3226,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,69.0,0,0,1,3233,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,15.0,0,0,1,3344,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-09,55.0,0,0,1,3344,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-09.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,__nav.speedKmH,0,0,1,3130,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,__nav.satellitesCount,0,0,2,3130,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,__nav.hardwareValidation,0,0,2,3130,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,__lgc.spd.0,0,0,1,3359,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,__lgc.ign.0,0,0,2,3459,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,__lgc.fls.0,0,0,1,3353,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,__lgc.vod.0,0,0,1,3459,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,53.0,0,0,1,3353,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,69.0,0,0,1,3359,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,15.0,0,0,1,3459,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+1d081b43-c7e1-48a0-8d48-6cd97f723de8,Т671КР31(ТМ),2026-05-10,55.0,0,0,1,3459,ok,,datasets/raw/bo_graph_v2_unit_1d081b43_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,__nav.speedKmH,0,0,1,6121,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,__nav.satellitesCount,0,0,2,6121,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,__nav.hardwareValidation,0,0,2,6121,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,__lgc.spd.0,0,0,1,6317,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,__lgc.ign.0,0,0,2,6317,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,__lgc.vod.0,0,0,1,6317,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,69.0,0,0,1,6104,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,15.0,0,0,1,6317,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-04,55.0,0,0,1,6317,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-04.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,__nav.speedKmH,0,0,1,5736,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,__nav.satellitesCount,0,0,2,5736,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,__nav.hardwareValidation,0,0,2,5736,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,__lgc.spd.0,0,0,1,6256,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,__lgc.ign.0,0,0,2,6256,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,__lgc.vod.0,0,0,1,6256,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,69.0,0,0,1,5974,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,15.0,0,0,1,6256,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-05,55.0,0,0,1,6256,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-05.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,__nav.speedKmH,0,0,1,6249,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,__nav.satellitesCount,0,0,2,6249,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,__nav.hardwareValidation,0,0,2,6249,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,__lgc.spd.0,0,0,1,6590,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,__lgc.ign.0,0,0,2,6590,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,__lgc.vod.0,0,0,1,6590,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,69.0,0,0,1,6354,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,15.0,0,0,1,6590,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-06,55.0,0,0,1,6590,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-06.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,__nav.speedKmH,0,0,1,2421,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,__nav.satellitesCount,0,0,2,2421,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,__nav.hardwareValidation,0,0,2,2421,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,__lgc.spd.0,0,0,1,2682,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,__lgc.ign.0,0,0,2,2682,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,__lgc.vod.0,0,0,1,2682,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,69.0,0,0,1,2398,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,15.0,0,0,1,2682,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-07,55.0,0,0,1,2682,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-07.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,__nav.speedKmH,0,0,1,5383,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,__nav.satellitesCount,0,0,2,5383,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,__nav.hardwareValidation,0,0,2,5383,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,__lgc.spd.0,0,0,1,6035,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,__lgc.ign.0,0,0,2,6035,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,__lgc.vod.0,0,0,1,6035,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,69.0,0,0,1,5856,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,15.0,0,0,1,6035,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-08,55.0,0,0,1,6035,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-08.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,__nav.speedKmH,0,0,1,13,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,__nav.satellitesCount,0,0,2,13,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,__nav.hardwareValidation,0,0,2,13,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,__lgc.spd.0,0,0,1,106,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,__lgc.ign.0,0,0,2,106,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,__lgc.vod.0,0,0,1,106,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,69.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,15.0,0,0,1,106,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-09,55.0,0,0,1,106,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-09.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,__nav.speedKmH,0,0,1,6021,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,__nav.satellitesCount,0,0,2,6021,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,__nav.hardwareValidation,0,0,2,6021,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,__lgc.spd.0,0,0,1,6268,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,__lgc.ign.0,0,0,2,6268,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,__lgc.vod.0,0,0,1,6268,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,69.0,0,0,1,6094,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,15.0,0,0,1,6268,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+203f2a64-e628-4b54-aa08-724b9a55702a,С725АТ159(ТМ),2026-05-10,55.0,0,0,1,6268,ok,,datasets/raw/bo_graph_v2_unit_203f2a64_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__nav.speedKmH,0,0,1,4423,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__nav.satellitesCount,0,0,2,4423,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__nav.hardwareValidation,0,0,2,4423,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__lgc.spd.0,0,0,1,8469,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__lgc.spd.1,0,0,1,7256,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__lgc.ign.0,0,0,2,8474,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__lgc.fls.0,0,0,1,33,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__lgc.vod.0,0,0,1,193,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,__lgc.esp.0,0,0,1,3291,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,6.0.32768.0,0,0,1,13,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,80.0.32934.6,0,0,1,7363,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,30.0.32930.2,0,0,1,193,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-04,9.0.32929.1,0,0,1,3291,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-04.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__nav.speedKmH,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__nav.satellitesCount,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__nav.hardwareValidation,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__lgc.spd.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__lgc.spd.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__lgc.ign.0,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__lgc.fls.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__lgc.vod.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,__lgc.esp.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,6.0.32768.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,80.0.32934.6,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,30.0.32930.2,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-05,9.0.32929.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-05.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__nav.speedKmH,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__nav.satellitesCount,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__nav.hardwareValidation,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__lgc.spd.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__lgc.spd.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__lgc.ign.0,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__lgc.fls.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__lgc.vod.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,__lgc.esp.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,6.0.32768.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,80.0.32934.6,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,30.0.32930.2,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-06,9.0.32929.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-06.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__nav.speedKmH,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__nav.satellitesCount,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__nav.hardwareValidation,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__lgc.spd.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__lgc.spd.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__lgc.ign.0,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__lgc.fls.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__lgc.vod.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,__lgc.esp.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,6.0.32768.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,80.0.32934.6,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,30.0.32930.2,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-07,9.0.32929.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-07.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__nav.speedKmH,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__nav.satellitesCount,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__nav.hardwareValidation,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__lgc.spd.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__lgc.spd.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__lgc.ign.0,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__lgc.fls.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__lgc.vod.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,__lgc.esp.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,6.0.32768.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,80.0.32934.6,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,30.0.32930.2,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-08,9.0.32929.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-08.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__nav.speedKmH,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__nav.satellitesCount,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__nav.hardwareValidation,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__lgc.spd.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__lgc.spd.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__lgc.ign.0,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__lgc.fls.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__lgc.vod.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,__lgc.esp.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,6.0.32768.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,80.0.32934.6,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,30.0.32930.2,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-09,9.0.32929.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-09.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__nav.speedKmH,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__nav.satellitesCount,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__nav.hardwareValidation,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__lgc.spd.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__lgc.spd.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__lgc.ign.0,3,0,2,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__lgc.fls.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__lgc.vod.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,__lgc.esp.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,6.0.32768.0,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,80.0.32934.6,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,30.0.32930.2,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+39806354-3224-44fa-b475-edc1ae8e41a0,В 693 ЕО/550 RUS,2026-05-10,9.0.32929.1,3,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_39806354_2026-05-10.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-04,__nav.speedKmH,0,0,1,3241,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-04.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-04,__nav.satellitesCount,0,0,2,3241,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-04.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-04,__nav.hardwareValidation,0,0,2,3241,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-04.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-04,__lgc.spd.0,0,0,1,3405,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-04.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-04,__lgc.ign.0,0,0,2,3405,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-04.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-04,__lgc.vod.0,0,0,1,3405,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-04.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-04,15.0,0,0,1,3405,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-04.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-05,__nav.speedKmH,0,0,1,3405,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-05.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-05,__nav.satellitesCount,0,0,2,3405,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-05.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-05,__nav.hardwareValidation,0,0,2,3405,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-05.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-05,__lgc.spd.0,0,0,1,4966,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-05.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-05,__lgc.ign.0,0,0,2,4966,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-05.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-05,__lgc.vod.0,0,0,1,4966,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-05.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-05,15.0,0,0,1,4966,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-05.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-06,__nav.speedKmH,0,0,1,2714,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-06.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-06,__nav.satellitesCount,0,0,2,2714,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-06.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-06,__nav.hardwareValidation,0,0,2,2714,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-06.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-06,__lgc.spd.0,0,0,1,3891,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-06.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-06,__lgc.ign.0,0,0,2,3891,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-06.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-06,__lgc.vod.0,0,0,1,3891,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-06.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-06,15.0,0,0,1,3891,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-06.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-07,__nav.speedKmH,0,0,1,3942,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-07.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-07,__nav.satellitesCount,0,0,2,3942,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-07.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-07,__nav.hardwareValidation,0,0,2,3942,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-07.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-07,__lgc.spd.0,0,0,1,4372,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-07.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-07,__lgc.ign.0,0,0,2,4372,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-07.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-07,__lgc.vod.0,0,0,1,4372,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-07.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-07,15.0,0,0,1,4372,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-07.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-08,__nav.speedKmH,0,0,1,4132,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-08.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-08,__nav.satellitesCount,0,0,2,4132,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-08.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-08,__nav.hardwareValidation,0,0,2,4132,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-08.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-08,__lgc.spd.0,0,0,1,5104,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-08.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-08,__lgc.ign.0,0,0,2,5104,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-08.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-08,__lgc.vod.0,0,0,1,5104,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-08.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-08,15.0,0,0,1,5104,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-08.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-09,__nav.speedKmH,0,0,1,3923,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-09.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-09,__nav.satellitesCount,0,0,2,3923,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-09.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-09,__nav.hardwareValidation,0,0,2,3923,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-09.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-09,__lgc.spd.0,0,0,1,4100,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-09.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-09,__lgc.ign.0,0,0,2,4100,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-09.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-09,__lgc.vod.0,0,0,1,4100,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-09.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-09,15.0,0,0,1,4100,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-09.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-10,__nav.speedKmH,0,0,1,3526,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-10.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-10,__nav.satellitesCount,0,0,2,3526,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-10.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-10,__nav.hardwareValidation,0,0,2,3526,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-10.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-10,__lgc.spd.0,0,0,1,4762,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-10.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-10,__lgc.ign.0,0,0,2,4762,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-10.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-10,__lgc.vod.0,0,0,1,4762,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-10.json
+4733730f-4465-47c3-9e2a-137373cd6c52,О802УЕ198,2026-05-10,15.0,0,0,1,4762,ok,,datasets/raw/bo_graph_v2_unit_4733730f_2026-05-10.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-04,__nav.speedKmH,0,0,1,484,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-04.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-04,__nav.satellitesCount,0,0,2,484,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-04.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-04,__nav.hardwareValidation,0,0,2,484,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-04.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-04,__lgc.ign.0,0,0,2,556,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-04.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-04,53.0,0,0,1,385,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-04.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-04,69.0,0,0,1,386,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-04.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-04,15.0,0,0,1,556,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-04.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-04,55.0,0,0,1,556,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-04.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-05,__nav.speedKmH,0,0,1,165,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-05.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-05,__nav.satellitesCount,0,0,2,165,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-05.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-05,__nav.hardwareValidation,0,0,2,165,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-05.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-05,__lgc.ign.0,0,0,2,170,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-05.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-05,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-05.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-05,69.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-05.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-05,15.0,0,0,1,170,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-05.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-05,55.0,0,0,1,170,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-05.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-06,__nav.speedKmH,0,0,1,1798,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-06.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-06,__nav.satellitesCount,0,0,2,1798,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-06.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-06,__nav.hardwareValidation,0,0,2,1798,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-06.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-06,__lgc.ign.0,0,0,2,1882,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-06.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-06,53.0,0,0,1,1726,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-06.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-06,69.0,0,0,1,1725,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-06.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-06,15.0,0,0,1,1882,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-06.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-06,55.0,0,0,1,1882,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-06.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-07,__nav.speedKmH,0,0,1,3294,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-07.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-07,__nav.satellitesCount,0,0,2,3294,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-07.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-07,__nav.hardwareValidation,0,0,2,3294,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-07.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-07,__lgc.ign.0,0,0,2,3378,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-07.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-07,53.0,0,0,1,3214,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-07.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-07,69.0,0,0,1,3218,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-07.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-07,15.0,0,0,1,3378,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-07.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-07,55.0,0,0,1,3378,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-07.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-08,__nav.speedKmH,0,0,1,551,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-08.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-08,__nav.satellitesCount,0,0,2,551,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-08.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-08,__nav.hardwareValidation,0,0,2,551,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-08.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-08,__lgc.ign.0,0,0,2,596,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-08.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-08,53.0,0,0,1,563,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-08.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-08,69.0,0,0,1,563,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-08.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-08,15.0,0,0,1,596,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-08.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-08,55.0,0,0,1,596,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-08.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-09,__nav.speedKmH,0,0,1,14,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-09.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-09,__nav.satellitesCount,0,0,2,14,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-09.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-09,__nav.hardwareValidation,0,0,2,14,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-09.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-09,__lgc.ign.0,0,0,2,19,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-09.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-09,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-09.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-09,69.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-09.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-09,15.0,0,0,1,19,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-09.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-09,55.0,0,0,1,19,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-09.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-10,__nav.speedKmH,0,0,1,15,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-10.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-10,__nav.satellitesCount,0,0,2,15,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-10.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-10,__nav.hardwareValidation,0,0,2,15,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-10.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-10,__lgc.ign.0,0,0,2,20,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-10.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-10,53.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-10.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-10,69.0,0,0,1,0,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-10.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-10,15.0,0,0,1,20,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-10.json
+7da860ea-ff5b-4fbb-a5d0-f89a8d3953b6,А910АА123,2026-05-10,55.0,0,0,1,20,ok,,datasets/raw/bo_graph_v2_unit_7da860ea_2026-05-10.json

@@ -1,0 +1,12 @@
+alarm_id,dataset_vehicle_code,unit_id,event_type,period_index,period_type,period_duration,track_point_count
+3059d92e-c668-4c58-b3dd-3326e1cd6a45,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,0,1,00:30:07,133
+46b542d1-1ba3-4997-9496-9f0859a9bc30,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,0,2,00:03:43,2
+46b542d1-1ba3-4997-9496-9f0859a9bc30,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,1,1,00:26:24,115
+0605028d-a8f9-4237-a9dd-c5d0b70d10cd,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,0,2,00:05:03,2
+0605028d-a8f9-4237-a9dd-c5d0b70d10cd,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,1,1,00:25:04,109
+122f8e75-9edf-4db8-839e-5de6b29bd45b,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,0,2,00:06:47,2
+122f8e75-9edf-4db8-839e-5de6b29bd45b,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,1,1,00:23:20,102
+661adc32-0b32-490b-836e-6b1f0da537cf,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,0,2,00:10:48,2
+661adc32-0b32-490b-836e-6b1f0da537cf,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,1,1,00:19:19,85
+6e0414ee-ac4c-4278-a129-afbc076aa99a,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,0,2,00:13:36,2
+6e0414ee-ac4c-4278-a129-afbc076aa99a,U126TK124,b93acd8d-6546-4571-8b58-dbbde1f4b3e0,Drowsiness,1,1,00:16:31,74
