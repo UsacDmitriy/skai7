@@ -1,12 +1,26 @@
+# Data & generated output
 datasets/
 output/
-.mypy_cache/
+datasets/ready/sensor_diagnostics/*
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
 .venv/
-.DS_Store
-05_video_telematics_single_window/
-datasets/ready/sensor_diagnostics/*
-*.png
+.mypy_cache/
+**/.ipynb_checkpoints/
+
+# Tooling / worktrees
+.kilo/
 .playwright-mcp/
 skai7_clean/
+
+# Assets / heavy media
+05_video_telematics_single_window/
+*.png
+
+# OS / logs
+**/.DS_Store
+.DS_Store
+*.log
