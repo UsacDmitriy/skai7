@@ -1,0 +1,25 @@
+{
+  "_comment": "Канонический справочник типов алярмов SKAI. Источник: реальные значения колонки Type в datasets/ready/video_events/selected_video_alarms.csv (54 алярма, 21 ТС). Маппинг raw->canonical согласован с backend/constants.py ALARM_TYPE_LABELS и подтверждён корреляцией channel->Type (ch5=салонная DMS, ch1-3=дорожные/ADAS).",
+  "channel_map": {
+    "1": {"label": "Дорожная (ADAS / фронтальная)", "facing": "road"},
+    "2": {"label": "Дорожная доп.", "facing": "road"},
+    "3": {"label": "Дорожная доп.", "facing": "road"},
+    "5": {"label": "Салонная (DMS / водитель)", "facing": "cabin"}
+  },
+  "alarm_types": [
+    {"raw": "Drowsiness",          "code": "DMS_DROWSY",          "label_ru": "Засыпание за рулём (микросон)", "source": "DMS",        "severity": "critical", "requires_video": true,  "auto_request_video": true,  "count": 15},
+    {"raw": "Smoking",             "code": "DMS_SMOKING",         "label_ru": "Курение",                       "source": "DMS",        "severity": "medium",   "requires_video": true,  "auto_request_video": false, "count": 12},
+    {"raw": "Distraction",         "code": "DMS_PHONE",           "label_ru": "Отвлечение / телефон",          "source": "DMS",        "severity": "high",     "requires_video": true,  "auto_request_video": true,  "count": 4},
+    {"raw": "NoDriver",            "code": "DRIVER_SUBSTITUTION", "label_ru": "Нет водителя в кадре / подмена", "source": "DMS",        "severity": "high",     "requires_video": true,  "auto_request_video": true,  "count": 4},
+    {"raw": "DangerousDistance",   "code": "ADAS_HMW",            "label_ru": "Опасная дистанция",             "source": "ADAS",       "severity": "high",     "requires_video": true,  "auto_request_video": false, "count": 3},
+    {"raw": "Yawning",             "code": "DMS_YAWNING",         "label_ru": "Зевание (усталость)",           "source": "DMS",        "severity": "medium",   "requires_video": true,  "auto_request_video": false, "count": 3},
+    {"raw": "SeatBelt",            "code": "DMS_SEATBELT",        "label_ru": "Ремень безопасности",           "source": "DMS",        "severity": "medium",   "requires_video": true,  "auto_request_video": false, "count": 3},
+    {"raw": "SharpAcceleration",   "code": "HARSH_ACCEL",         "label_ru": "Резкое ускорение",             "source": "TELEMATICS", "severity": "medium",   "requires_video": false, "auto_request_video": false, "count": 2},
+    {"raw": "SharpBraking",        "code": "HARSH_BRAKING",       "label_ru": "Резкое торможение",            "source": "TELEMATICS", "severity": "high",     "requires_video": true,  "auto_request_video": true,  "count": 2},
+    {"raw": "CollisionWarning",    "code": "ADAS_FCW",            "label_ru": "Предупреждение о столкновении", "source": "ADAS",       "severity": "high",     "requires_video": true,  "auto_request_video": true,  "count": 2},
+    {"raw": "Sabotage",            "code": "CAMERA_TAMPER",       "label_ru": "Саботаж камеры",                "source": "DMS",        "severity": "high",     "requires_video": true,  "auto_request_video": true,  "count": 1},
+    {"raw": "PedestrianWarning",   "code": "ADAS_PCW",            "label_ru": "Предупреждение о пешеходе",      "source": "ADAS",       "severity": "high",     "requires_video": true,  "auto_request_video": true,  "count": 1},
+    {"raw": "SpeedLimitViolation", "code": "OVERSPEED",           "label_ru": "Превышение скорости",           "source": "COMBINED",   "severity": "high",     "requires_video": false, "auto_request_video": false, "count": 1},
+    {"raw": "SharpLeftTurn",       "code": "HARSH_CORNERING",     "label_ru": "Резкий поворот",               "source": "TELEMATICS", "severity": "medium",   "requires_video": true,  "auto_request_video": false, "count": 1}
+  ]
+}
