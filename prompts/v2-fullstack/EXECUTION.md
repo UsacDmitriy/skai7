@@ -24,6 +24,28 @@ code /Users/dimausac/projects/skai_7/.worktrees/tests
 Или File → Open Folder → выбрать папку worktree → Open in New Window. В каждом окне открой панель
 Claude Code и дай промпт волны (см. START.md). Окна работают **одновременно** — разные ветки, разные файлы.
 
+### Как запускать промпт в Claude Code
+
+**Один промпт = одна задача Claude Code.** В нужном окне открой панель Claude Code и дай команду:
+
+```text
+Выполни промпт @prompts/v2-fullstack/track-b-backend/b1-duckdb-etl.md
+```
+
+(`@`-ссылка подставит файл; либо просто «выполни b1»). Дождись завершения и проверки, затем следующий
+по очереди из `START.md`. Промпты одной под-волны без зависимостей (например `b2`∥`b4`) можно дать сразу.
+
+### Где запускать барьеры
+
+Барьеры (`x1`–`x4`) выполняются **НЕ в worktree, а в основном окне `skai_7`** на ветке `integration`:
+
+```bash
+code /Users/dimausac/projects/skai_7        # основное окно (или просто оно уже открыто)
+```
+
+Затем в Claude Code этого окна: сначала git-склейка (см. блоки ниже), потом по одному
+`@prompts/v2-fullstack/wave-x-integration/x1-remove-streamlit.md` → `x2` → `x3` (→ `x4` на барьере 2).
+
 ## Почему без конфликтов
 Контракт §5/§7.7 закрепил непересекающиеся папки: `api/` ⟂ `web/` ⟂ `api/tests/`. Каждый worktree —
 своя ветка, мерж чистый. Роуты `App.tsx` и корневые файлы (`Makefile`, `requirements*`) трогает только
@@ -133,13 +155,21 @@ flowchart TD
 
 > Коммит после волны: `git add -A && git commit -m "feat(backend): wave 1"` (аналогично для web).
 
-### Барьер 1 — интеграция P0 (основное окно, последовательно)
+### Барьер 1 — интеграция P0 (основное окно `skai_7`, последовательно)
+
+**Шаг 1 — склейка веток:**
 
 ```bash
 cd /Users/dimausac/projects/skai_7
 git checkout integration && git merge feat/backend && git merge feat/web
-# затем по очереди в этом же окне:
-# x1-remove-streamlit → x2-wiring → x3-e2e-smoke
+```
+
+**Шаг 2 — в Claude Code основного окна по одному промпту, дожидаясь проверки каждого:**
+
+```text
+Выполни @prompts/v2-fullstack/wave-x-integration/x1-remove-streamlit.md
+Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
+Выполни @prompts/v2-fullstack/wave-x-integration/x3-e2e-smoke.md
 ```
 
 ### Волна 2 — расширение P1/P2 (макс. параллельно)
@@ -150,13 +180,27 @@ git checkout integration && git merge feat/backend && git merge feat/web
 | 2 Web | `d4` ∥ `d5` ; `f5`…`f13` (все параллельно) | — |
 | 3 Tests | `T4` сразу · `T1` после `b2/b7/b10` · `T2` после `b6`+`b11–b13` · `T3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
 
-### Барьер 2 — финальный e2e (основное окно)
+### Барьер 2 — финальный e2e (основное окно `skai_7`)
+
+**Шаг 1 — подтянуть волну 2:**
 
 ```bash
 cd /Users/dimausac/projects/skai_7 && git checkout integration
 git merge feat/backend && git merge feat/web
-# повтор x2 → x3, затем x4-e2e-p1p2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage)
-git checkout main && git merge integration   # ФИНАЛ
+```
+
+**Шаг 2 — в Claude Code основного окна:**
+
+```text
+Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
+Выполни @prompts/v2-fullstack/wave-x-integration/x3-e2e-smoke.md
+Выполни @prompts/v2-fullstack/wave-x-integration/x4-e2e-p1p2.md
+```
+
+**Шаг 3 — финал в main:**
+
+```bash
+git checkout main && git merge integration
 ```
 
 ## Слияние
