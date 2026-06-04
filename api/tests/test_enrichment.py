@@ -228,62 +228,203 @@ class TestEvidenceSummary:
 
 
 # ---------------------------------------------------------------------------
-# cameras_from_videofiles
+# cameras_from_videofiles — CONTRACT §2 (frozen)
 # ---------------------------------------------------------------------------
 
 
 class TestCamerasFromVideofiles:
-    def _make_row(self, channel: int, download_status: str) -> dict:
-        return {"channel": str(channel), "download_status": download_status}
+    """CONTRACT §2: всегда ровно 3 камеры в порядке ADAS / DMS / СНЗ."""
 
-    def test_channel_1_label(self):
-        cams = cameras_from_videofiles([self._make_row(1, "downloaded")])
-        assert cams[0]["label"] == "ADAS · Передняя"
+    def _row(self, channel: int, download_status: str, **extra) -> dict:
+        d = {"channel": str(channel), "download_status": download_status}
+        d.update(extra)
+        return d
 
-    def test_channel_5_label(self):
-        cams = cameras_from_videofiles([self._make_row(5, "downloaded")])
-        assert cams[0]["label"] == "DMS · Салон"
+    # ------------------------------------------------------------------
+    # Always exactly 3 entries
+    # ------------------------------------------------------------------
 
-    def test_channel_3_label(self):
-        cams = cameras_from_videofiles([self._make_row(3, "downloaded")])
-        assert cams[0]["label"] == "CH3 · доп."
-
-    def test_channel_2_label(self):
-        cams = cameras_from_videofiles([self._make_row(2, "downloaded")])
-        assert cams[0]["label"] == "CH2 · доп."
-
-    def test_downloaded_is_online(self):
-        cams = cameras_from_videofiles([self._make_row(1, "downloaded")])
-        assert cams[0]["status"] == "online"
-        assert cams[0]["hasVideo"] is True
-
-    def test_not_downloaded_is_offline(self):
-        cams = cameras_from_videofiles([self._make_row(1, "pending")])
-        assert cams[0]["status"] == "offline"
-        assert cams[0]["hasVideo"] is False
-
-    def test_failed_is_offline(self):
-        cams = cameras_from_videofiles([self._make_row(5, "failed")])
-        assert cams[0]["status"] == "offline"
-        assert cams[0]["hasVideo"] is False
-
-    def test_dedup_same_channel(self):
-        rows = [self._make_row(1, "downloaded"), self._make_row(1, "failed")]
+    def test_always_3_cameras_full(self):
+        """Все каналы присутствуют → 3 камеры."""
+        rows = [self._row(1, "downloaded"), self._row(5, "downloaded"), self._row(2, "downloaded")]
         cams = cameras_from_videofiles(rows)
-        assert len(cams) == 1
+        assert len(cams) == 3
 
-    def test_multiple_channels_sorted(self):
-        rows = [self._make_row(5, "downloaded"), self._make_row(1, "downloaded")]
+    def test_always_3_cameras_empty(self):
+        """Пустой список → всё равно 3 camera (все offline)."""
+        cams = cameras_from_videofiles([])
+        assert len(cams) == 3
+
+    def test_always_3_cameras_partial(self):
+        """Только ch1 → 3 камеры."""
+        cams = cameras_from_videofiles([self._row(1, "downloaded")])
+        assert len(cams) == 3
+
+    # ------------------------------------------------------------------
+    # Fixed order: ADAS / DMS / СНЗ
+    # ------------------------------------------------------------------
+
+    def test_order_adas_first(self):
+        rows = [self._row(1, "downloaded"), self._row(5, "downloaded"), self._row(2, "downloaded")]
         cams = cameras_from_videofiles(rows)
         assert cams[0]["id"] == "CAM-01"
+
+    def test_order_dms_second(self):
+        rows = [self._row(1, "downloaded"), self._row(5, "downloaded"), self._row(2, "downloaded")]
+        cams = cameras_from_videofiles(rows)
         assert cams[1]["id"] == "CAM-05"
 
+    def test_order_snz_third_from_ch2(self):
+        rows = [self._row(1, "downloaded"), self._row(5, "downloaded"), self._row(2, "downloaded")]
+        cams = cameras_from_videofiles(rows)
+        assert cams[2]["id"] == "CAM-02"
+
+    def test_order_snz_third_from_ch3(self):
+        rows = [self._row(1, "downloaded"), self._row(5, "downloaded"), self._row(3, "downloaded")]
+        cams = cameras_from_videofiles(rows)
+        assert cams[2]["id"] == "CAM-03"
+
+    # ------------------------------------------------------------------
+    # Canonical labels
+    # ------------------------------------------------------------------
+
+    def test_adas_label(self):
+        cams = cameras_from_videofiles([self._row(1, "downloaded")])
+        assert cams[0]["label"] == "ADAS · Фронт"
+
+    def test_dms_label(self):
+        cams = cameras_from_videofiles([self._row(5, "downloaded")])
+        assert cams[1]["label"] == "DMS · Салон"
+
+    def test_snz_label_from_ch2(self):
+        rows = [self._row(2, "downloaded")]
+        cams = cameras_from_videofiles(rows)
+        assert cams[2]["label"] == "СНЗ · Доп."
+
+    def test_snz_label_from_ch3(self):
+        rows = [self._row(3, "downloaded")]
+        cams = cameras_from_videofiles(rows)
+        assert cams[2]["label"] == "СНЗ · Кузов"
+
+    def test_snz_label_absent_placeholder(self):
+        """Ни ch2, ни ch3 → placeholder "СНЗ · Доп."."""
+        cams = cameras_from_videofiles([])
+        assert cams[2]["label"] == "СНЗ · Доп."
+
+    def test_snz_ch2_preferred_over_ch3(self):
+        """Если оба ch2 и ch3 присутствуют — слот СНЗ использует ch2."""
+        rows = [self._row(2, "downloaded"), self._row(3, "downloaded")]
+        cams = cameras_from_videofiles(rows)
+        assert cams[2]["label"] == "СНЗ · Доп."
+        assert cams[2]["id"] == "CAM-02"
+
+    # ------------------------------------------------------------------
+    # Status: online / warning / offline
+    # ------------------------------------------------------------------
+
+    def test_downloaded_is_online(self):
+        cams = cameras_from_videofiles([self._row(1, "downloaded")])
+        assert cams[0]["status"] == "online"
+
+    def test_partial_is_warning(self):
+        cams = cameras_from_videofiles([self._row(1, "partial")])
+        assert cams[0]["status"] == "warning"
+
+    def test_unknown_nonempty_is_warning(self):
+        """Любое непустое значение кроме 'downloaded' → warning."""
+        cams = cameras_from_videofiles([self._row(1, "pending")])
+        assert cams[0]["status"] == "warning"
+
+    def test_failed_is_warning(self):
+        """'failed' → warning (непустой, не 'downloaded')."""
+        cams = cameras_from_videofiles([self._row(5, "failed")])
+        assert cams[1]["status"] == "warning"
+
+    def test_empty_status_is_offline(self):
+        cams = cameras_from_videofiles([self._row(1, "")])
+        assert cams[0]["status"] == "offline"
+
+    def test_absent_channel_is_offline(self):
+        """Отсутствующий канал → offline."""
+        cams = cameras_from_videofiles([])
+        assert cams[0]["status"] == "offline"  # ADAS absent
+        assert cams[1]["status"] == "offline"  # DMS absent
+        assert cams[2]["status"] == "offline"  # СНЗ absent
+
+    # ------------------------------------------------------------------
+    # hasVideo
+    # ------------------------------------------------------------------
+
+    def test_hasvideo_true_when_online(self):
+        cams = cameras_from_videofiles([self._row(1, "downloaded")])
+        assert cams[0]["hasVideo"] is True
+
+    def test_hasvideo_true_when_warning(self):
+        """warning → реальный файл есть, hasVideo = True."""
+        cams = cameras_from_videofiles([self._row(1, "partial")])
+        assert cams[0]["hasVideo"] is True
+
+    def test_hasvideo_false_when_offline(self):
+        cams = cameras_from_videofiles([])
+        assert cams[0]["hasVideo"] is False
+
+    def test_hasvideo_false_empty_status(self):
+        cams = cameras_from_videofiles([self._row(1, "")])
+        assert cams[0]["hasVideo"] is False
+
+    # ------------------------------------------------------------------
+    # offline_from / offline_to
+    # ------------------------------------------------------------------
+
     def test_offline_keys_present(self):
-        cams = cameras_from_videofiles([self._make_row(1, "downloaded")])
-        assert "offline_from" in cams[0]
-        assert "offline_to" in cams[0]
+        cams = cameras_from_videofiles([self._row(1, "downloaded")])
+        for cam in cams:
+            assert "offline_from" in cam
+            assert "offline_to" in cam
+
+    def test_online_offline_times_none(self):
+        cams = cameras_from_videofiles([self._row(1, "downloaded")])
         assert cams[0]["offline_from"] is None
         assert cams[0]["offline_to"] is None
+
+    def test_absent_channel_offline_times_none(self):
+        """Канал отсутствует → offline_from/to = None."""
+        cams = cameras_from_videofiles([])
+        assert cams[0]["offline_from"] is None
+        assert cams[0]["offline_to"] is None
+
+    def test_warning_with_created_at_has_offline_from(self):
+        """warning + created_at_utc → offline_from заполнен."""
+        row = self._row(1, "partial", created_at_utc="2026-05-14T10:00:00Z")
+        cams = cameras_from_videofiles([row])
+        assert cams[0]["offline_from"] == "2026-05-14T10:00:00Z"
+        assert cams[0]["offline_to"] is None
+
+    def test_offline_status_with_empty_download_status_no_ts(self):
+        """offline (пустой статус, нет ts) → offline_from = None."""
+        cams = cameras_from_videofiles([self._row(1, "")])
+        assert cams[0]["offline_from"] is None
+
+    # ------------------------------------------------------------------
+    # Dedup: first occurrence wins
+    # ------------------------------------------------------------------
+
+    def test_dedup_first_wins(self):
+        rows = [self._row(1, "downloaded"), self._row(1, "partial")]
+        cams = cameras_from_videofiles(rows)
+        assert cams[0]["status"] == "online"  # first row wins
+
+    # ------------------------------------------------------------------
+    # Unknown channels ignored (don't leak into output)
+    # ------------------------------------------------------------------
+
+    def test_unknown_channel_ignored(self):
+        """ch4 не входит ни в один из 3 слотов."""
+        rows = [self._row(4, "downloaded"), self._row(1, "downloaded")]
+        cams = cameras_from_videofiles(rows)
+        assert len(cams) == 3
+        ids = [c["id"] for c in cams]
+        assert "CAM-04" not in ids
 
 
 # ---------------------------------------------------------------------------

@@ -119,20 +119,13 @@ _EVIDENCE_TEMPLATES: dict[str, str] = {
 _DEFAULT_EVIDENCE_TEMPLATE = "Событие типа {alarm_code}. Скорость: {speed:.0f} км/ч. Уровень риска: {severity}."
 
 # ---------------------------------------------------------------------------
-# Channel label mapping
-# video_files CSV columns: channel (int), download_status
+# Camera slot definitions (CONTRACT §2, frozen)
+# Fixed 3 canonical camera slots: ADAS (ch1), DMS (ch5), СНЗ (ch2 else ch3)
 # ---------------------------------------------------------------------------
 
-_CHANNEL_LABELS: dict[int, str] = {
-    1: "ADAS · Передняя",
-    5: "DMS · Салон",
-}
-
-
-def _channel_label(ch: int) -> str:
-    if ch in _CHANNEL_LABELS:
-        return _CHANNEL_LABELS[ch]
-    return f"CH{ch} · доп."
+_CAM_ADAS_ID = "CAM-01"
+_CAM_DMS_ID = "CAM-05"
+_CAM_SNZ_ID = "CAM-02"
 
 
 # ---------------------------------------------------------------------------
@@ -237,55 +230,100 @@ def evidence_summary(alarm_code: str, speed_kmh: float, severity: str) -> str:
 
 
 def cameras_from_videofiles(rows: list[dict]) -> list[dict]:
-    """Формирует Camera[] из строк таблицы video_files.
+    """Формирует ровно 3 канонических Camera dict из строк таблицы video_files.
 
-    CSV-колонки: channel (int), download_status (str), video_file_id / media_relative_path.
-    Возвращает список {id, label, status, hasVideo, offline_from, offline_to}.
-    offline_from/offline_to = None (детализированное offline-window — задача следующего слоя).
+    CONTRACT §2 (frozen). Всегда возвращает 3 записи в порядке:
+      1. ADAS  — channel 1  — label "ADAS · Фронт"
+      2. DMS   — channel 5  — label "DMS · Салон"
+      3. СНЗ   — channel 2 если есть, иначе channel 3; если ни 2, ни 3 — placeholder
 
-    Маппинг каналов:
-        1  → "ADAS · Передняя"
-        5  → "DMS · Салон"
-        2/3/прочие → "CH{n} · доп."
-    status = "online" if download_status == "downloaded" else "offline"
-    hasVideo — True если status == "online".
+    Labels:
+      - СНЗ из ch2 → "СНЗ · Доп."
+      - СНЗ из ch3 → "СНЗ · Кузов"
+      - СНЗ absent → "СНЗ · Доп." (canonical placeholder)
+
+    Status per camera:
+      - "online"  if download_status == "downloaded"
+      - "warning" if download_status непустой и не "downloaded" (partial/broken/unknown)
+      - "offline" if канал отсутствует в rows ИЛИ download_status пустой/None
+
+    hasVideo: True если status in ("online", "warning") — т.е. строка файла реально существует.
+
+    offline_from / offline_to:
+      - online → None, None
+      - warning/offline с известным created_at_utc → используем его как offline_from,
+        offline_to = None (открытый диапазон)
+      - offline без строки (канал отсутствует) → None, None
+      Выбор детерминирован и не использует datetime.now/random.
     """
-    cameras: list[dict] = []
-    seen_channels: set[int] = set()
-
+    # Index rows by channel (first occurrence wins for dedup)
+    channel_rows: dict[int, dict] = {}
     for row in rows:
-        # Robust key lookup (exact CSV header names)
         ch_raw = row.get("channel", row.get("Channel", ""))
-        dl_status = row.get("download_status", row.get("Download_status", ""))
-
         try:
             ch = int(ch_raw)
         except (ValueError, TypeError):
             continue
+        if ch not in channel_rows:
+            channel_rows[ch] = row
 
-        if ch in seen_channels:
-            continue
-        seen_channels.add(ch)
-
-        status = "online" if dl_status == "downloaded" else "offline"
-        has_video = status == "online"
-        label = _channel_label(ch)
-        cam_id = f"CAM-{ch:02d}"
-
-        cameras.append(
-            {
+    def _make_camera(cam_id: str, label: str, row: dict | None) -> dict:
+        """Строит dict камеры из найденной строки (или None если канал отсутствует)."""
+        if row is None:
+            # Channel entirely absent
+            return {
                 "id": cam_id,
                 "label": label,
-                "status": status,
-                "hasVideo": has_video,
+                "status": "offline",
+                "hasVideo": False,
                 "offline_from": None,
                 "offline_to": None,
             }
-        )
 
-    # Sort by channel number for stable ordering
-    cameras.sort(key=lambda c: int(c["id"].split("-")[1]))
-    return cameras
+        dl_status = str(row.get("download_status", row.get("Download_status", "")) or "").strip()
+
+        if dl_status == "downloaded":
+            status = "online"
+        elif dl_status:
+            status = "warning"
+        else:
+            status = "offline"
+
+        has_video = status in ("online", "warning")
+
+        # offline_from: best-effort deterministic — use created_at_utc if available and status != online
+        offline_from: str | None = None
+        offline_to: str | None = None
+        if status != "online":
+            ts_raw = row.get("created_at_utc", row.get("event_begin_utc", ""))
+            if ts_raw:
+                offline_from = str(ts_raw)
+            # offline_to remains None (open-ended window; closed window computed upstream)
+
+        return {
+            "id": cam_id,
+            "label": label,
+            "status": status,
+            "hasVideo": has_video,
+            "offline_from": offline_from,
+            "offline_to": offline_to,
+        }
+
+    # Slot 1: ADAS — channel 1
+    adas = _make_camera("CAM-01", "ADAS · Фронт", channel_rows.get(1))
+
+    # Slot 2: DMS — channel 5
+    dms = _make_camera("CAM-05", "DMS · Салон", channel_rows.get(5))
+
+    # Slot 3: СНЗ — channel 2 preferred, else channel 3, else absent placeholder
+    if 2 in channel_rows:
+        snz = _make_camera("CAM-02", "СНЗ · Доп.", channel_rows[2])
+    elif 3 in channel_rows:
+        snz = _make_camera("CAM-03", "СНЗ · Кузов", channel_rows[3])
+    else:
+        snz = _make_camera("CAM-02", "СНЗ · Доп.", None)
+
+    return [adas, dms, snz]
 
 
 def telemetry_from_trackpoints(
