@@ -6,6 +6,17 @@
 
 Строим рабочий оффлайн-прототип. Не оверинжинирить.
 
+## Implementation plan
+
+Действующий план разработки — **`prompts/v2-fullstack/`** (стек DuckDB + FastAPI + React).
+Источник истины по данным/API/токенам — **`prompts/v2-fullstack/00-CONTRACT.md`** (включая §7
+full-scope). Каждый агент кодит против контракта, треки D ‖ B ‖ F идут параллельно; порядок волн —
+`init/playbook/00-day-plan.md`.
+
+Скоуп — **полный продукт (10 идей, P0+P1+P2)** с **реальной интеграцией** голоса/NLU и справочника
+водителей: STT `faster-whisper large-v3`, NLU Groq LLaMA 3.3 70B (fallback regex), детерминированный
+`driver_reference` (контракт §7.1, заменяемый на внешний источник). Старая Streamlit-эра — в `prompts/legacy/`.
+
 ## Inputs
 
 - `data/selected_video_alarms.csv` - события VA: аларм, машина, время, тип, скорость, координаты при наличии.

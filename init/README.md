@@ -10,8 +10,7 @@
 Телематика + видео + CAN в одном экране.
 Клик на событие → синхронное видео + график + действия.
 
-**Дизайн:** `design-prompts/claude-design/03-idea1-incident-video.md`
-**Код:** `prompts/waves/wave-03-screens/P3-03B-incident-card.md`
+**Реализация:** `prompts/v2-fullstack/` — контракт §3/§6, `track-f-frontend/f4-screens` (IncidentCard)
 
 ### Идея #2 (P0) — Интерактивный аналитический отчёт
 → `init/ideas/02-idea-interactive-report.md`
@@ -19,8 +18,7 @@
 Голосом или текстом → подтверждение → дашборд.
 Режим В-1 (один водитель) + Режим В-2 (парк, toggle По водителям|По ТС).
 
-**Дизайн:** `design-prompts/claude-design/05-idea2-interactive-report.md`
-**Код:** `prompts/waves/wave-03-screens/P2-03D-analytics-screen.md`
+**Реализация:** `prompts/v2-fullstack/` — контракт §7.1–§7.4, `track-f-frontend/f7-analytics-voice`
 
 ---
 
@@ -44,16 +42,15 @@ init/
   playbook/                    ← чеклисты, шаблоны, скрипт демо
 
 prompts/
-  waves/                      ← промпты разработки (волны 00–05)
-    README.md                 ← плейбук запуска
-    wave-00/                  ← чтение контекста
-    wave-00a-architecture/    ← архитектура
-    wave-01-foundation/       ← types, constants, mock JSON
-    wave-02-components/       ← React-компоненты
-    wave-03-screens/          ← экраны
-    wave-04-routing/          ← роутинг App.tsx
-    wave-05-polish/           ← tickets, smoke, demo
+  v2-fullstack/               ← ДЕЙСТВУЮЩИЙ план (DuckDB+FastAPI+React)
+    00-CONTRACT.md            ← источник истины (данные/API/токены/§7 full-scope)
+    README.md                 ← граф волн и порядок запуска
+    track-b-backend/          ← b1–b13 (ETL, enrichment, views, API, voice/NLU, driver)
+    track-d-design/           ← d1–d5 (токены, UI-примитивы, карта, voice/timeline)
+    track-f-frontend/         ← f1–f13 (клиент, экраны, лента/карта/отчёт/заявки/…)
+    wave-x-integration/       ← x1–x3 (выпил Streamlit, склейка, e2e-smoke)
   init/                       ← discovery-промпт
+  legacy/                     ← архив Streamlit-эры (setup 01–04, orchestration)
 ```
 
 ---

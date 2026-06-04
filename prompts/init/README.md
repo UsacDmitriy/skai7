@@ -1,14 +1,18 @@
-# Prompts/
+# Prompts/init
 
-> Готовые промпты для проекта SKAI: «Единое окно для видео и телематики». Целевой стек — Streamlit (Python).
+> Инициализационные промпты SKAI: «Единое окно для видео и телематики».
+>
+> ⚠️ **Действующий план разработки — `prompts/v2-fullstack/`** (DuckDB + FastAPI + React,
+> источник истины `00-CONTRACT.md`). Здесь остался только generic `discovery-prompt.md`.
+> Streamlit-эра промпты (`setup/01–04`, `orchestration-prompt.md`) перенесены в `prompts/legacy/`.
 
 ## Когда какой промпт
 
 | Когда | Промпт | Кто использует |
 |---|---|---|
-| На старте проекта, один раз | [`discovery-prompt.md`](./discovery-prompt.md) | Вся команда вместе |
-| Периодически во время работы | [`orchestration-prompt.md`](./orchestration-prompt.md) | Pilot / Team Lead |
-| Первый запуск репозитория (параллельно) | [`setup/`](./setup/) | Любой из команды |
+| На старте нового проекта, один раз | [`discovery-prompt.md`](./discovery-prompt.md) | Вся команда |
+| Разработка SKAI (текущая) | [`../v2-fullstack/README.md`](../v2-fullstack/README.md) | Все треки |
+| Архив Streamlit-эры | [`../legacy/`](../legacy/) | — (историческая справка) |
 
 ---
 
@@ -112,11 +116,15 @@ LLM выступает в роли **главного архитектора**. 
 
 ---
 
-## Setup
+## Setup (архив — `prompts/legacy/setup/`)
+
+> ⚠️ Раздел описывает **устаревшую** Streamlit-инфраструктуру. Промпты перенесены в
+> `prompts/legacy/setup/`. Актуальная инфраструктура (DuckDB+FastAPI+React) — в `prompts/v2-fullstack/`
+> (треки b4/f1 + волна `wave-x-integration`). Ниже — историческая справка.
 
 **Назначение:** за 1 заход развернуть полную инфраструктуру репозитория для Streamlit-приложения SKAI.
 
-Четыре параллельных промпта в папке `setup/`:
+Четыре параллельных промпта (теперь в `prompts/legacy/setup/`):
 
 ### 1. Git + Codex / MCP Config
 
@@ -181,18 +189,19 @@ LLM выступает в роли **главного архитектора**. 
 - В `templates/prompt-codex.md.template` — стартовый промпт для запуска агента на конкретной задаче
 - В `playbook/` — техники стыковки модулей, примеры промптов для видеоинтеграции и работы с телематическими API
 
-### Жизненный цикл промптов
+### Жизненный цикл промптов (актуальный — v2-fullstack)
 
 ```
-Discovery (prompts/init/discovery-prompt.md)        ← 1 раз на старте
+Discovery (prompts/init/discovery-prompt.md)          ← 1 раз на старте нового проекта
   ↓
-AGENTS.md заполнен                                   ← результат discovery
+agents.md + 00-CONTRACT.md                            ← цель + контракт заморожены
   ↓
-setup/ (4 параллельных промпта)                      ← репо готово
+prompts/v2-fullstack/ — треки D ‖ B ‖ F параллельно   ← разработка против контракта
   ↓
-Работа по ролям: backend, frontend, QA, AI          ← параллельная разработка
+wave-x-integration (x1–x3)                            ← склейка + e2e smoke
   ↓
-Orchestration (prompts/init/orchestration-prompt.md)  ← периодически
-  ↓
-Финальная полировка + демо-скрипт                    ← на финале
+Расширение §7 (P1/P2 + voice/NLU) → финальный e2e     ← полный продукт
 ```
+
+> Архив Streamlit-эры (`legacy/setup/`, `legacy/orchestration-prompt.md`) — историческая справка,
+> в текущем цикле не используется.

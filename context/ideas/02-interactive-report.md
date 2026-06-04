@@ -61,13 +61,10 @@
 - `data/mock/fleet-report.json` — В-2 по водителям (5 водителей, 23 нарушения)
 - `data/mock/fleet-vehicles.json` — В-2 по ТС (камеры + multi-driver)
 
-## Дизайн-промпты
+## Промпты реализации (актуальный план — `prompts/v2-fullstack/`)
 
-- `design-prompts/claude-design/05-idea2-interactive-report.md`
-- `design-prompts/claude-design/05-idea2-interactive-report.md` (секция D-05)
-
-## Dev-промпты
-
-- `prompts/hackathon/wave-01-foundation/01F-driver-report-mock--qwen3.md`
-- `prompts/hackathon/wave-02-components/02E-idea2-analytics-components--qwen3.md` (11 компонентов)
-- `prompts/hackathon/wave-03-screens/P2-03D-analytics-screen--kimi-k2.6.md` (P0)
+- Контракт: `prompts/v2-fullstack/00-CONTRACT.md` (§7.1–§7.4 reports + voice/NLU + driver)
+- Backend: `track-b-backend/` — `b7-driver-reference`, `b8-stt-service`, `b9-nlu-service`, `b10-reports-views`
+- UI-примитивы: `track-d-design/d5-voice-timeline` (VoiceButton, ConfirmationModal)
+- Экран: `track-f-frontend/f7-analytics-voice` (отчёт В-1/В-2, голос, видео по клику)
+- Референс вёрстки: `ui/Интерактивнй отчет/`

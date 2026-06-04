@@ -1,254 +1,96 @@
 # КАРТА ПРОДУКТА — SKAI Unified Incident Window
 
-> Один документ: все идеи, все промпты, все данные, последовательность.
+> Один документ: идеи → экраны → клиенты → данные → промпты реализации.
+> Действующий план разработки — `prompts/v2-fullstack/` (источник истины `00-CONTRACT.md`).
 
 ---
 
-## ПРИОРИТЕТ ИДЕЙ
+## ПРИОРИТЕТ ИДЕЙ (10 идей)
 
 ```
-#1 P0  Единое окно инцидента      → видео + телематика + CAN синхронно
-#2 P0  Интерактивный отчёт        → голос/текст → подтверждение → дашборд
-       Экран 1 (два варианта)      → лента событий + живой мониторинг
-#3 P1  Диспетчерский алерт        → автозапрос видео ±15 сек
-#4 P1  Список заявок
-#5 P1  Видеодосье рейса
-#6 P2  РЭБ-восстановление маршрута
-#7 P2  Саботаж камеры (нет промпта)
-#8 P2  Карта по ролям (расширение экрана 1)
+#1  P0  Единое окно инцидента        видео ADAS+DMS + телеметрия + причина + действия
+#2  P0  Интерактивный отчёт          голос/текст → NLU → дашборд В-1/В-2, видео по клику
+#3  P0  Карточка без видео           placeholder + «Запросить архив» (состояние #1)
+#4  P0  Лента событий + мониторинг   карта, дедуп 1 ТС = 1 точка
+#5  P1  Диспетчерский алерт          автозапрос видео ±15 сек
+#6  P1  Список заявок (Tickets)
+#7  P1  Видеодосье рейса             таймлайн + видеоотметки
+#8  P2  РЭБ-восстановление маршрута  GPS-разрывы + видеоанализ
+#9  P2  Детекция саботажа камеры     тёмный DMS + speed>0
+#10 P2  Карта по ролям               логист / диспетчер / безопасник
 ```
 
 ---
 
-## ЭКРАНЫ И ИДЕИ
+## ЭКРАНЫ · ИДЕЯ · КЛИЕНТ · ПРОМПТЫ
 
-### Экран 1A — Лента событий
-**Клиенты:** Фомин (PepsiCo), Маслов (Балтика)
-**Фичи из интервью:**
-- Источник события: badge [📹 ВА] / [⚡ Тел] / [⚡📹 Оба] — Фомин: «прыгаем между системами»
-- Фильтр «Нет видео» — Фомин: «много событий без видео, надо запрашивать архив»
-- **Переключатель роли [🏭 Логист | 🛡 Диспетчер | 🔒 Безопасность]** — Маслов: «логисты видят только телематику»
-- 1 ТС = 1 событие (не дублирование терминалов) — Маслов: «3 машины — 5 точек»
+| Экран / маршрут | Идея | Клиент | Промпты `prompts/v2-fullstack/` |
+|---|---|---|---|
+| Лента событий `/` | #4 | Фомин, Маслов | `track-f/f5-events-feed`, `track-d/d4` (RoleToggle) |
+| Живой мониторинг `/monitor` | #4/#10 | Маслов | `track-f/f6-monitor-map`, `track-d/d4-map-primitives` |
+| **Карточка инцидента `/incidents/:id`** | **#1 P0** | Фомин, Оздоев | `track-b/b3,b5,b6`, `track-d/d2`, `track-f/f4-screens` |
+| Карточка без видео (состояние) | #3 P0 | Фомин | то же (`f4`, кейс video_available=false) |
+| **Интерактивный отчёт `/report`** | **#2 P0** | Оздоев, Фомин | `track-b/b7,b8,b9,b10`, `track-d/d5`, `track-f/f7-analytics-voice` |
+| Диспетчерский алерт `/alert/:id` | #5 P1 | Оздоев | `track-b/b13`, `track-f/f9-dispatch-alert` |
+| Список заявок `/tickets` | #6 P1 | — | `track-b/b13`, `track-f/f8-tickets` |
+| Видеодосье `/trip/:id` | #7 P1 | Бриф | `track-b/b13`, `track-d/d4,d5`, `track-f/f10-trip-dossier` |
+| РЭБ `/reb/:id` | #8 P2 | Бриф | `track-b/b12-reb`, `track-f/f11-reb-recovery` |
+| Детекция саботажа (виджет) | #9 P2 | Фомин | `track-b/b11-sabotage`, `track-f/f12-sabotage` |
+| Карта по ролям (сквозная) | #10 P2 | Маслов | `track-d/d4`, `track-f/f13-role-toggle` |
 
-| Тип | Файл |
-|-----|------|
-| 💡 Идея | `init/ideas/01-idea-unified-window.md` + `09-role-based-map.md` |
-| 🎨 Claude Design | `design-prompts/claude-design/01-events-feed.md` |
-| ⚙️ Dev | `prompts/waves/wave-03-screens/P4-03A-events-feed.md` |
-| 📦 Mock | `data/mock/incidents.json` · `data/mock/events-feed.json` |
-
----
-
-### Экран 1Б — Живой мониторинг (карта)
-**Клиенты:** Маслов (Балтика — логисты)
-**Фичи из интервью:**
-- Тёмная тема, карта 24/7
-- **Переключатель роли** — логисты видят только позицию ТС
-- 1 ТС = 1 маркер на карте
-- Попап с badge источника + «1 ТС · 1 объект»
-
-| Тип | Файл |
-|-----|------|
-| 🎨 Claude Design | `design-prompts/claude-design/02-live-monitor.md` |
-| ⚙️ Dev | `prompts/waves/wave-03-screens/P1-03E-live-monitor.md` |
-| 📦 Mock | `data/mock/incidents.json` · `data/mock/live-monitor.json` · `data/mock/vehicles.json` |
+Подробное описание каждой идеи — в `init/ideas/`. Контекст клиентов — `init/ideas/03-customer-voice.md`, конкуренты — `04-competitors-analysis.md`.
 
 ---
 
-### Экран 2 — Карточка инцидента с видео **[ИДЕЯ #1 P0]**
-**Клиенты:** Фомин (PepsiCo), Оздоев (ГПН)
-**Фичи из интервью:**
-- Два видеоплеера ADAS+DMS синхронно — Фомин: «CAN правдивее, сравниваем в одном окне»
-- CAN-скорость + акселерометр, маркер движется с видео
-- Badge источника [⚡📹 Оба] — откуда событие
-- **[📹 Позвонить через камеру]** — Маслов: «звонить через регистратор, не по телефону»
-- **Блок «Причина события»** — Фомин: «почему резкое торможение — засыпал, подрезали?»
-  AI-версия + кнопки [😴 Засыпал] [📱 Отвлёкся] [🚗 Подрезали] [⚙ Техн. сбой]
+## КЛЮЧЕВЫЕ ФИЧИ ИЗ ИНТЕРВЬЮ
 
-| Тип | Файл |
-|-----|------|
-| 💡 Идея | `init/ideas/01-idea-unified-window.md` |
-| 🎨 Claude Design | `design-prompts/claude-design/03-idea1-incident-video.md` |
-| ⚙️ Dev (экран) | `prompts/waves/wave-03-screens/P3-03B-incident-card.md` |
-| ⚙️ Dev (компоненты) | `02A-idea1-IncidentCard` · `02B-idea1-VideoPanel` · `02C-idea1-TelemetryChart` · `02D-idea1-ActionButtons` · `02F` · `02G` · `02H` |
-| 📦 Mock | `data/mock/incidents.json` · `data/mock/incident-video.json` |
-
----
-
-### Экран 3 — Карточка инцидента без видео **[ИДЕЯ #1 P0]**
-**Клиенты:** Фомин (PepsiCo)
-**Фичи:**
-- Placeholder с объяснением почему нет видео (CAM-03 offline)
-- Кнопка «Запросить архивное видео» → статус запроса
-- **[📹 Позвонить через камеру]** — те же состояния
-- **Блок «Причина события»** — без видео, только телеметрия
-
-| Тип | Файл |
-|-----|------|
-| 💡 Идея | `init/ideas/01-idea-unified-window.md` |
-| 🎨 Claude Design | `design-prompts/claude-design/04-idea1-incident-no-video.md` |
-| ⚙️ Dev (экран) | `prompts/waves/wave-03-screens/P3-03B-incident-card.md` |
-| 📦 Mock | `data/mock/incidents.json` · `data/mock/incident-no-video.json` |
-
----
-
-### Экран 4 — Интерактивный аналитический отчёт **[ИДЕЯ #2 P0]**
-**Клиенты:** Оздоев (ГПН), Фомин (PepsiCo)
-**Фичи:**
-- Голосовой ввод 🎤 (faster-whisper large-v3, RU/KK/EN) — или текстом
-- Подтверждающее окно «Вот как я понял» + уверенность 96%
-- **Режим В-1** (один водитель): карточка + KPI + трек + график + таблица ВА+тел → клик→видео
-- **Режим В-2** (парк): toggle [👤 По водителям | 🚛 По ТС]
-  - По ТС: камеры online/offline, водители за период (1 ТС = N водителей)
-- Колонка «Причина» в таблице нарушений
-- Клик на строку → VideoSlidePanel с причиной
-- Источник: Оздоев: «Нажал нарушение — вылезло видео»
-
-| Тип | Файл |
-|-----|------|
-| 💡 Идея | `init/ideas/02-idea-interactive-report.md` |
-| 🎨 Claude Design | `design-prompts/claude-design/05-idea2-interactive-report.md` |
-| ⚙️ Dev (экран) | `prompts/waves/wave-03-screens/P2-03D-analytics-screen.md` |
-| ⚙️ Dev (компоненты) | `02E-idea2-analytics-components.md` (13 компонентов) |
-| 📦 Mock В-1 | `data/mock/driver-report.json` — Иванов, 7 нарушений, 487 км |
-| 📦 Mock В-2 | `data/mock/fleet.json` · (нужно создать: fleet-report.json, fleet-vehicles.json) |
-
----
-
-### Экран 5 — Диспетчерский алерт ±15 сек [P1]
-**Клиенты:** Оздоев (ГПН) — Богобоязов Павел, Нефедов Вадим
-**Фичи:**
-- Автозапрос видео ±15 сек при критическом событии
-- Алерт поверх экрана (не блокирует работу)
-- Роли: Логист видит только badge, Диспетчер — полный алерт
-- Связка с диспетчерским центром
-
-| Тип | Файл |
-|-----|------|
-| 💡 Идея | `init/ideas/08-camera-sabotage.md` |
-| 🎨 Claude Design | `design-prompts/claude-design/06-dispatch-alert-plus.md` |
-| 📦 Mock | `data/mock/dispatch-alert.json` |
-
----
-
-### Экран 6 — Список заявок [P1]
-
-| Тип | Файл |
-|-----|------|
-| 🎨 Claude Design | `design-prompts/claude-design/07-tickets-screen.md` |
-| ⚙️ Dev | `prompts/waves/wave-05-polish/05A-tickets-table.md` · `05B-tickets-screen.md` |
-| 📦 Mock | `data/mock/tickets.json` |
-
----
-
-### Экран 7 — Видеодосье рейса [P1]
-**Источник:** Бриф организаторов (сценарий Т+В)
-
-| Тип | Файл |
-|-----|------|
-| 💡 Идея | `init/ideas/09-role-based-map.md` |
-| 🎨 Claude Design | `design-prompts/claude-design/08-trip-dossier.md` |
-| 📦 Mock | `data/mock/trip-dossier.json` |
-
----
-
-### Экран 8 — Восстановление маршрута при РЭБ [P1]
-**Источник:** Бриф организаторов
-
-| Тип | Файл |
-|-----|------|
-| 💡 Идея | `init/ideas/04-competitors-analysis.md` |
-| 🎨 Claude Design | `design-prompts/claude-design/09-reb-route-recovery.md` |
-| 📦 Mock | `data/mock/reb-route.json` |
-
----
-
-### Идеи без дизайн-промпта [P2]
-
-| Идея | Источник | Файл идеи | Что нужно |
-|------|----------|-----------|-----------|
-| Детекция саботажа камеры | Фомин (PepsiCo) | `init/ideas/08-camera-sabotage.md` | Создать `design-prompts/claude-design/ (промпт не создан)` |
-| Карта по ролям (полная) | Маслов (Балтика) | `init/ideas/09-role-based-map.md` | Расширить 01/02 или создать `11-role-map.md` |
+- **Badge источника** [📹 ВА] / [⚡ Тел] / [⚡📹 Оба] — Фомин: «прыгаем между системами».
+- **Фильтр «Нет видео»** + «Запросить архив» — Фомин: «много событий без видео».
+- **Ролевой switcher** [🏭 Логист | 🛡 Диспетчер | 🔒 Безопасник] — Маслов: «логисты видят только телематику».
+- **1 ТС = 1 точка** (дедупликация терминалов) — Маслов: «3 машины — 5 точек».
+- **Звонок через регистратор** — Маслов: «звонить через камеру, не по телефону».
+- **Блок «Причина события»** [😴/📱/🚗/⚙] — Фомин: «почему резкое торможение?».
+- **Видео по клику в отчёте** (killer feature) — Оздоев: «нажал нарушение — вылезло видео».
+- **Саботаж: тёмный DMS + машина едет** — Фомин: «закрывают камеры, но телематика видит движение».
 
 ---
 
 ## ПОСЛЕДОВАТЕЛЬНОСТЬ РАЗРАБОТКИ
 
+См. `init/playbook/00-day-plan.md` и `prompts/v2-fullstack/README.md`:
+
 ```
-ШАГ 0   Все читают: AGENTS.md + init/ideas/01 + 02
-
-ШАГ 1   ПАРАЛЛЕЛЬНО — Wave 1 (Foundation):
-         01A types       01B constants    01C incidents.json
-         01D vehicles    01E app shell
-         01F-A driver-report.json         (Идея #2 В-1)
-         01F-B fleet-reports.json         (Идея #2 В-2, нужно создать)
-         01F-C presets + types
-
-ШАГ 2   ПАРАЛЛЕЛЬНО — три потока:
-
-  ПОТОК 1 — Экран 1:
-    03A EventFeedScreen       03E LiveMonitorScreen
-
-  ПОТОК 2 — Идея #1 (компоненты):
-    02A IncidentCard           02B VideoPanel
-    02C TelemetryChart         02D ActionButtons (+звонок +причина)
-    02F IncidentTopBar         02G ContextChips
-    02H SourceStatusGrid
-
-  ПОТОК 3 — Идея #2 (компоненты):
-    02E analytics-components (13 компонентов)
-      VoiceQueryBox · ConfirmationModal · DriverReportCard
-      ViolationsTable · RouteTrackMap · SpeedChart · VideoSlidePanel
-      FleetDriversList · FleetBarChart · FleetMap
-      DriverMiniDashboard · FleetVehiclesList · VehicleMiniDashboard
-
-ШАГ 3   ПАРАЛЛЕЛЬНО — экраны P0:
-  ПОТОК 2: 03B UnifiedIncidentWindow  (зависит от 02A-H)
-  ПОТОК 3: 03D AnalyticsScreen        (зависит от 02E, 01F)
-
-ШАГ 4   04-wire-routing (сходятся все потоки)
-         Маршруты: / · /monitor · /incident/:id · /analytics
-
-ШАГ 5   ПАРАЛЛЕЛЬНО — полировка:
-         05A tickets-table    05B tickets-screen
-         05C smoke-checklist  05D demo-script
-
-ШАГ 6   Демо по 05D-demo-script.md:
-         Flow 1: inc-002 → видео + телеметрия + [Создать заявку]
-         Flow 2: inc-003 → нет видео → [Запросить архив]
-         Flow 3: голос «Нарушения Иванова за 3 дня» → подтверждение → отчёт
+Барьер 0  cleanup + заморозка 00-CONTRACT (+§7) + решение по driver_reference
+Волна 1   P0:  d1–d3 ‖ b1–b6 ‖ f1–f4
+Волна 2   x1–x3 (выпил Streamlit, склейка, e2e) → демо #1/#3
+Волна 3   расширение: d4–d5 ‖ b7–b13 ‖ f5–f13 (идеи #2,#4–#10)
+Волна 4   финальный e2e + voice/NLU
 ```
 
 ---
 
-## РЕАЛЬНЫЕ ДАННЫЕ (datasets/ready/)
+## РЕАЛЬНЫЕ ДАННЫЕ (`datasets/ready/`)
 
-| Файл | Что содержит | Для экранов |
-|------|-------------|------------|
-| `selected_video_alarms.csv` | 54 аларма: тип, время, скорость, адрес, CameraIds | Все экраны с видео |
-| `video_files.csv` | 94 MP4: канал, длительность, media_relative_path | Видеоплееры |
-| `track_points.csv` | 81,977 точек: lat, lon, speed_kmh, timestamp | Карты, графики |
-| `sensor_graph_points.csv` | 959k точек датчиков | Графики телеметрии |
-| `sensor_catalog.csv` | 627 датчиков: id, имя, группа, единицы | Выбор датчиков |
-| `reference/*.csv` | Сопоставление id машин между системами | Соединение данных |
-| `training/` | 94 MP4 (728 сек) | Видеоплееры |
-| `fuel_reconciliation/` | Топливная сверка (30 строк) | Не для основного сценария |
-| `navigation_problem_tracks/` | Проблемные треки | Не для основного сценария |
+| Файл | Содержит | Для экранов |
+|---|---|---|
+| `video_events/selected_video_alarms.csv` | 54 аларма: тип, время, скорость, CameraIds | Все с видео |
+| `video_events/video_files.csv` | 94 MP4: канал (1–3 ADAS / 5 DMS), media_relative_path | Видеоплееры |
+| `video_events/track_points.csv` | точки трека: lat, lon, speed_kmh, timestamp | Карты, графики |
+| `sensor_diagnostics/sensor_catalog.csv` | 627 датчиков | Графики телеметрии |
+| `navigation_problem_tracks/` | 82k точек, разрывы GPS | РЭБ (#8) |
+| `reference/*.csv` | сопоставление id ТС между системами | Дедупликация (#4/#10) |
+| `fuel_reconciliation/` | топливная сверка (30 строк) | вне основного сценария (501) |
 
-> ⚠️ data/mock/*.json — ПРИМЕРЫ, не соответствующие реальной структуре CSV. НЕ использовать.
+Справочник 14 типов алярмов — `data/analysis/alarm_types.json`. Эталонная форма объекта — `data/mock/incidents.py`.
+Идентичность водителей — детерминированный `driver_reference` (контракт §7.1).
 
 ---
 
-## КЛЮЧЕВЫЕ ДАННЫЕ ДЛЯ ДЕМО
+## КЛЮЧЕВЫЕ ПАРАМЕТРЫ ДЕМО
 
 | Параметр | Значение |
-|----------|----------|
-| Алармов для демо | 5-10 из selected_video_alarms.csv (разные типы: Sabotage, DMS, ADAS) |
-| Точек трека | 50-100 вокруг одного аларма |
-| Датчиков для графика | 2-3: скорость (__lgc.spd.0), топливо, обороты |
-| MP4 для плеера | 2-4 ролика (каналы 1 и 5) |
-| Период | 14-15.05.2026 (видео) / 04-10.05.2026 (датчики/треки) |
-| STT | faster-whisper large-v3 (open-source, RU 🇷🇺 / KK 🇰🇿 / EN 🇬🇧) |
-| NLU | LLM (текст → структурированный запрос) |
-| Primary color | #1E3A8A |
-| Font | Inter |
+|---|---|
+| STT | faster-whisper large-v3 (RU 🇷🇺 / KK 🇰🇿 / EN 🇬🇧) |
+| NLU | Groq LLaMA 3.3 70B + fallback regex |
+| Primary color | #1E3A8A · Font Inter |
+| Период видео | 14–19.05.2026 · треки/датчики 04–10.05.2026 |

@@ -12,7 +12,7 @@
 - [ ] `npm run dev` → :5173 открылся
 - [ ] Прочитал `AGENTS.md` — знаю что строим
 - [ ] Прочитал `AGENTS.md` раздел 0 — знаю правила
-- [ ] Прочитал `prompts/waves/README.md`
+- [ ] Прочитал `prompts/v2-fullstack/README.md` и `00-CONTRACT.md`
 
 ### Контекст продукта
 - [ ] Знаю 5 mock-кейсов наизусть (госномер + ФИО + тип события)
@@ -49,4 +49,4 @@
 
 - Репо недоступен → Усачёв Дмитрий
 - Детальный план промптов → `init/playbook/00-day-plan.md`
-- Матрица волн → `prompts/waves/README.md`
+- Матрица волн → `prompts/v2-fullstack/README.md`

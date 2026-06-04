@@ -15,8 +15,8 @@
 
 ## Связанные промпты
 
-- Дизайн: `design-prompts/claude-design/05-idea2-interactive-report.md`
-- Код: `prompts/waves/wave-03-screens/P2-03D-analytics-screen.md`
+- Контракт: `prompts/v2-fullstack/00-CONTRACT.md` (§7.1–§7.4)
+- Код: `prompts/v2-fullstack/track-f-frontend/f7-analytics-voice.md`
 
 ## Идея
 

@@ -155,7 +155,7 @@ IncidentDetail extends IncidentSummary {   # для GET /incidents/{id}
 
 ### 3.4 Эндпоинты — `actions` и stub-домены
 
-| POST | `/api/actions` | `Action` | тело `{incident_id, action, comment}`; `action ∈ {mark_reviewed, create_task, export_report, request_archive, call_driver}`; пишет в `output/actions.csv`; меняет `status` инцидента в рантайме |
+| POST | `/api/actions` | `Action` | тело `{incident_id, action, comment}`; `action ∈ {mark_reviewed, create_task, export_report, request_archive, call_driver, notify_hr}`; пишет в `output/actions.csv`; меняет `status` инцидента в рантайме |
 | GET | `/api/fuel/*`, `/api/sensors/*`, `/api/navigation/*` | `501 Not Implemented` | только роутеры-скелеты + TODO; таблицы в DuckDB уже есть |
 
 ---
@@ -205,7 +205,7 @@ spacing base 4px; кнопка h36; иконки Lucide React
 
 ---
 
-## 5. Customer Requirements (из интервью)
+## 6. Customer Requirements (из интервью)
 
 > Источник: `context/customer-research.md`
 
@@ -235,3 +235,133 @@ DRIVER_MOCK = {
 }
 RISK_SCORE_FORMULA = "severity_weight * speed_factor * night_multiplier"
 ```
+
+---
+
+## 7. Расширение скоупа: P1/P2 + Voice/NLU + Driver (full-scope v2.1)
+
+> Этот раздел расширяет контракт с P0-домена `incidents` до полного продукта (идеи #1–#10).
+> Решения по скоупу: **P0+P1+P2**, **реальная интеграция Voice/NLU и справочника водителей**.
+> Базовые §1–§6 остаются в силе; ниже — добавки, не переопределяющие их.
+
+### 7.1 Справочник водителей — `driver_reference` (реальная таблица, не рантайм-mock)
+
+Идентичности водителей нет в исходных датасетах. Заводим **реальную таблицу DuckDB**
+`driver_reference`, посеянную детерминированно один раз и **заменяемую** на внешний источник
+(RFID/HR-API) без изменения контракта API.
+
+- Артефакт сида: `data/seed/driver_reference.csv` (в git, не генерируется на лету).
+- Колонки: `vehicle_plate, unit_id, driver_id, driver_name, driver_phone, department, region, safety_score`.
+- Генерация сида (скрипт `api/etl/seed_drivers.py`): для каждого уникального `UnitStateNumber`/`UnitId`
+  из `video_events__selected_video_alarms` — детерминированно (seed `crc32(plate)`) выбрать ФИО/телефон/
+  подразделение/регион из фиксированных пулов (≥20 имён, ≥5 регионов). `safety_score` = 100 − среднего
+  `risk_score` алярмов этого ТС.
+- В DuckDB грузится как таблица `driver_reference` (b1 подхватывает `data/seed/*.csv` с префиксом `seed`
+  → имя `seed__driver_reference`, либо b7 создаёт явно — см. b7).
+- `enrichment.driver_for(plate)` (§2) меняется: **сначала** ищет в `driver_reference`, **иначе** падает
+  на синтетику по `crc32`. Так «реальный» путь и демо-fallback сосуществуют.
+
+> Замена на внешний источник = только перегенерация `driver_reference.csv` / смена загрузчика b7.
+> API-схемы (`driver`, `driver_id`, `driver_phone`) не меняются.
+
+### 7.2 Новые SQL-views (Track B, файлы `api/sql/2x_*.sql`)
+
+| View | Файл | Назначение | Идея |
+|---|---|---|---|
+| `v_driver_report` | `api/sql/20_v_driver_report.sql` | алярмы+метрики по `vehicle_plate` (агрегаты периода) | #2 В-1 |
+| `v_fleet` | `api/sql/21_v_fleet.sql` | агрегаты по парку: по водителям и по ТС | #2 В-2 |
+| `v_vehicle` | `api/sql/22_v_vehicle.sql` | карточка ТС: статус камер + список водителей за период (1 ТС = N водителей) | #2 В-2/ТС, #10 |
+| `v_sabotage` | `api/sql/23_v_sabotage.sql` | корреляция: алярм `CAMERA_TAMPER`/тёмный DMS-канал + `speed_kmh>0` из `track_points` | #9 |
+| `v_reb` | `api/sql/24_v_reb.sql` | разрывы GPS из `navigation__track_periods` (`period_type=3`) + соседние видимые периоды | #8 |
+
+Все view идут поверх таблиц b1; порядок имён (`10_`,`20_`…) гарантирует, что `v_incidents` создаётся первым.
+
+### 7.3 Voice/NLU — реальная интеграция (Track B)
+
+| Слой | Технология | Файл | Контракт |
+|---|---|---|---|
+| STT | `faster-whisper` `large-v3` (локально, RU/KK/EN) | `api/services/stt_service.py` | `transcribe(wav_bytes, lang?) -> {text, lang, confidence}` |
+| NLU | Groq API + LLaMA 3.3 70B (env `GROQ_API_KEY`); fallback — локальный regex | `api/services/nlu_service.py` | `parse(text) -> ReportQuery{kind:"driver"\|"fleet", plate?, driver_name?, period_days?, view?}` |
+
+- Конфиг (`api/core/config.py`): `groq_api_key`, `whisper_model="large-v3"`, `whisper_device="cpu"`.
+- `nlu_service.parse` сначала пробует Groq (structured JSON prompt), при ошибке/без ключа — детерминированный
+  regex-парсер (ФИО/госномер/«за N дней/дня»). Обе ветки возвращают одну и ту же `ReportQuery`.
+- Зависимости (b4 `api/requirements.txt`): `faster-whisper`, `groq`. Тяжёлая модель STT грузится лениво.
+
+### 7.4 Новые эндпоинты (Track B, роутеры b6+)
+
+| Метод | Путь | Ответ | Идея |
+|---|---|---|---|
+| POST | `/api/reports/transcribe` | `{text, lang, confidence}` | #2 (голос → текст; тело — `multipart/form-data` wav) |
+| POST | `/api/reports/query` | `{query: ReportQuery, report: DriverReport\|FleetReport}` | #2 (теперь реальный NLU + отчёт; заменяет заглушку §3.3) |
+| GET | `/api/reports/vehicle/{plate}` | `VehicleReport` | #2 В-2/ТС, #10 |
+| GET | `/api/tickets` | `Ticket[]` | #6 (читает `output/actions.csv`) |
+| GET | `/api/alerts/{id}` | `DispatchAlert` (видео ±15с + телеметрия момента) | #5 |
+| GET | `/api/trips/{id}` | `TripDossier` (трек + таймлайн событий) | #7 |
+| GET | `/api/reb/{id}` | `RebRecovery` (GPS-разрывы + соседние видеокадры) | #8 |
+| GET | `/api/sabotage` | `SabotageEvent[]` (из `v_sabotage`) | #9 |
+
+> `POST /api/reports/query` из §3.3 расширяется: ответ оборачивается в `{query, report}`. fuel/sensors/navigation
+> остаются стабами `501` (кроме `navigation`→`/api/reb`, который теперь реализован).
+
+### 7.5 Новые Pydantic-схемы (b5+)
+
+```text
+ReportQuery   { kind: "driver"|"fleet", plate?: str, driver_name?: str, period_days?: int=3, view?: "drivers"|"vehicles" }
+VehicleReport { plate, vehicle_model, cameras: Camera[], drivers: DriverRef[], period_alarms: IncidentSummary[], mileage_km }
+DriverRef     { driver_id, driver_name, role: "main"|"secondary", trips: int, safety_score: int }
+Ticket        { id, created_at, incident_id, action, comment, status: "new"|"in_progress"|"closed" }
+DispatchAlert { incident: IncidentDetail, video_window_sec: int=15, requested_at: str }
+TripDossier   { vehicle_plate, track: TelemetryPoint[], timeline: {ts_offset, alarm_code, label, has_video}[] }
+RebRecovery   { vehicle_plate, gps_track: {lat,lon,ts}[], gap_periods: {start,end,duration_sec}[], video_frames: {ts, channel, url}[] }
+SabotageEvent { id, vehicle_plate, ts, dms_dark: bool, speed_kmh: float, driver_name, video_url }
+```
+
+### 7.6 Дизайн-токены — добавки (Track D, d4/d5)
+
+```text
+map: marker severity colors = severity-палитра §4; marker-online #16A34A · marker-offline #94A3B8
+     cluster radius 40px; dedup: 1 unit_id = 1 marker (НЕ 1 AlarmId)
+voice: idle (primary outline) · recording (critical pulse) · processing (primary spinner)
+timeline: track line #1E3A8A; event dot = severity color; t=0 marker critical
+roles: Логист 🏭 / Диспетчер 🛡 / Безопасник 🔒 — chip-токены primary-50/primary
+leaflet tiles: тёмная тема для /monitor (24/7)
+```
+
+### 7.7 Владение новыми файлами (без пересечений)
+
+| Агент | Владеет | Зависит от |
+|---|---|---|
+| b7 driver-reference | `data/seed/driver_reference.csv`, `api/etl/seed_drivers.py`; правка `enrichment.driver_for` (по согласованию с b2) | b1, §7.1 |
+| b8 stt-service | `api/services/stt_service.py` | b4 |
+| b9 nlu-service | `api/services/nlu_service.py` | b4 |
+| b10 reports-views | `api/sql/20_v_driver_report.sql`, `21_v_fleet.sql`, `22_v_vehicle.sql`; `api/services/reports_service.py` (расширение) | b1, b3, b7, b9 |
+| b11 sabotage | `api/sql/23_v_sabotage.sql`, `api/services/sabotage_service.py`, роутер `api/routers/sabotage.py` | b1 |
+| b12 reb | `api/sql/24_v_reb.sql`, `api/services/reb_service.py`, роутер `api/routers/reb.py` | b1 |
+| b13 tickets+alerts+trips | `api/services/tickets_service.py`, роутеры `tickets.py`/`alerts.py`/`trips.py` | b5, b6 |
+| d4 map-primitives | `web/src/components/map/*` (Leaflet MapView, MarkerLayer, RoleToggle) | d1 |
+| d5 voice+timeline | `web/src/components/ui/VoiceButton.tsx`, `ConfirmationModal.tsx`, `Timeline.tsx` | d1, d2 |
+| f5 events-feed | `web/src/pages/EventsFeed.tsx` | d2, f2 |
+| f6 monitor-map | `web/src/pages/Monitor.tsx` (полный, заменяет scaffold f4) | d4, f2 |
+| f7 analytics-voice | `web/src/pages/Report.tsx` (полный, заменяет scaffold f4), `web/src/api/voice.ts` | d5, f2 |
+| f8 tickets | `web/src/pages/Tickets.tsx` | d2, f2 |
+| f9 dispatch-alert | `web/src/pages/DispatchAlert.tsx` (или модал) | d2, f2 |
+| f10 trip-dossier | `web/src/pages/TripDossier.tsx` | d4, d5, f2 |
+| f11 reb-recovery | `web/src/pages/RebRecovery.tsx` | d4, f2 |
+| f12 sabotage | `web/src/components/SabotageWidget.tsx` + секция в Report/Monitor | d2, f2 |
+| f13 role-toggle | интеграция `RoleToggle` (d4) в EventsFeed/Monitor; фильтрация по роли | d4, f5, f6 |
+
+> `f6`/`f7` **заменяют** scaffold-версии `Monitor.tsx`/`Report.tsx` из f4. После full-scope f4 владеет
+> только `IncidentCard.tsx`; Monitor/Report переходят к f6/f7. Зафиксировать при запуске Волны 3.
+
+### 7.8 Acceptance criteria — P1/P2
+
+**Лента событий (`/`, идея #4):** badge источника `[📹/⚡/⚡📹]`, фильтр «Нет видео», ролевой switcher, поиск по plate/ФИО, клик→карточка.
+**Монитор (`/monitor`, идея #4/#10):** Leaflet, 1 `unit_id` = 1 маркер, цвет по severity, ролевой режим (Логист — без DMS-алармов), тёмная тема.
+**Отчёт (`/report`, идея #2):** 🎤 → `transcribe` → текст → `query` → подтверждающее окно (`ConfirmationModal`) → дашборд В-1/В-2; клик по нарушению → видео справа.
+**Tickets (`/tickets`, идея #6):** таблица из `output/actions.csv`, фильтры по типу/статусу/дате.
+**Dispatch alert (идея #5):** при `auto_request_video=true` алярме — модал с видео ±15с + 3 кнопки.
+**Видеодосье (`/trip/:id`, идея #7):** трек + таймлайн событий, клик по точке → видео момента.
+**РЭБ (`/reb/:id`, идея #8):** GPS-трек с разрывами + соседние видеокадры; данные из `navigation_problem_tracks`.
+**Саботаж (идея #9):** список `v_sabotage` (тёмный DMS + speed>0), кнопки «Заявка»/«HR».
+**Карта по ролям (идея #10):** переключатель роли скрывает/показывает слои; дедупликация ТС.

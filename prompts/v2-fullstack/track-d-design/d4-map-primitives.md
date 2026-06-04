@@ -1,0 +1,65 @@
+# d4 · Map-примитивы (Leaflet + React)
+
+> Трек **Design**. Против `00-CONTRACT.md` §4 (палитра) + §7.6 (добавки map/roles) + §7.7 (владение d4).
+> **Владеет:** `web/src/components/map/*` (`MapView.tsx`, `MarkerLayer.tsx`, `RoleToggle.tsx`).
+> Зависит от d1 (токены). Использует токены d1, но НЕ редактирует tailwind.config.
+> Карты — `react-leaflet`, иконки — `lucide-react`.
+
+## Цель
+
+Презентационные примитивы карты для `/monitor` (идея #4/#10): тёмная Leaflet-карта 24/7,
+дедуплицированные маркеры ТС с цветом по severity и ролевой переключатель слоёв. Без fetch
+и бизнес-логики — только props → разметка. На них собираются экраны f6/f13.
+
+## Компоненты
+
+1. **`MapView.tsx`** — обёртка `MapContainer` (react-leaflet).
+   - Тёмная тема `/monitor` (24/7): tile-слой тёмный (CartoDB `dark_matter` или эквивалент), фон
+     контейнера `ink` (#0F172A) до загрузки тайлов.
+   - Props: `center: [lat, lon]`, `zoom: number`, `children` (слои), `className?`.
+   - Атрибуция тайлов обязательна; контролы зума в стиле токенов (surface/border d1).
+   - Кластеризация: `radius 40px` (§7.6) — настроить через `react-leaflet-cluster`/`MarkerClusterGroup`.
+     Иконка кластера — кружок `primary` (#1E3A8A) с числом ТС (tabular-nums, белый текст).
+
+2. **`MarkerLayer.tsx`** — слой маркеров ТС.
+   - Props: `units: MapUnit[]`, `onSelect?: (unitId: string) => void`.
+     `MapUnit { unit_id, vehicle_plate, lat, lon, severity, online, last_alarm }`
+     где `last_alarm { id, alarm_label_ru, severity, ts }`.
+   - **ДЕДУПЛИКАЦИЯ (§7.6, критично):** один маркер на `unit_id`, НЕ на `AlarmId`. Если на входе
+     несколько алярмов одного ТС — компонент отрисовывает ровно один маркер (последний/наихудший
+     алярм). Дедуп — на уровне props-контракта `MapUnit`, но компонент обязан не множить точки даже
+     при дублях в массиве (защита `Map<unit_id>`).
+   - Цвет маркера — **severity-палитра §4** через маппинг d1: `critical→critical`, `high→high`,
+     `medium→warning`, `low→ok`. Кольцо статуса: `online #16A34A` / `offline #94A3B8` (§7.6) —
+     тонкая обводка маркера.
+   - Попап маркера: госномер + последний алярм (`alarm_label_ru` + `SeverityBadge` из d2 + время) +
+     ссылка-переход на `/incidents/:id` (по `last_alarm.id`). Клик по маркеру → `onSelect(unit_id)`.
+
+3. **`RoleToggle.tsx`** — переключатель роли (segmented chips).
+   - Props: `value: Role`, `onChange: (r: Role) => void`. `Role = 'logist' | 'dispatcher' | 'security'`.
+   - Три chip'а с эмодзи (§7.6): **Логист 🏭** / **Диспетчер 🛡** / **Безопасник 🔒**.
+   - Активный chip — `bg-primary` (#1E3A8A) + белый текст; неактивный — `bg-primary-50` (#EFF6FF) +
+     текст `primary`. Скругление `xl` (12px, badge), переход плавный.
+   - Только presentation: фильтрацию слоёв по роли делает f13, компонент лишь эмитит `onChange`.
+
+## Требования
+
+- TypeScript, строгие props-интерфейсы, именованный экспорт.
+- Иконки — `lucide-react`; эмодзи ролей — текстом в chip.
+- Никаких прямых hex в разметке — Tailwind-классы/CSS-переменные d1. Исключение — цвета, которые
+  Leaflet требует императивно (divIcon/marker color): брать из CSS-переменных d1 (`--sev-*`,
+  `--marker-online`/`--marker-offline`), не дублировать литералы (значения см. §7.6, заводит d1).
+- Leaflet CSS (`leaflet/dist/leaflet.css`) импортируется один раз в `MapView.tsx`.
+- Каждый компонент самодостаточен и рендерится в витрине d3.
+
+## Check
+
+- Все 3 файла компилируются (`tsc --noEmit`) без ошибок типов.
+- `MapView` рендерит тёмные тайлы; кластер-иконка показывает число ТС, радиус кластеризации 40px.
+- `MarkerLayer`: при подаче массива с несколькими алярмами одного `unit_id` на карте ровно **один**
+  маркер на это ТС (дедупликация по `unit_id`, НЕ по `AlarmId`).
+- Цвет маркера соответствует severity-маппингу d1; кольцо `online`/`offline` рендерится корректно
+  в обоих состояниях.
+- Попап содержит госномер, последний алярм и рабочую ссылку на `/incidents/:id`; клик эмитит `onSelect`.
+- `RoleToggle` рендерится во всех трёх состояниях (logist/dispatcher/security), активный chip
+  визуально выделен `primary`, `onChange` отдаёт выбранную роль.

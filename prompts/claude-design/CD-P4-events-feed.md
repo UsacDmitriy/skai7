@@ -1,7 +1,7 @@
 # Claude Design P4 — Лента событий (EventFeedScreen)
 
 > Инструмент: claude.ai/design
-> System prompt: `design-prompts/claude-design/00-design-system.md`
+> System prompt: `prompts/claude-design/00-design-system.md`
 > Сохранить в: `code/clade_design/Лента событий/`
 
 ## Дизайн-спека (встроена)

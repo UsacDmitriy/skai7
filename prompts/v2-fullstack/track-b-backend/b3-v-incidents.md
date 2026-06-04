@@ -1,7 +1,7 @@
 # b3 · SQL view v_incidents
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §1.3. **Владеет:** `api/sql/10_v_incidents.sql`.
-> Порт `prompts/waves/wave-06-sqlite-backend/06B-incidents-view.md` с SQLite → DuckDB-синтаксис.
+> View `v_incidents` по контракту §1.3 (DuckDB-синтаксис; ранний SQLite-прототип портирован).
 
 ## Цель
 

@@ -1,7 +1,7 @@
 # b1 · DuckDB ETL — build_duckdb.py
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §1. **Владеет:** `api/etl/build_duckdb.py`.
-> Порт логики `prompts/waves/wave-06-sqlite-backend/06A-etl-build-db.md` с SQLite → DuckDB.
+> ETL-сборка БД из CSV (логика самодостаточна: см. контракт §1; ранний SQLite-прототип портирован на DuckDB).
 
 ## Цель
 

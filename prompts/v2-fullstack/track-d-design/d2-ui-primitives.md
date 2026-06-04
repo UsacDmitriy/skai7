@@ -2,8 +2,8 @@
 
 > Трек **Design**. Против `00-CONTRACT.md` §4 + `init/context/DESIGN.md` (раздел Components).
 > **Владеет:** `web/src/components/ui/*`. Использует токены d1, но НЕ редактирует tailwind.config.
-> Референс вёрстки — HTML-мокапы `ui/**` и `prompts/waves/wave-03-screens/**` (читать как образец стиля,
-> не копировать React-через-Babel — писать чистые TSX-компоненты).
+> Референс вёрстки — HTML-мокапы `ui/**` и дизайн-промпты `prompts/claude-design/**` (читать как образец
+> стиля, не копировать React-через-Babel — писать чистые TSX-компоненты).
 
 ## Цель
 

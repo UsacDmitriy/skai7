@@ -31,4 +31,6 @@
 
 ## Статус
 
-⚠️ **Нет дизайн-промпта.** При наличии времени — создать `design-prompts/claude-design/ (промпт не создан)`
+✅ **Промпты реализации созданы.** Backend: `prompts/v2-fullstack/track-b-backend/b11-sabotage.md`
+(view `v_sabotage` — тёмный DMS + speed>0, `GET /api/sabotage`). Frontend:
+`track-f-frontend/f12-sabotage.md`. Контракт §7.2/§7.4/§7.5. Дизайн-промпт при желании — в `prompts/claude-design/`.

@@ -1,0 +1,52 @@
+# f5 · Лента событий (`/`)
+
+> Трек **Frontend**. Против `00-CONTRACT.md` §3 (схемы/эндпоинты) + §7.8 (AC «Лента событий»).
+> **Владеет:** `web/src/pages/EventsFeed.tsx`. Использует UI-примитивы d2 (`@/components`),
+> `RoleToggle` из d4 и API-клиент f2. Идея #4 «Лента событий». Иконки — `lucide-react`.
+
+## Цель
+
+Таблица всех алярмов парка как стартовый экран (маршрут `/`). Один ряд = один алярм
+(`IncidentSummary` из §3.1), быстрый триаж: видно источник, severity, риск, есть ли видео.
+Клик по строке ведёт в карточку `/incidents/:id` (владелец карточки — f4).
+
+## Экран
+
+Данные: `client.listIncidents(filters?)` → `IncidentSummary[]`. Не дублируй схему — поля по §3.1.
+
+- **Счётчики сверху** (плашки/`Card`): «В зоне риска» (`risk_score ≥ порог`), «Критичных»
+  (`severity==='critical'`), «Без видео» (`video_available===false`), «Закрыто»
+  (`status==='closed'`). Числа — `tabular-nums`.
+- **Бейдж источника** по `source` (§3.1 `Source`): `COMBINED → [⚡📹 Оба]`, `ADAS → [📹 ВА]`,
+  `DMS → [📹 ВА]`, `TELEMATICS → [⚡ Тел]`. Компактный chip.
+- **Таблица** (`DataTable` d2): тип (`alarm_label_ru`), бейдж источника, `SeverityBadge`,
+  `ScoreBar(risk_score)`, ТС (`vehicle_plate`) + водитель (`driver`), `speed_kmh`, время (`ts`),
+  адрес (`address`, nullable), значок видео (`Video`/`VideoOff` по `video_available`).
+- **Severity-border** у строки/строчной карточки — левая граница цветом severity (маппинг d1:
+  critical/high/medium→warning/low→ok).
+- **Фильтр «Нет видео»** — toggle, оставляет только `video_available===false`.
+- **Поиск** по `vehicle_plate` и `driver` (ФИО) — клиентская фильтрация по загруженному списку.
+- **Ролевой switcher** — `RoleToggle` (d4), `Role = 'logist'|'dispatcher'|'security'`. Логист видит
+  только телематику (без DMS-алармов: скрывать `source ∈ {DMS, COMBINED}` по DMS-части — фильтровать
+  по `source==='TELEMATICS'`/`ADAS`); Диспетчер/Безопасник — все. Фильтрация клиентская.
+- **Клик по строке** → навигация на `/incidents/:id`.
+- Состояния loading/error/empty.
+
+## Зависимости и параллельность
+
+- Зависит от: **f2** (`listIncidents`; метод уже есть), **d2** (`DataTable`, `SeverityBadge`,
+  `ScoreBar`, `Card`), **d4** (`RoleToggle`). Маршрут `/` регистрирует f1.
+- Параллелится с f6/f7/f8 — отдельный файл страницы, пересечений по владению нет.
+- Ролевая фильтрация частично пересекается с f13 (интеграция `RoleToggle`); здесь — локальная
+  фильтрация по роли внутри `EventsFeed`, f13 при необходимости поднимет состояние роли выше.
+
+## Check
+
+- `/` рендерит таблицу на живом API (после `make db` + бэк) и на фикстурах (`VITE_USE_FIXTURES=true`).
+- Все 4 счётчика считаются из загруженного списка и сходятся с числом строк по фильтрам.
+- Бейдж источника соответствует `source`: `[⚡📹 Оба]`/`[📹 ВА]`/`[⚡ Тел]`.
+- Severity-border строки соответствует severity-маппингу d1.
+- Toggle «Нет видео» оставляет только `video_available===false`.
+- Поиск фильтрует по `vehicle_plate` и `driver` (регистронезависимо).
+- `RoleToggle`: в роли «Логист» DMS-алярмы скрыты; Диспетчер/Безопасник показывают все.
+- Клик по строке открывает `/incidents/:id`.

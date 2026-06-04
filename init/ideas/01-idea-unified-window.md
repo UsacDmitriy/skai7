@@ -37,17 +37,13 @@
 **Экран 4 — нет видео (кейс Сидоров, Е902СТ 150):**
 CAM-03 offline → placeholder с объяснением → кнопка «Запросить архив».
 
-## Дизайн-промпты
+## Промпты реализации (актуальный план — `prompts/v2-fullstack/`)
 
-- `design-prompts/claude-design/03-idea1-incident-video.md`
-- `design-prompts/claude-design/04-idea1-incident-no-video.md`
-
-## Dev-промпты
-
-- `prompts/waves/wave-03-screens/P3-03B-incident-card.md` (P0)
-- `prompts/waves/wave-02-components/02A-idea1-IncidentCard.md`
-- `prompts/waves/wave-02-components/02B-idea1-VideoPanel.md`
-- `prompts/waves/wave-02-components/02C-idea1-TelemetryChart.md`
+- Контракт: `prompts/v2-fullstack/00-CONTRACT.md` (§3 incidents, §6 AC P0)
+- Backend: `track-b-backend/` — `b3-v-incidents`, `b5-schemas-repos-services`, `b6-routers`
+- UI-примитивы: `track-d-design/d2-ui-primitives` (VideoPlayer, TelemetryChart)
+- Экран: `track-f-frontend/f4-screens` (IncidentCard, сквозной flow)
+- Референс вёрстки: `ui/Карточка инцидента/`
 
 ## Три доп. функции из интервью
 

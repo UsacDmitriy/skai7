@@ -1,7 +1,7 @@
 # Claude Design P3 — Расширенная карточка инцидента
 
 > Инструмент: claude.ai/design
-> Загрузить system prompt из `design-prompts/claude-design/00-design-system.md`
+> Загрузить system prompt из `prompts/claude-design/00-design-system.md`
 > Сделать ДВЕ версии: Flow 1 (есть видео) и Flow 2 (нет видео)
 
 ---

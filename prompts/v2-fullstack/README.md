@@ -14,13 +14,13 @@
 | Фронт | React + Vite + TypeScript + Tailwind, пакет `web/` |
 | Тесты | pytest (бэк), vitest (фронт, по возможности) |
 
-## Граф выполнения — 3 параллельных трека
+## Граф выполнения — 3 параллельных трека (P0) + расширение (P1/P2)
 
 ```text
                ┌──────────── 00-CONTRACT.md ────────────┐
                │  поля инцидента · таблицы DuckDB ·       │
                │  v_incidents · enrichment · REST+схемы · │
-               │  дизайн-токены  (источник истины)        │
+               │  дизайн-токены · §7 full-scope (P1/P2)   │
                └────────────────────┬─────────────────────┘
         ┌───────────────────────────┼───────────────────────────┐
         ▼                           ▼                           ▼
@@ -28,14 +28,27 @@
    d1 tailwind-theme          b1 duckdb-etl                 f1 vite-scaffold
    d2 ui-primitives           b2 enrichment                 f2 api-client
    d3 component-lib           b3 v-incidents                f3 mock-fixtures
-                              b4 fastapi-scaffold           f4 screens
-                              b5 schemas-repos-services
-                              b6 routers
+   ── расширение (§7) ──       b4 fastapi-scaffold           f4 screens (IncidentCard)
+   d4 map-primitives          b5 schemas-repos-services     ── расширение (§7) ──
+   d5 voice-timeline          b6 routers                    f5 events-feed
+                              ── расширение (§7) ──           f6 monitor-map *
+                              b7 driver-reference            f7 analytics-voice *
+                              b8 stt-service                 f8 tickets
+                              b9 nlu-service                 f9 dispatch-alert
+                              b10 reports-views              f10 trip-dossier
+                              b11 sabotage                   f11 reb-recovery
+                              b12 reb                        f12 sabotage
+                              b13 tickets-alerts-trips       f13 role-toggle
         └───────────────────────────┼───────────────────────────┘
                                      ▼
                       wave-x-integration (барьер)
                       x1 remove-streamlit · x2 wiring · x3 e2e-smoke
 ```
+
+> `*` f6/f7 заменяют scaffold-версии `Monitor.tsx`/`Report.tsx` из f4 (см. контракт §7.7).
+> **Волна P0** = d1–d3 ‖ b1–b6 ‖ f1–f4 → x1–x3 (рабочее демо идей #1/#3).
+> **Волна расширения (§7)** = d4–d5 ‖ b7–b13 ‖ f5–f13 — стартует после заморозки контракта,
+> сходится на повторном x2/x3 (идеи #2,#4–#10). Максимальный параллелизм — граница только по контракту.
 
 ## Порядок запуска
 
@@ -44,20 +57,23 @@
    - Зависимость только по контракту: фронт кодит против JSON-схем из контракта (+ фикстуры f3), дизайн — против токенов, бэк — против таблиц/схем. Никто не ждёт чужой рантайм.
 3. **Барьер 2 — интеграция.** После завершения D/B/F запускается `wave-x-integration`: выпил Streamlit, склейка React↔FastAPI, сквозной smoke.
 
-## Что переиспользуется из старых волн
+## Что переиспользуется
 
 | Источник | Что берём |
 |---|---|
-| `prompts/waves/wave-06-sqlite-backend/00-CONTRACT.md` | Имена таблиц `{prefix}__{csv}`, `alarm_type_catalog`, колонки `v_incidents` (портируем на DuckDB) |
 | `init/context/DESIGN.md` | Дизайн-токены, компоненты, severity-палитра → Tailwind-тема |
-| HTML-мокапы `ui/**`, `prompts/waves/wave-03-screens/**` | Референсы 3 P0-экранов: Карточка инцидента, Живой мониторинг, Интерактивный отчёт |
+| HTML-мокапы `ui/**` (Карточка инцидента, Живой мониторинг, Интерактивный отчёт) | Референсы вёрстки P0/P1 экранов |
 | `data/analysis/alarm_types.json` | Справочник 14 типов алярмов (raw→code→label_ru, severity, source) |
 | `data/mock/incidents.py` | Эталонная форма объекта инцидента для API/фронта |
+| `datasets/ready/**` | Реальные CSV (54 аларма, 94 MP4, треки, топливо, навигация) |
 
-> ⚠️ **Deprecated:** `prompts/waves/wave-00a…wave-06` и Streamlit-`backend/` считаются архивом. Новый стек строится здесь. Отличие от wave-06: недостающие поля **обогащаются** (driver/model/risk_score), а не остаются NULL.
+> ⚠️ **Архив:** ранняя Streamlit-`backend/`-реализация и старая wave-структура (`prompts/waves/`) удалены.
+> Единственный действующий план разработки — этот каталог (`prompts/v2-fullstack/`). Legacy init-setup
+> промпты Streamlit-эры лежат в `prompts/legacy/`. Отличие от старого подхода: недостающие поля
+> **обогащаются** (driver/model/risk_score), а не остаются NULL.
 
-## Объём (scope)
+## Объём (scope) — полный продукт P0+P1+P2
 
-- **Сквозной P0-домен `incidents` / `video_events`** — реализуется end-to-end через все треки (ETL → enrichment → v_incidents → repo → service → router → API-client → экран «Карточка инцидента» → тест).
-- **fuel / sensors / navigation** — таблицы грузятся в DuckDB, но в API только скелет + `501 Not Implemented`; на фронте — заглушки.
-- **Экраны Монитор / Отчёт** — scaffold (вёрстка из мокапов + заглушечные данные), без полного wiring.
+- **P0 — домен `incidents` / `video_events`** end-to-end (d1–d3 ‖ b1–b6 ‖ f1–f4): ETL → enrichment → v_incidents → repo → service → router → API-client → «Карточка инцидента» → тест.
+- **Расширение (§7) — идеи #2,#4–#10**: реальные Voice/NLU (faster-whisper + Groq), справочник водителей `driver_reference`, отчёты В-1/В-2, лента/карта по ролям, заявки, диспетчерский алерт, видеодосье, РЭБ-восстановление, детекция саботажа. Промпты d4–d5 ‖ b7–b13 ‖ f5–f13.
+- **fuel / sensors** — таблицы в DuckDB, в API скелет + `501`. `navigation` — теперь реализован как `/api/reb` (b12).
