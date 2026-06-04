@@ -30,9 +30,114 @@ Claude Code и дай промпт волны (см. START.md). Окна раб�
 integration (x1/x2), поэтому в параллельной фазе их никто не делит.
 
 ## Порядок волн
+
 - **Волна 1** (backend ∥ web): BACKEND b1→b6 ; WEB d1→d3, f1→f4.
 - **Волна 2** (макс. параллельно): BACKEND b7→b10, b8∥b9, b11∥b12∥b13 ; WEB d4∥d5, f5–f13 ; TESTS T1–T3.
 - **Волна 3** (integration, основное окно `skai_7` на ветке integration): x1→x2→x3→x4.
+
+## Подробная схема выполнения
+
+Что запускать → в каком окне → где барьеры синхронизации.
+
+```mermaid
+flowchart TD
+    C0["🔒 БАРЬЕР 0 — КОНТРАКТ<br/>(окно skai_7, main)<br/>заморозить 00-CONTRACT.md"]
+
+    subgraph W1["ВОЛНА 1 · P0 core — окна 1 и 2 параллельно"]
+        direction LR
+        subgraph B1["🪟 Окно 1 · backend (feat/backend) — api/, data/"]
+            direction TB
+            b1["b1 duckdb-etl"] --> b3["b3 v-incidents"]
+            b1 --> b2["b2 enrichment"]
+            b1 --> b4["b4 fastapi-scaffold"]
+            b3 --> b5["b5 schemas-repos-services"]
+            b2 --> b5
+            b4 --> b5
+            b5 --> b6["b6 routers"]
+        end
+        subgraph F1["🪟 Окно 2 · web (feat/web) — web/"]
+            direction TB
+            d1["d1 tailwind-theme"] --> d2["d2 ui-primitives"] --> d3["d3 component-lib"]
+            d3 --> f1["f1 vite-scaffold"] --> f2["f2 api-client"] --> f3["f3 mock-fixtures"] --> f4["f4 screens · IncidentCard"]
+        end
+    end
+
+    C0 --> W1
+
+    BR1["🚧 БАРЬЕР 1 — ИНТЕГРАЦИЯ P0<br/>(окно skai_7, ветка integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend + feat/web → x1 → x2 → x3"]
+    W1 --> BR1
+
+    subgraph W2["ВОЛНА 2 · расширение P1/P2 — макс. параллельно"]
+        direction LR
+        subgraph B2["🪟 Окно 1 · backend"]
+            direction TB
+            wb7["b7 driver-reference → b10 reports-views"]
+            wb89["b8 stt ∥ b9 nlu"]
+            wb11["b11 sabotage ∥ b12 reb ∥ b13 tickets-alerts-trips<br/>⚠ роутеры в ALL_ROUTERS"]
+        end
+        subgraph F2["🪟 Окно 2 · web"]
+            direction TB
+            wd["d4 map ∥ d5 voice-timeline"]
+            wf["f5…f13 (все параллельно)"]
+        end
+        subgraph T2["🪟 Окно 3 · tests (feat/tests, Codex)"]
+            direction TB
+            t4["T4 chores — сразу"]
+            t1["T1 unit — после b2/b7/b10"]
+            t2["T2 API — после b6 + b11–b13"]
+            t3["T3 front — после d2/f2/f4"]
+        end
+    end
+
+    BR1 --> W2
+
+    BR2["🏁 БАРЬЕР 2 — ФИНАЛЬНЫЙ e2e<br/>(окно skai_7, integration)<br/>merge волны 2 → x2 → x3 → x4-e2e-p1p2 → merge в main"]
+    W2 --> BR2
+```
+
+### Окна и владение
+
+| Окно | Worktree / ветка | Владеет папками | Открыть |
+| --- | --- | --- | --- |
+| 1 · Backend | `.worktrees/backend` / `feat/backend` | `api/`, `data/seed/`, `data/skai.duckdb` | `code .worktrees/backend` |
+| 2 · Web | `.worktrees/web` / `feat/web` | `web/` | `code .worktrees/web` |
+| 3 · Tests | `.worktrees/tests` / `feat/tests` (Codex) | `api/tests/`, vitest | `code .worktrees/tests` |
+| Интеграция | `skai_7` / `integration` | корневые: `App.tsx`, `Makefile`, `requirements*` | основное окно |
+
+### Волна 1 — P0 core (окна 1 и 2 одновременно)
+
+| Окно | Промпты (порядок) | Проверка |
+| --- | --- | --- |
+| 1 Backend | `b1` → (`b2` ∥ `b4`) + `b3` → `b5` → `b6` | `make db` (54 аларма / 14 типов + `v_incidents`), `make api`, `GET /api/incidents` |
+| 2 Web | `d1` → `d2` → `d3` → `f1` → `f2` → `f3` → `f4` | `VITE_USE_FIXTURES=true`, `npm run dev`, `npm run typecheck` |
+
+> Коммит после волны: `git add -A && git commit -m "feat(backend): wave 1"` (аналогично для web).
+
+### Барьер 1 — интеграция P0 (основное окно, последовательно)
+
+```bash
+cd /Users/dimausac/projects/skai_7
+git checkout integration && git merge feat/backend && git merge feat/web
+# затем по очереди в этом же окне:
+# x1-remove-streamlit → x2-wiring → x3-e2e-smoke
+```
+
+### Волна 2 — расширение P1/P2 (макс. параллельно)
+
+| Окно | Промпты | Примечание |
+| --- | --- | --- |
+| 1 Backend | `b7`→`b10` ; `b8` ∥ `b9` ; `b11` ∥ `b12` ∥ `b13` | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
+| 2 Web | `d4` ∥ `d5` ; `f5`…`f13` (все параллельно) | — |
+| 3 Tests | `T4` сразу · `T1` после `b2/b7/b10` · `T2` после `b6`+`b11–b13` · `T3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
+
+### Барьер 2 — финальный e2e (основное окно)
+
+```bash
+cd /Users/dimausac/projects/skai_7 && git checkout integration
+git merge feat/backend && git merge feat/web
+# повтор x2 → x3, затем x4-e2e-p1p2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage)
+git checkout main && git merge integration   # ФИНАЛ
+```
 
 ## Слияние
 ```bash
