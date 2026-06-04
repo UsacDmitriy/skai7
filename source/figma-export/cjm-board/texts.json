@@ -1,0 +1,2502 @@
+[
+  {
+    "id": "1:193",
+    "name": "Цель использования",
+    "text": "Цель использования",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:194",
+    "name": "Какие задачи персона решает с помощью сервиса",
+    "text": "Какие задачи персона решает с помощью сервиса",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "253:3957",
+    "name": "Контекст использования",
+    "text": "Контекст использования",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "253:3958",
+    "name": "В каких ситуациях люди пользуются",
+    "text": "В каких ситуациях люди пользуются",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:217",
+    "name": "Почему важно",
+    "text": "Почему важно",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:218",
+    "name": "Какую ценность объединение ВА и телематики дает пользователям",
+    "text": "Какую ценность объединение ВА и телематики дает пользователям",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3706",
+    "name": "Интерфейс",
+    "text": "Интерфейс",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3707",
+    "name": "В каком интерфейсе работает",
+    "text": "В каком интерфейсе работает",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3792",
+    "name": "Особенности",
+    "text": "Особенности",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3793",
+    "name": "Что нужно учесть",
+    "text": "Что нужно учесть",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:229",
+    "name": "Сергей",
+    "text": "Сергей",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:230",
+    "name": "Специалист транспортной безопасности",
+    "text": "Специалист транспортной безопасности",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:231",
+    "name": "Работает с Сейба",
+    "text": "Работает с Сейба",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 16.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.17600000381469727,
+      "lineHeightPx": 24.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:272",
+    "name": "Боли и страхи",
+    "text": "Боли и страхи",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:279",
+    "name": "Чего хотят избежать персоны при использовании сревиса?",
+    "text": "Чего хотят избежать персоны при использовании сревиса?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2000",
+    "name": "Цель использования",
+    "text": "Цель использования",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2001",
+    "name": "Какие задачи персона решает с помощью сервиса",
+    "text": "Какие задачи персона решает с помощью сервиса",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "253:3931",
+    "name": "Контекст использования",
+    "text": "Контекст использования",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "253:3932",
+    "name": "В каких ситуациях люди пользуются",
+    "text": "В каких ситуациях люди пользуются",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3716",
+    "name": "Интерфейс",
+    "text": "Интерфейс",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3717",
+    "name": "В каком интерфейсе работает",
+    "text": "В каком интерфейсе работает",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2024",
+    "name": "Почему важно",
+    "text": "Почему важно",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2025",
+    "name": "Какую ценность объединение ВА и телематики дает пользователям",
+    "text": "Какую ценность объединение ВА и телематики дает пользователям",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3802",
+    "name": "Особенности",
+    "text": "Особенности",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3803",
+    "name": "Что нужно учесть",
+    "text": "Что нужно учесть",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2032",
+    "name": "Алексей",
+    "text": "Алексей",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2033",
+    "name": "Специалист сервисного деартамента поддержки SKAI",
+    "text": "Специалист сервисного деартамента поддержки SKAI",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2034",
+    "name": "Частый пользователь системы, работал со старым Online и Studio, поэтому есть привычные паттерны.",
+    "text": "Частый пользователь системы, работал со старым Online и Studio, поэтому есть привычные паттерны.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 16.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.17600000381469727,
+      "lineHeightPx": 24.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2073",
+    "name": "Боли и страхи",
+    "text": "Боли и страхи",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2080",
+    "name": "Чего хотят избежать персоны при использовании сревиса?",
+    "text": "Чего хотят избежать персоны при использовании сревиса?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2186",
+    "name": "Цель использования",
+    "text": "Цель использования",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2187",
+    "name": "Какие задачи персона решает с помощью сервиса",
+    "text": "Какие задачи персона решает с помощью сервиса",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2198",
+    "name": "Контекст использования",
+    "text": "Контекст использования",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2199",
+    "name": "В каких ситуациях люди пользуются",
+    "text": "В каких ситуациях люди пользуются",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3726",
+    "name": "Какой интерфейс",
+    "text": "Какой интерфейс",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3727",
+    "name": "Какую ценность дает пользователям",
+    "text": "Какую ценность дает пользователям",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2210",
+    "name": "Почему важно",
+    "text": "Почему важно",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2211",
+    "name": "Какую ценность объединение ВА и телематики дает пользователям",
+    "text": "Какую ценность объединение ВА и телематики дает пользователям",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3812",
+    "name": "Особенности",
+    "text": "Особенности",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:3813",
+    "name": "Что нужно учесть",
+    "text": "Что нужно учесть",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2218",
+    "name": "Василий",
+    "text": "Василий",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2219",
+    "name": "Представитель коммерческого отдела",
+    "text": "Представитель коммерческого отдела",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2220",
+    "name": "Демонстрирует и продает новый Online 3.0 Хорошо знает старую систему и может сравнивать",
+    "text": "Демонстрирует и продает новый Online 3.0\nХорошо знает старую систему и может сравнивать",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 16.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.17600000381469727,
+      "lineHeightPx": 24.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2259",
+    "name": "Боли и страхи",
+    "text": "Боли и страхи",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "248:2266",
+    "name": "Чего хотят избежать персоны при использовании сревиса?",
+    "text": "Чего хотят избежать персоны при использовании сревиса?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:1269",
+    "name": "Немного о формате встрече. Это беседа в формате вопрос ответ. Я поставлю на запись нашу встречу. Это очень поможет нам при дальнейшем анализе результатов. Есть ли какие-то вопросы? Тогда перехожу к своим.",
+    "text": "Немного о формате встрече. Это беседа в формате вопрос ответ. \nЯ поставлю на запись нашу встречу. Это очень поможет нам при дальнейшем анализе результатов. \nЕсть ли какие-то вопросы? Тогда перехожу к своим.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:1272",
+    "name": "Расскажите о вашей роли в компании? и как часто вы работаете с событиями нарушения вождения? Какое ПО используете в работе? (SD) Какой продукт используют клиенты, с которыми ты общаешься? Какое оборудование стоит на ваших ТС, только телематика, часть видеоналитика или на одном ТС телематика + видеоналитика? В чем удобство разъеденного/объединённого оборудования? Какую задачу выполняет телематика, какую задачу выполняет видеаналитика? В каком случае обращаешься к телематике? Какие вы преимущества отдельных разделов видеоаналитики и телематики на сайте? Какие ожидание от использования совместного оборудования на сайте?",
+    "text": "Расскажите о вашей роли в компании? и как часто вы работаете с событиями нарушения вождения?\nКакое ПО используете в работе?\n(SD) Какой продукт используют клиенты, с которыми ты общаешься?\nКакое оборудование стоит на ваших ТС, только телематика, часть видеоналитика или на одном ТС телематика + видеоналитика?\nВ чем удобство разъеденного/объединённого оборудования?\nКакую задачу выполняет телематика, какую задачу выполняет видеаналитика? В каком случае обращаешься к телематике?\nКакие вы преимущества отдельных разделов видеоаналитики и телематики на сайте?\nКакие ожидание от использования совместного оборудования на сайте?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1550",
+    "name": "Далее хочу обсудить сам процесс выявления нарушений. Соответствует ли наше видение с вашим процессом?",
+    "text": "Далее хочу обсудить сам процесс выявления нарушений.\nСоответствует ли наше видение с вашим процессом?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1572",
+    "name": "Предполагаем, что вы ежедневно/еженедельно строите отчеты, чтобы выявить нарушения. Так ли это? Какой раздел в интерфейсе помогает отслеживать нарушения? Насколько высокое у вас доверие к системе? Как вы перепроверяете более детально нарушения? С какими проблемами сталкиваетесь при поиске нарушений? С какими проблемами сталкиваетесь просмотре отчетов или передаче отчетов далее? Какие эмоции вызывает у вас выявление нарушений? Какие события вы отслеживаете? Работаете ли вы сами с нарушениями или передаете информацию другим лицам?",
+    "text": "Предполагаем, что вы ежедневно/еженедельно строите отчеты, чтобы выявить нарушения. Так ли это?\nКакой раздел в интерфейсе помогает отслеживать нарушения?\nНасколько высокое у вас доверие к системе? \nКак вы перепроверяете более детально нарушения?\nС какими проблемами сталкиваетесь при поиске нарушений?\nС какими проблемами сталкиваетесь просмотре отчетов или передаче отчетов далее?\nКакие эмоции вызывает у вас выявление нарушений?\nКакие события вы отслеживаете?\nРаботаете ли вы сами с нарушениями или передаете информацию другим лицам?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1439",
+    "name": "процесс",
+    "text": "процесс",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1486",
+    "name": "корректировка требований",
+    "text": "корректировка требований",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1483",
+    "name": "7. анализ причин возникновения нарушений",
+    "text": " 7. анализ причин возникновения нарушений",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1480",
+    "name": "оценка изменений",
+    "text": "оценка изменений",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1477",
+    "name": "применяются меры для нарушителя",
+    "text": "применяются меры для нарушителя",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1474",
+    "name": "готовится отчет/статистика нарушений",
+    "text": "готовится отчет/статистика нарушений",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1471",
+    "name": "оценивается критичность",
+    "text": "оценивается критичность",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1468",
+    "name": "Выискиваются нарушения",
+    "text": "Выискиваются нарушения",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "18:1462",
+    "name": "Ежедневный/еженедельный ежемесячный отчет",
+    "text": "Ежедневный/еженедельный ежемесячный отчет",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:1278",
+    "name": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить? Есть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хотите добавить? Тогда на этом всё, спасибо за то что нашли время на беседу. Ваши ответы нам здорово помогут. Хорошего дня!",
+    "text": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить?\nЕсть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хотите добавить?\nТогда на этом всё, спасибо за то что нашли время на беседу. Ваши ответы нам здорово помогут. \nХорошего дня!",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "26:1617",
+    "name": "Какие еще процессы в поиске нарушений у вас есть? Достаточно ли вам инструментов для отслеживания нарушений?",
+    "text": "Какие еще процессы в поиске нарушений у вас есть?\nДостаточно ли вам инструментов для отслеживания нарушений?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "27:1636",
+    "name": "Как вы анализируете причины нарушений? В каком виде вы фиксируете эти причины? Есть ли сложности с которыми вы сталкиваетесь при анализе причин?",
+    "text": "Как вы анализируете причины нарушений?\nВ каком виде вы фиксируете эти причины?\nЕсть ли сложности с которыми вы сталкиваетесь при анализе причин?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "24:1586",
+    "name": "Как часто вы корректируете требования к нарушениям? Какие изменения вносите и по каким причинам? С какими проблемами сталкиваетесь при корректировке требований? Как фиксируете эти изменения? Какие проблемы и эмоции вызывает у вас корректировка требований?",
+    "text": "Как часто вы корректируете требования к нарушениям?\nКакие изменения вносите и по каким причинам?\nС какими проблемами сталкиваетесь при корректировке требований?\nКак фиксируете эти изменения?\nКакие проблемы и эмоции вызывает у вас корректировка требований?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "26:1628",
+    "name": "Какие меры вы принимаете для нарушителей? Отличаются ли они по способу выявления, события с видео или события только с телематикой? С какими проблемами сталкиваетесь при фиксации нарушителей? Как вы отслеживаете изменения нарушителей?",
+    "text": "Какие меры вы принимаете для нарушителей?\nОтличаются ли они по способу выявления, события с видео или события только с телематикой?\nС какими проблемами сталкиваетесь при фиксации нарушителей?\nКак вы отслеживаете изменения нарушителей?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "26:1607",
+    "name": "Ведете ли вы статистику нарушений? Часто строите отчеты? и с какой целью? Какую информацию вы отслеживаете в отчетах? Отличается ли отчеты видеоаналитики и телематики? В чем отличия? С какими проблемами вы сталкиваетесь при построении отчетов? Какие эмоции вызывает построение отчетов?",
+    "text": "Ведете ли вы статистику нарушений?\nЧасто строите отчеты? и с какой целью?\nКакую информацию вы отслеживаете в отчетах? \nОтличается ли отчеты видеоаналитики и телематики? В чем отличия?\nС какими проблемами вы сталкиваетесь при построении отчетов?\nКакие эмоции вызывает построение отчетов?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:1281",
+    "name": "Привет. Сегодня мы проводим исследование пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики",
+    "text": "Привет. Сегодня мы проводим исследование пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1672",
+    "name": "Немного о формате встрече. Это беседа в формате вопрос ответ. Информацию используем внутренне, только для нас, информация не будет распространятся другим лицам Периодически я буду делать паузы, чтобы записать Есть ли какие-то вопросы? Тогда перехожу к своим.",
+    "text": "Немного о формате встрече. Это беседа в формате вопрос ответ. \nИнформацию используем внутренне, только для нас, информация не будет распространятся другим лицам\nПериодически я буду делать паузы, чтобы записать \nЕсть ли какие-то вопросы? Тогда перехожу к своим.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1675",
+    "name": "Расскажите о вашей роли в компании? С какими клиентами работаешь? Какой продукт используют клиенты, с которыми ты общаешься? (только телематика, только видеоналитика или на одном ТС телематика + видеоналитика?) Какое ПО используете в работе? Как часто вы работаете с нарушениями безопасного вождения и видеоаналитики? Какие задачи клиенты решает используя инструменты телематики и/или видеаналитики?",
+    "text": "Расскажите о вашей роли в компании? \nС какими клиентами работаешь?\nКакой продукт используют клиенты, с которыми ты общаешься? (только телематика, только видеоналитика или на одном ТС телематика + видеоналитика?)\nКакое ПО используете в работе?\nКак часто вы работаете с нарушениями безопасного вождения и видеоаналитики?\nКакие задачи клиенты решает используя инструменты телематики и/или видеаналитики?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1679",
+    "name": "Далее хочу обсудить сам процесс выявления нарушений. Расскажите какие основные задачи решаете ежедневно с помощью телематики или видеоаналитики? Есть ли какие-то еженедельные/ежемесячные задачи? Расскажите подробнее? Какие нарушения важно выявлять? Как вы сейчас это решаете с помощью инструментов видеоаналитики или телематики ? Ищите ли вы дополнительные доказательства произошедшего события? ______ Почему? _______ Насколько часто? Сталкивались ли при поиске нарушений с какими-то сложностями? С какими? Достаточно ли вам информации в отчетах? Какие эмоции вы получаете при взаимодействия с системой? Какую информацию передаете клиентам?",
+    "text": "Далее хочу обсудить сам процесс выявления нарушений.\nРасскажите какие основные задачи решаете ежедневно с помощью телематики или видеоаналитики?\nЕсть ли какие-то еженедельные/ежемесячные задачи?\nРасскажите подробнее?\nКакие нарушения важно выявлять?\nКак вы сейчас это решаете с помощью инструментов видеоаналитики или телематики ?\nИщите ли вы дополнительные доказательства произошедшего события? ______ Почему? _______ Насколько часто?\nСталкивались ли при поиске нарушений с какими-то сложностями? С какими?\nДостаточно ли вам информации в отчетах? \nКакие эмоции вы получаете при взаимодействия с системой?\nКакую информацию передаете клиентам?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1681",
+    "name": "процесс",
+    "text": "процесс",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1696",
+    "name": "Ежедневный/еженедельный ежемесячный отчет",
+    "text": "Ежедневный/еженедельный ежемесячный отчет",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1694",
+    "name": "Выискиваются нарушения",
+    "text": "Выискиваются нарушения",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1692",
+    "name": "оценивается критичность",
+    "text": "оценивается критичность",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1690",
+    "name": "готовится отчет/статистика нарушений",
+    "text": "готовится отчет/статистика нарушений",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1688",
+    "name": "применяются меры для нарушителя",
+    "text": "применяются меры для нарушителя",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1686",
+    "name": "оценка изменений",
+    "text": "оценка изменений",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1684",
+    "name": "7. анализ причин возникновения нарушений",
+    "text": " 7. анализ причин возникновения нарушений",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1682",
+    "name": "корректировка требований",
+    "text": "корректировка требований",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1700",
+    "name": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить? Есть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хотите добавить? Тогда на этом всё, спасибо за то что нашли время на беседу. Ваши ответы нам здорово помогут. Хорошего дня!",
+    "text": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить?\nЕсть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хотите добавить?\nТогда на этом всё, спасибо за то что нашли время на беседу. Ваши ответы нам здорово помогут. \nХорошего дня!",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1703",
+    "name": "Какие еще процессы в поиске нарушений у вас есть? Достаточно ли вам инструментов для отслеживания нарушений?",
+    "text": "Какие еще процессы в поиске нарушений у вас есть?\nДостаточно ли вам инструментов для отслеживания нарушений?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1706",
+    "name": "Как вы анализируете причины нарушений? В каком виде вы фиксируете эти причины? Есть ли сложности с которыми вы сталкиваетесь при анализе причин?",
+    "text": "Как вы анализируете причины нарушений?\nВ каком виде вы фиксируете эти причины?\nЕсть ли сложности с которыми вы сталкиваетесь при анализе причин?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "37:1496",
+    "name": "Как клиент оценивает критичность нарушения? В каком виде вы фиксируете критичность нарушения? Есть ли сложности с которыми вы сталкиваетесь оценивая критичность нарушения?",
+    "text": "Как клиент оценивает критичность нарушения?\nВ каком виде вы фиксируете критичность нарушения?\nЕсть ли сложности с которыми вы сталкиваетесь оценивая критичность нарушения?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1709",
+    "name": "Как часто клиенты корректируют требования к нарушениям? От кого идет инициатива по корректировке требований? Какие изменения вносите и по каким причинам? С какими проблемами сталкиваетесь при корректировке требований? Как фиксируете эти изменения? Какие проблемы и эмоции вызывает у вас корректировка требований?",
+    "text": "Как часто клиенты корректируют требования к нарушениям?\nОт кого идет инициатива по корректировке требований?\nКакие изменения вносите и по каким причинам?\nС какими проблемами сталкиваетесь при корректировке требований?\nКак фиксируете эти изменения?\nКакие проблемы и эмоции вызывает у вас корректировка требований?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1715",
+    "name": "Ведете ли вы статистику нарушений? Часто строите отчеты? и с какой целью? Какую информацию вы отслеживаете в отчетах? Отличается ли отчеты видеоаналитики и телематики? В чем отличия? С какими проблемами вы сталкиваетесь при построении отчетов? Какие эмоции вызывает построение отчетов? Какие вы преимущества отдельных разделов видеоаналитики и телематики на сайте? Какие ожидание от использования совместного оборудования на сайте?",
+    "text": "Ведете ли вы статистику нарушений?\nЧасто строите отчеты? и с какой целью?\nКакую информацию вы отслеживаете в отчетах? \nОтличается ли отчеты видеоаналитики и телематики? В чем отличия?\nС какими проблемами вы сталкиваетесь при построении отчетов?\nКакие эмоции вызывает построение отчетов?\nКакие вы преимущества отдельных разделов видеоаналитики и телематики на сайте?\nКакие ожидание от использования совместного оборудования на сайте?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "28:1718",
+    "name": "Привет. Сегодня мы проводим исследование пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики.",
+    "text": "Привет. Сегодня мы проводим исследование пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "39:1516",
+    "name": "Немного о формате встрече. Это беседа в формате вопрос ответ. Информацию используем внутренне, только для нас, информация не будет распространятся другим лицам Периодически я буду делать паузы, чтобы записать Есть ли какие-то вопросы? Тогда перехожу к своим",
+    "text": "Немного о формате встрече. Это беседа в формате вопрос ответ. \nИнформацию используем внутренне, только для нас, информация не будет распространятся другим лицам\nПериодически я буду делать паузы, чтобы записать \nЕсть ли какие-то вопросы? Тогда перехожу к своим",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "39:1519",
+    "name": "Расскажите о вашей роли в компании? Как часто вы работаете с выявлениями нарушений вождения? Какое оборудование стоит на ваших ТС, только телематика, часть видеоналитика или на одном ТС телематика + видеоналитика? В чем удобство разъеденного/объединённого оборудования? Какую задачу выполняет телематика, какую задачу выполняет видеаналитика? В каком случае обращаешься к телематике? Какие вы преимущества отдельных разделов видеоаналитики и телематики на сайте? Какие ожидание от использования совместного оборудования на сайте?",
+    "text": "Расскажите о вашей роли в компании? \nКак часто вы работаете с выявлениями нарушений вождения?\nКакое оборудование стоит на ваших ТС, только телематика, часть видеоналитика или на одном ТС телематика + видеоналитика?\nВ чем удобство разъеденного/объединённого оборудования?\nКакую задачу выполняет телематика, какую задачу выполняет видеаналитика? В каком случае обращаешься к телематике?\nКакие вы преимущества отдельных разделов видеоаналитики и телематики на сайте?\nКакие ожидание от использования совместного оборудования на сайте?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "39:1522",
+    "name": "Для решения каких задач вы идете в систему? Как часто ты выполняете эти задачам? Для чего эти задачи выполняются? Расставьте приоритет по важности задач.",
+    "text": "Для решения каких задач вы идете в систему?\nКак часто ты выполняете эти задачам?\nДля чего эти задачи выполняются?\nРасставьте приоритет по важности задач.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "39:1542",
+    "name": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить? Есть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хотите добавить? Тогда на этом всё, спасибо за то что нашли время на беседу. Ваши ответы нам здорово помогут. Хорошего дня!",
+    "text": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить?\nЕсть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хотите добавить?\nТогда на этом всё, спасибо за то что нашли время на беседу. Ваши ответы нам здорово помогут. \nХорошего дня!",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "39:1545",
+    "name": "Какие еще процессы в поиске нарушений у вас есть? Достаточно ли вам инструментов для отслеживания нарушений?",
+    "text": "Какие еще процессы в поиске нарушений у вас есть?\nДостаточно ли вам инструментов для отслеживания нарушений?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "39:1551",
+    "name": "Как вы выполняете эту задачу? Насколько удовлетворены процессом выполнения этой задачи? Какие есть сложности при выполнении задачи?",
+    "text": "Как вы выполняете эту задачу?\nНасколько удовлетворены процессом выполнения этой задачи?\nКакие есть сложности при выполнении задачи?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "39:1560",
+    "name": "Добрый день. Сегодня мы проводим исследование пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики.",
+    "text": "Добрый день. Сегодня мы проводим исследование пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "74:1513",
+    "name": "Немного о формате встрече. Это беседа в формате вопрос ответ. Информацию используем внутренне, только для нас, информация не будет распространятся другим лицам Я поставлю на запись, чтобы потом проанализировать информацию. и периодически буду останавливаться записывать. Есть ли какие-то вопросы? Тогда перехожу к своим",
+    "text": "Немного о формате встрече. Это беседа в формате вопрос ответ. \nИнформацию используем внутренне, только для нас, информация не будет распространятся другим лицам\nЯ поставлю на запись, чтобы потом проанализировать информацию. и периодически буду останавливаться записывать.\nЕсть ли какие-то вопросы? Тогда перехожу к своим",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "74:1516",
+    "name": "Как часто вы работаете с выявлениями нарушений вождения? В каком оборудовании заинтересованы клиенты сейчас больше, только телематика, часть видеоналитика или на одном ТС телематика + видеоналитика? В чем удобство разъеденного/объединённого оборудования? Какую задачу выполняет телематика, какую задачу выполняет видеаналитика? В каком случае обращаешься к телематике? Какие вы преимущества отдельных разделов видеоаналитики и телематики на сайте? Какие ожидание от использования совместного оборудования на сайте?",
+    "text": "\nКак часто вы работаете с выявлениями нарушений вождения?\nВ каком  оборудовании  заинтересованы клиенты сейчас больше, только телематика, часть видеоналитика или на одном ТС телематика + видеоналитика?\nВ чем удобство разъеденного/объединённого оборудования?\nКакую задачу выполняет телематика, какую задачу выполняет видеаналитика? В каком случае обращаешься к телематике?\nКакие вы преимущества отдельных разделов видеоаналитики и телематики на сайте?\nКакие ожидание от использования совместного оборудования на сайте?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "74:1519",
+    "name": "Для решения каких задач ты идешь в систему? Как часто ты выполняешь эти задачам? Для чего эти задачи выполняются? Расставьте приоритет по важности задач.",
+    "text": "Для решения каких задач ты идешь в систему?\nКак часто ты выполняешь эти задачам?\nДля чего эти задачи выполняются?\nРасставьте приоритет по важности задач.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "74:1522",
+    "name": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить? Есть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хотите добавить? Тогда на этом всё, спасибо за то что нашли время на беседу. Ваши ответы нам здорово помогут. Хорошего дня!",
+    "text": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить?\nЕсть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хотите добавить?\nТогда на этом всё, спасибо за то что нашли время на беседу. Ваши ответы нам здорово помогут. \nХорошего дня!",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "74:1525",
+    "name": "Какие еще процессы в поиске нарушений у тебя есть? Достаточно ли инструментов для отслеживания нарушений? Можешь ли сравнить какие уже есть улучшения в новой системе относительно старой С какими сложностями сталкиваешься.",
+    "text": "Какие еще процессы в поиске нарушений у тебя есть?\nДостаточно ли инструментов для отслеживания нарушений?\nМожешь ли сравнить какие уже есть улучшения в новой системе относительно старой\nС какими сложностями сталкиваешься.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "74:1528",
+    "name": "Как ты выполняешь эту задачу? Насколько удовлетворен процессом выполнения этой задачи? Какие есть сложности при выполнении задачи?",
+    "text": "Как ты выполняешь эту задачу?\nНасколько удовлетворен процессом выполнения этой задачи?\nКакие есть сложности при выполнении задачи?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "74:1531",
+    "name": "Добрый день. Сегодня мы проводим исследование пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики.",
+    "text": "Добрый день. Сегодня мы проводим исследование пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "40:1592",
+    "name": "Немного о формате встрече. Это беседа в формате вопрос ответ. Информацию используем внутренне, только для нас, информация не будет распространятся другим лицам Периодически я буду делать паузы, чтобы записать Есть ли какие-то вопросы? Тогда перехожу к своим",
+    "text": "Немного о формате встрече. Это беседа в формате вопрос ответ. \nИнформацию используем внутренне, только для нас, информация не будет распространятся другим лицам\nПериодически я буду делать паузы, чтобы записать \nЕсть ли какие-то вопросы? Тогда перехожу к своим",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "40:1595",
+    "name": "Расскажи о вашей роли в компании? С какими клиентами работаешь? Какой продукт используют клиенты, с которыми ты общаешься? (только телематика, только видеоналитика или на одном ТС телематика + видеоналитика?) Какое ПО используешь в работе? Как часто ты работаешь с нарушениями безопасного вождения и видеоаналитики? Какие задачи клиенты решает используя инструменты телематики и/или видеаналитики?",
+    "text": "Расскажи о вашей роли в компании? \nС какими клиентами работаешь?\nКакой продукт используют клиенты, с которыми ты общаешься? (только телематика, только видеоналитика или на одном ТС телематика + видеоналитика?)\nКакое ПО используешь в работе?\nКак часто ты работаешь с нарушениями безопасного вождения и видеоаналитики?\nКакие задачи клиенты решает используя инструменты телематики и/или видеаналитики?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "40:1598",
+    "name": "Для решения каких задач ты идешь в систему? Как часто ты выполняешь эти задачам? Для чего эти задачи выполняются? Расставь приоритет по важности задач.",
+    "text": "Для решения каких задач ты идешь в систему?\nКак часто ты выполняешь эти задачам?\nДля чего эти задачи выполняются?\nРасставь приоритет по важности задач.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "40:1601",
+    "name": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить? Есть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хочешь добавить? Тогда на этом всё, спасибо за то что нашел время на беседу. Твои ответы нам здорово помогут. Хорошего дня!",
+    "text": "Может быть, остались ещё какие-то проблемы о которых мы не успели поговорить?\nЕсть ли у вас какие-то вопросы после нашей беседы? Быть может, что-то хочешь добавить?\nТогда на этом всё, спасибо за то что нашел время на беседу. Твои ответы нам здорово помогут. \nХорошего дня!",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "40:1604",
+    "name": "Какие еще процессы в поиске нарушений у тебя есть? Достаточно ли тебе инструментов для отслеживания нарушений?",
+    "text": "Какие еще процессы в поиске нарушений у тебя есть?\nДостаточно ли тебе инструментов для отслеживания нарушений?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "40:1607",
+    "name": "Как ты выполняешь эту задачу? Насколько удовлетворен процессом выполнения этой задачи? Какие есть сложности при выполнении задачи?",
+    "text": "Как ты выполняешь эту задачу?\nНасколько удовлетворен процессом выполнения этой задачи?\nКакие есть сложности при выполнении задачи?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "40:1610",
+    "name": "Привет. Сегодня мы проводим исследование на тему пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики.",
+    "text": "Привет. Сегодня мы проводим исследование на тему пользовательского опыта работы с событиями в интерфейсе мониторинга и видеоаналитики.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1871",
+    "name": "Цель использования",
+    "text": "Цель использования",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1872",
+    "name": "Какие задачи персона решает с помощью сервиса",
+    "text": "Какие задачи персона решает с помощью сервиса",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1880",
+    "name": "Контекст использования",
+    "text": "Контекст использования",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1881",
+    "name": "В каких ситуациях люди пользуются",
+    "text": "В каких ситуациях люди пользуются",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1886",
+    "name": "Офис",
+    "text": "Офис",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1887",
+    "name": "30 лет",
+    "text": "30 лет",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1888",
+    "name": "СД",
+    "text": "СД",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1889",
+    "name": "Артем",
+    "text": "Артем",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1890",
+    "name": "Руководитель низшего звена",
+    "text": "Руководитель низшего звена",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1891",
+    "name": "Частый пользователь системы, работала со старым Online и Studio, поэтому есть привычные паттерны.",
+    "text": "Частый пользователь системы, работала со старым Online и Studio, поэтому есть привычные паттерны.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 16.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.17600000381469727,
+      "lineHeightPx": 24.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1895",
+    "name": "Персональная информация",
+    "text": "Персональная информация",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1932",
+    "name": "Боли и страхи",
+    "text": "Боли и страхи",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1935",
+    "name": "Чего хотят избежать персоны при использовании сревиса?",
+    "text": "Чего хотят избежать персоны при использовании сревиса?",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1940",
+    "name": "Почему важно",
+    "text": "Почему важно",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": "Inter-Bold",
+      "fontStyle": "Bold",
+      "fontWeight": 700,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 40.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.8800000190734864,
+      "lineHeightPx": 60.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "247:1941",
+    "name": "Какую ценность дает пользователям",
+    "text": "Какую ценность дает пользователям",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 14.0,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.15400000333786013,
+      "lineHeightPx": 21.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:1258",
+    "name": "Клиентов с одновременным использованием обоих функционалов телематики и видеоаналитики пока немного. Автопарк оснащен телематикой на 100%, но дополнительно оснащается еще и ВА Клиенты хотели бы оснастить весь автопарк видеаналитикой. ГПН планирует активно оснащать автопарк ВА (300-400+ машин).",
+    "text": "Клиентов с одновременным использованием обоих функционалов телематики и видеоаналитики пока немного. Автопарк оснащен телематикой на 100%, но дополнительно оснащается еще и ВА\nКлиенты хотели бы оснастить весь автопарк  видеаналитикой. ГПН планирует активно оснащать автопарк ВА (300-400+ машин).",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "1:1261",
+    "name": "Респонденты часто работают с системой, в основном в интерфейсе SEIBA, на данный момент это пилотные проекты, видеоаналитика тестируется, у кого-то только 1 ТС с видеоаналитикой.",
+    "text": "Респонденты часто работают с системой, в основном в интерфейсе SEIBA, на данный момент это пилотные проекты, видеоаналитика тестируется, у кого-то только 1 ТС с видеоаналитикой.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.4559999942779541,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "258:2768",
+    "name": "Text",
+    "text": "Ежедневный мониторинг ВА\nПроверка местоположения водителей\nАнализ нарушений в архиве (курение, телефон, ремень)\n\nЕжедневный мониторинг в skai studio\nПроверка местоположения водителей, чтобы распределить ближайших водителей и загрузить.\n\nРабота с системой для ведения электронных путевых листов. Каждое утро формируется отчет статистики для мониторинга уровня топлива в баках, пробега и показаний одометров. Данные сверяет с ТМС.\n\nПризнает, что еще не освоил все возможности системы - не все отчеты изучены. Текущий функционал полностью покрывает рабочие потребности по контролю транспорта и топлива.",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.2640000057220459,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "258:2782",
+    "name": "Text",
+    "text": "Еженедельный анализ событий Вход в зафиксированные события  →  выбор событий за неделю   →   отфильтровать по событиям, сортировать по количеству нарушений   →   написать служебную записку",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.2640000057220459,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  },
+  {
+    "id": "299:3159",
+    "name": "Text",
+    "text": "Получаем заявки от клиента через портал, проверяем заявки, если есть ошибка, работаем с исправлением дефекта через вызов монтажной группой или настройкой в ПО (студия, онлайн, конфигуратор)",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 24.0,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.2640000057220459,
+      "lineHeightPx": 36.0,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150.0,
+      "lineHeightUnit": "FONT_SIZE_%"
+    }
+  }
+]
