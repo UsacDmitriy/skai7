@@ -1,0 +1,8582 @@
+[
+  {
+    "id": "1:31",
+    "name": "CJM клиенты",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -9024.0,
+      "y": 11989.0,
+      "width": 36728.0,
+      "height": 1400.0
+    }
+  },
+  {
+    "id": "329:7283",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7894.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7320",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7894.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7372",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7350.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7373",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7350.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7385",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7078.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7386",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7078.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7398",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6806.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7399",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6806.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7411",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6534.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7412",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6534.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "266:2373",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8464.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7266",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8464.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7191",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5446.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7192",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5446.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7207",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5174.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7683",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5174.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7223",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4902.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7224",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4902.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7434",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4630.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7435",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4630.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7450",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4358.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7471",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4358.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7488",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4086.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7489",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4086.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7578",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3270.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7579",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3270.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7143",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6262.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7144",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6262.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7175",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5718.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7176",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5718.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7159",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5990.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7160",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5990.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "266:2400",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8166.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7244",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8166.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7301",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7622.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7355",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7622.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7540",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3542.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7561",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3542.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7506",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3814.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7525",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3814.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7096",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2998.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7117",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2998.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7970",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2454.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7993",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2454.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7930",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2726.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7953",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2726.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8010",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2182.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8011",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2182.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8028",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1841.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8029",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1841.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8064",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1297.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8087",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1297.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8104",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1025.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8105",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1025.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8140",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -481.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8141",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -481.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8301",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 63.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8302",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 63.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8046",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1569.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8047",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1569.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8122",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -753.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8123",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -753.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7894",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -209.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7895",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -209.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8174",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 879.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8191",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 879.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8206",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1151.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8223",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1151.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7878",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 335.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8159",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 335.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7911",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 607.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7912",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 607.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8248",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1423.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:8249",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1423.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8451",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1695.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8468",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1695.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8483",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1967.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8484",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1967.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8499",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2239.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8520",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2239.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8537",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2511.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8538",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2511.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8555",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2783.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8556",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2783.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8573",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3055.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8592",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3055.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8607",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3327.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8608",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3327.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8623",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3599.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8624",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3599.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8639",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3871.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8660",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3871.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8334",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4143.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8335",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4143.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8397",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4687.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8398",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4687.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8363",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4415.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8429",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4415.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3725",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5321.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3726",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5321.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3680",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5049.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3708",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5049.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3757",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5593.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3797",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5593.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3946",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5865.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3947",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5865.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4951",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6396.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4952",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6396.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4116",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6137.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4117",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6137.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4131",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6662.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4132",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6662.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4146",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6934.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8697",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6934.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4161",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7206.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8719",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7206.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4176",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7478.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4198",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7478.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4974",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8566.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4975",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8566.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3829",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7750.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3830",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7750.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3886",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8022.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3887",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8022.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3901",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8294.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3902",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8294.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3916",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8838.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3917",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8838.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3931",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9110.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8772",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9110.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4221",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9382.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8814",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9382.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4455",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9654.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8792",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9654.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4431",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10742.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4432",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10742.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4329",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10198.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8858",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10198.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4407",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10470.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8880",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10470.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4486",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11014.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4524",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11014.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4271",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9926.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8836",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9926.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9321",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 18122.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9322",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 18122.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4539",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11322.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8941",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11322.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4747",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12410.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4748",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12410.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4605",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12682.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4606",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12682.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4628",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12954.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4629",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12954.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4813",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13498.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4814",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13498.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4836",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13226.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4837",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13226.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8977",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14314.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8978",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14314.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9222",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17034.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9223",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17034.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4652",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13770.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4653",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13770.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4721",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11594.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4722",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11594.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4564",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11866.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4592",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11866.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4882",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14858.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4883",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14858.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4675",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14586.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4676",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14586.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8911",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12138.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:8912",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12138.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4859",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14042.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4860",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14042.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9084",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16490.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9085",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16490.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9129",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16762.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9130",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16762.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9095",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16218.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9096",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16218.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9245",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17850.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9290",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17850.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4928",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15130.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4929",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15130.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4905",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15402.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:4906",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15402.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9018",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15674.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9019",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15674.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9041",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15946.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9067",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15946.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9197",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17578.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9198",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17578.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9152",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17306.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9308",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17306.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9695",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 21257.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9747",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 21257.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9762",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 21529.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9763",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 21529.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9787",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 21801.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9788",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 21801.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9988",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 22073.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9989",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 22073.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10013",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 22345.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10014",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 22345.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9672",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 20985.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9725",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 20985.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9449",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 18537.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9450",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 18537.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9438",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 18809.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9439",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 18809.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9504",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 19081.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9505",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 19081.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9527",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 20169.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9590",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 20169.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9385",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 19625.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9634",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 19625.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3809",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 19353.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "324:3810",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 19353.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9481",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 19897.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9612",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 19897.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9560",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 20441.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "330:9561",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 20441.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9812",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 20713.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9948",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 20713.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9846",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 24249.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10234",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 24249.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9859",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 24521.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10256",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 24521.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9885",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 23977.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:9886",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 23977.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10278",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 24793.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10279",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 24793.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10073",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 23433.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10074",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 23433.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10047",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 22889.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10048",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 22889.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10060",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 23161.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10061",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 23161.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10146",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 23705.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10174",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 23705.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10086",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 22617.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10087",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 22617.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10554",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 26962.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10555",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 26962.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10567",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 27234.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10568",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 27234.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10580",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 26690.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10581",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 26690.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10380",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 25065.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10381",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 25065.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10593",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 27506.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10594",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 27506.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10334",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 25604.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10335",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 25604.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10405",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 25335.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10406",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 25335.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10466",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 25874.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10467",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 25874.0,
+      "y": 13196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10477",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 26146.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10478",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 26146.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10488",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 26418.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "331:10532",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 26418.0,
+      "y": 13191.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "258:2221",
+    "name": "CJM техподдержка",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -9104.0,
+      "y": 13899.0,
+      "width": 27488.0,
+      "height": 1504.0
+    }
+  },
+  {
+    "id": "303:3427",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1232.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3450",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1232.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3467",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -960.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3468",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -960.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3485",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -688.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3508",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -688.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3525",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -416.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3526",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -416.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3538",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -144.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3999",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -144.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3551",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 128.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3552",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 128.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3564",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 400.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3565",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 400.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3577",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 672.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3578",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 672.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3590",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 944.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3591",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 944.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3603",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1216.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3604",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1216.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3616",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1488.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3617",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1488.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3629",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1760.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3630",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1760.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3642",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2032.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3643",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2032.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3655",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2304.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3656",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2304.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3668",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2576.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3669",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2576.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3681",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2848.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3682",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2848.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3694",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3120.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3695",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3120.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3707",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3392.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3708",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3392.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3720",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3664.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3721",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3664.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3733",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3936.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3734",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3936.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3746",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4208.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3747",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4208.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3049",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8440.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3050",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8440.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3072",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8168.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3073",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8168.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3085",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7896.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3086",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7896.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3098",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7624.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3099",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7624.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3111",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7352.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:4149",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7352.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3124",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7080.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:4127",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7080.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3137",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6808.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:4015",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6808.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3150",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6536.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:4031",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6536.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3163",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6264.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:4171",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6264.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3176",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5992.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:4105",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5992.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3189",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5720.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:4193",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5720.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3202",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5448.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:4083",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5448.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3215",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5176.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3216",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5176.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3228",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4904.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3229",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4904.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3293",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4632.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3294",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4632.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3306",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4360.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3983",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4360.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3319",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4088.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3320",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4088.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3332",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3816.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3333",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3816.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3345",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3544.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3346",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3544.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3358",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2184.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3359",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2184.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3371",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1912.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3372",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1912.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3384",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1640.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3409",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1640.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3241",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3272.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3242",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3272.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3254",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3000.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3255",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3000.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3267",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2728.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3268",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2728.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3280",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2456.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3281",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2456.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3313",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4570.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3314",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4570.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3337",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4842.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3360",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4842.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3927",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5114.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3946",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5114.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3961",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5386.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3962",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5386.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3977",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5658.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3978",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5658.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3993",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5930.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3994",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5930.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4009",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6202.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4010",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6202.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4025",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6474.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4026",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6474.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4041",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6746.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4058",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6746.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4073",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7018.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4074",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7018.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4084",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7290.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4101",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7290.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4246",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8378.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4283",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8378.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4652",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8922.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4653",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8922.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4116",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7562.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4639",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7562.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4132",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7834.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4185",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7834.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4204",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8106.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4229",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8106.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4322",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9194.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4341",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9194.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4356",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9466.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4357",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9466.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4372",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9738.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4373",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 9738.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4388",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10010.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4389",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10010.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4404",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10282.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4421",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10282.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4436",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10554.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4437",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10554.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4452",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10826.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4473",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 10826.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4490",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11098.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4491",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11098.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4503",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11370.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4504",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11370.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4262",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8650.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4305",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 8650.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4516",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11642.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4535",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11642.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4620",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12458.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4621",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12458.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4550",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11914.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4567",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 11914.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4582",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12186.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:4603",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12186.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3796",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16536.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3797",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16536.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3809",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16808.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3810",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16808.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3822",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17080.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3823",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17080.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3833",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17352.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3834",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17352.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3844",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17624.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3845",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17624.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3855",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17896.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3856",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 17896.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3866",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 18168.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3867",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 18168.0,
+      "y": 15165.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "294:2569",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16174.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "303:3960",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 16174.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "294:2596",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15902.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "294:2646",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15902.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3149",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13092.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3150",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13092.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:2939",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12820.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:2992",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 12820.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3027",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13364.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3028",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13364.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3040",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13636.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3041",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13636.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3053",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13908.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3054",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 13908.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3066",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14180.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3067",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14180.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3079",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14452.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3080",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14452.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3092",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14724.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3093",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14724.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3105",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14996.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3106",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14996.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3118",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15268.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3119",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15268.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3131",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15540.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:3132",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 15540.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:2971",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14180.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "299:2972",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 14180.0,
+      "y": 15196.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "258:2468",
+    "name": "Продажники и \"идеальная версия клиента\"",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -9024.0,
+      "y": 15948.0,
+      "width": 16582.0,
+      "height": 1400.0
+    }
+  },
+  {
+    "id": "321:6275",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8438.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3345",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8438.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6625",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8166.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3370",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -8166.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6644",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7894.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3418",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7894.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3282",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7622.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3307",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7622.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6682",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7078.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3497",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7078.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6663",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7350.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3323",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -7350.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3433",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6806.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6522",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6806.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3455",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6534.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3456",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6534.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6701",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6262.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6542",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -6262.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6720",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5990.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6350",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5990.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6739",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5718.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6370",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5718.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6302",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5174.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6303",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5174.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "327:5099",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5446.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6222",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -5446.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6758",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4902.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "323:3554",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4902.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6777",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4630.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6778",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4630.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6796",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4358.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6564",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -4358.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6910",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2636.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6419",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2636.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6815",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3996.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6586",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3996.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6834",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3724.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6608",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3724.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "327:5216",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2908.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "327:5217",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2908.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6853",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3452.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6854",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3452.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6872",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3180.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6873",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -3180.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6929",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2364.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6640",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2364.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6948",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2092.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6445",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -2092.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6967",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1820.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6476",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1820.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:6986",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1548.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6499",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1548.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7005",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1186.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7006",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -1186.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7024",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -642.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5489",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -642.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7043",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -370.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6679",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -370.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "327:5301",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -914.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5517",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -914.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5372",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -98.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6659",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -98.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5394",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 174.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5395",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 174.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5416",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 446.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5417",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 446.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7062",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 718.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6713",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 718.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7081",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 990.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5461",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 990.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7100",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1278.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6735",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1278.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7119",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1550.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6827",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1550.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7138",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1822.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6779",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 1822.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7157",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2110.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6851",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2110.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5863",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2654.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5864",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2654.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7195",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2926.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6885",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2926.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7176",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2382.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7371",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 2382.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7214",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3198.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7215",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3198.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5758",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4286.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5759",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4286.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5673",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3742.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5674",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3742.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5624",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3470.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6961",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 3470.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5695",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4014.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6943",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4014.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5651",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4558.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:6981",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4558.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5785",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5102.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5786",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5102.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5807",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5374.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7007",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5374.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7233",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4830.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7234",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 4830.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5829",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5646.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5917",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 5646.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5935",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6050.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:5936",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6050.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "328:6102",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6544.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7053",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6544.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7252",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6816.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7253",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 6816.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7271",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7088.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7272",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7088.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "321:7290",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7360.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "329:7075",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": 7360.0,
+      "y": 17150.0,
+      "width": 60.0,
+      "height": 60.0
+    }
+  },
+  {
+    "id": "1:152",
+    "name": "Исследование",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20880.0,
+      "y": -10112.0,
+      "width": 644.0,
+      "height": 838.0
+    }
+  },
+  {
+    "id": "434:4339",
+    "name": "Section 4",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17144.0,
+      "y": 12700.0,
+      "width": 6512.0,
+      "height": 1376.0
+    }
+  },
+  {
+    "id": "1:190",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16376.0,
+      "y": 12748.0,
+      "width": 1088.0,
+      "height": 1280.0
+    }
+  },
+  {
+    "id": "1:192",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16150.0,
+      "y": 12855.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "1:201",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -16344.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "253:3956",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16158.0,
+      "y": 13452.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "1:214",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -14072.0,
+      "y": 12748.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "1:216",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -13846.0,
+      "y": 12855.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "1:223",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -14040.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:3703",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12920.0,
+      "y": 12748.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "248:3705",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12694.0,
+      "y": 12855.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:3712",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -12888.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:3789",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -11768.0,
+      "y": 12748.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "248:3791",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -11542.0,
+      "y": 12855.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:3798",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -11736.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "1:224",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17096.0,
+      "y": 12748.0,
+      "width": 672.0,
+      "height": 784.0
+    }
+  },
+  {
+    "id": "1:232",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -17064.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "1:269",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15224.0,
+      "y": 12748.0,
+      "width": 1088.0,
+      "height": 1280.0
+    }
+  },
+  {
+    "id": "1:271",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -14884.453125,
+      "y": 12855.0,
+      "width": 424.9093017578125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "1:280",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -15192.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "434:4340",
+    "name": "Section 5",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17144.0,
+      "y": 14124.0,
+      "width": 6512.0,
+      "height": 1376.0
+    }
+  },
+  {
+    "id": "248:1997",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16376.0,
+      "y": 14172.0,
+      "width": 1088.0,
+      "height": 1280.0
+    }
+  },
+  {
+    "id": "248:1999",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16150.0,
+      "y": 14279.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:2008",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -16344.0,
+      "y": 14204.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "253:3930",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16150.0,
+      "y": 14876.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:3713",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12920.0,
+      "y": 14172.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "248:3715",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12694.0,
+      "y": 14279.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:3722",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -12888.0,
+      "y": 14204.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:2021",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -14072.0,
+      "y": 14172.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "248:2023",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -13846.0,
+      "y": 14279.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:2030",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -14040.0,
+      "y": 14204.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:3799",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -11768.0,
+      "y": 14172.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "248:3801",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -11542.0,
+      "y": 14279.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:3808",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -11736.0,
+      "y": 14204.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:2031",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17096.0,
+      "y": 14172.0,
+      "width": 672.0,
+      "height": 784.0
+    }
+  },
+  {
+    "id": "248:2035",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -17064.0,
+      "y": 14204.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:2370",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -16877.0,
+      "y": 14247.0,
+      "width": 250.0,
+      "height": 250.0
+    }
+  },
+  {
+    "id": "248:2472",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -16877.0,
+      "y": 14247.0,
+      "width": 250.0,
+      "height": 250.0
+    }
+  },
+  {
+    "id": "248:2070",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15224.0,
+      "y": 14172.0,
+      "width": 1088.0,
+      "height": 1280.0
+    }
+  },
+  {
+    "id": "248:2072",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -14884.453125,
+      "y": 14279.0,
+      "width": 424.9093017578125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:2081",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -15192.0,
+      "y": 14204.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "434:4341",
+    "name": "Section 6",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17144.0,
+      "y": 15548.0,
+      "width": 6512.0,
+      "height": 1376.0
+    }
+  },
+  {
+    "id": "248:2183",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16376.0,
+      "y": 15596.0,
+      "width": 1088.0,
+      "height": 1280.0
+    }
+  },
+  {
+    "id": "248:2185",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16150.0,
+      "y": 15703.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:2194",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -16344.0,
+      "y": 15628.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:2197",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -16150.0,
+      "y": 16300.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:3723",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12920.0,
+      "y": 15596.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "248:3725",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12694.0,
+      "y": 15703.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:3732",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -12888.0,
+      "y": 15628.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:2207",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -14072.0,
+      "y": 15596.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "248:2209",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -13846.0,
+      "y": 15703.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:2216",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -14040.0,
+      "y": 15628.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:3809",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -11768.0,
+      "y": 15596.0,
+      "width": 1088.0,
+      "height": 960.0
+    }
+  },
+  {
+    "id": "248:3811",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -11542.0,
+      "y": 15703.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:3815",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -11736.0,
+      "y": 15628.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:2217",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17096.0,
+      "y": 15596.0,
+      "width": 672.0,
+      "height": 784.0
+    }
+  },
+  {
+    "id": "248:2221",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -17064.0,
+      "y": 15628.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "248:3321",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -16885.0,
+      "y": 15671.0,
+      "width": 250.0,
+      "height": 250.0
+    }
+  },
+  {
+    "id": "248:3322",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -16885.0,
+      "y": 15671.0,
+      "width": 250.0,
+      "height": 250.0
+    }
+  },
+  {
+    "id": "248:2256",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15224.0,
+      "y": 15596.0,
+      "width": 1088.0,
+      "height": 1280.0
+    }
+  },
+  {
+    "id": "248:2258",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -14884.453125,
+      "y": 15703.0,
+      "width": 424.9093017578125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "248:2267",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -15192.0,
+      "y": 15628.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "1:1266",
+    "name": "Скрипт",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17828.0,
+      "y": -8416.0,
+      "width": 2312.0,
+      "height": 4496.0
+    }
+  },
+  {
+    "id": "1:1267",
+    "name": "2",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -8014.0,
+      "width": 1400.0006103515625,
+      "height": 344.27294921875
+    }
+  },
+  {
+    "id": "1:1270",
+    "name": "3",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -7622.0,
+      "width": 1400.0006103515625,
+      "height": 516.27294921875
+    }
+  },
+  {
+    "id": "1:1273",
+    "name": "4",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -7072.0,
+      "width": 1400.0,
+      "height": 646.72705078125
+    }
+  },
+  {
+    "id": "1:1276",
+    "name": "5",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -4365.0,
+      "width": 1398.0,
+      "height": 409.27294921875
+    }
+  },
+  {
+    "id": "26:1615",
+    "name": "8",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -4663.0,
+      "width": 1398.0,
+      "height": 265.27294921875
+    }
+  },
+  {
+    "id": "27:1634",
+    "name": "10",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -5387.0,
+      "width": 1398.0,
+      "height": 337.27294921875
+    }
+  },
+  {
+    "id": "24:1584",
+    "name": "6",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -5089.0,
+      "width": 1398.0,
+      "height": 393.27294921875
+    }
+  },
+  {
+    "id": "26:1626",
+    "name": "9",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -5929.0,
+      "width": 1398.0,
+      "height": 393.27294921875
+    }
+  },
+  {
+    "id": "26:1605",
+    "name": "7",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -6392.0,
+      "width": 1400.0006103515625,
+      "height": 429.27294921875
+    }
+  },
+  {
+    "id": "1:1279",
+    "name": "1",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17780.0,
+      "y": -8368.0,
+      "width": 1400.0006103515625,
+      "height": 324.27294921875
+    }
+  },
+  {
+    "id": "28:1669",
+    "name": "Скрипт",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15264.0,
+      "y": -8416.0,
+      "width": 2143.0,
+      "height": 4476.0
+    }
+  },
+  {
+    "id": "28:1670",
+    "name": "2",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -8014.0,
+      "width": 1400.0006103515625,
+      "height": 380.27294921875
+    }
+  },
+  {
+    "id": "28:1673",
+    "name": "3",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -7622.0,
+      "width": 1400.0006103515625,
+      "height": 480.27294921875
+    }
+  },
+  {
+    "id": "28:1677",
+    "name": "4",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -7120.0,
+      "width": 1400.0,
+      "height": 672.0
+    }
+  },
+  {
+    "id": "28:1698",
+    "name": "5",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -4398.0,
+      "width": 1398.0,
+      "height": 409.27294921875
+    }
+  },
+  {
+    "id": "28:1701",
+    "name": "8",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -4696.0,
+      "width": 1398.0,
+      "height": 265.27294921875
+    }
+  },
+  {
+    "id": "28:1704",
+    "name": "10",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -5492.0,
+      "width": 1398.0,
+      "height": 337.27294921875
+    }
+  },
+  {
+    "id": "37:1494",
+    "name": "11",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -6426.0,
+      "width": 1398.0,
+      "height": 337.27294921875
+    }
+  },
+  {
+    "id": "28:1707",
+    "name": "6",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -5122.0,
+      "width": 1398.0,
+      "height": 393.27294921875
+    }
+  },
+  {
+    "id": "28:1713",
+    "name": "7",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -6041.0,
+      "width": 1400.0006103515625,
+      "height": 501.27294921875
+    }
+  },
+  {
+    "id": "28:1716",
+    "name": "1",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15216.0,
+      "y": -8368.0,
+      "width": 1400.0006103515625,
+      "height": 324.27294921875
+    }
+  },
+  {
+    "id": "39:1513",
+    "name": "Скрипт для Клиентов",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12568.0,
+      "y": -8416.0,
+      "width": 1496.0006103515625,
+      "height": 2913.0
+    }
+  },
+  {
+    "id": "39:1514",
+    "name": "2",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12520.0,
+      "y": -8014.0,
+      "width": 1400.0006103515625,
+      "height": 380.27294921875
+    }
+  },
+  {
+    "id": "39:1517",
+    "name": "3",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12520.0,
+      "y": -7604.0,
+      "width": 1400.0006103515625,
+      "height": 552.27294921875
+    }
+  },
+  {
+    "id": "39:1520",
+    "name": "4",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12520.0,
+      "y": -7022.0,
+      "width": 1394.0,
+      "height": 369.27294921875
+    }
+  },
+  {
+    "id": "39:1540",
+    "name": "5",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12520.0,
+      "y": -5961.0,
+      "width": 1398.0,
+      "height": 409.27294921875
+    }
+  },
+  {
+    "id": "39:1543",
+    "name": "8",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12520.0,
+      "y": -6256.0,
+      "width": 1398.0,
+      "height": 265.27294921875
+    }
+  },
+  {
+    "id": "39:1549",
+    "name": "11",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12520.0,
+      "y": -6623.0,
+      "width": 1398.0,
+      "height": 337.27294921875
+    }
+  },
+  {
+    "id": "39:1558",
+    "name": "1",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -12520.0,
+      "y": -8368.0,
+      "width": 1400.0006103515625,
+      "height": 324.27294921875
+    }
+  },
+  {
+    "id": "74:1510",
+    "name": "Скрипт для Клиентов",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -8848.0,
+      "y": -8416.0,
+      "width": 1496.0006103515625,
+      "height": 2913.0
+    }
+  },
+  {
+    "id": "74:1511",
+    "name": "2",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -8800.0,
+      "y": -8014.0,
+      "width": 1400.0006103515625,
+      "height": 380.27294921875
+    }
+  },
+  {
+    "id": "74:1514",
+    "name": "3",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -8800.0,
+      "y": -7604.0,
+      "width": 1400.0006103515625,
+      "height": 552.27294921875
+    }
+  },
+  {
+    "id": "74:1517",
+    "name": "4",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -8800.0,
+      "y": -7022.0,
+      "width": 1394.0,
+      "height": 369.27294921875
+    }
+  },
+  {
+    "id": "74:1520",
+    "name": "5",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -8800.0,
+      "y": -5961.0,
+      "width": 1398.0,
+      "height": 409.27294921875
+    }
+  },
+  {
+    "id": "74:1523",
+    "name": "8",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -8800.0,
+      "y": -6256.0,
+      "width": 1398.0,
+      "height": 265.27294921875
+    }
+  },
+  {
+    "id": "74:1526",
+    "name": "11",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -8800.0,
+      "y": -6623.0,
+      "width": 1398.0,
+      "height": 337.27294921875
+    }
+  },
+  {
+    "id": "74:1529",
+    "name": "1",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -8800.0,
+      "y": -8368.0,
+      "width": 1400.0006103515625,
+      "height": 324.27294921875
+    }
+  },
+  {
+    "id": "40:1589",
+    "name": "Скрипт для СД",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -10840.0,
+      "y": -8416.0,
+      "width": 1496.0006103515625,
+      "height": 2809.0
+    }
+  },
+  {
+    "id": "40:1590",
+    "name": "2",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -10792.0,
+      "y": -8014.0,
+      "width": 1400.0006103515625,
+      "height": 380.27294921875
+    }
+  },
+  {
+    "id": "40:1593",
+    "name": "3",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -10792.0,
+      "y": -7622.0,
+      "width": 1400.0006103515625,
+      "height": 480.27294921875
+    }
+  },
+  {
+    "id": "40:1596",
+    "name": "4",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -10792.0,
+      "y": -7116.0,
+      "width": 1394.0,
+      "height": 369.27294921875
+    }
+  },
+  {
+    "id": "40:1599",
+    "name": "5",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -10792.0,
+      "y": -6065.0,
+      "width": 1398.0,
+      "height": 409.27294921875
+    }
+  },
+  {
+    "id": "40:1602",
+    "name": "8",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -10792.0,
+      "y": -6363.0,
+      "width": 1398.0,
+      "height": 265.27294921875
+    }
+  },
+  {
+    "id": "40:1605",
+    "name": "11",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -10792.0,
+      "y": -6726.0,
+      "width": 1398.0,
+      "height": 337.27294921875
+    }
+  },
+  {
+    "id": "40:1608",
+    "name": "1",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -10792.0,
+      "y": -8368.0,
+      "width": 1400.0006103515625,
+      "height": 324.27294921875
+    }
+  },
+  {
+    "id": "247:1867",
+    "name": "Персоны",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20928.0,
+      "y": 12700.0,
+      "width": 3056.0,
+      "height": 1488.0
+    }
+  },
+  {
+    "id": "247:1868",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20160.0,
+      "y": 12748.0,
+      "width": 1088.0,
+      "height": 672.0
+    }
+  },
+  {
+    "id": "247:1870",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -19934.0,
+      "y": 12855.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "247:1876",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -20128.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "247:1877",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20160.0,
+      "y": 13468.0,
+      "width": 1088.0,
+      "height": 672.0
+    }
+  },
+  {
+    "id": "247:1879",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -19934.0,
+      "y": 13575.0,
+      "width": 636.453125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "247:1883",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -20128.0,
+      "y": 13500.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "247:1884",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20880.0,
+      "y": 12748.0,
+      "width": 672.0,
+      "height": 1184.0
+    }
+  },
+  {
+    "id": "247:1885",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20784.0,
+      "y": 13789.0,
+      "width": 496.0,
+      "height": 80.0
+    }
+  },
+  {
+    "id": "247:1892",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -20848.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "247:1894",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20748.0,
+      "y": 12855.0,
+      "width": 424.9093017578125,
+      "height": 149.0
+    }
+  },
+  {
+    "id": "247:1897",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -20636.0,
+      "y": 13133.0,
+      "width": 200.0,
+      "height": 200.0
+    }
+  },
+  {
+    "id": "247:1898",
+    "name": "Frame",
+    "type": "FRAME",
+    "description": "",
+    "boundingBox": {
+      "x": -20636.0,
+      "y": 13133.0,
+      "width": 200.0,
+      "height": 200.0
+    }
+  },
+  {
+    "id": "247:1929",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -19008.0,
+      "y": 12748.0,
+      "width": 1088.0,
+      "height": 672.0
+    }
+  },
+  {
+    "id": "247:1931",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -18668.453125,
+      "y": 12855.0,
+      "width": 424.9093017578125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "247:1936",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -18976.0,
+      "y": 12780.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "247:1937",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -19008.0,
+      "y": 13468.0,
+      "width": 1088.0,
+      "height": 672.0
+    }
+  },
+  {
+    "id": "247:1939",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -18668.453125,
+      "y": 13575.0,
+      "width": 424.9093017578125,
+      "height": 89.45458984375
+    }
+  },
+  {
+    "id": "247:1942",
+    "name": "pin",
+    "type": "INSTANCE",
+    "description": "",
+    "boundingBox": {
+      "x": -18976.0,
+      "y": 13500.0,
+      "width": 64.0,
+      "height": 64.0
+    }
+  },
+  {
+    "id": "353:5257",
+    "name": "Итог исследования",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20928.0,
+      "y": 19615.0,
+      "width": 8272.0,
+      "height": 4577.0
+    }
+  },
+  {
+    "id": "353:5200",
+    "name": "",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20880.0,
+      "y": 19663.0,
+      "width": 1384.0,
+      "height": 961.0
+    }
+  },
+  {
+    "id": "1:1257",
+    "name": "Выводы/результаты",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20880.0,
+      "y": 20779.0,
+      "width": 1384.0,
+      "height": 3365.0
+    }
+  },
+  {
+    "id": "343:4578",
+    "name": "Замечания по интерфейсу SEIBA",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -15532.0,
+      "y": 19663.0,
+      "width": 1328.0,
+      "height": 3173.0
+    }
+  },
+  {
+    "id": "348:4885",
+    "name": "Замечания по интерфейсу ONLINE 3.0",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -14032.0,
+      "y": 19663.0,
+      "width": 1328.0,
+      "height": 4120.0
+    }
+  },
+  {
+    "id": "343:4614",
+    "name": "Замечания по интерфейсу STUDIO",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -17032.0,
+      "y": 19664.0,
+      "width": 1328.0,
+      "height": 1072.0
+    }
+  },
+  {
+    "id": "260:2259",
+    "name": "Вопросы на обсуждение",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -19324.0,
+      "y": 19663.0,
+      "width": 2120.0,
+      "height": 961.0
+    }
+  },
+  {
+    "id": "348:4352",
+    "name": "Вопросы на обсуждение",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -19324.0,
+      "y": 20779.0,
+      "width": 2120.0,
+      "height": 1100.0
+    }
+  },
+  {
+    "id": "348:4517",
+    "name": "Обучение",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -19324.0,
+      "y": 22034.0,
+      "width": 2120.0,
+      "height": 1456.0
+    }
+  },
+  {
+    "id": "14:1543",
+    "name": "Section 3",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": -20880.0,
+      "y": -8416.0,
+      "width": 2800.0,
+      "height": 1896.0
+    }
+  },
+  {
+    "id": "353:5199",
+    "name": "Возможно для будущих тестов",
+    "type": "SECTION",
+    "description": "",
+    "boundingBox": {
+      "x": 6896.0,
+      "y": 4195.0,
+      "width": 7464.0,
+      "height": 4044.7265625
+    }
+  }
+]
