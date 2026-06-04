@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.core.config import settings
 from api.core.duckdb_conn import close_connection
+from api.routers import ALL_ROUTERS
 
 logger = logging.getLogger("skai.api")
 
@@ -49,7 +50,8 @@ def create_app() -> FastAPI:
     def health() -> dict[str, str]:
         return {"status": "ok"}
 
-    # routers подключаются в x2/b6
+    for router in ALL_ROUTERS:
+        app.include_router(router)
 
     return app
 
