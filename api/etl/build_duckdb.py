@@ -71,9 +71,10 @@ def _load_csvs(conn: duckdb.DuckDBPyConnection, ready_dir: Path) -> int:
             continue
 
         table = _table_name(prefix, csv_path)
+        csv_literal = str(csv_path).replace("'", "''")
         sql = (
             f'CREATE OR REPLACE TABLE "{table}" AS '
-            f"SELECT * FROM read_csv_auto('{csv_path}', header=true, all_varchar=false)"
+            f"SELECT * FROM read_csv_auto('{csv_literal}', header=true, all_varchar=false)"
         )
         conn.execute(sql)
         row_count = conn.execute(f'SELECT count(*) FROM "{table}"').fetchone()[0]
