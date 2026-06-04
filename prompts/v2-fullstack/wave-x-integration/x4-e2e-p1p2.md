@@ -1,7 +1,7 @@
 # x4 · Сквозной smoke P1/P2 + Voice/NLU (финал расширения)
 
 > **Барьер 2 — финал Волны 2 (расширение).** **Владеет:** только запуск/проверки (smoke). Авторство тестов —
-> Codex-задачи `prompts/codex-tasks/T2-api-integration-tests` (`test_reports_api`, `test_p1p2_api`) и `T3`.
+> трек T `prompts/v2-fullstack/track-t-tests/t2-api-integration-tests` (`test_reports_api`, `test_p1p2_api`) и `t3`.
 > Ничего не переписывает — при провале заводит дефект соответствующему треку (b7–b13 / d4,d5 / f5–f13).
 > Запускается после Барьера 1 (x1–x3, роутеры включены) и завершения Волны 2 (расширение P1/P2).
 

@@ -11,7 +11,7 @@ skai_7/
 └── .worktrees/            (gitignored)
     ├── backend  [feat/backend]      ← окно 1: api/, data/seed/
     ├── web      [feat/web]          ← окно 2: web/
-    └── tests    [feat/tests]        ← окно 3: Codex desktop (api/tests, web vitest)
+    └── tests    [feat/tests]        ← окно 3: Claude Code · track-t-tests (api/tests, web vitest)
 ```
 В каждой `.worktrees/<name>/START.md` — очередь промптов и владение.
 
@@ -121,12 +121,12 @@ flowchart TD
             wd["d4 map ∥ d5 voice-timeline"]
             wf["f5…f13 (все параллельно)"]
         end
-        subgraph T2["🪟 Окно 3 · tests (feat/tests, Codex)"]
+        subgraph T2["🪟 Окно 3 · tests (feat/tests, Claude Code)"]
             direction TB
-            t4["T4 chores — сразу"]
-            t1["T1 unit — после b2/b7/b10"]
-            t2["T2 API — после b6 + b11–b13"]
-            t3["T3 front — после d2/f2/f4"]
+            t4["t4 chores — сразу"]
+            t1["t1 unit — после b2/b7/b10"]
+            t2["t2 API — после b6 + b11–b13"]
+            t3["t3 front — после d2/f2/f4"]
         end
     end
 
@@ -154,7 +154,7 @@ flowchart TD
 | --- | --- | --- | --- |
 | 1 · Backend | `.worktrees/backend` / `feat/backend` | `api/`, `data/seed/`, `data/skai.duckdb` | `code .worktrees/backend` |
 | 2 · Web | `.worktrees/web` / `feat/web` | `web/` | `code .worktrees/web` |
-| 3 · Tests | `.worktrees/tests` / `feat/tests` (Codex) | `api/tests/`, vitest | `code .worktrees/tests` |
+| 3 · Tests | `.worktrees/tests` / `feat/tests` (Claude Code · `track-t-tests`) | `api/tests/`, vitest | `code .worktrees/tests` |
 | Интеграция | `skai_7` / `integration` | корневые: `App.tsx`, `Makefile`, `requirements*` | основное окно |
 
 ### Волна 1 — P0 core (окна 1 и 2 одновременно)
@@ -189,7 +189,7 @@ git checkout integration && git merge feat/backend && git merge feat/web
 | --- | --- | --- |
 | 1 Backend | `b7`→`b10` ; `b8` ∥ `b9` ; `b11` ∥ `b12` ∥ `b13` | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
 | 2 Web | `d4` ∥ `d5` ; `f5`…`f13` (все параллельно) | — |
-| 3 Tests | `T4` сразу · `T1` после `b2/b7/b10` · `T2` после `b6`+`b11–b13` · `T3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
+| 3 Tests | `t4` сразу · `t1` после `b2/b7/b10` · `t2` после `b6`+`b11–b13` · `t3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
 
 ### Барьер 2 — финальный e2e (основное окно `skai_7`)
 
@@ -221,7 +221,7 @@ git add -A && git commit -m "feat(backend): wave 1"
 # в основном репо:
 cd /Users/dimausac/projects/skai_7
 git checkout integration && git merge feat/backend && git merge feat/web
-# Codex перед тестами: в .worktrees/tests → git merge integration
+# track-t-tests перед тестами: в .worktrees/tests → git merge integration
 ```
 Финал: `integration` → `main`.
 
