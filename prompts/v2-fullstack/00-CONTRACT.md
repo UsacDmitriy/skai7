@@ -9,6 +9,14 @@
 > **против этого контракта**, а не против рантайма другого трека. Имена таблиц/колонок/полей/
 > эндпоинтов/токенов меняются ТОЛЬКО здесь и ТОЛЬКО по согласованию.
 
+> **Changelog (contract-change):**
+> - **2026-06-04 · #1 (синхронизация с макетами 07 Заявки):**
+>   (a) В `Source` (§3.1) добавлено значение `"DIAGNOSTIC"` — для алярмов сенсорной диагностики
+>   («Камера офлайн» и т.п., источник `sensor_diagnostics` / `alarm_type_catalog.source`), бейдж «⚙ Диагностика».
+>   (b) `Ticket.status` (§7.5) приведён к единому enum `Status` (§3.1) `active|in_progress|validated|closed`
+>   вместо прежнего `new|in_progress|closed`; «Просрочена» больше **не статус** — добавлены производные
+>   поля `deadline` и `is_overdue`. Синхронно поправлен промпт `prompts/claude-design/07-tickets-screen`.
+
 ## 0. Конвенции (из CLAUDE.md)
 
 - Язык кода/идентификаторов — английский; UI-тексты и комментарии — по необходимости русский.
@@ -123,7 +131,7 @@ CSV без `.csv`, lowercase. Колонки — заголовки CSV **дос
 
 ```text
 Severity  = "critical" | "high" | "medium" | "low"
-Source    = "DMS" | "ADAS" | "TELEMATICS" | "COMBINED"
+Source    = "DMS" | "ADAS" | "TELEMATICS" | "COMBINED" | "DIAGNOSTIC"   # DIAGNOSTIC — алярмы сенсорной диагностики (камера офлайн и т.п.), бейдж «⚙ Диагностика»
 Status    = "active" | "in_progress" | "validated" | "closed"
 
 Camera        { id: str, label: str, status: "online"|"offline"|"warning", hasVideo: bool,
@@ -352,7 +360,9 @@ FleetReport   {                                  # GET /reports/fleet (идея 
 VehicleReport { plate, vehicle_model, risk_score: int, cameras: Camera[],  # GET /reports/vehicle/{plate}, len(cameras)=3
                 drivers: DriverRef[], period: ReportPeriod, period_alarms: ViolationRow[], mileage_km, trips: int }
 DriverRef     { driver_id, driver_name, role: "main"|"secondary", trips: int, safety_score: int, risk_score: int }
-Ticket        { id, created_at, incident_id, action, comment, status: "new"|"in_progress"|"closed" }
+Ticket        { id, created_at, incident_id, action, comment, status: Status,   # единый enum Status (§3.1): active|in_progress|validated|closed
+                deadline: str|null, is_overdue: bool }   # is_overdue = deadline<now И status∉{closed}; «Просрочена» — не статус, а оверлей по is_overdue
+                # RU-метки: active=«Новая» · in_progress=«В работе» · validated=«Проверена» · closed=«Закрыта»
 DispatchAlert { incident: IncidentDetail, video_window_sec: int=15, requested_at: str }
 TripDossier   { vehicle_plate, track: TelemetryPoint[], timeline: {ts_offset, alarm_code, label, has_video}[] }
 RebRecovery   { vehicle_plate, gps_track: {lat,lon,ts}[], gap_periods: {start,end,duration_sec}[], video_frames: {ts, channel, url}[] }
@@ -397,7 +407,7 @@ leaflet tiles: тёмная тема для /monitor (24/7)
 | f13 role-toggle | интеграция `RoleToggle` (d4) в EventsFeed/Monitor; фильтрация по роли | d4, f5, f6 |
 
 > `f6`/`f7` **заменяют** scaffold-версии `Monitor.tsx`/`Report.tsx` из f4. После full-scope f4 владеет
-> только `IncidentCard.tsx`; Monitor/Report переходят к f6/f7. Зафиксировать при запуске Волны 3.
+> только `IncidentCard.tsx`; Monitor/Report переходят к f6/f7. Зафиксировать при запуске Волны 2 (расширение).
 
 ### 7.8 Acceptance criteria — P1/P2
 
