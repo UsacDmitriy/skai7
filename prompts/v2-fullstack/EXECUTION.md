@@ -76,24 +76,25 @@ integration (x1/x2), поэтому в параллельной фазе их н
 дозакрытие unit-покрытия по всему решению** (W3-3/W3-4). Не входят в P0/P1/P2-скоуп; каждый пункт
 выполняется на ветке трека-владельца по мере её готовности, порядок между пунктами не важен
 (зависимостей нет). Сходятся на **Барьере 3 (x5)** — полный регресс + гейт покрытия → `main`.
-Промпты лежат в `prompts/v2-fullstack/wave-3-backlog/` (один пункт = один файл).
+Промпты разложены по трекам-владельцам внутри `prompts/v2-fullstack/wave-3-backlog/`
+(`track-b-backend/`, `track-t-tests/`; один пункт = один файл — структура и граф в README папки).
 
 | # | Промпт | Трек | Источник / детали | Приоритет |
 | --- | --- | --- | --- | --- |
-| W3-1 | [`wave-3-backlog/w3-1-b13-ticket-sync.md`](wave-3-backlog/w3-1-b13-ticket-sync.md) — синхронизировать промпт `b13` с contract-change #1: дефолт статуса `Ticket` `"new"` → `"active"` (значение `new` удалено из enum `Status`); добавить в схему `Ticket` поля `deadline` и `is_overdue` (оверлей «⏱ Просрочено», не статус). | b13 / backend | `track-b-backend/b13-tickets-alerts-trips.md:15,17` vs `00-CONTRACT.md` §7.5 | Средний (до реализации `tickets_service`) |
-| W3-2 | [`wave-3-backlog/w3-2-diagnostic-source-data.md`](wave-3-backlog/w3-2-diagnostic-source-data.md) — данные для `Source=DIAGNOSTIC`: значение объявлено в §3.1, но в `data/analysis/alarm_types.json` нет строки с `source:"DIAGNOSTIC"` → бейдж «⚙ Диагностика» (макет 07) ни на чём не срабатывает. | b1 / данные | `00-CONTRACT.md` §3.1 (changelog #1) vs `alarm_type_catalog` (14 строк) | Низкий (демо-опционально) |
-| W3-3 | [`wave-3-backlog/w3-3-backend-unit-coverage.md`](wave-3-backlog/w3-3-backend-unit-coverage.md) — backend unit-покрытие **всех** модулей `b1–b13` (дозакрытие t1: b1/b3/b4/b5/b6/b8/b9/b11/b12/b13), гейт `api/` ≥ 85%. | T / tests | по промптам `b1–b13` + `00-CONTRACT.md` §1–§3/§7.5 | Высокий (качество релиза) |
-| W3-4 | [`wave-3-backlog/w3-4-frontend-unit-coverage.md`](wave-3-backlog/w3-4-frontend-unit-coverage.md) — frontend unit/компонентное покрытие `d3–d5`, `f5–f13` (дозакрытие t3), гейт `web/src` ≥ 80%. | T / tests | по промптам `d3–d5`/`f5–f13` + §3.1/§4/§7.5 | Высокий (качество релиза) |
-| W3-5 | [`wave-3-backlog/w3-5-no-video-incident-reachable.md`](wave-3-backlog/w3-5-no-video-incident-reachable.md) — no-video инцидент достижим в живых данных: UI-ветка «нет видео» + «Запросить архив» + `sensor_active_after_sec` (§2) мертва. | b3 / данные (+T) | `api/sql/10_v_incidents.sql:25` (`video_available` всегда `1`, источник — только видео-алярмы); выявлено smoke x3 | Средний (закрывает мёртвую P0-ветку) |
+| W3-1 | [`wave-3-backlog/track-b-backend/w3-1-b13-ticket-sync.md`](wave-3-backlog/track-b-backend/w3-1-b13-ticket-sync.md) — синхронизировать промпт `b13` с contract-change #1: дефолт статуса `Ticket` `"new"` → `"active"` (значение `new` удалено из enum `Status`); добавить в схему `Ticket` поля `deadline` и `is_overdue` (оверлей «⏱ Просрочено», не статус). | b13 / backend | `track-b-backend/b13-tickets-alerts-trips.md:15,17` vs `00-CONTRACT.md` §7.5 | Средний (до реализации `tickets_service`) |
+| W3-2 | [`wave-3-backlog/track-b-backend/w3-2-diagnostic-source-data.md`](wave-3-backlog/track-b-backend/w3-2-diagnostic-source-data.md) — данные для `Source=DIAGNOSTIC`: значение объявлено в §3.1, но в `data/analysis/alarm_types.json` нет строки с `source:"DIAGNOSTIC"` → бейдж «⚙ Диагностика» (макет 07) ни на чём не срабатывает. | b1 / данные | `00-CONTRACT.md` §3.1 (changelog #1) vs `alarm_type_catalog` (14 строк) | Низкий (демо-опционально) |
+| W3-5 | [`wave-3-backlog/track-b-backend/w3-5-no-video-incident-reachable.md`](wave-3-backlog/track-b-backend/w3-5-no-video-incident-reachable.md) — no-video инцидент достижим в живых данных: `v_incidents.video_available` всегда `1` (источник — только видео-алярмы), поэтому UI-ветка «нет видео» + «Запросить архив» + `sensor_active_after_sec` (§2) мертва. | b3 / данные (+T) | smoke x3 vs `00-CONTRACT.md` §2 | Средний (закрывает мёртвую P0-ветку) |
+| W3-3 | [`wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md`](wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md) — backend unit-покрытие **всех** модулей `b1–b13` (дозакрытие t1: b1/b3/b4/b5/b6/b8/b9/b11/b12/b13), гейт `api/` ≥ 85%. | T / tests | по промптам `b1–b13` + `00-CONTRACT.md` §1–§3/§7.5 | Высокий (качество релиза) |
+| W3-4 | [`wave-3-backlog/track-t-tests/w3-4-frontend-unit-coverage.md`](wave-3-backlog/track-t-tests/w3-4-frontend-unit-coverage.md) — frontend unit/компонентное покрытие `d3–d5`, `f5–f13` (дозакрытие t3), гейт `web/src` ≥ 80%. | T / tests | по промптам `d3–d5`/`f5–f13` + §3.1/§4/§7.5 | Высокий (качество релиза) |
 
 > Закрытый аудитом дефект Волны 1 (b2 `_SPEED_LIMIT_TABLE` на legacy-кодах) исправлен в рамках Волны 1
 > (ветка `feat/backend`, fix(b2)) и в бэклог не выносится.
 
-**Как запускать пункты.** В окне трека-владельца (например `.worktrees/backend` для W3-1/W3-2,
-`.worktrees/tests` для W3-3/W3-4) дай промпт обычным порядком:
+**Как запускать пункты.** В окне трека-владельца (`.worktrees/backend` для W3-1/W3-2/W3-5,
+`.worktrees/tests` для W3-3/W3-4) дай промпт из папки его трека:
 
 ```text
-Выполни @prompts/v2-fullstack/wave-3-backlog/w3-3-backend-unit-coverage.md
+Выполни @prompts/v2-fullstack/wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md
 ```
 
 **Барьер 3 (x5)** — в основном окне `skai_7` на ветке `integration`, после завершения Волны 3:
@@ -107,7 +108,7 @@ git merge feat/backend feat/web feat/tests
 Выполни @prompts/v2-fullstack/wave-x-integration/x5-wave3-hardening.md
 ```
 
-Новый пункт бэклога → добавь файл `wave-3-backlog/wN-*.md` + строку в таблицу выше.
+Новый пункт бэклога → добавь файл в папку трека (`wave-3-backlog/track-b-backend/` или `track-t-tests/`) `wN-*.md` + строку в таблицу выше.
 
 ## Подробная схема выполнения
 
@@ -151,19 +152,16 @@ flowchart TD
 
     subgraph W2["ВОЛНА 2 · расширение P1/P2 — макс. параллельно"]
         direction LR
-        subgraph B2["🪟 Окно 1 · backend (feat/backend)"]
+        subgraph B2["🪟 Окно 1 · backend"]
             direction TB
-            wb7["b7 driver-reference"] --> wb10["b10 reports-views"]
-            wb9["b9 nlu"] --> wb10
-            wb8["b8 stt"]
-            wb11["b11 sabotage"]
-            wb12["b12 reb"]
-            wb13["b13 tickets-alerts-trips"]
+            wb7["b7 driver-reference → b10 reports-views"]
+            wb89["b8 stt ∥ b9 nlu"]
+            wb11["b11 sabotage ∥ b12 reb ∥ b13 tickets-alerts-trips<br/>⚠ роутеры в ALL_ROUTERS"]
         end
-        subgraph F2["🪟 Окно 2 · web (feat/web)"]
+        subgraph F2["🪟 Окно 2 · web"]
             direction TB
-            wd4["d4 map"] --> wf["f5…f13 (параллельно)"]
-            wd5["d5 voice-timeline"] --> wf
+            wd["d4 map ∥ d5 voice-timeline"]
+            wf["f5…f13 (все параллельно)"]
         end
         subgraph T2["🪟 Окно 3 · tests (feat/tests, Claude Code)"]
             direction TB
@@ -181,12 +179,13 @@ flowchart TD
 
     subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг — окна 1 и 3 параллельно"]
         direction LR
-        subgraph B3["🪟 Окно 1 · backend (feat/backend) — api/, data/"]
+        subgraph B3["🪟 Окно 1 · backend (feat/backend) — track-b-backend/"]
             direction TB
             w31["w3-1 b13-ticket-sync"]
             w32["w3-2 diagnostic-source-data"]
+            w35["w3-5 no-video-incident-reachable"]
         end
-        subgraph T3["🪟 Окно 3 · tests (feat/tests, Claude Code) — api/tests, vitest"]
+        subgraph T3["🪟 Окно 3 · tests (feat/tests, Claude Code) — track-t-tests/"]
             direction TB
             w33["w3-3 backend-unit-coverage"]
             w34["w3-4 frontend-unit-coverage"]
@@ -243,19 +242,13 @@ Git-склейка и продвижение `main` — **внутри пром�
 
 Красный check → **стоп**, дефект соответствующему треку, чиним на `integration`, `main` не трогаем.
 
-### Волна 2 — расширение P1/P2 (окна 1, 2, 3 одновременно)
+### Волна 2 — расширение P1/P2 (макс. параллельно)
 
-В каждом окне даёшь промпты по очереди (как в Волне 1), дожидаясь проверки. Запускается **после Барьера 1** (P0 в `main`); перед стартом в каждом worktree: `git fetch && git merge integration`.
-
-| Окно | Промпты (порядок) | Проверка |
+| Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 1 Backend | параллельно: `b7`, `b8`, `b9`, `b11`, `b12`, `b13` → затем `b10` (после `b7`+`b9`) | `make db` (+ `seed__driver_reference`, views `20`–`24`), `make api`, `GET /api/reports/fleet` · `/api/tickets` · `/api/sabotage` · `/api/reb/{id}` · `/api/trips/{id}` → 200 |
-| 2 Web | (`d4` ∥ `d5`) → `f5`…`f13` (все параллельно) | `npm run typecheck`; `VITE_USE_FIXTURES=true npm run dev` → экраны `/tickets`, `/report` (🎤), `/trip/:id`, `/reb/:id`, монитор-карта |
-| 3 Tests | `t4` сразу ; `t1` после `b2/b7/b10` ; `t2` после `b6`+`b11–b13` ; `t3` после `d2/f2/f4` | `pytest api/tests` зелёный ; `npm run test` (vitest) зелёный |
-
-> `b11`/`b13` экспортируют `router` в своих модулях — `x2` подключит их **авто-обходом** `api/routers` (правка `ALL_ROUTERS`/`__init__.py` не нужна).
-> Tests (окно 3): перед прогоном `git fetch && git merge integration`; баги **эскалируются** треку-владельцу, в тестах не правятся.
-> Коммит после волны: `git add -A && git commit -m "feat(backend): wave 2"` (аналогично web/tests).
+| 1 Backend | `b7`→`b10` ; `b8` ∥ `b9` ; `b11` ∥ `b12` ∥ `b13` | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
+| 2 Web | `d4` ∥ `d5` ; `f5`…`f13` (все параллельно) | — |
+| 3 Tests | `t4` сразу · `t1` после `b2/b7/b10` · `t2` после `b6`+`b11–b13` · `t3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
 
 ### Барьер 2 — финальный e2e (основное окно `skai_7`)
 
@@ -274,11 +267,12 @@ Git-склейка и продвижение `main` — **внутри пром�
 
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 1 Backend | `w3-1` (b13/Ticket: enum `Status`, `deadline`/`is_overdue`) ∥ `w3-2` (данные `source=DIAGNOSTIC`) | неблокирующие доработки из аудита; до реализации `tickets_service` |
-| 3 Tests | `w3-3` (backend unit `b1–b13`) ∥ `w3-4` (frontend unit `d3–d5`/`f5–f13`) | дозакрытие покрытия t1/t3; перед прогоном `git fetch && git merge integration`; баги эскалируются |
+| 1 Backend | `track-b-backend/`: `w3-1` (b13/Ticket) ∥ `w3-2` (данные `source=DIAGNOSTIC`) ∥ `w3-5` (no-video ветка) | неблокирующие доработки из аудита; до реализации `tickets_service` |
+| 3 Tests | `track-t-tests/`: `w3-3` (backend unit `b1–b13`) ∥ `w3-4` (frontend unit `d3–d5`/`f5–f13`) | дозакрытие покрытия t1/t3; перед прогоном `git fetch && git merge integration`; баги эскалируются |
 
-> Окно 2 (web) в Волне 3 не участвует. Файлы: `prompts/v2-fullstack/wave-3-backlog/`. Запуск в окне:
-> `Выполни @prompts/v2-fullstack/wave-3-backlog/w3-3-backend-unit-coverage.md`.
+> Окно 2 (web) в Волне 3 не участвует. Файлы — по трекам в `prompts/v2-fullstack/wave-3-backlog/`
+> (структура и граф — в README папки). Запуск в окне:
+> `Выполни @prompts/v2-fullstack/wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md`.
 
 ### Барьер 3 — хардненинг (основное окно `skai_7`)
 
