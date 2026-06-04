@@ -2,9 +2,12 @@
 
 ## Goal
 
-Сделать MVP интерфейса, который показывает ценность объединения телематики и видео в одном окне: событие, трек, контекст, медиа-доказательство и быстрое действие.
+Разработать **полноценные экраны-приложения для демонстрации клиенту**, которые показывают ценность
+объединения телематики и видео в одном окне: событие, трек, контекст, медиа-доказательство и быстрое действие.
 
-Строим рабочий оффлайн-прототип. Не оверинжинирить.
+Цель — продукт демо-качества (не черновик-MVP). **Ограничений по стеку и времени нет** — хакатон позади.
+Делаем добротно: рабочие сценарии, чистая архитектура по `prompts/v2-fullstack/`. Демо работает на
+локальных данных (`datasets/ready/` + DuckDB), без зависимости от прод-сервисов SKAI.
 
 ## Implementation plan
 
@@ -66,12 +69,12 @@ full-scope). Каждый агент кодит против контракта,
 - UI demonstrates time saved versus separate systems.
 - README explains local launch.
 
-## Timebox tips
+## Demo quality bar
 
-- Use tables and timelines before fancy maps.
-- Media path text is acceptable if video preview costs too much time.
-- Focus on "one event -> complete context -> action".
-- Do not build a video platform.
+- Цель — экраны демо-качества для показа клиенту: чистый UI по дизайн-системе, реальные данные, рабочие сценарии.
+- Видео — реальные MP4 из `datasets/media/` (превью/плеер), не текстовая заглушка пути.
+- Держать фокус: "одно событие → полный контекст → действие"; но довести до законченного вида, не до черновика.
+- Это не платформа стриминга видео — демонстрационное приложение поверх готовых данных.
 
 ## AI Tooling & Model Policy
 
@@ -87,12 +90,11 @@ full-scope). Каждый агент кодит против контракта,
 
 ## Implementation Constraints
 
-- Keep the default stack simple: Python 3.12 unless a different stack is deliberately accepted as-is.
-- Work offline by default: local CSV files and local media folders.
-- Do not integrate with real SKAI production services in the prototype.
-- Do not call CRUD/action APIs against real systems unless explicitly approved.
-- Avoid microservices, Kubernetes, complex queues, custom auth, background workers, and platform rewrites.
-- Prioritize working user flows, explainable logic, a value metric, and an action saved to `output/`.
+- Стек — по `prompts/v2-fullstack/`: DuckDB + FastAPI (Python 3.12) + React/Vite/Tailwind. Ограничений по стеку/времени нет.
+- Демо работает на локальных данных: `datasets/ready/` (CSV→DuckDB) + `datasets/media/` (MP4). Не интегрироваться с прод-сервисами SKAI.
+- Не вызывать CRUD/action-API реальных систем без явного разрешения (действия пишутся в `output/`).
+- Архитектура — добротная и читаемая под демо клиенту; не раздувать инфраструктуру сверх нужд демонстрации (k8s/очереди/own-auth не требуются, но и не запрещены, если оправданы).
+- Приоритет: рабочие сценарии, объяснимая логика, метрика ценности, законченный вид экранов.
 
 
 ---

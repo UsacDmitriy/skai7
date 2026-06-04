@@ -15,7 +15,10 @@
 - **Топбар инцидента**: тип (`alarm_label_ru`), `SeverityBadge`, `ScoreBar(risk_score)`, источник (`source`, в т.ч. «Оба»/COMBINED), ТС/водитель (+`driver_region`, `driver_safety_score`)/время/адрес.
 - **Блок причины**: `evidence_summary` + **«версия события · уверенность `confidence`%»** (`event_version`).
 - **Два видео** (`VideoPlayer`): `cam_front_url` (ADAS) и `cam_dms_url` (DMS); доп. каналы из `cam_extra[]` («Другие камеры»). Если `video_available=false` — пустое состояние + «Запросить архив»; показать окно offline (`Camera.offline_from/to`) и `sensor_active_after_sec` («DMS-сенсор работал +N сек»).
-- **График телеметрии** (`TelemetryChart`) по `telemetry[]`, маркер события x=0 (акселерометр `ax` — производная скорости, не плоский ноль).
+- **График телеметрии** (`TelemetryChart`) по `telemetry[]`, статичный маркер события x=0 (акселерометр `ax` — производная скорости, не плоский ноль).
+- **Синхронизация видео↔телеметрия (idea #1, §6):** экран хранит `currentSec` (из `VideoPlayer.onTimeUpdate`) и
+  передаёт его как `playheadOffset` в `TelemetryChart` — движущаяся вертикаль идёт за воспроизведением. Оба плеера
+  (ADAS+DMS) синхронны: `seekTo`/play общие; клик по графику → `seekTo` на обоих. Это ключевой демо-эффект.
 - **Статусы камер** (`cameras[]`) — online/offline/**warning** («Нестабильна»).
 - **Панель действий** (`Button`): «Проверено» (`mark_reviewed`) / «Создать заявку» (`create_task`) / «Запросить архив» (`request_archive`) / «Позвонить водителю» (`call_driver`) / **«Валидация»** (`validate`) / **«Стоп ТС»** (`stop_vehicle`) → `client.postAction(...)`.
 - Состояния loading/error/404.

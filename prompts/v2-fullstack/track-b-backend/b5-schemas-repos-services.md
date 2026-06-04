@@ -8,13 +8,22 @@
 Доменные модели (Pydantic v2), доступ к DuckDB (репозитории) и бизнес-логику (сервисы).
 **Incidents — полностью**; reports/vehicles — рабоче; fuel/sensors/navigation — стабы.
 
-## domain/ (Pydantic v2, строго по §3.1)
+## domain/ (Pydantic v2) — ЕДИНЫЙ владелец всех схем (P0 §3.1 + full-scope §7.5)
+
+b5 — **единственный владелец `api/domain/*`**. Здесь определяются ВСЕ Pydantic-модели, включая P1/P2
+из §7.5 (их используют b9–b13, но материализует только b5 — иначе конфликт владения `domain/`).
 
 - `common.py` — `Severity`, `Source`, `Status` (Literal/Enum), базовые типы.
-- `incidents.py` — `Camera`, `TelemetryPoint`, `IncidentSummary`, `IncidentDetail` (наследует Summary).
-- `reports.py` — `DriverReport`, `FleetReport`, `ReportQuery {text:str}`, `Action {incident_id, action, comment}`.
+- `incidents.py` — `Camera` (+`offline_from/to`), `TelemetryPoint`, `IncidentSummary`, `IncidentDetail`
+  (наследует Summary; включает `confidence`, `event_version`, `driver_region/department/safety_score`,
+  `sensor_active_after_sec`, `cam_extra[]` по §3.1).
+- `reports.py` — **полные §7.5**: `ReportQuery {kind, plate?, driver_name?, period_days=3, view?}`
+  (заменяет старую форму `{text}` из §3.3 — её НЕ создавать), `ReportKPI`, `ReportPeriod`, `ViolationRow`,
+  `DriverRef`, `DriverReport`, `FleetReport`, `VehicleReport`.
+- `entities.py` — `Action {incident_id, action, comment}`, `Ticket`, `DispatchAlert`, `TripDossier`,
+  `RebRecovery`, `SabotageEvent` (§7.5).
 - `vehicles.py` — `VehicleSummary`.
-- Имена полей и опциональность — **точно** как в §3.1 (camelCase только где указано: `hasVideo`).
+- Имена полей и опциональность — **точно** как в §3.1/§7.5 (camelCase только где указано: `hasVideo`).
 
 ## repositories/ (DuckDB SQL → dict/DataFrame)
 

@@ -15,9 +15,9 @@
 2. **`SeverityBadge.tsx`** — props `severity: 'critical'|'high'|'medium'|'low'`, `label: string`. Цветной кружок 6px + текст. Палитра через маппинг d1 (medium→warning, low→ok).
 3. **`ScoreBar.tsx`** — props `score: 0..100`. Трек 4px + градиентная заливка (`.score-bar-fill`), числовое значение справа (700, tabular-nums).
 4. **`Card.tsx`** — surface-карточка; вариант `incident` с `border-left: 4px` по severity, состояния `hover`/`selected` (props `selected?`, `onClick?`).
-5. **`VideoPlayer.tsx`** — 16:9, фон #0F172A, нативный `<video controls>` + проп `eventMarkerPct?` (жёлтая вертикаль на таймлайне). Принимает `src: string`, `poster?`. Пустое состояние «Видео недоступно» если `src` пуст.
+5. **`VideoPlayer.tsx`** — 16:9, фон #0F172A, нативный `<video controls>` + проп `eventMarkerPct?` (жёлтая вертикаль на таймлайне). Принимает `src: string`, `poster?`. **Для sync (idea #1):** проп `onTimeUpdate?(currentSec: number)` (прокидывает `video.currentTime`) и опц. `seekTo?: number` (контролируемая перемотка) — чтобы экран мог синхронизировать два плеера и маркер графика. Пустое состояние «Видео недоступно» если `src` пуст.
 6. **`DataTable.tsx`** — generic таблица: `columns`, `rows`, sort-иконки, hover/selected строки (DESIGN.md §Таблица). Без пагинации (или простая).
-7. **`TelemetryChart.tsx`** — Recharts: линия скорости (#1E3A8A) + линия акселерометра (#EA580C), `ReferenceLine` события (#EAB308, x=0). Props `data: {ts_offset, speed, ax, ay}[]`. Стиль из DESIGN.md §График телеметрии.
+7. **`TelemetryChart.tsx`** — Recharts: линия скорости (#1E3A8A) + линия акселерометра (#EA580C), `ReferenceLine` события (#EAB308, x=0). Props `data: {ts_offset, speed, ax, ay}[]`. **Для sync (idea #1):** проп `playheadOffset?: number` — **движущаяся** вертикаль (синяя), позиция = текущее время видео; двигается вместе с воспроизведением (не путать со статичным маркером события x=0). Стиль из DESIGN.md §График телеметрии.
 
 ## Требования
 
@@ -30,4 +30,5 @@
 
 - Все 7 файлов компилируются (`tsc --noEmit`) без ошибок типов.
 - `SeverityBadge` корректно мапит `medium→warning`, `low→ok`.
-- `TelemetryChart` принимает форму `TelemetryPoint` из контракта §3.1.
+- `TelemetryChart` принимает форму `TelemetryPoint` из контракта §3.1 + проп `playheadOffset` (движущаяся вертикаль).
+- `VideoPlayer` отдаёт `onTimeUpdate(currentSec)` и принимает `seekTo` (для sync двух плееров и графика).

@@ -9,13 +9,19 @@
 
 ## Задачи
 
-1. **`api/main.py`** — подключить роутеры из `api/routers` (`ALL_ROUTERS` от b6):
+1. **`api/main.py`** — подключить **ВСЕ** роутеры из пакета `api/routers` (P0 от b6 + P1/P2 от b11–b13:
+   `sabotage`, `reb`, `tickets`, `alerts`, `trips`). Чтобы не редактировать общий список из разных волн —
+   **авто-обход пакета** (каждый модуль экспортирует объект `router`):
    ```python
-   from api.routers import ALL_ROUTERS
-   for r in ALL_ROUTERS:
-       app.include_router(r)
+   import pkgutil, importlib
+   import api.routers as routers_pkg
+   for _, name, _ in pkgutil.iter_modules(routers_pkg.__path__):
+       mod = importlib.import_module(f"api.routers.{name}")
+       if hasattr(mod, "router"):
+           app.include_router(mod.router)
    ```
-   Проверить, что CORS уже включает `http://localhost:5173` (из b4 settings).
+   (Либо `ALL_ROUTERS` от b6, дополненный новыми — но авто-обход исключает конфликт владения
+   `__init__.py` между b6 и b11–b13.) Проверить CORS на `http://localhost:5173` (из b4 settings).
 2. **`web/vite.config.ts`** — `server.proxy`: `'/api' → http://localhost:8000` (target из env `VITE_API_TARGET`, дефолт 8000). Убрать TODO от f1.
 3. **`Makefile`** — цели:
    - `db:` → `python -m api.etl.build_duckdb`

@@ -225,9 +225,10 @@ spacing base 4px; кнопка h36; иконки Lucide React
 ### Acceptance criteria для P0:
 
 **Карточка инцидента (`/incidents/:id`):**
-- `video_available=true` → два плеера (cam_front + cam_dms) синхронно
+- `video_available=true` → два плеера (cam_front + cam_dms) **синхронны** (общий play/seek)
 - `video_available=false` → placeholder + `[Запросить архив]`
-- TelemetryChart: скорость из `track_points`, маркер t=0
+- TelemetryChart: скорость из `track_points`, статичный маркер события t=0 **+ движущийся `playheadOffset`**,
+  идущий за `currentTime` видео (idea #1 «маркер двигается вместе с видео»); клик по графику перематывает видео
 - Блок причины: [😴 Усталость] [📱 Телефон] [🚗 Подрезали] [⚙ Техн. сбой]
 - `[📹 Позвонить через камеру]` — три состояния: idle/connecting/active
 
