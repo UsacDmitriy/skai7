@@ -3,6 +3,28 @@
 > **Барьер-волна** (после D/B/F). **Владеет:** удалением Streamlit-артефактов + `requirements.txt`, `.gitignore`, `.streamlit/`.
 > Запускать ПОСЛЕ того как `api/` (трек B) и `web/` (трек F) готовы и проходят свои check.
 
+## Перед стартом — склейка веток (main держим стабильным)
+
+Барьеры идут в основном окне `skai_7` на ветке `integration`. **`main` не трогаем**, пока сквозной
+smoke не станет зелёным (продвижение `main` — в x3 для P0 и x4 для P1/P2).
+
+```bash
+cd /Users/dimausac/projects/skai_7
+git checkout integration
+git merge feat/backend feat/web   # подтянуть готовые треки волны 1 (B и F)
+```
+
+Слияние должно пройти без конфликтов (`git status` чисто). Конфликт → разрулить в `integration`, `main` не затрагивая.
+
+## Проверка предыдущего шага (волна 1: треки B + F)
+
+До выпила Streamlit убедись, что новые треки здоровы на свежесклеенной `integration`:
+
+- backend: `make db` (54 аларма / 14 типов + `v_incidents`), `make api` → `GET /api/incidents` 200 с обогащением.
+- frontend: `cd web && npm install && npm run typecheck` без ошибок; `npm run dev` поднимает :5173.
+
+Если что-то падает — **стоп**: заведи дефект соответствующему треку, Streamlit не удаляй, пока B/F не зелёные.
+
 ## Цель
 
 Убрать ранний Streamlit-прототип, не задев новые `api/` и `web/` и реальные данные.
