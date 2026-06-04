@@ -67,4 +67,4 @@
 - Backend: `track-b-backend/` — `b7-driver-reference`, `b8-stt-service`, `b9-nlu-service`, `b10-reports-views`
 - UI-примитивы: `track-d-design/d5-voice-timeline` (VoiceButton, ConfirmationModal)
 - Экран: `track-f-frontend/f7-analytics-voice` (отчёт В-1/В-2, голос, видео по клику)
-- Референс вёрстки: `ui/Интерактивнй отчет/`
+- Референс вёрстки: `ui/05 Интерактивный отчёт/`

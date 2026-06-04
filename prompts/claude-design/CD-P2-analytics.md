@@ -1,5 +1,7 @@
 # Claude Design P2 — Интерактивный отчёт (AnalyticsScreen)
 
+> 🎯 **Статус макета:** ✅ ГОТОВ. Папка: `ui/05 Интерактивный отчёт/`
+
 > Инструмент: claude.ai/design
 > Загрузить system prompt из `prompts/claude-design/00-design-system.md`
 > Результат сохранить: `code/clade_design/Интерактивный отчёт v2/`

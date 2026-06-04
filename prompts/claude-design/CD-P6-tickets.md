@@ -1,4 +1,6 @@
 # Claude Design P6 — Экран заявок (TicketsScreen)
+
+> 🎯 **Статус макета:** ◻️ НОВЫЙ. Папка: `ui/07 Заявки/`
 > Инструмент: claude.ai/design · System prompt: `00-design-system.md`
 > Сохранить: `code/clade_design/Заявки/`
 

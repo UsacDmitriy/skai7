@@ -43,7 +43,7 @@ CAM-03 offline → placeholder с объяснением → кнопка «За
 - Backend: `track-b-backend/` — `b3-v-incidents`, `b5-schemas-repos-services`, `b6-routers`
 - UI-примитивы: `track-d-design/d2-ui-primitives` (VideoPlayer, TelemetryChart)
 - Экран: `track-f-frontend/f4-screens` (IncidentCard, сквозной flow)
-- Референс вёрстки: `ui/Карточка инцидента/`
+- Референс вёрстки: `ui/03 Карточка инцидента/`
 
 ## Три доп. функции из интервью
 

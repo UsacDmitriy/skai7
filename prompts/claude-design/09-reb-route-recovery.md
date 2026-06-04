@@ -1,5 +1,7 @@
 # Экран 9 — Восстановление маршрута при РЭБ
 
+> 🎯 **Статус макета:** ◻️ НОВЫЙ. Папка: `ui/09 Восстановление РЭБ/`
+
 > Дизайн-система — `00-design-system.md` (severity critical/high/medium/low, токены §7.6).
 > Данные — контракт `prompts/v2-fullstack/00-CONTRACT.md` §7.5 `RebRecovery`
 > (`{ vehicle_plate, gps_track: {lat,lon,ts}[], gap_periods: {start,end,duration_sec}[], video_frames: {ts, channel, url}[] }`).

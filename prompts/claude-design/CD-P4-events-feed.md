@@ -1,5 +1,7 @@
 # Claude Design P4 — Лента событий (EventFeedScreen)
 
+> 🎯 **Статус макета:** ◻️ НОВЫЙ. Папка: `ui/01 Лента событий/`
+
 > Инструмент: claude.ai/design
 > System prompt: `prompts/claude-design/00-design-system.md`
 > Сохранить в: `code/clade_design/Лента событий/`

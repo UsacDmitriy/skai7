@@ -1,4 +1,6 @@
 # Claude Design P5 — Диспетчерский алерт (DispatchAlertScreen)
+
+> 🎯 **Статус макета:** ◻️ НОВЫЙ. Папка: `ui/06 Диспетчерский алерт/`
 > Инструмент: claude.ai/design · System prompt: `00-design-system.md`
 > Сохранить: `code/clade_design/Диспетчерский алерт/`
 

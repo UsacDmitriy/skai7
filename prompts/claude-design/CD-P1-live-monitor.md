@@ -1,5 +1,7 @@
 # Claude Design P1 — Живой мониторинг (LiveMonitorScreen)
 
+> 🎯 **Статус макета:** ⚠️ ПЕРЕГЕНЕРИТЬ (карта-герой). Папка: `ui/02 Живой мониторинг/`
+
 > Инструмент: claude.ai/design
 > Загрузить system prompt из `prompts/claude-design/00-design-system.md`
 > Результат сохранить: `code/clade_design/Живой мониторинг/`

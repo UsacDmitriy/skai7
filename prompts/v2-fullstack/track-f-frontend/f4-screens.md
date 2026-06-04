@@ -3,7 +3,7 @@
 > Трек **Frontend**. Против `00-CONTRACT.md` §3. **Владеет:**
 > `web/src/pages/IncidentCard.tsx`, `web/src/pages/Monitor.tsx`, `web/src/pages/Report.tsx`.
 > Использует UI-примитивы d2 (`@/components`) и API-клиент f2. Референсы вёрстки — HTML-мокапы:
-> `ui/Карточка инцидента/`, `ui/Промпт_2_Живой мониторинг /`, `ui/Интерактивнй отчет/` (+ `wave-03-screens/**`).
+> `ui/03 Карточка инцидента/`, `ui/02 Живой мониторинг/`, `ui/05 Интерактивный отчёт/` (+ `wave-03-screens/**`).
 
 ## Цель
 
@@ -29,13 +29,13 @@
 
 Маршрут `/monitor`. Лента инцидентов из `client.listIncidents()` — список `Card(variant=incident)` с
 severity-border, сортировка по `ts`/`risk_score`, фильтры по severity/source. Клик → `/incidents/:id`.
-Карта/таймлайн — заглушка-плейсхолдер с `# TODO`. Референс — `ui/Промпт_2_Живой мониторинг /`.
+Карта/таймлайн — заглушка-плейсхолдер с `# TODO`. Референс — `ui/02 Живой мониторинг/`.
 
 ## Report.tsx (scaffold)
 
 Маршрут `/report`. Поле NL-запроса + кнопка → `client.queryReport(text)`; рендер `DriverReport`/`FleetReport`
 (KPI-плашки + `DataTable` нарушений). Клик по строке → видео справа (killer-feature idea #2) — выезжающая
-панель с `VideoPlayer`. Голосовой ввод — кнопка-заглушка `# TODO Whisper`. Референс — `ui/Интерактивнй отчет/`.
+панель с `VideoPlayer`. Голосовой ввод — кнопка-заглушка `# TODO Whisper`. Референс — `ui/05 Интерактивный отчёт/`.
 
 ## Check
 

@@ -1,5 +1,7 @@
 # Экран 8 — Видеодосье рейса
 
+> 🎯 **Статус макета:** ◻️ НОВЫЙ. Папка: `ui/08 Видеодосье рейса/`
+
 > Дизайн-система — `00-design-system.md` (токены §7.6, severity critical/high/medium/low).
 > Данные — контракт `prompts/v2-fullstack/00-CONTRACT.md` §7.5 `TripDossier`
 > (`{ vehicle_plate, track: TelemetryPoint[], timeline: {ts_offset, alarm_code, label, has_video}[] }`).

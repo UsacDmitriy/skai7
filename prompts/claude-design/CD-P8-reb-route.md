@@ -1,4 +1,6 @@
 # Claude Design P8 — Восстановление маршрута РЭБ (REBRouteScreen)
+
+> 🎯 **Статус макета:** ◻️ НОВЫЙ. Папка: `ui/09 Восстановление РЭБ/`
 > Инструмент: claude.ai/design · System prompt: `00-design-system.md`
 > Сохранить: `code/clade_design/Восстановление РЭБ/`
 

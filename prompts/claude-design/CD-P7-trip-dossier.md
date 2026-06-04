@@ -1,4 +1,6 @@
 # Claude Design P7 — Досье поездки (TripDossierScreen)
+
+> 🎯 **Статус макета:** ◻️ НОВЫЙ. Папка: `ui/08 Видеодосье рейса/`
 > Инструмент: claude.ai/design · System prompt: `00-design-system.md`
 > Сохранить: `code/clade_design/Досье поездки/`
 
