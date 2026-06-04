@@ -32,9 +32,17 @@
 6. Пулы (`NAMES`, `DEPARTMENTS`, `REGIONS`) — константы модуля; **те же**, что использует `enrichment`
    (вынести в общий источник либо продублировать с явным комментарием синхронизации с b2).
 
+## Второй сид: `data/seed/driver_trips.csv` (мульти-водитель на ТС, §7.1)
+
+Для В-2 «по ТС» макет требует «основной водитель + другие». `driver_reference` = основной водитель ТС;
+`driver_trips` = связь ТС→водители за период. Колонки: `vehicle_plate, driver_id, driver_name, role, trips`.
+Генерация (`seed_drivers.py`): для каждого ТС — основной водитель (из `driver_reference`, `role="main"`,
+`trips` = 60–80% рейсов) + детерминированно 0–1 вторичный (`role="secondary"`, из пула по `seed*7`,
+остаток рейсов). Грузится как таблица `"driver_trips"` (тем же приёмом `CREATE OR REPLACE TABLE`).
+
 ## Загрузка в DuckDB
 
-b1 рекурсивно грузит `data/seed/*.csv` с префиксом `seed` → таблица `"seed__driver_reference"`.
+b1 рекурсивно грузит `data/seed/*.csv` с префиксом `seed` → таблицы `"seed__driver_reference"`/`"seed__driver_trips"`.
 Для стабильного имени `"driver_reference"` b7 добавляет в конец `seed_drivers.py` (или в отдельный
 SQL, подхватываемый b1) шаг:
 `CREATE OR REPLACE TABLE "driver_reference" AS SELECT * FROM read_csv_auto('data/seed/driver_reference.csv', header=true)`.

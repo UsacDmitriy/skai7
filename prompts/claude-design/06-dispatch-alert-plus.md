@@ -18,7 +18,7 @@
 **ALERT BANNER (full-width, 48px, bg #FEE2E2, border-bottom 2px #DC2626):**
   🚨 "КРИТИЧЕСКОЕ СОБЫТИЕ" (12px bold #991B1B uppercase) + "—" +
   "В345КМ 97 — Петров Д.С. — 03:12" (14px bold #0F172A)
-  badge [⚡ Телематика] (#F0F9FF bg, #0EA5E9 text) — источник события
+  badge [⚡📹 Оба] (#F0FDF4 bg, #16A34A text) — источник события (COMBINED)
   badge зелёный: "✓ Видео получено автоматически за 4 сек"
   Кнопка "✕" ghost справа
 

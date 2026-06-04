@@ -23,7 +23,7 @@
 **ALERT BANNER (full-width, 48px, bg #FEE2E2, border-bottom 2px #DC2626):**
   🚨 "КРИТИЧЕСКОЕ СОБЫТИЕ" (12px bold #991B1B uppercase) + "—" +
   "В345КМ 97 — Петров Д.С. — 03:12" (14px bold #0F172A)
-  badge [⚡ Телематика] (#F0F9FF bg, #0EA5E9 text) — источник события
+  badge [⚡📹 Оба] (#F0FDF4 bg, #16A34A text) — источник события (COMBINED)
   badge зелёный: "✓ Видео получено автоматически за 4 сек"
   Кнопка "✕" ghost справа
 
@@ -96,43 +96,52 @@ Inter · bg #F8FAFC · primary #1E3A8A · critical #DC2626
 
 
 ## Промпт
+> Готовый текст для вставки. **Полностью соответствует встроенной спеке выше.** Канон-данные:
+> В345КМ 97 / Петров / Датчик удара — Подозрение на ДТП / **03:12:00 · 02.04.2026** / 🔴 Критичный /
+> источник **⚡📹 Оба (COMBINED)** / скорость 54→0 км/ч, акс 4.2 м/с² / причина «😴 Засыпал».
+> Алерт-баннер светлый (bg #FEE2E2, border #DC2626) — как в спеке, НЕ сплошной красный header.
+
 ```
 Создай standalone HTML "SKAI — Диспетчерский алерт".
 Показать экран критичного алерта — диспетчер получает уведомление и видит всё в одном окне.
 
-HEADER h-14 bg #DC2626 text white px-6 flex items-center justify-between:
-  "🚨 КРИТИЧНЫЙ АЛЕРТ" (bold 16px) + "В345КМ 97 — Петров Д.С." (14px) + "03:12"
-  [✓ Принял] white border rounded · [✕ Закрыть] muted
+ALERT BANNER (full-width h-12, bg #FEE2E2, border-bottom 2px #DC2626) px-6 flex items-center justify-between:
+  🚨 "КРИТИЧЕСКОЕ СОБЫТИЕ" (12px bold #991B1B uppercase) + "В345КМ 97 — Петров Д.С. — 03:12"
+  badge [⚡📹 Оба] зелёный + badge зелёный "✓ Видео получено автоматически за 4 сек"
+  [✕] ghost справа
 
 ОСНОВНАЯ ЗОНА flex gap-4 p-4 bg #F8FAFC:
 
   Левая (420px):
     Видеоплеер 16:9 bg #0F172A rounded-xl:
-      [▶] по центру + "CAM-02 DMS" label top-left (white 11px)
-      "МОМЕНТ СОБЫТИЯ 03:12:04" badge bottom-center (red)
+      [▶] по центру + "CAM-02 DMS · Салон" label top-left (white 11px)
+      "МОМЕНТ СОБЫТИЯ 03:12:00" badge bottom-center (red)
     Мини-график скорости (белая карточка border rounded mt-3 p-3 h-28):
       Линия синяя резко падает до 0 (момент удара)
-      "54 → 0 км/ч за 4 сек"
+      "54 → 0 км/ч за 4 сек · акс. пик 4.2 м/с²"
     [↗ Открыть полную карточку инцидента →] border primary w-full mt-2
 
   Правая (flex-1):
     "ЧТО ПРОИЗОШЛО" white border rounded-xl p-4 mb-3:
       bg #FEF2F2 border-l-4 border-red-600 p-3 rounded text-sm mb-3:
         "Датчик удара зафиксировал резкое снижение скорости с 54 до 0 км/ч за 4 секунды.
-        По данным DMS водитель держал телефон за 15 секунд до удара."
+        Акселерометр: пик 4.2 м/с². DMS не сработал — вероятно боковое столкновение."
       Причины (flex gap-2 mt-3):
-        [😴 Усталость] [📱 Телефон ✓ ВЫБРАНО] [🚗 Подрезали] [⚙ Техн. сбой]
+        [😴 Засыпал ✓ ВЫБРАНО] [📱 Отвлёкся] [🚗 Подрезали] [⚙ Техн. сбой]
         Активный: bg #1E3A8A text white
 
     "ДАННЫЕ ТС" white border rounded-xl p-4 mb-3 grid 2 cols text-sm:
-      Скорость: 0 км/ч · Лимит: 60 км/ч
-      Непрерывно: 94 мин · Источник: COMBINED
+      Скорость: 0 км/ч (до удара 54) · Лимит: 60 км/ч
+      Непрерывно: 178 мин · Источник: ⚡📹 Оба (COMBINED)
       Координаты: 55.76, 37.61 · Ночная смена ✓
 
+    Таймер реакции (text-center bg #FEF2F2 border #FCA5A5 rounded p-3): ⏱ "2:34" (40px bold #DC2626)
+
     ДЕЙСТВИЯ flex flex-col gap-2:
+      [📞 Позвонить водителю] bg #1E3A8A white h-10 rounded w-full
       [📹 Позвонить через камеру] bg #0369A1 white h-10 rounded w-full
-      [🔧 Создать заявку по инциденту] bg #1E3A8A white h-10 rounded w-full
-      [📊 Открыть аналитику по водителю] border h-10 rounded w-full
+      [🔧 Создать заявку по инциденту] border #1E3A8A h-10 rounded w-full
+      [✓ Всё в порядке] border #16A34A h-10 rounded w-full
 
 Tailwind CDN, standalone HTML.
 ```

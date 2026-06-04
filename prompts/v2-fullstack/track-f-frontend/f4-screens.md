@@ -12,11 +12,12 @@
 ## IncidentCard.tsx (P0, end-to-end)
 
 Маршрут `/incidents/:id`. Через `client.getIncident(id)` (+ `getTelemetry`):
-- **Топбар инцидента**: тип (`alarm_label_ru`), `SeverityBadge`, `ScoreBar(risk_score)`, ТС/водитель/время/адрес.
-- **Два видео** (`VideoPlayer`): `cam_front_url` (ADAS) и `cam_dms_url` (DMS); если `video_available=false` — пустое состояние + кнопка «Запросить архив» (idea #1, кейс без видео).
-- **График телеметрии** (`TelemetryChart`) по `telemetry[]`, маркер события x=0.
-- **Статусы камер** (`cameras[]`) — online/offline.
-- **Панель действий** (`Button`): «Проверено» / «Создать заявку» / «Запросить архив» / «Позвонить водителю» → `client.postAction(...)`.
+- **Топбар инцидента**: тип (`alarm_label_ru`), `SeverityBadge`, `ScoreBar(risk_score)`, источник (`source`, в т.ч. «Оба»/COMBINED), ТС/водитель (+`driver_region`, `driver_safety_score`)/время/адрес.
+- **Блок причины**: `evidence_summary` + **«версия события · уверенность `confidence`%»** (`event_version`).
+- **Два видео** (`VideoPlayer`): `cam_front_url` (ADAS) и `cam_dms_url` (DMS); доп. каналы из `cam_extra[]` («Другие камеры»). Если `video_available=false` — пустое состояние + «Запросить архив»; показать окно offline (`Camera.offline_from/to`) и `sensor_active_after_sec` («DMS-сенсор работал +N сек»).
+- **График телеметрии** (`TelemetryChart`) по `telemetry[]`, маркер события x=0 (акселерометр `ax` — производная скорости, не плоский ноль).
+- **Статусы камер** (`cameras[]`) — online/offline/**warning** («Нестабильна»).
+- **Панель действий** (`Button`): «Проверено» (`mark_reviewed`) / «Создать заявку» (`create_task`) / «Запросить архив» (`request_archive`) / «Позвонить водителю» (`call_driver`) / **«Валидация»** (`validate`) / **«Стоп ТС»** (`stop_vehicle`) → `client.postAction(...)`.
 - Состояния loading/error/404.
 
 Покрыть оба кейса из идеи #1: «есть видео» (датчик удара 54→0) и «нет видео» (телефон, камера offline).

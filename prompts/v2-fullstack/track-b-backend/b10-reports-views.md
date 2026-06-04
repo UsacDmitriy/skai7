@@ -19,7 +19,8 @@
   (по `vehicle_plate`/`unit_id`): кол-во алярмов, средний/макс `risk`, кол-во ТС/водителей.
 - `api/sql/22_v_vehicle.sql` → `v_vehicle` (идея #2 В-2/ТС, #10):
   карточка ТС — `vehicle_plate`, модель, статус камер (из `video_events__video_files`),
-  список водителей за период (**1 ТС = N водителей** через `driver_reference`).
+  список водителей за период (**1 ТС = N водителей** через `driver_trips`, не `driver_reference`;
+  `role` main/secondary и `trips` берутся из `driver_trips`).
 
 > SQL-views держат «сырое+агрегаты»; `risk_score`-зависимые величины, требующие формулы §2,
 > досчитывает сервис (как в §1.3 для `v_incidents`).
@@ -29,9 +30,12 @@
 Дополнить существующий сервис b5 (не ломая `driver_report`/`fleet_report`):
 
 - `driver_report(db, plate, period_days=3) -> DriverReport` — поверх `v_driver_report`, обогащение
-  водителя через `driver_reference` (b7); метрики периода.
+  водителя через `driver_reference` (b7); `kpi: ReportKPI` (всего/ВА/телематика/грубых); `violations:
+  ViolationRow[]` с `is_gross`; `disciplinary_warning = gross>=3 OR safety_score<60` (§7.5).
 - `fleet_report(db, period_days=3, view="drivers") -> FleetReport` — поверх `v_fleet`; разрез
-  `view ∈ {"drivers","vehicles"}` (по водителям / по ТС).
+  `view ∈ {"drivers","vehicles"}`. `by_vehicles[]` несёт `risk_score`, `gross`, `cameras_ok="N/3"`.
+- **Правило «грубых» (gross)** — единое (§7.5): `severity=critical OR alarm_code ∈ {OVERSPEED, DMS_SMOKING}`.
+  Реализовать как хелпер `is_gross(row)` и переиспользовать в driver/fleet/vehicle.
 - `vehicle_report(db, plate, period_days=3) -> VehicleReport` — поверх `v_vehicle` (схема §7.5):
   `cameras: Camera[]`, `drivers: DriverRef[]` (роль main/secondary по числу поездок), `period_alarms`, `mileage_km`.
 - `query(db, text, period_days=None) -> dict` — **реальный NLU**: `q = nlu_service.parse(text)` (b9),

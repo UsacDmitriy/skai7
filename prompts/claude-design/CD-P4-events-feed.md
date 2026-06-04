@@ -125,15 +125,14 @@ KPI BAR white border-b px-6 py-3 flex gap-8:
 ОСНОВНАЯ ЗОНА flex h-[calc(100vh-112px)]:
 
   Список flex-1 overflow-y-auto:
-    7 строк, hover:bg-slate-50, cursor-pointer
-    border-l-4: critical=DC2626, high=EA580C, medium=3B82F6, low=94A3B8
+    5 строк, hover:bg-slate-50, cursor-pointer
+    border-l-4: critical=#DC2626, high=#EA580C, medium=#EAB308, low=#16A34A
     Строка 1 ВЫБРАННАЯ bg-blue-50 border-[#1E3A8A]:
       [🔴] В345КМ 97 · Петров Д.С.
       "💥 Подозрение на ДТП — датчик удара" · 03:12
       [📹] COMBINED badge · Score 84 [Открыть →]
-    Строки 2-7: DMS_DROWSY/А777ВВ 77, DMS_PHONE/Е902СТ 150,
-      HARSH_BRAKING/Н124УУ 199, FCW/Н124УУ 199,
-      DRIVER_SUBSTITUTION/К451МА 77, CAMERA_OFFLINE
+    Строки 2-5: DMS_DROWSY/А777ВВ 77 (Score 97), DMS_PHONE/Е902СТ 150 (76, нет видео),
+      HARSH_BRAKING/Н124УУ 199 (68), Резкий поворот/М213ОО 77 (Степанов, 71)
 
   Панель деталей w-[380px] border-l bg-white overflow-y-auto:
     Header: "В345КМ 97 — Петров Д.С." + Score 84 badge

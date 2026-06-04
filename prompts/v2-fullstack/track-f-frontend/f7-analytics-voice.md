@@ -23,7 +23,10 @@
 4. **`ConfirmationModal`** (d5) «Вот как я понял ваш запрос» с распарсенным `ReportQuery`:
    `[Исправить]` (вернуть в поле текста) / `[✓ Показать]` (рендер дашборда).
 5. **Дашборд**:
-   - **В-1 (driver)** — `DriverReport`: KPI-плашки + `DataTable` нарушений по водителю/ТС.
+   - **В-1 (driver)** — `DriverReport` (§7.5): карточка водителя (ФИО, рейтинг `safety_score`, модель ТС,
+     пробег, рейсы) + **4 KPI-плашки `ReportKPI`** (всего / ВА видео-детекции / телематика / **грубых**) +
+     warning-баннер при `disciplinary_warning` (дисциплинарное взыскание) + `DataTable` `ViolationRow[]`
+     (грубые `is_gross` — выделить). Клик по строке → видео справа.
    - **В-2 (fleet)** — `FleetReport`: KPI + toggle представления **«По водителям» | «По ТС»**
      (соответствует `ReportQuery.view = 'drivers'|'vehicles'`; режим «По ТС» может тянуть
      `client.getVehicleReport(plate)` → `VehicleReport` §7.5 для детализации ТС).

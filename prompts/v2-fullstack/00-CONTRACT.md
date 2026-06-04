@@ -97,8 +97,14 @@ CSV без `.csv`, lowercase. Колонки — заголовки CSV **дос
 | `risk_score` (0–100) | `clamp( 100 * (0.45*sev_w + 0.25*speed_ratio + 0.15*night + 0.15*freq_w) )`, где `sev_w`={critical:1.0, high:0.7, medium:0.45, low:0.2}; `speed_ratio = min(speed_kmh/speed_limit_kmh, 1.5)/1.5`; `night`={1 если is_night иначе 0}; `freq_w = min(events_last_7d/7, 1)`. Округлять до целого. |
 | `status` | Дефолт `"active"`. Переопределяется журналом действий (см. §3.4 `/actions`). |
 | `evidence_summary` | Шаблон по `alarm_code` (как в `data/mock/incidents.py`), подставляя speed/severity. |
-| `cameras[]` | Из `video_files` по алярму: канал 1→«ADAS · Передняя», 5→«DMS · Салон», 2/3→доп. `status="online"` если есть файл с `download_status=downloaded`, иначе `offline`. |
-| `telemetry[]` | Из `track_points` по алярму: точки около `ts` → `{ts_offset, speed, ax, ay}`. `ax/ay` нет в данных → `0.0` (TODO-маркер) либо производная скорости. |
+| `cameras[]` | Из `video_files` по алярму. Канон меток: ch1→«ADAS · Фронт», ch5→«DMS · Салон», ch2→«СНЗ · Доп.», ch3→«СНЗ · Кузов». `status="online"` если есть файл `download_status=downloaded`; `"warning"` («Нестабильна») если `download_status=partial`/битый/частичный файл; иначе `"offline"`. Длина массива всегда 3 канонических (ADAS/DMS/СНЗ), отсутствующий → `offline`. |
+| `Camera.offline_from/to` | Для `offline`/`warning`: окно недоступности из `sensor_diagnostics`/`video_files.created_at`; если нет — детерминированно по `seed(id)` относительно `ts` (для no-video placeholder). |
+| `telemetry[]` | Из `track_points` по алярму: точки около `ts` (±60с) → `{ts_offset, speed, ax, ay}`. **`ax` = производная скорости** `(speed[i]-speed[i-1])/Δt` в м/с² (не `0.0`, иначе график-акселерометр плоский); `ay`=`0.0` (нет данных). |
+| `driver_region` / `driver_department` | Из `driver_reference` (§7.1) по `vehicle_plate`. |
+| `driver_safety_score` | Из `driver_reference.safety_score`. |
+| `confidence` (0–100) | «Уверенность версии события». Источника нет → детерминированно: `70 + seed(id) % 30` (стабильно), но `requires_video=false`/нет видео → −10. |
+| `event_version` | Текст основной гипотезы причины по `alarm_code` (как `evidence_summary`, короткая форма) либо `null`. |
+| `sensor_active_after_sec` | No-video: сколько секунд DMS-сенсор фиксировал событие после ухода камеры в offline. Из разницы `End`(аларма) и `offline_from`; если нет — `seed(id)%10`. |
 
 Пулы имён/моделей — в `enrichment.py` как константы. Все формулы — чистые функции, покрыты unit-тестами.
 
@@ -115,8 +121,9 @@ Severity  = "critical" | "high" | "medium" | "low"
 Source    = "DMS" | "ADAS" | "TELEMATICS" | "COMBINED"
 Status    = "active" | "in_progress" | "validated" | "closed"
 
-Camera        { id: str, label: str, status: "online"|"offline"|"warning", hasVideo: bool }
-TelemetryPoint{ ts_offset: int, speed: float, ax: float, ay: float }
+Camera        { id: str, label: str, status: "online"|"offline"|"warning", hasVideo: bool,
+                offline_from: str|null, offline_to: str|null }   # окна offline для no-video
+TelemetryPoint{ ts_offset: int, speed: float, ax: float, ay: float }   # ax = производная скорости (§2)
 
 IncidentSummary {            # для ленты GET /incidents
   id: str, alarm_type: str, alarm_code: str, alarm_label_ru: str,
@@ -128,14 +135,20 @@ IncidentSummary {            # для ленты GET /incidents
 
 IncidentDetail extends IncidentSummary {   # для GET /incidents/{id}
   ts_end: str, unit_id: str, unit_name: str, driver_id: str, driver_phone: str,
+  driver_region: str, driver_department: str, driver_safety_score: int,   # из driver_reference (§7.1)
   speed_limit_kmh: int, is_night: bool, continuous_driving_min: int, events_last_7d: int,
+  confidence: int, event_version: str|null,            # «версия события · уверенность %» (enrichment §2)
+  sensor_active_after_sec: int|null,                   # no-video: DMS-сенсор работал ещё N сек после offline
   mileage_km: float, movement_duration: str, video_count: int,
   cam_front_url: str|null, cam_dms_url: str|null,
+  cam_extra: {channel: int, url: str}[],               # доп. каналы ch2/ch3 для блока «Другие камеры»
   evidence_summary: str, cameras: Camera[], telemetry: TelemetryPoint[]
 }
 ```
 
-Форма эталонна `data/mock/incidents.py` — фронт (f2/f3) и бэк (b5) обязаны совпадать пополю.
+Структура (вложенность/набор сущностей) эталонна `data/mock/incidents.py`, но **имена полей — по этому контракту**.
+Старый мок использует legacy-имена → канон-маппинг (b5/f3 переименовывают при загрузке):
+`score`→`risk_score`, `event_source`→`source`, `alarm_type_label`→`alarm_label_ru`. **Источник истины имён — §3.1, а не мок.**
 
 ### 3.2 Эндпоинты — `incidents` (реализуются полностью)
 
@@ -155,7 +168,7 @@ IncidentDetail extends IncidentSummary {   # для GET /incidents/{id}
 
 ### 3.4 Эндпоинты — `actions` и stub-домены
 
-| POST | `/api/actions` | `Action` | тело `{incident_id, action, comment}`; `action ∈ {mark_reviewed, create_task, export_report, request_archive, call_driver, notify_hr}`; пишет в `output/actions.csv`; меняет `status` инцидента в рантайме |
+| POST | `/api/actions` | `Action` | тело `{incident_id, action, comment}`; `action ∈ {mark_reviewed, create_task, export_report, request_archive, call_driver, notify_hr, validate, stop_vehicle}`; пишет в `output/actions.csv`; меняет `status` инцидента в рантайме |
 | GET | `/api/fuel/*`, `/api/sensors/*`, `/api/navigation/*` | `501 Not Implemented` | только роутеры-скелеты + TODO; таблицы в DuckDB уже есть |
 
 ---
@@ -252,6 +265,10 @@ RISK_SCORE_FORMULA = "severity_weight * speed_factor * night_multiplier"
 
 - Артефакт сида: `data/seed/driver_reference.csv` (в git, не генерируется на лету).
 - Колонки: `vehicle_plate, unit_id, driver_id, driver_name, driver_phone, department, region, safety_score`.
+- **Мульти-водитель на ТС (для В-2 «по ТС», макет требует «основной + другие»):** второй сид
+  `data/seed/driver_trips.csv` (`vehicle_plate, driver_id, driver_name, role: "main"|"secondary", trips: int`)
+  — детерминированно 1–2 водителя на ТС (основной + опц. второй). `v_vehicle.drivers` строится из него,
+  не из `driver_reference` (который остаётся «основной водитель ТС»).
 - Генерация сида (скрипт `api/etl/seed_drivers.py`): для каждого уникального `UnitStateNumber`/`UnitId`
   из `video_events__selected_video_alarms` — детерминированно (seed `crc32(plate)`) выбрать ФИО/телефон/
   подразделение/регион из фиксированных пулов (≥20 имён, ≥5 регионов). `safety_score` = 100 − среднего
@@ -308,14 +325,36 @@ RISK_SCORE_FORMULA = "severity_weight * speed_factor * night_multiplier"
 
 ```text
 ReportQuery   { kind: "driver"|"fleet", plate?: str, driver_name?: str, period_days?: int=3, view?: "drivers"|"vehicles" }
-VehicleReport { plate, vehicle_model, cameras: Camera[], drivers: DriverRef[], period_alarms: IncidentSummary[], mileage_km }
-DriverRef     { driver_id, driver_name, role: "main"|"secondary", trips: int, safety_score: int }
+
+ReportKPI     { total: int, video_da: int, telematics: int, gross: int }   # всего / ВА видео-детекции / телематика / грубых
+ReportPeriod  { from: str, to: str, days: int }
+ViolationRow  { id, ts, alarm_code, alarm_label_ru, source: Source, severity: Severity, is_gross: bool }
+
+DriverReport  {                                  # GET /reports/driver/{plate} (идея #2 В-1)
+  driver: DriverRef, vehicle_plate: str, vehicle_model: str,
+  period: ReportPeriod, mileage_km: float, trips: int,
+  kpi: ReportKPI, disciplinary_warning: bool,    # порог: gross>=3 ИЛИ safety_score<60
+  violations: ViolationRow[]                      # клик по строке → IncidentDetail (killer-feature)
+}
+
+FleetReport   {                                  # GET /reports/fleet (идея #2 В-2)
+  period: ReportPeriod, kpi: ReportKPI, vehicles_count: int,
+  by_drivers: { driver: DriverRef, vehicle_plate, vehicle_model, mileage_km, risk_score: int, gross: int, total: int }[],
+  by_vehicles: { plate, vehicle_model, main_driver: str, mileage_km, risk_score: int, gross: int, total: int, cameras_ok: str }[]  # cameras_ok="2/3"
+}
+
+VehicleReport { plate, vehicle_model, risk_score: int, cameras: Camera[],  # GET /reports/vehicle/{plate}, len(cameras)=3
+                drivers: DriverRef[], period: ReportPeriod, period_alarms: ViolationRow[], mileage_km, trips: int }
+DriverRef     { driver_id, driver_name, role: "main"|"secondary", trips: int, safety_score: int, risk_score: int }
 Ticket        { id, created_at, incident_id, action, comment, status: "new"|"in_progress"|"closed" }
 DispatchAlert { incident: IncidentDetail, video_window_sec: int=15, requested_at: str }
 TripDossier   { vehicle_plate, track: TelemetryPoint[], timeline: {ts_offset, alarm_code, label, has_video}[] }
 RebRecovery   { vehicle_plate, gps_track: {lat,lon,ts}[], gap_periods: {start,end,duration_sec}[], video_frames: {ts, channel, url}[] }
 SabotageEvent { id, vehicle_plate, ts, dms_dark: bool, speed_kmh: float, driver_name, video_url }
 ```
+
+> **«Грубые» (gross):** `severity ∈ {critical}` ИЛИ `alarm_code ∈ {OVERSPEED, DMS_SMOKING}` (критическая скорость + курение —
+> по интервью Оздоева). Считается в `reports_service` (b10). `is_gross` материализуется в `ViolationRow`.
 
 ### 7.6 Дизайн-токены — добавки (Track D, d4/d5)
 
