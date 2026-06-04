@@ -175,15 +175,23 @@ flowchart TD
     BR2["🏁 БАРЬЕР 2 — ФИНАЛЬНЫЙ e2e<br/>(окно skai_7, integration)<br/>merge волны 2 → x2 → x3 → x4-e2e-p1p2 → merge в main"]
     W2 --> BR2
 
-    subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг"]
+    subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг — макс. параллельно"]
         direction LR
-        w3back["w3-1 b13/Ticket ∥ w3-2 DIAGNOSTIC<br/>(backend/данные)"]
-        w3test["w3-3 backend unit (b1–b13) ∥ w3-4 frontend unit (d3–d5/f5–f13)<br/>🪟 Окно 3 · tests"]
+        subgraph B3["🪟 Окно 1 · backend (feat/backend)"]
+            direction TB
+            w31["w3-1 b13/Ticket — enum Status, deadline/is_overdue"]
+            w32["w3-2 DIAGNOSTIC — данные source=DIAGNOSTIC"]
+        end
+        subgraph T3["🪟 Окно 3 · tests (feat/tests, Claude Code)"]
+            direction TB
+            w33["w3-3 backend unit — b1–b13 (дозакрытие t1)"]
+            w34["w3-4 frontend unit — d3–d5/f5–f13 (дозакрытие t3)"]
+        end
     end
 
     BR2 --> W3
 
-    BR3["🧪 БАРЬЕР 3 — ХАРДНЕНИНГ<br/>(окно skai_7, integration)<br/>merge волны 3 → x5-wave3-hardening (регресс + гейт покрытия) → merge в main"]
+    BR3["🧪 БАРЬЕР 3 — ХАРДНЕНИНГ<br/>(окно skai_7, integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend + feat/tests → x5-wave3-hardening<br/>(регресс + гейт покрытия api≥85% / web≥80%) → merge в main"]
     W3 --> BR3
 ```
 
@@ -251,6 +259,27 @@ Git-склейка и продвижение `main` — **внутри пром�
 ```
 
 Красный check → **стоп**, дефект трека, `main` остаётся на стабильном P0.
+
+### Волна 3 — бэклог + тест-хардненинг (макс. параллельно)
+
+| Окно | Промпты | Примечание |
+| --- | --- | --- |
+| 1 Backend | `w3-1` (b13/Ticket: enum `Status`, `deadline`/`is_overdue`) ∥ `w3-2` (данные `source=DIAGNOSTIC`) | неблокирующие доработки из аудита; до реализации `tickets_service` |
+| 3 Tests | `w3-3` (backend unit `b1–b13`) ∥ `w3-4` (frontend unit `d3–d5`/`f5–f13`) | дозакрытие покрытия t1/t3; перед прогоном `git fetch && git merge integration`; баги эскалируются |
+
+> Окно 2 (web) в Волне 3 не участвует. Файлы: `prompts/v2-fullstack/wave-3-backlog/`. Запуск в окне:
+> `Выполни @prompts/v2-fullstack/wave-3-backlog/w3-3-backend-unit-coverage.md`.
+
+### Барьер 3 — хардненинг (основное окно `skai_7`)
+
+Git **внутри промпта** (x5 в «Перед стартом» сам сливает `feat/backend`+`feat/tests` в `integration`,
+в финале продвигает `main` ff-only). Один промпт, дожидаясь зелёного check:
+
+```text
+Выполни @prompts/v2-fullstack/wave-x-integration/x5-wave3-hardening.md
+```
+
+Красный регресс/покрытие → **стоп**, дефект трека, `main` остаётся на стабильном P1/P2.
 
 ## Слияние
 ```bash
