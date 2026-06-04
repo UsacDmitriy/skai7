@@ -63,32 +63,47 @@ integration (x1/x2), поэтому в параллельной фазе их н
 - **Барьер 1 — интеграция P0** (`skai_7`, ветка `integration`): x1→x2→x3.
 - **Волна 2 — расширение P1/P2** (макс. параллельно): BACKEND b7→b10, b8∥b9, b11∥b12∥b13 ; WEB d4∥d5, f5–f13 ; TESTS T1–T3.
 - **Барьер 2 — финал** (`skai_7`, `integration`): x4 (+ повтор x2/x3) → merge в `main`.
-- **Волна 3 — доработки (бэклог)**: накопленные неблокирующие правки из аудитов. Не блокирует P0/P1/P2; выполняется по мере готовности треков. См. раздел [«Волна 3 · бэклог доработок»](#волна-3--бэклог-доработок).
+- **Волна 3 — бэклог + тест-хардненинг**: неблокирующие правки из аудитов (W3-1/W3-2) и **дозакрытие unit-покрытия по всему решению** (W3-3 backend, W3-4 frontend). Не блокирует P0/P1/P2; выполняется по мере готовности треков. См. раздел [«Волна 3 · бэклог доработок»](#волна-3--бэклог-доработок).
+- **Барьер 3 — хардненинг** (`skai_7`, `integration`): x5 — полный регресс (unit+API+фронт) + гейт покрытия → merge в `main`.
 
 > **Заморозка `main` на время волн.** Все коммиты идут в `feat/*` и `integration`; **в `main` напрямую
 > не коммитим**. `main` продвигается только барьерами через `git merge --ff-only integration` (x3 для P0,
-> x4 для P1/P2). Любой прямой коммит в `main` во время волн разведёт ветки и сломает ff-only.
+> x4 для P1/P2, x5 для Волны 3). Любой прямой коммит в `main` во время волн разведёт ветки и сломает ff-only.
 
 ## Волна 3 · бэклог доработок
 
-Неблокирующие правки и улучшения продукта, выявленные аудитами после Волн 1/2. Не входят в
-P0/P1/P2-скоуп; **барьер не нужен** — каждый пункт выполняется на ветке трека-владельца по мере
-её готовности и приезжает в `integration`/`main` обычным мержем. Порядок между пунктами не важен
-(зависимостей нет). Промпты лежат в `prompts/v2-fullstack/wave-3-backlog/` (один пункт = один файл).
+Неблокирующие правки и улучшения продукта из аудитов (W3-1/W3-2) плюс **тест-хардненинг —
+дозакрытие unit-покрытия по всему решению** (W3-3/W3-4). Не входят в P0/P1/P2-скоуп; каждый пункт
+выполняется на ветке трека-владельца по мере её готовности, порядок между пунктами не важен
+(зависимостей нет). Сходятся на **Барьере 3 (x5)** — полный регресс + гейт покрытия → `main`.
+Промпты лежат в `prompts/v2-fullstack/wave-3-backlog/` (один пункт = один файл).
 
 | # | Промпт | Трек | Источник / детали | Приоритет |
 | --- | --- | --- | --- | --- |
 | W3-1 | [`wave-3-backlog/w3-1-b13-ticket-sync.md`](wave-3-backlog/w3-1-b13-ticket-sync.md) — синхронизировать промпт `b13` с contract-change #1: дефолт статуса `Ticket` `"new"` → `"active"` (значение `new` удалено из enum `Status`); добавить в схему `Ticket` поля `deadline` и `is_overdue` (оверлей «⏱ Просрочено», не статус). | b13 / backend | `track-b-backend/b13-tickets-alerts-trips.md:15,17` vs `00-CONTRACT.md` §7.5 | Средний (до реализации `tickets_service`) |
 | W3-2 | [`wave-3-backlog/w3-2-diagnostic-source-data.md`](wave-3-backlog/w3-2-diagnostic-source-data.md) — данные для `Source=DIAGNOSTIC`: значение объявлено в §3.1, но в `data/analysis/alarm_types.json` нет строки с `source:"DIAGNOSTIC"` → бейдж «⚙ Диагностика» (макет 07) ни на чём не срабатывает. | b1 / данные | `00-CONTRACT.md` §3.1 (changelog #1) vs `alarm_type_catalog` (14 строк) | Низкий (демо-опционально) |
+| W3-3 | [`wave-3-backlog/w3-3-backend-unit-coverage.md`](wave-3-backlog/w3-3-backend-unit-coverage.md) — backend unit-покрытие **всех** модулей `b1–b13` (дозакрытие t1: b1/b3/b4/b5/b6/b8/b9/b11/b12/b13), гейт `api/` ≥ 85%. | T / tests | по промптам `b1–b13` + `00-CONTRACT.md` §1–§3/§7.5 | Высокий (качество релиза) |
+| W3-4 | [`wave-3-backlog/w3-4-frontend-unit-coverage.md`](wave-3-backlog/w3-4-frontend-unit-coverage.md) — frontend unit/компонентное покрытие `d3–d5`, `f5–f13` (дозакрытие t3), гейт `web/src` ≥ 80%. | T / tests | по промптам `d3–d5`/`f5–f13` + §3.1/§4/§7.5 | Высокий (качество релиза) |
 
 > Закрытый аудитом дефект Волны 1 (b2 `_SPEED_LIMIT_TABLE` на legacy-кодах) исправлен в рамках Волны 1
 > (ветка `feat/backend`, fix(b2)) и в бэклог не выносится.
 
-**Как запускать.** В окне трека-владельца (например `.worktrees/backend` для W3-1/W3-2) дай промпт
-обычным порядком, без отдельного барьера:
+**Как запускать пункты.** В окне трека-владельца (например `.worktrees/backend` для W3-1/W3-2,
+`.worktrees/tests` для W3-3/W3-4) дай промпт обычным порядком:
 
 ```text
-Выполни @prompts/v2-fullstack/wave-3-backlog/w3-1-b13-ticket-sync.md
+Выполни @prompts/v2-fullstack/wave-3-backlog/w3-3-backend-unit-coverage.md
+```
+
+**Барьер 3 (x5)** — в основном окне `skai_7` на ветке `integration`, после завершения Волны 3:
+
+```bash
+cd /Users/dimausac/projects/skai_7 && git checkout integration
+git merge feat/backend feat/web feat/tests
+```
+
+```text
+Выполни @prompts/v2-fullstack/wave-x-integration/x5-wave3-hardening.md
 ```
 
 Новый пункт бэклога → добавь файл `wave-3-backlog/wN-*.md` + строку в таблицу выше.
@@ -159,6 +174,17 @@ flowchart TD
 
     BR2["🏁 БАРЬЕР 2 — ФИНАЛЬНЫЙ e2e<br/>(окно skai_7, integration)<br/>merge волны 2 → x2 → x3 → x4-e2e-p1p2 → merge в main"]
     W2 --> BR2
+
+    subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг"]
+        direction LR
+        w3back["w3-1 b13/Ticket ∥ w3-2 DIAGNOSTIC<br/>(backend/данные)"]
+        w3test["w3-3 backend unit (b1–b13) ∥ w3-4 frontend unit (d3–d5/f5–f13)<br/>🪟 Окно 3 · tests"]
+    end
+
+    BR2 --> W3
+
+    BR3["🧪 БАРЬЕР 3 — ХАРДНЕНИНГ<br/>(окно skai_7, integration)<br/>merge волны 3 → x5-wave3-hardening (регресс + гейт покрытия) → merge в main"]
+    W3 --> BR3
 ```
 
 ### Барьеры синхронизации — где и какой промпт
@@ -170,6 +196,7 @@ flowchart TD
 | 🔒 0 · Контракт | `main` | `00-CONTRACT.md` (артефакт, замораживается вручную) | фиксирует поля, схемы §7.5, токены — источник истины; до заморозки треки не стартуют |
 | 🚧 1 · Интеграция P0 | `integration` | `x1-remove-streamlit.md` → `x2-wiring.md` → `x3-e2e-smoke.md` | выпил Streamlit, склейка React↔FastAPI (`ALL_ROUTERS`, `App.tsx`), сквозной smoke |
 | 🏁 2 · Финальный e2e | `integration` → `main` | повтор `x2`/`x3` → `x4-e2e-p1p2.md` | smoke на полном наборе P1/P2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage) |
+| 🧪 3 · Хардненинг Волны 3 | `integration` → `main` | `x5-wave3-hardening.md` | полный регресс (unit+API+фронт) + гейт покрытия (`api/`≥85%, `web/src`≥80%); проверка W3-1/W3-2 |
 
 > Файлы барьеров: `prompts/v2-fullstack/wave-x-integration/`.
 
@@ -193,20 +220,16 @@ flowchart TD
 
 ### Барьер 1 — интеграция P0 (основное окно `skai_7`, последовательно)
 
-**Шаг 1 — склейка веток:**
-
-```bash
-cd /Users/dimausac/projects/skai_7
-git checkout integration && git merge feat/backend && git merge feat/web
-```
-
-**Шаг 2 — в Claude Code основного окна по одному промпту, дожидаясь проверки каждого:**
+Git-склейка и продвижение `main` — **внутри промптов** (x1 сам сливает `main`+`feat/backend`+`feat/web`
+вариантом «а», x3 продвигает `main`). Просто подавай по одному в Claude Code, дожидаясь зелёного check:
 
 ```text
 Выполни @prompts/v2-fullstack/wave-x-integration/x1-remove-streamlit.md
 Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
 Выполни @prompts/v2-fullstack/wave-x-integration/x3-e2e-smoke.md
 ```
+
+Красный check → **стоп**, дефект соответствующему треку, чиним на `integration`, `main` не трогаем.
 
 ### Волна 2 — расширение P1/P2 (макс. параллельно)
 
@@ -218,14 +241,8 @@ git checkout integration && git merge feat/backend && git merge feat/web
 
 ### Барьер 2 — финальный e2e (основное окно `skai_7`)
 
-**Шаг 1 — подтянуть волну 2:**
-
-```bash
-cd /Users/dimausac/projects/skai_7 && git checkout integration
-git merge feat/backend && git merge feat/web
-```
-
-**Шаг 2 — в Claude Code основного окна:**
+Тот же вид — git **внутри промптов** (x2 в «Перед стартом» сам подтягивает волну 2 в `integration`
+идемпотентной склейкой; x4 продвигает `main`). Подавай по одному, дожидаясь зелёного check:
 
 ```text
 Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
@@ -233,11 +250,7 @@ git merge feat/backend && git merge feat/web
 Выполни @prompts/v2-fullstack/wave-x-integration/x4-e2e-p1p2.md
 ```
 
-**Шаг 3 — финал в main:**
-
-```bash
-git checkout main && git merge integration
-```
+Красный check → **стоп**, дефект трека, `main` остаётся на стабильном P0.
 
 ## Слияние
 ```bash
