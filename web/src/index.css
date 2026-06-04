@@ -1,0 +1,20 @@
+/**
+ * Точка подключения Tailwind (владелец — f1).
+ * Дизайн-токены и шрифт Inter — в `styles/tokens.css` (d1), импортируются раньше.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    margin: 0;
+  }
+}
