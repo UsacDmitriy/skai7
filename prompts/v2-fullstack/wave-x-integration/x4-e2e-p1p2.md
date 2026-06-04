@@ -83,6 +83,8 @@ git merge feat/backend feat/web   # волна 2: b7–b13, d4/d5, f5–f13
 ```bash
 git -C /Users/dimausac/projects/skai_7 checkout main
 git merge --ff-only integration       # main догоняет integration (fast-forward)
+# если ff-only падает (в main снова попали прямые коммиты) →
+#   git merge --no-ff integration -m "merge integration → main (P1/P2)"
 git checkout integration
 ```
 

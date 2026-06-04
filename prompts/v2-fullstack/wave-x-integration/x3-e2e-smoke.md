@@ -60,7 +60,9 @@
 
 ```bash
 git -C /Users/dimausac/projects/skai_7 checkout main
-git merge --ff-only integration       # main догоняет integration (fast-forward, без новых коммитов)
+git merge --ff-only integration       # main догоняет integration (fast-forward)
+# если ff-only падает (в main снова попали прямые коммиты во время волны) →
+#   git merge --no-ff integration -m "merge integration → main (P0)"
 git checkout integration              # вернуться на integration для волны 2
 ```
 

@@ -11,8 +11,15 @@ smoke не станет зелёным (продвижение `main` — в x3 
 ```bash
 cd /Users/dimausac/projects/skai_7
 git checkout integration
+git merge --no-ff main -m "merge main (docs/мокапы/f2) → integration"   # вариант «а»: main разошёлся во время волн
 git merge feat/backend feat/web   # подтянуть готовые треки волны 1 (B и F)
 ```
+
+> **Вариант «а» (почему сначала `main`):** во время волн в `main` попали прямые коммиты
+> (docs, ui-мокапы, протёкший f2 `web/src/api/*`) → `main` и `integration` разошлись. Вливаем `main`
+> в `integration` обычным merge-коммитом — после этого `main` становится предком `integration`,
+> и финальный `git merge --ff-only integration` (x3) снова проходит fast-forward.
+> Конфликт по `web/src/api/*` разрешаем в пользу `feat/web` (там канон f2/f3).
 
 Слияние должно пройти без конфликтов (`git status` чисто). Конфликт → разрулить в `integration`, `main` не затрагивая.
 
@@ -33,7 +40,8 @@ git merge feat/backend feat/web   # подтянуть готовые треки
 
 - `backend/` (весь Streamlit-пакет: app.py, screens/, components/, charts.py, metrics.py, risk_table.py, data_loader.py, …).
 - `run.py`, корневой Streamlit-`main.py` (если импортирует `backend.app`).
-- `.streamlit/`, `ui/` (HTML-мокапы — перенести нужные в `prompts/v2-fullstack/_refs/` ДО удаления, если ещё нужны как референс; иначе оставить в git-истории).
+- `.streamlit/` (Streamlit-конфиг).
+- **`ui/` НЕ удалять** — это актуальные HTML-мокапы Claude Design (10 экранов), визуальный референс для Волны 2 (`f5–f13`). Трогать только Streamlit-артефакты.
 - `output/` сохранить (туда пишет actions), `data/`, `datasets/`, `sample_data/` — **НЕ трогать**.
 
 ## Изменить
