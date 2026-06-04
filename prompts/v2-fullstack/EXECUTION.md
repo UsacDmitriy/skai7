@@ -55,10 +55,18 @@ flowchart TD
             b4 --> b5
             b5 --> b6["b6 routers"]
         end
-        subgraph F1["🪟 Окно 2 · web (feat/web) — web/"]
+        subgraph F1["🪟 Окно 2 · web (feat/web) — web/ + дизайн-система"]
             direction TB
-            d1["d1 tailwind-theme"] --> d2["d2 ui-primitives"] --> d3["d3 component-lib"]
-            d3 --> f1["f1 vite-scaffold"] --> f2["f2 api-client"] --> f3["f3 mock-fixtures"] --> f4["f4 screens · IncidentCard"]
+            subgraph D1["Дизайн-система (track-d)"]
+                d1["d1 tailwind-theme"] --> d2["d2 ui-primitives"] --> d3["d3 component-lib"]
+            end
+            subgraph FR1["Фронт (track-f)"]
+                f1["f1 vite-scaffold"] --> f2["f2 api-client"] --> f3["f3 mock-fixtures"] --> f4["f4 screens · IncidentCard"]
+            end
+            D1 --> FR1
+        end
+        subgraph CD["🌐 Claude Design (браузер) — параллельно, HTML-референсы"]
+            cd["prompts/claude-design/** → ui/**"]
         end
     end
 
@@ -94,6 +102,18 @@ flowchart TD
     BR2["🏁 БАРЬЕР 2 — ФИНАЛЬНЫЙ e2e<br/>(окно skai_7, integration)<br/>merge волны 2 → x2 → x3 → x4-e2e-p1p2 → merge в main"]
     W2 --> BR2
 ```
+
+### Барьеры синхронизации — где и какой промпт
+
+Все барьеры выполняются в **основном окне `skai_7`** (не в worktree), последовательно.
+
+| Барьер | Ветка | Промпты / артефакт | Что делает |
+| --- | --- | --- | --- |
+| 🔒 0 · Контракт | `main` | `00-CONTRACT.md` (артефакт, замораживается вручную) | фиксирует поля, схемы §7.5, токены — источник истины; до заморозки треки не стартуют |
+| 🚧 1 · Интеграция P0 | `integration` | `x1-remove-streamlit.md` → `x2-wiring.md` → `x3-e2e-smoke.md` | выпил Streamlit, склейка React↔FastAPI (`ALL_ROUTERS`, `App.tsx`), сквозной smoke |
+| 🏁 2 · Финальный e2e | `integration` → `main` | повтор `x2`/`x3` → `x4-e2e-p1p2.md` | smoke на полном наборе P1/P2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage) |
+
+> Файлы барьеров: `prompts/v2-fullstack/wave-x-integration/`.
 
 ### Окна и владение
 
