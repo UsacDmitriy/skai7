@@ -1,6 +1,6 @@
 # Лента событий — макет Claude Design
 
-- **Источник (дизайн-промпт):** `prompts/claude-design/01-events-feed / CD-P4`
+- **Источник (дизайн-промпт):** `prompts/claude-design/01-events-feed`
 - **Потребляет (frontend):** `prompts/v2-fullstack/track-f-frontend/f5-events-feed`
 - **Статус:** новый
 

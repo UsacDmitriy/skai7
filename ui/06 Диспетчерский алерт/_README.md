@@ -1,6 +1,6 @@
 # Диспетчерский алерт — макет Claude Design
 
-- **Источник (дизайн-промпт):** `prompts/claude-design/06-dispatch-alert-plus / CD-P5`
+- **Источник (дизайн-промпт):** `prompts/claude-design/06-dispatch-alert-plus`
 - **Потребляет (frontend):** `prompts/v2-fullstack/track-f-frontend/f9-dispatch-alert`
 - **Статус:** новый
 

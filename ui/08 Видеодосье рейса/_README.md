@@ -1,6 +1,6 @@
 # Видеодосье рейса — макет Claude Design
 
-- **Источник (дизайн-промпт):** `prompts/claude-design/08-trip-dossier / CD-P7`
+- **Источник (дизайн-промпт):** `prompts/claude-design/08-trip-dossier`
 - **Потребляет (frontend):** `prompts/v2-fullstack/track-f-frontend/f10-trip-dossier`
 - **Статус:** новый
 
