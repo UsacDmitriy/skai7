@@ -12,6 +12,7 @@ prompts/
 │   ├── track-b-backend/        DuckDB ETL + обогащение + FastAPI (b1…b6)
 │   ├── track-d-design/         Tailwind-тема, UI-примитивы, библиотека компонентов (d1…d3)
 │   ├── track-f-frontend/       Vite-скелет, API-клиент, фикстуры, экраны (f1…f4)
+│   ├── track-t-tests/          pytest + vitest, рутина/chores (t1…t4, worktree feat/tests)
 │   └── wave-x-integration/     удаление Streamlit, связка, e2e-smoke (x1…x3)
 │
 └── init/                   ← инициализационные промпты (запускаются на старте)
@@ -68,14 +69,14 @@ prompts/
 
 Повтор `x2`/`x3` на полном наборе фич + `x4` smoke (voice/NLU/reports/tickets/alerts/trips/REB/sabotage).
 
-### Тесты (worktree `feat/tests`, параллельно, по готовности кода)
+### Тесты — `track-t-tests` (worktree `feat/tests`, Claude Code, параллельно, по готовности кода)
 
 Тест-трек владеет только тестами и chores; баги в продукт-коде эскалируются, а не правятся в тестах.
 
-- **T4** (chores: `.env.example`, lint, RUNBOOK, `check.sh`) — сразу, без зависимостей.
-- **T1** (backend unit) — после мержа `b2/b7/b10` в `integration`.
-- **T2** (API integration) — после `b6` (P0) + `b11–b13` (P1/P2).
-- **T3** (frontend) — после `d2/f2/f4`, далее по мере `f5–f13`.
+- **t4** (chores: `.env.example`, lint, RUNBOOK, `check.sh`) — сразу, без зависимостей.
+- **t1** (backend unit) — после мержа `b2/b7/b10` в `integration`.
+- **t2** (API integration) — после `b6` (P0) + `b11–b13` (P1/P2).
+- **t3** (frontend) — после `d2/f2/f4`, далее по мере `f5–f13`.
 - Перед прогоном: `git fetch && git merge origin/integration`. Проверка: `pytest api/tests -q` / `cd web && npx vitest run`.
 
 ## Где что лежит

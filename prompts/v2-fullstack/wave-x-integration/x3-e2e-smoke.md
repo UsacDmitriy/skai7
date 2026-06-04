@@ -1,7 +1,7 @@
 # x3 · Сквозной smoke + тесты
 
 > **Барьер-волна, финал.** **Владеет:** только запуск/проверки (smoke). Авторство тестов делегировано
-> Codex-задачам `prompts/codex-tasks/T1–T3` (`api/tests/**`, `web/**/*.test.tsx`). Ничего не переписывает —
+> треку T `prompts/v2-fullstack/track-t-tests/t1–t3` (`api/tests/**`, `web/**/*.test.tsx`). Ничего не переписывает —
 > при провале заводит дефект для соответствующего трека.
 
 ## Перед стартом
@@ -60,7 +60,9 @@
 
 ```bash
 git -C /Users/dimausac/projects/skai_7 checkout main
-git merge --ff-only integration       # main догоняет integration (fast-forward, без новых коммитов)
+git merge --ff-only integration       # main догоняет integration (fast-forward)
+# если ff-only падает (в main снова попали прямые коммиты во время волны) →
+#   git merge --no-ff integration -m "merge integration → main (P0)"
 git checkout integration              # вернуться на integration для волны 2
 ```
 

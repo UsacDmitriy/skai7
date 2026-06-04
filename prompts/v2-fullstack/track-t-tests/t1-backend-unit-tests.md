@@ -1,6 +1,6 @@
 # T1 · Backend unit-тесты (pytest)
 
-> Codex-task. Против `00-CONTRACT.md` §2 (enrichment), §7.1 (сиды), §7.5 (gross/disciplinary).
+> Track T (Claude Code, `feat/tests`). Против `00-CONTRACT.md` §2 (enrichment), §7.1 (сиды), §7.5 (gross/disciplinary).
 > **Владеет:** `api/tests/unit/**`, `api/tests/conftest.py`, `api/requirements-dev.txt`.
 > Запускается после b2/b7/b10. НЕ редактирует продуктовый код — при найденном баге заводит дефект треку.
 
