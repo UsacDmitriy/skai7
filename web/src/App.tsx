@@ -25,7 +25,7 @@ import { cn } from '@/components/ui/cn'
 
 /**
  * Каркас SPA (f1): BrowserRouter + AppShell (сайдбар 48/240 + header 56) + роуты.
- * Экраны f4 (Monitor/IncidentCard/Report) пока заглушены `Placeholder`.
+ * Экраны f4 (Monitor/IncidentCard/Report) подключены ленивым импортом.
  * Витрина d3 (`_StyleGuide`) подключается ленивым импортом.
  */
 
@@ -169,7 +169,10 @@ function Placeholder({ title }: { title: string }) {
   )
 }
 
-// ── Ленивая витрина d3 (файл присутствует) ────────────────────────────────────
+// ── Ленивые экраны f4 + витрина d3 ────────────────────────────────────────────
+const Monitor = lazy(() => import('@/pages/Monitor')) as ComponentType
+const IncidentCard = lazy(() => import('@/pages/IncidentCard')) as ComponentType
+const Report = lazy(() => import('@/pages/Report')) as ComponentType
 const StyleGuide = lazy(() => import('@/pages/_StyleGuide')) as ComponentType
 
 export default function App() {
@@ -180,12 +183,30 @@ export default function App() {
       <Routes>
         <Route element={<AppShell />}>
           <Route index element={<Navigate to="/monitor" replace />} />
-          <Route path="/monitor" element={<Placeholder title="Мониторинг" />} />
+          <Route
+            path="/monitor"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <Monitor />
+              </Suspense>
+            }
+          />
           <Route
             path="/incidents/:id"
-            element={<Placeholder title="Карточка инцидента" />}
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <IncidentCard />
+              </Suspense>
+            }
           />
-          <Route path="/report" element={<Placeholder title="Отчёты" />} />
+          <Route
+            path="/report"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <Report />
+              </Suspense>
+            }
+          />
           <Route
             path="/_styleguide"
             element={
