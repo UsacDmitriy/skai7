@@ -12,9 +12,13 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    // TODO (x2): прокси к FastAPI, чтобы фронт ходил на /api без CORS.
-    // proxy: {
-    //   '/api': { target: 'http://localhost:8000', changeOrigin: true },
-    // },
+    // Прокси к FastAPI: фронт ходит на /api без CORS-проблем.
+    // Target берётся из VITE_API_TARGET, дефолт — http://localhost:8000.
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_TARGET ?? 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
   },
 })

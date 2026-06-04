@@ -3,10 +3,21 @@
 > **Барьер-волна.** **Владеет:** `api/main.py` (include routers), `web/vite.config.ts` (proxy), `Makefile`.
 > После b6 (роутеры существуют) и f1/f2 (фронт-каркас готов).
 
-## Перед стартом
+## Перед стартом — актуализировать `integration` (идемпотентно для обоих барьеров)
 
-Продолжаем в окне `skai_7` на ветке `integration` (сразу после x1). **`main` не трогаем.**
-Коммит x1 уже на `integration`; если нет — `git status` должен быть чистым после x1.
+В окне `skai_7` на ветке `integration`. **`main` не трогаем.**
+
+```bash
+cd /Users/dimausac/projects/skai_7
+git checkout integration
+git merge --no-ff main feat/backend feat/web
+# Барьер 1: x1 уже всё слил → «Already up to date» (no-op).
+# Барьер 2 (x2 — первый шаг барьера): подтягивает волну 2 (b7–b13, d4/d5, f5–f13).
+# Расхождение main (вариант «а») закрывает «--no-ff main»; конфликт web/src/api/* → в пользу feat/web.
+```
+
+Роутеры новых волн (b11–b13) подключаются **автоматически** (авто-обход `api/routers`, см. ниже) —
+отдельной правки списка не требуют. Конфликт — разрулить на `integration`, `main` не затрагивая.
 
 ## Проверка предыдущего шага (x1 · выпил Streamlit)
 
