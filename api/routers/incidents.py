@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Annotated
 
 import duckdb
@@ -23,6 +24,25 @@ router = APIRouter(prefix="/api/incidents", tags=["incidents"])
 
 # Каналы камер (§3.1): 1=ADAS/фронт, 2/3=доп., 5=DMS/салон.
 _VALID_CHANNELS = {1, 2, 3, 5}
+
+
+def _resolve_media_path(rel_path: str) -> Path:
+    """Абсолютный путь к mp4 под `settings.media_dir`.
+
+    `media_relative_path` в БД хранится относительно корня проекта и уже
+    содержит префикс `datasets/media/…`, тогда как `media_dir` сам равен
+    `<root>/datasets/media`. Снимаем избыточный префикс, чтобы склейка
+    `media_dir / rel` не задваивала `datasets/media`. Устойчиво и к путям,
+    хранящимся уже относительно media_dir (`video_events/…`).
+    """
+    rel = Path(rel_path)
+    try:
+        media_prefix = settings.media_dir.relative_to(settings.project_root).parts
+    except ValueError:  # media_dir вне project_root (env-override) — без снятия
+        media_prefix = ()
+    if media_prefix and rel.parts[: len(media_prefix)] == media_prefix:
+        rel = Path(*rel.parts[len(media_prefix):])
+    return settings.media_dir / rel
 
 DbDep = Annotated[duckdb.DuckDBPyConnection, Depends(get_db)]
 
@@ -78,7 +98,7 @@ def get_video(incident_id: str, channel: int, db: DbDep) -> FileResponse:
     if rel_path is None:
         raise HTTPException(status_code=404, detail="Видео не найдено")
 
-    file_path = settings.media_dir / rel_path
+    file_path = _resolve_media_path(rel_path)
     if not file_path.is_file():
         raise HTTPException(status_code=404, detail="Видеофайл отсутствует на диске")
 

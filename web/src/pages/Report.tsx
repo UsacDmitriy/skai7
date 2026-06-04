@@ -306,8 +306,20 @@ export default function Report() {
                     {videoIncident.vehicle_plate} · {formatTime(videoIncident.ts)}
                   </div>
                 </div>
-                <VideoPlayer src={videoIncident.cam_front_url ?? undefined} />
-                <VideoPlayer src={videoIncident.cam_dms_url ?? undefined} />
+                <VideoPlayer
+                  src={
+                    videoIncident.cam_front_url
+                      ? client.videoUrl(videoIncident.id, 1)
+                      : undefined
+                  }
+                />
+                <VideoPlayer
+                  src={
+                    videoIncident.cam_dms_url
+                      ? client.videoUrl(videoIncident.id, 5)
+                      : undefined
+                  }
+                />
                 <p className="text-xs text-muted">{videoIncident.evidence_summary}</p>
               </>
             )}

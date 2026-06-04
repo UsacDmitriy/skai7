@@ -1,3 +1,5 @@
-pandas==2.2.3
-numpy==2.2.4
-altair==5.5.0
+# Корневой requirements — зависимости бэкенда живут в api/requirements.txt
+# (fastapi / uvicorn / duckdb / pydantic / pandas — см. там).
+-r api/requirements.txt
+
+# TODO(NLU): faster-whisper вернётся для голосового NLU (трек B), удалён вместе со Streamlit-прототипом.

@@ -8,17 +8,32 @@ Only the app skeleton + infrastructure live here. Routers are wired in x2/b6.
 """
 from __future__ import annotations
 
+import importlib
 import logging
+import pkgutil
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import api.routers as routers_pkg
 from api.core.config import settings
 from api.core.duckdb_conn import close_connection
-from api.routers import ALL_ROUTERS
 
 logger = logging.getLogger("skai.api")
+
+
+def _discover_routers() -> list[APIRouter]:
+    """Авто-обход пакета `api.routers`: каждый модуль с объектом `router`
+    подключается без правки общего списка (P0 от b6 + P1/P2 от b11–b13).
+    """
+    discovered: list[APIRouter] = []
+    for _, name, _ in pkgutil.iter_modules(routers_pkg.__path__):
+        mod = importlib.import_module(f"api.routers.{name}")
+        router = getattr(mod, "router", None)
+        if isinstance(router, APIRouter):
+            discovered.append(router)
+    return discovered
 
 
 @asynccontextmanager
@@ -50,8 +65,10 @@ def create_app() -> FastAPI:
     def health() -> dict[str, str]:
         return {"status": "ok"}
 
-    for router in ALL_ROUTERS:
+    routers = _discover_routers()
+    for router in routers:
         app.include_router(router)
+    logger.info("Подключено роутеров: %d", len(routers))
 
     return app
 

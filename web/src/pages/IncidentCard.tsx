@@ -21,6 +21,7 @@ import type {
   Severity,
   Source,
   Status,
+  VideoChannel,
 } from '@/api/types'
 import {
   Button,
@@ -343,7 +344,7 @@ export default function IncidentCard() {
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                   <div className="space-y-1">
                     <VideoPlayer
-                      src={inc.cam_front_url ?? undefined}
+                      src={inc.cam_front_url ? client.videoUrl(inc.id, 1) : undefined}
                       eventMarkerPct={eventMarkerPct}
                       onTimeUpdate={setCurrentSec}
                       seekTo={seekSec}
@@ -352,7 +353,7 @@ export default function IncidentCard() {
                   </div>
                   <div className="space-y-1">
                     <VideoPlayer
-                      src={inc.cam_dms_url ?? undefined}
+                      src={inc.cam_dms_url ? client.videoUrl(inc.id, 5) : undefined}
                       eventMarkerPct={eventMarkerPct}
                       seekTo={seekSec}
                     />
@@ -365,7 +366,10 @@ export default function IncidentCard() {
                     <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                       {inc.cam_extra.map((cam) => (
                         <div key={cam.channel} className="space-y-1">
-                          <VideoPlayer src={cam.url} seekTo={seekSec} />
+                          <VideoPlayer
+                            src={client.videoUrl(inc.id, cam.channel as VideoChannel)}
+                            seekTo={seekSec}
+                          />
                           <span className="text-xs text-muted">Канал {cam.channel}</span>
                         </div>
                       ))}
