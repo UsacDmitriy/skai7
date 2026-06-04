@@ -26,6 +26,7 @@
 | W3-2 | [`w3-2-diagnostic-source-data.md`](w3-2-diagnostic-source-data.md) — данные для `Source=DIAGNOSTIC` (бейдж «⚙ Диагностика», макет 07) | b1 / данные | Низкий |
 | W3-3 | [`w3-3-backend-unit-coverage.md`](w3-3-backend-unit-coverage.md) — backend unit-покрытие всех модулей `b1–b13` (дозакрытие t1), гейт `api/`≥85% | T / tests | Высокий |
 | W3-4 | [`w3-4-frontend-unit-coverage.md`](w3-4-frontend-unit-coverage.md) — frontend unit-покрытие `d3–d5`/`f5–f13` (дозакрытие t3), гейт `web/src`≥80% | T / tests | Высокий |
+| W3-5 | [`w3-5-no-video-incident-reachable.md`](w3-5-no-video-incident-reachable.md) — no-video инцидент достижим в живых данных (мёртвая UI-ветка «нет видео» + «Запросить архив» + `sensor_active_after_sec` §2); выявлено smoke x3 | b3 / данные (+T) | Средний |
 
 > **Барьер 3 (x5):** после завершения пунктов — `../wave-x-integration/x5-wave3-hardening.md`
 > прогоняет полный регресс + гейт покрытия и продвигает `main`.

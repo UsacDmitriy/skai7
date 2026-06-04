@@ -250,6 +250,14 @@ spacing base 4px; кнопка h36; иконки Lucide React
 - `cam_dms_url` (ch5) для DMS-нарушений, `cam_front_url` (ch1) для ADAS
 - NL-запрос → подтверждение → дашборд (4 состояния)
 
+> **Правило воспроизведения видео (анти-регресс DEF-3, barrier-1 smoke x3).**
+> Поля `cam_dms_url` / `cam_front_url` / `cam_extra[].url` — это `media_relative_path` из БД
+> (пути относительно корня проекта), они **НЕ являются URL для `<video src>`** и служат только
+> двум целям: (1) индикатор наличия видео (non-null ⇒ канал есть), (2) выбор канала
+> (DMS→5, ADAS→1). Источник для плеера — **всегда** API-эндпоинт `GET /api/incidents/{id}/video/{channel}`
+> через `client.videoUrl(id, channel)` (f2). Шаблон: `src = inc.cam_dms_url ? client.videoUrl(inc.id, 5) : undefined`.
+> Прямой биндинг `src={cam_dms_url}` ломает воспроизведение (относительный путь → 404). Касается f4, f7 и любого нового экрана с видео.
+
 **Монитор (`/monitor`):**
 - Ролевой switcher: Логист (только телематика) / Диспетчер / Безопасник
 - Одна точка на `unit_id` (не на `AlarmId`) — дедупликация ТС
