@@ -82,3 +82,45 @@
 - Do not call CRUD/action APIs against real systems unless explicitly approved.
 - Avoid microservices, Kubernetes, complex queues, custom auth, background workers, and platform rewrites.
 - Prioritize working user flows, explainable logic, a value metric, and an action saved to `output/`.
+
+
+---
+
+## Customer Context
+
+> Подробнее: `context/customer-research.md`
+
+**Три клиента:**
+
+**Фомин (PepsiCo, ~200 ТС)** — «39 ДТП в телематике, видео подтвердило 5.
+Нужно: CAN-скорость + видео ±30 сек в одном окне.»
+→ Блок причины события, единый отчёт для страховой.
+
+**Маслов (Балтика, ~300 ТС)** — «3 машины как 5 точек из-за задвоения терминалов.
+Нужно: статус камер сразу, кнопка звонка через DMS.»
+→ `cameras[]` с online/offline, ролевой switcher Логист/Диспетчер/Безопасник.
+
+**Оздоев (ГПН, ~800 ТС)** — «Нажал нарушение — должно вылезти видео.»
+→ Killer feature: клик на строку в отчёте → VideoPanel рядом.
+
+**Маппинг на данные:**
+- 54 реальных алярма в `v_incidents` (видео у всех)
+- ch5 → `cam_dms_url` (DMS/Drowsiness/Smoking)
+- ch1 → `cam_front_url` (ADAS/дорога)
+- `navigation_problem_tracks` → экран Восстановление РЭБ (реальные данные!)
+- Нет в данных: `driver`, `vehicle_model`, `risk_score` → enrichment/mock
+
+## Screens
+
+| Route | Screen | Priority | Customer |
+|-------|--------|----------|----------|
+| `/incidents/:id` | Карточка инцидента | **P0** | Фомин, Маслов, Оздоев |
+| `/monitor` | Живой мониторинг | **P0** | Маслов |
+| `/report` | Аналитический отчёт | **P0** | Оздоев |
+| `/` | Лента событий | P1 | все |
+| `/tickets` | Заявки | P1 | Маслов |
+| `/alert/:id` | Диспетчерский алерт | P2 | Фомин |
+| `/trip/:id` | Досье поездки | P2 | Оздоев |
+| `/reb/:id` | Восстановление РЭБ | P2 | Оздоев |
+
+> HTML-мокапы для P0: `ui/Карточка инцидента/`, `ui/Промпт_2_Живой мониторинг /`, `ui/Интерактивнй отчет/`
