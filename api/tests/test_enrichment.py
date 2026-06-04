@@ -107,6 +107,19 @@ class TestSpeedLimit:
     def test_mock_harsh_braking(self):
         assert speed_limit_for("HARSH_BRAKING") == 90
 
+    def test_canonical_dms_codes_city_limit(self):
+        # Реальные коды каталога DMS → 60 (раньше уходили в дефолт 90).
+        for code in ("DMS_SMOKING", "DMS_YAWNING", "DMS_SEATBELT", "CAMERA_TAMPER"):
+            assert speed_limit_for(code) == 60, code
+
+    def test_canonical_adas_codes_city_limit(self):
+        for code in ("ADAS_FCW", "ADAS_HMW", "ADAS_PCW"):
+            assert speed_limit_for(code) == 60, code
+
+    def test_canonical_highway_codes(self):
+        for code in ("OVERSPEED", "HARSH_ACCEL", "HARSH_CORNERING"):
+            assert speed_limit_for(code) == 90, code
+
 
 # ---------------------------------------------------------------------------
 # is_night

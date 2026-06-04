@@ -61,30 +61,27 @@ _VEHICLE_MODELS: list[str] = [
 # DMS / city-type alarms → 60; highway/telematics alarms → 90
 # ---------------------------------------------------------------------------
 
+# Ключи — и канонические `code` (alarm_code в v_incidents), и `raw`-имена
+# (fallback alarm_type в сервисе). Синхронизировано с `alarm_type_catalog` (b1, §1).
+# Правило §2: source=DMS / городской тип → 60; шоссе/манёвры → 90 (дефолт).
 _SPEED_LIMIT_TABLE: dict[str, int] = {
-    # DMS events (driver monitoring — typically city/urban)
-    "Drowsiness": 60,
-    "Yawning": 60,
-    "Distraction": 60,
-    "Smoking": 60,
-    "NoDriver": 60,
-    "Sabotage": 60,
-    "SeatBelt": 60,
-    # ADAS collision-type events — urban proximity
-    "CollisionWarning": 60,
-    "DangerousDistance": 60,
-    "PedestrianWarning": 60,
-    # Speed / maneuver events on highway — default 90
-    "SpeedLimitViolation": 90,
-    "SharpBraking": 90,
-    "SharpAcceleration": 90,
-    "SharpLeftTurn": 90,
-    # Mock alarm codes from incidents.py
-    "DMS_DROWSY": 60,
-    "DMS_PHONE": 60,
-    "CRASH_SENSOR": 60,
-    "HARSH_BRAKING": 90,
-    "DRIVER_SUBSTITUTION": 60,
+    # DMS — мониторинг водителя (городской тип) → 60
+    "DMS_DROWSY": 60, "Drowsiness": 60,
+    "DMS_YAWNING": 60, "Yawning": 60,
+    "DMS_PHONE": 60, "Distraction": 60,
+    "DMS_SMOKING": 60, "Smoking": 60,
+    "DMS_SEATBELT": 60, "SeatBelt": 60,
+    "CAMERA_TAMPER": 60, "Sabotage": 60,
+    "DRIVER_SUBSTITUTION": 60, "NoDriver": 60,
+    # ADAS — дистанция/столкновение/пешеход (городская близость) → 60
+    "ADAS_FCW": 60, "CollisionWarning": 60,
+    "ADAS_HMW": 60, "DangerousDistance": 60,
+    "ADAS_PCW": 60, "PedestrianWarning": 60,
+    # COMBINED / TELEMATICS — скорость и манёвры (шоссе) → 90
+    "OVERSPEED": 90, "SpeedLimitViolation": 90,
+    "HARSH_BRAKING": 90, "SharpBraking": 90,
+    "HARSH_ACCEL": 90, "SharpAcceleration": 90,
+    "HARSH_CORNERING": 90, "SharpLeftTurn": 90,
 }
 
 _DEFAULT_SPEED_LIMIT = 90
