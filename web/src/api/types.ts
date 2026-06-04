@@ -1,29 +1,33 @@
-// f2 · API types — точная калька Pydantic-схем контракта.
-// Источник истины: prompts/v2-fullstack/00-CONTRACT.md §3.1 (P0) + §7.5 (full-scope P1/P2).
-// ЕДИНСТВЕННЫЙ владелец доменных типов фронта — этот файл. f3–f13 их только используют.
+/**
+ * f2 · TypeScript-типы, пополю повторяющие Pydantic-схемы контракта.
+ * Источник истины — `prompts/v2-fullstack/00-CONTRACT.md` §3.1 (домен incidents)
+ * и §7.5 (full-scope P1/P2). Любое расхождение ломает экраны.
+ *
+ * Владелец файла — f2. f3 (fixtures) и f4–f13 только импортируют типы отсюда.
+ */
 
-// ───────────────────────────────────────────────────────────── P0 · enums (§3.1)
+// ── Перечисления (§3.1) ───────────────────────────────────────────────────────
 
+/** Уровень риска / severity. НЕ путать с дизайн-токенами `warning`/`ok`. */
 export type Severity = 'critical' | 'high' | 'medium' | 'low'
 
-// DIAGNOSTIC — алярмы сенсорной диагностики (камера офлайн и т.п.), бейдж «⚙ Диагностика» (contract-change #1).
+/** Источник алярма. `DIAGNOSTIC` — сенсорная диагностика (камера офлайн), бейдж «⚙ Диагностика» (contract-change #1). */
 export type Source = 'DMS' | 'ADAS' | 'TELEMATICS' | 'COMBINED' | 'DIAGNOSTIC'
 
+/** Жизненный цикл инцидента/заявки. Единый enum (contract-change #1). */
 export type Status = 'active' | 'in_progress' | 'validated' | 'closed'
 
+/** Состояние камеры. `warning` = «Нестабильна». */
 export type CameraStatus = 'online' | 'offline' | 'warning'
 
-/** Видеоканалы (§3.2): ch1 ADAS·Фронт · ch5 DMS·Салон · ch2 СНЗ·Доп · ch3 СНЗ·Кузов. */
-export type VideoChannel = 1 | 2 | 3 | 5
-
-// ───────────────────────────────────────────────────────── P0 · домен incidents (§3.1)
+// ── Базовые сущности (§3.1) ───────────────────────────────────────────────────
 
 export interface Camera {
   id: string
   label: string
   status: CameraStatus
   hasVideo: boolean
-  /** окно недоступности для no-video / offline / warning */
+  /** Окно недоступности для no-video (offline/warning). */
   offline_from: string | null
   offline_to: string | null
 }
@@ -31,11 +35,12 @@ export interface Camera {
 export interface TelemetryPoint {
   ts_offset: number
   speed: number
-  /** ax = производная скорости (§2), не 0 */
+  /** Производная скорости (м/с²), §2 — не 0.0, иначе график-акселерометр плоский. */
   ax: number
   ay: number
 }
 
+/** Ответ ленты `GET /incidents`. */
 export interface IncidentSummary {
   id: string
   alarm_type: string
@@ -57,19 +62,19 @@ export interface IncidentSummary {
   status: Status
 }
 
-/** Доп. видеоканалы (ch2/ch3) для блока «Другие камеры». */
+/** Доп. канал (ch2/ch3) для блока «Другие камеры». */
 export interface CamExtra {
   channel: number
   url: string
 }
 
+/** Ответ `GET /incidents/{id}` — расширяет IncidentSummary. */
 export interface IncidentDetail extends IncidentSummary {
   ts_end: string
   unit_id: string
   unit_name: string
   driver_id: string
   driver_phone: string
-  // из driver_reference (§7.1)
   driver_region: string
   driver_department: string
   driver_safety_score: number
@@ -77,10 +82,10 @@ export interface IncidentDetail extends IncidentSummary {
   is_night: boolean
   continuous_driving_min: number
   events_last_7d: number
-  // «версия события · уверенность %» (enrichment §2)
+  /** «Уверенность версии события», 0–100 (enrichment §2). */
   confidence: number
   event_version: string | null
-  // no-video: DMS-сенсор работал ещё N сек после offline
+  /** No-video: DMS-сенсор работал ещё N сек после ухода камеры в offline. */
   sensor_active_after_sec: number | null
   mileage_km: number
   movement_duration: string
@@ -93,21 +98,38 @@ export interface IncidentDetail extends IncidentSummary {
   telemetry: TelemetryPoint[]
 }
 
-// ───────────────────────────────────────────────────────── P0 · vehicles + actions
+// ── Vehicles (§3.3) ───────────────────────────────────────────────────────────
 
-// VehicleSummary не пин-схема в §3.1 (§3.3: «список ТС из video_events__vehicles + обогащение
-// driver/model»). Минимальный набор, согласованный с naming-конвенцией контракта.
-export interface VehicleSummary {
-  vehicle_plate: string
-  unit_id: string
-  unit_name: string
-  vehicle_model: string
-  driver: string
-  alarms_count: number
-  risk_score: number
+/** Камера в карточке ТС (без оконных полей offline — облегчённая форма). */
+export interface VehicleCamera {
+  id: string
+  label: string
+  status: CameraStatus
 }
 
-/** Действия журнала (§3.4 POST /api/actions). */
+/** Ответ `GET /vehicles` — список ТС из `video_events__vehicles` + обогащение. */
+export interface VehicleSummary {
+  id: string
+  plate: string
+  model: string
+  driver: string
+  division: string
+  alarm_count: number
+  /** Типы алярмов через `|` (как в датасете). */
+  alarm_types: string
+  downloaded_video_count: number
+  total_track_mileage_km: number
+  avg_speed_kmh: number
+  cameras: VehicleCamera[]
+  telematics_status: string
+  archive_status: string
+  connection_status: string
+  engine_hours: number
+  last_maintenance: string
+}
+
+// ── Actions (§3.4) ────────────────────────────────────────────────────────────
+
 export type ActionType =
   | 'mark_reviewed'
   | 'create_task'
@@ -118,37 +140,27 @@ export type ActionType =
   | 'validate'
   | 'stop_vehicle'
 
-/** Тело запроса POST /api/actions. */
-export interface ActionInput {
-  incident_id: string
-  action: ActionType
-  comment?: string
-}
-
-/** Ответ POST /api/actions (echo + рантайм-статус инцидента). */
+/** Тело и ответ `POST /actions`. */
 export interface Action {
-  id: string
-  created_at: string
   incident_id: string
   action: ActionType
   comment: string
-  status: Status
+  /** Новый статус инцидента в рантайме (возвращается сервисом). */
+  status?: Status
+  created_at?: string
 }
 
-// ───────────────────────────────────────────────── full-scope · reports/NLU (§7.5)
-
-export type ReportKind = 'driver' | 'fleet'
-export type ReportView = 'drivers' | 'vehicles'
+// ── Reports / full-scope (§7.5) ───────────────────────────────────────────────
 
 export interface ReportQuery {
-  kind: ReportKind
+  kind: 'driver' | 'fleet'
   plate?: string
   driver_name?: string
-  period_days?: number // default 3
-  view?: ReportView
+  period_days?: number
+  view?: 'drivers' | 'vehicles'
 }
 
-/** всего / ВА видео-детекции / телематика / грубых */
+/** всего / ВА видео-детекции / телематика / грубых. */
 export interface ReportKPI {
   total: number
   video_da: number
@@ -181,6 +193,7 @@ export interface DriverRef {
   risk_score: number
 }
 
+/** `GET /reports/driver/{plate}` (идея #2 В-1). */
 export interface DriverReport {
   driver: DriverRef
   vehicle_plate: string
@@ -189,14 +202,12 @@ export interface DriverReport {
   mileage_km: number
   trips: number
   kpi: ReportKPI
-  // порог: gross>=3 ИЛИ safety_score<60
+  /** Порог: gross>=3 ИЛИ safety_score<60. */
   disciplinary_warning: boolean
-  // клик по строке → IncidentDetail (killer-feature)
   violations: ViolationRow[]
 }
 
-/** Строка агрегата FleetReport.by_drivers. */
-export interface FleetDriverRow {
+export interface FleetByDriverRow {
   driver: DriverRef
   vehicle_plate: string
   vehicle_model: string
@@ -206,8 +217,7 @@ export interface FleetDriverRow {
   total: number
 }
 
-/** Строка агрегата FleetReport.by_vehicles. */
-export interface FleetVehicleRow {
+export interface FleetByVehicleRow {
   plate: string
   vehicle_model: string
   main_driver: string
@@ -215,22 +225,25 @@ export interface FleetVehicleRow {
   risk_score: number
   gross: number
   total: number
-  cameras_ok: string // напр. "2/3"
+  /** Напр. "2/3". */
+  cameras_ok: string
 }
 
+/** `GET /reports/fleet` (идея #2 В-2). */
 export interface FleetReport {
   period: ReportPeriod
   kpi: ReportKPI
   vehicles_count: number
-  by_drivers: FleetDriverRow[]
-  by_vehicles: FleetVehicleRow[]
+  by_drivers: FleetByDriverRow[]
+  by_vehicles: FleetByVehicleRow[]
 }
 
+/** `GET /reports/vehicle/{plate}` — len(cameras)=3. */
 export interface VehicleReport {
   plate: string
   vehicle_model: string
   risk_score: number
-  cameras: Camera[] // len = 3
+  cameras: Camera[]
   drivers: DriverRef[]
   period: ReportPeriod
   period_alarms: ViolationRow[]
@@ -238,36 +251,37 @@ export interface VehicleReport {
   trips: number
 }
 
+/** `GET /tickets` (идея #6). «Просрочена» — не статус, а оверлей по is_overdue. */
 export interface Ticket {
   id: string
   created_at: string
   incident_id: string
   action: string
   comment: string
-  // единый enum Status (§3.1): active=«Новая» · in_progress=«В работе» · validated=«Проверена» · closed=«Закрыта»
   status: Status
   deadline: string | null
-  // is_overdue = deadline<now И status∉{closed}; «Просрочена» — оверлей, не статус
   is_overdue: boolean
 }
 
+/** `GET /alerts/{id}` (идея #5). */
 export interface DispatchAlert {
   incident: IncidentDetail
-  video_window_sec: number // =15
+  video_window_sec: number
   requested_at: string
 }
 
-export interface TripTimelineItem {
+export interface TripTimelineEntry {
   ts_offset: number
   alarm_code: string
   label: string
   has_video: boolean
 }
 
+/** `GET /trips/{id}` (идея #7). */
 export interface TripDossier {
   vehicle_plate: string
   track: TelemetryPoint[]
-  timeline: TripTimelineItem[]
+  timeline: TripTimelineEntry[]
 }
 
 export interface RebGpsPoint {
@@ -288,6 +302,7 @@ export interface RebVideoFrame {
   url: string
 }
 
+/** `GET /reb/{id}` (идея #8). */
 export interface RebRecovery {
   vehicle_plate: string
   gps_track: RebGpsPoint[]
@@ -295,6 +310,7 @@ export interface RebRecovery {
   video_frames: RebVideoFrame[]
 }
 
+/** Элемент `GET /sabotage` (идея #9). */
 export interface SabotageEvent {
   id: string
   vehicle_plate: string
@@ -305,27 +321,32 @@ export interface SabotageEvent {
   video_url: string
 }
 
-// ───────────────────────────────────────────────── вспомогательные I/O-типы
+// ── Voice/NLU (§7.4) ──────────────────────────────────────────────────────────
 
-/** Query-параметры GET /api/incidents (§3.2). */
-export interface IncidentFilters {
-  severity?: Severity
-  source?: Source
-  status?: Status
-  vehicle_plate?: string
-  limit?: number // =100
-  offset?: number // =0
-}
-
-/** Ответ POST /api/reports/transcribe (§7.4). */
-export interface TranscribeResult {
+/** Ответ `POST /reports/transcribe`. */
+export interface Transcription {
   text: string
   lang: string
   confidence: number
 }
 
-/** Ответ POST /api/reports/query (§7.4): NLU-разбор + отчёт. */
-export interface QueryReportResult {
+/** Ответ `POST /reports/query` — обёртка `{query, report}`. */
+export interface QueryResult {
   query: ReportQuery
   report: DriverReport | FleetReport
 }
+
+// ── Параметры запросов ────────────────────────────────────────────────────────
+
+/** Фильтры `GET /incidents`. */
+export interface IncidentFilters {
+  severity?: Severity
+  source?: Source
+  status?: Status
+  vehicle_plate?: string
+  limit?: number
+  offset?: number
+}
+
+/** Каналы видео для `GET /incidents/{id}/video/{channel}`. */
+export type VideoChannel = 1 | 2 | 3 | 5
