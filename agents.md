@@ -22,11 +22,13 @@ full-scope). Каждый агент кодит против контракта,
 
 ## Inputs
 
-- `data/selected_video_alarms.csv` - события VA: аларм, машина, время, тип, скорость, координаты при наличии.
-- `data/video_files.csv` - скачанные MP4 и метаданные: `alarm_id`, `video_file_id`, `channel`, `media_relative_path`, размер, длительность.
-- `data/track_summary.csv`, `data/track_periods.csv`, `data/track_points.csv`, `data/max_speed_points.csv` - телеметрия вокруг аларма для единого окна.
-- `data/vehicles.csv` - сводка по машинам.
-- `data/work_rest_single_vehicle/` - отдельный one-object поднабор для режима труда/отдыха.
+> Канонический источник данных — `datasets/ready/` (см. контракт §3). Ниже — ключевые таблицы среза `video_events`.
+
+- `datasets/ready/video_events/selected_video_alarms.csv` - события VA: аларм, машина, время, тип, скорость, координаты при наличии.
+- `datasets/ready/video_events/video_files.csv` - скачанные MP4 и метаданные: `alarm_id`, `video_file_id`, `channel`, `media_relative_path`, размер, длительность.
+- `datasets/ready/video_events/track_summary.csv`, `.../track_periods.csv`, `.../track_points.csv`, `.../max_speed_points.csv` - телеметрия вокруг аларма для единого окна.
+- `datasets/ready/video_events/vehicles.csv` - сводка по машинам.
+- `datasets/ready/video_events/work_rest_single_vehicle/` - отдельный one-object поднабор для режима труда/отдыха.
 - MP4 лежат в `../../datasets/media/video_events/`; `media_relative_path` относителен к корню распакованного архива/проекта.
 
 ## Outputs

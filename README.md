@@ -51,7 +51,8 @@ pip install -r requirements.txt
 │   ├── risk_table.py
 │   ├── nl_parser.py
 │   └── analytics_presets.py
-├── data/                  ← CSV-файлы (телеметрия + видео-алармы)
+├── data/                  ← alarm_types.json + mock-эталоны структуры; БД skai.duckdb (gen)
+├── datasets/ready/        ← канонические CSV (источник истины: video_events, fuel, sensors…)
 ├── sample_data/           ← демо-данные (fallback)
 ├── output/                ← actions.csv, отчёты (автосоздаётся)
 ├── datasets/media/        ← MP4-файлы
