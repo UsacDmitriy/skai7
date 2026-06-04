@@ -201,3 +201,37 @@ spacing base 4px; кнопка h36; иконки Lucide React
 
 **Интеграция b1↔b3:** `build_duckdb.py` после загрузки таблиц и каталога выполняет все
 `api/sql/*.sql` в лексикографическом порядке → view от b3 подхватывается автоматически.
+
+
+---
+
+## 5. Customer Requirements (из интервью)
+
+> Источник: `context/customer-research.md`
+
+### Acceptance criteria для P0:
+
+**Карточка инцидента (`/incidents/:id`):**
+- `video_available=true` → два плеера (cam_front + cam_dms) синхронно
+- `video_available=false` → placeholder + `[Запросить архив]`
+- TelemetryChart: скорость из `track_points`, маркер t=0
+- Блок причины: [😴 Усталость] [📱 Телефон] [🚗 Подрезали] [⚙ Техн. сбой]
+- `[📹 Позвонить через камеру]` — три состояния: idle/connecting/active
+
+**Отчёт (`/report`) — killer feature Оздоева:**
+- Клик на строку нарушения → VideoPanel справа с правильным видео
+- `cam_dms_url` (ch5) для DMS-нарушений, `cam_front_url` (ch1) для ADAS
+- NL-запрос → подтверждение → дашборд (4 состояния)
+
+**Монитор (`/monitor`):**
+- Ролевой switcher: Логист (только телематика) / Диспетчер / Безопасник
+- Одна точка на `unit_id` (не на `AlarmId`) — дедупликация ТС
+
+### Enrichment (нет в реальных данных, mock обязателен):
+```python
+DRIVER_MOCK = {
+    # unit_id → driver info
+    # Пока: синтетически по госномеру
+}
+RISK_SCORE_FORMULA = "severity_weight * speed_factor * night_multiplier"
+```
