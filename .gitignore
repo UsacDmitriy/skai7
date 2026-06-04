@@ -8,6 +8,10 @@ datasets/**/*.mp4
 datasets/**/*.mov
 datasets/**/*.mkv
 
+# Frontend (web/)
+web/node_modules/
+web/dist/
+
 # Python
 __pycache__/
 *.pyc
