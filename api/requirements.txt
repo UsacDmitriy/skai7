@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+duckdb
+pydantic>=2
+pydantic-settings
+pandas
+pytest
+httpx        # для тестов TestClient
