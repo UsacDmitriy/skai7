@@ -38,19 +38,26 @@ def db() -> duckdb.DuckDBPyConnection:
 
 
 def _incident_with_downloaded_video(db: duckdb.DuckDBPyConnection) -> tuple[str, int]:
-    """(alarm_id, channel) для алярма со скачанным видео или skip."""
-    row = db.execute(
-        'SELECT vf."alarm_id", vf."channel" '
+    """(alarm_id, channel) для алярма, чей mp4 РЕАЛЬНО есть на диске, иначе skip.
+
+    Медиа (`datasets/media/`) gitignored → в свежем worktree файлов нет: проверяем
+    наличие через продакшн-хелпер `_resolve_media_path`, чтобы тест был переносим
+    (skip без медиа, а не падение).
+    """
+    from api.routers.incidents import _resolve_media_path
+
+    rows = db.execute(
+        'SELECT vf."alarm_id", vf."channel", vf."media_relative_path" '
         'FROM "video_events__video_files" vf '
         'JOIN v_incidents i ON i.id = vf."alarm_id" '
         "WHERE vf.\"media_relative_path\" IS NOT NULL "
         "  AND vf.\"download_status\" = 'downloaded' "
-        'ORDER BY vf."alarm_id", vf."channel" '
-        "LIMIT 1"
-    ).fetchone()
-    if row is None:
-        pytest.skip("Нет алярма со скачанным видео для happy-path.")
-    return str(row[0]), int(row[1])
+        'ORDER BY vf."alarm_id", vf."channel"'
+    ).fetchall()
+    for alarm_id, channel, rel_path in rows:
+        if _resolve_media_path(rel_path).is_file():
+            return str(alarm_id), int(channel)
+    pytest.skip("Нет mp4 на диске (datasets/media gitignored) — happy-path неприменим.")
 
 
 # ---------------------------------------------------------------------------
