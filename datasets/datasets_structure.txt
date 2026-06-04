@@ -1,0 +1,67 @@
+--- Datasets Logical Model ---
+
+1. video_events (primary set)
+   • selected_video_alarms.csv
+     - PK: alarm_id (TEXT)
+     - FK: unit_id → vehicles.unit_id
+     - Columns: dataset_vehicle_code, alarm_id, telemetry_id, terminal_id, unit_id, unit_name, unit_state_number, begin (TIMESTAMP), end (TIMESTAMP), type, speed (REAL), address, video_count, video_size_bytes, camera_ids (JSON), requested_camera_ids (JSON), latitude (REAL, nullable), longitude (REAL, nullable)
+   • video_files.csv
+     - PK: video_file_id (TEXT)
+     - FK: alarm_id → selected_video_alarms.alarm_id
+     - Columns: dataset_vehicle_code, alarm_id, telemetry_id, video_file_id, channel (INT), created_at_utc (TIMESTAMP), event_type, event_begin_utc, event_end_utc, unit_id, unit_name, unit_state_number, expected_size_from_alarm_bytes (INT), download_endpoint_attempted, local_path, download_status, size_bytes (INT), download_http_status (INT), content_type, server_filename, media_filename, media_relative_path, duration_seconds (REAL), video_width (INT), video_height (INT), video_codec
+   • vehicles.csv
+     - PK: dataset_vehicle_code (TEXT)
+     - Columns: dataset_vehicle_code, unit_id, unit_name, unit_state_number, alarm_count (INT), alarm_types (JSON), video_metadata_count (INT), downloaded_video_count (INT), track_window_count (INT), track_point_count (INT), total_track_mileage_km (REAL), downloaded_video_bytes (INT), downloaded_video_duration_seconds (REAL)
+   • track_summary.csv
+     - PK: alarm_id (TEXT)
+     - FK: alarm_id → selected_video_alarms.alarm_id
+     - Columns: alarm_id, dataset_vehicle_code, unit_id, unit_name, unit_state_number, event_type, event_begin_utc, event_end_utc, total_parking_duration (INT), total_movement_duration (INT), total_mileage_km (REAL), movement_mileage_km (REAL), movement_distance_navigation_km (REAL), break_distance_navigation_km (REAL), distance_odometer_km (REAL), track_period_count (INT), track_point_count (INT), max_speed_point_count (INT), raw_track_path
+   • track_periods.csv
+     - PK: (alarm_id, period_index)
+     - FK: alarm_id → track_summary.alarm_id
+     - Columns: alarm_id, dataset_vehicle_code, unit_id, event_type, period_index (INT), period_type, period_duration (INT), track_point_count (INT)
+   • track_points.csv
+     - PK: (alarm_id, point_index)
+     - FK: alarm_id → track_summary.alarm_id
+     - FK composite: (alarm_id, period_index) → track_periods(alarm_id, period_index)
+     - Columns: alarm_id, dataset_vehicle_code, unit_id, unit_state_number, event_type, event_begin_utc, period_index (INT), period_type, point_index (INT), timestamp_utc, latitude (REAL), longitude (REAL), speed_kmh (REAL), angle (REAL), course (REAL), ew (INT)
+   • max_speed_points.csv
+     - PK: (alarm_id, point_index)
+     - FK: alarm_id → selected_video_alarms.alarm_id
+     - Columns: alarm_id, dataset_vehicle_code, event_type, point_index (INT), timestamp_utc, latitude (REAL), longitude (REAL), speed_kmh (REAL), angle (REAL), course (REAL), ew (INT)
+   • work_rest_single_vehicle/* – таблицы с теми же структурами, префикс wr_ (selected_video_alarms → wr_selected_video_alarms и т.д.)
+
+2. fuel_reconciliation
+   • fuel_card_transactions.csv – PK: transaction_id (implicit unique row)
+   • fuel_events.csv – PK: event_id (implicit)
+   • fuel_vehicles.csv – PK: vehicle_id
+   • fuel_summary.csv – PK: summary_id (implicit)
+   • fuel_reconciliation.csv – PK: reconciliation_id (implicit)
+   Relationships: vehicle_id links across all tables; dates/timestamps are used to join transactions ↔ events ↔ reconciliation ↔ summary.
+
+3. sensor_diagnostics
+   • sensor_catalog.csv – PK: sensor_id
+   • sensor_targets.csv – PK: target_id (implicit)
+   • sensor_graph_points.csv – PK: (sensor_id, timestamp)
+   • sensor_graph_status.csv – PK: (sensor_id, timestamp)
+   • engine_statistics.csv, fuel_level_summary.csv, mileage_and_speed.csv, online_snapshot.csv, daily_mileage.csv – each keyed by sensor_id (and timestamp where applicable).
+   Relationships: sensor_id → all other sensor_* tables.
+
+4. navigation_problem_tracks
+   • navigation_problem_vehicles.csv – PK: vehicle_id
+   • track_points.csv – PK: (track_id, point_index)
+   • track_periods.csv – PK: (track_id, period_index)
+   • track_fetch_status.csv – PK: track_id
+   • problem_track_period_stats.csv – PK: track_id
+   • problem_track_daily_stats.csv – PK: track_id
+   Relationships: vehicle_id → track_id; track_id → periods → points.
+
+5. reference
+   • vehicle_matches.csv – PK: match_id (implicit)
+   • vehicle_match_candidates.csv – PK: candidate_id (implicit)
+   • zis_legacy_matches.csv – PK: legacy_id (implicit)
+   All contain fields linking to vehicles.dataset_vehicle_code.
+
+6. manifest.csv – describes which datasets are present and row counts.
+
+--- End of Model ---

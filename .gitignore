@@ -1,7 +1,12 @@
 # Data & generated output
-datasets/
 output/
-datasets/ready/sensor_diagnostics/*
+data/skai.duckdb
+
+# Datasets: track lightweight data, exclude only heavy binary media
+datasets/media/
+datasets/**/*.mp4
+datasets/**/*.mov
+datasets/**/*.mkv
 
 # Python
 __pycache__/
