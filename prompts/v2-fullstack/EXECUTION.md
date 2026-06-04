@@ -84,6 +84,7 @@ integration (x1/x2), поэтому в параллельной фазе их н
 | W3-2 | [`wave-3-backlog/w3-2-diagnostic-source-data.md`](wave-3-backlog/w3-2-diagnostic-source-data.md) — данные для `Source=DIAGNOSTIC`: значение объявлено в §3.1, но в `data/analysis/alarm_types.json` нет строки с `source:"DIAGNOSTIC"` → бейдж «⚙ Диагностика» (макет 07) ни на чём не срабатывает. | b1 / данные | `00-CONTRACT.md` §3.1 (changelog #1) vs `alarm_type_catalog` (14 строк) | Низкий (демо-опционально) |
 | W3-3 | [`wave-3-backlog/w3-3-backend-unit-coverage.md`](wave-3-backlog/w3-3-backend-unit-coverage.md) — backend unit-покрытие **всех** модулей `b1–b13` (дозакрытие t1: b1/b3/b4/b5/b6/b8/b9/b11/b12/b13), гейт `api/` ≥ 85%. | T / tests | по промптам `b1–b13` + `00-CONTRACT.md` §1–§3/§7.5 | Высокий (качество релиза) |
 | W3-4 | [`wave-3-backlog/w3-4-frontend-unit-coverage.md`](wave-3-backlog/w3-4-frontend-unit-coverage.md) — frontend unit/компонентное покрытие `d3–d5`, `f5–f13` (дозакрытие t3), гейт `web/src` ≥ 80%. | T / tests | по промптам `d3–d5`/`f5–f13` + §3.1/§4/§7.5 | Высокий (качество релиза) |
+| W3-5 | [`wave-3-backlog/w3-5-no-video-incident-reachable.md`](wave-3-backlog/w3-5-no-video-incident-reachable.md) — no-video инцидент достижим в живых данных: `v_incidents.video_available` всегда `1` (источник — только видео-алярмы), поэтому UI-ветка «нет видео» + «Запросить архив» + `sensor_active_after_sec` (§2) мертва. Выявлено smoke x3. | b3 / данные (+T) | Средний (закрывает мёртвую P0-ветку) |
 
 > Закрытый аудитом дефект Волны 1 (b2 `_SPEED_LIMIT_TABLE` на legacy-кодах) исправлен в рамках Волны 1
 > (ветка `feat/backend`, fix(b2)) и в бэклог не выносится.
@@ -175,17 +176,17 @@ flowchart TD
     BR2["🏁 БАРЬЕР 2 — ФИНАЛЬНЫЙ e2e<br/>(окно skai_7, integration)<br/>merge волны 2 → x2 → x3 → x4-e2e-p1p2 → merge в main"]
     W2 --> BR2
 
-    subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг — макс. параллельно"]
+    subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг — окна 1 и 3 параллельно"]
         direction LR
-        subgraph B3["🪟 Окно 1 · backend (feat/backend)"]
+        subgraph B3["🪟 Окно 1 · backend (feat/backend) — api/, data/"]
             direction TB
-            w31["w3-1 b13/Ticket — enum Status, deadline/is_overdue"]
-            w32["w3-2 DIAGNOSTIC — данные source=DIAGNOSTIC"]
+            w31["w3-1 b13-ticket-sync"]
+            w32["w3-2 diagnostic-source-data"]
         end
-        subgraph T3["🪟 Окно 3 · tests (feat/tests, Claude Code)"]
+        subgraph T3["🪟 Окно 3 · tests (feat/tests, Claude Code) — api/tests, vitest"]
             direction TB
-            w33["w3-3 backend unit — b1–b13 (дозакрытие t1)"]
-            w34["w3-4 frontend unit — d3–d5/f5–f13 (дозакрытие t3)"]
+            w33["w3-3 backend-unit-coverage"]
+            w34["w3-4 frontend-unit-coverage"]
         end
     end
 
