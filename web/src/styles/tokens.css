@@ -1,0 +1,54 @@
+/**
+ * SKAI Online — CSS-переменные и утилиты.
+ * Дублируют палитру Tailwind для использования ВНЕ классов Tailwind
+ * (инлайн-стили, градиенты, сторонние библиотеки: Recharts, Leaflet).
+ *
+ * Источник истины: 00-CONTRACT.md §4 + init/context/DESIGN.md.
+ *
+ * Шрифт Inter подключается через Google Fonts (вариант по умолчанию).
+ * Альтернатива при оффлайн-сборке: установить `@fontsource/inter` и
+ * заменить @import ниже на `import '@fontsource/inter'` в точке входа.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Базовая палитра */
+  --color-primary: #1e3a8a;
+  --color-primary-dark: #1e3070;
+  --color-primary-50: #eff6ff;
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+
+  /* Severity: critical */
+  --sev-critical: #dc2626;
+  --sev-critical-bg: #fee2e2;
+  --sev-critical-text: #991b1b;
+
+  /* Severity: high */
+  --sev-high: #ea580c;
+  --sev-high-bg: #fef3c7;
+  --sev-high-text: #b45309;
+
+  /* Severity: warning (API severity = medium) */
+  --sev-warning: #eab308;
+  --sev-warning-bg: #fef9c3;
+  --sev-warning-text: #854d0e;
+
+  /* Severity: ok (API severity = low) */
+  --sev-ok: #16a34a;
+  --sev-ok-bg: #dcfce7;
+  --sev-ok-text: #166534;
+}
+
+/* Заливка score-bar: зелёный → жёлтый → красный */
+.score-bar-fill {
+  background: linear-gradient(90deg, #16a34a 0%, #eab308 50%, #dc2626 100%);
+}
+
+/* Табличные цифры (выравнивание чисел в таблицах/счётчиках) */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
