@@ -2,11 +2,13 @@ from __future__ import annotations
 
 """Модуль загрузки CSV и сохранения действий диспетчера."""
 
+import logging
 from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
-import streamlit as st
+
+logger = logging.getLogger(__name__)
 
 CITY_COORDS = {
     "москва": (55.7558, 37.6173),
@@ -70,7 +72,6 @@ def _enrich_coordinates(df: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
-@st.cache_data
 def load_csv_files(data_dir: Path) -> dict[str, pd.DataFrame]:
     """Читает все CSV из data_dir. Возвращает {имя_файла: DataFrame}."""
     data_dir.mkdir(parents=True, exist_ok=True)
@@ -86,7 +87,7 @@ def load_csv_files(data_dir: Path) -> dict[str, pd.DataFrame]:
                 df = _enrich_coordinates(df)
             datasets[key] = df
         except Exception as e:
-            st.warning(f"Ошибка загрузки {key}: {e}")
+            logger.warning("Ошибка загрузки %s: %s", key, e)
 
     return datasets
 

@@ -1,6 +1,6 @@
 # Video events dataset
 
-Prepared for hackathon cases that combine video-alarm events with nearby telemetry tracks.
+Prepared for product cases that combine video-alarm events with nearby telemetry tracks.
 
 ## Source period
 

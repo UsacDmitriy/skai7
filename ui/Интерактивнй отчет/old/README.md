@@ -16,7 +16,7 @@
 ## Связанные промпты
 
 - Дизайн: `design-prompts/claude-design/05-idea2-interactive-report.md`
-- Код: `prompts/hackathon/wave-03-screens/P2-03D-analytics-screen--kimi-k2.6.md`
+- Код: `prompts/waves/wave-03-screens/P2-03D-analytics-screen.md`
 
 ## Идея
 

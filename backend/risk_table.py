@@ -6,7 +6,7 @@ __all__ = [
     "get_incident_report",
 ]
 
-"""Модуль риск-таблицы для Details-вкладки Streamlit-приложения SKAI Unified Incident Window."""
+"""Модуль риск-таблицы SKAI Unified Incident Window."""
 
 import pandas as pd
 

@@ -1,6 +1,6 @@
 # Идея #1 (P0) — Единое окно инцидента
 
-> Приоритет: **#1 из 2**. Главное что нужно показать на демо.
+> Приоритет: **#1 из 2**. Ключевой сценарий продукта.
 > Экраны: 3 (с видео) + 4 (без видео)
 
 ## Суть
@@ -44,10 +44,10 @@ CAM-03 offline → placeholder с объяснением → кнопка «За
 
 ## Dev-промпты
 
-- `prompts/hackathon/wave-03-screens/P3-03B-incident-card--kimi-k2.6.md` (P0)
-- `prompts/hackathon/wave-02-components/02A-idea1-IncidentCard--qwen3.md`
-- `prompts/hackathon/wave-02-components/02B-idea1-VideoPanel--qwen3.md`
-- `prompts/hackathon/wave-02-components/02C-idea1-TelemetryChart--qwen3.md`
+- `prompts/waves/wave-03-screens/P3-03B-incident-card.md` (P0)
+- `prompts/waves/wave-02-components/02A-idea1-IncidentCard.md`
+- `prompts/waves/wave-02-components/02B-idea1-VideoPanel.md`
+- `prompts/waves/wave-02-components/02C-idea1-TelemetryChart.md`
 
 ## Три доп. функции из интервью
 

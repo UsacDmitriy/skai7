@@ -1,6 +1,6 @@
 # Идея #2 (P0) — Интерактивный аналитический отчёт
 
-> Приоритет: **#2 из 2**. Второе по важности для демо — после единого окна.
+> Приоритет: **#2 из 2**. Второе по важности — после единого окна.
 > Экран: 5 (Диалог аналитики)
 
 ## Суть
@@ -23,10 +23,10 @@
 ## Технологии
 
 - **STT:** faster-whisper large-v3 — локально, open-source, RU 🇷🇺 / KK 🇰🇿 / EN 🇬🇧
-- **NLU:** Groq API + LLaMA 3.3 70B — бесплатный тариф, 300+ токенов/сек
-- **NLU offline:** Ollama + LLaMA 3.1 8B
+- **NLU:** LLM — текст → структурированный запрос
+- **NLU offline:** локальная LLM
 
-Пайплайн: 🎤 → faster-whisper → текст → Groq+LLaMA → ParsedQuery → подтверждение → отчёт
+Пайплайн: 🎤 → faster-whisper → текст → LLM → ParsedQuery → подтверждение → отчёт
 
 ## Поток
 
@@ -68,6 +68,6 @@
 
 ## Dev-промпты
 
-- `prompts/hackathon/wave-01-foundation/01F-driver-report-mock--qwen3.md`
-- `prompts/hackathon/wave-02-components/02E-idea2-analytics-components--qwen3.md` (11 компонентов)
-- `prompts/hackathon/wave-03-screens/P2-03D-analytics-screen--kimi-k2.6.md` (P0)
+- `prompts/waves/wave-01-foundation/01F-driver-report-mock.md`
+- `prompts/waves/wave-02-components/02E-idea2-analytics-components.md` (11 компонентов)
+- `prompts/waves/wave-03-screens/P2-03D-analytics-screen.md` (P0)

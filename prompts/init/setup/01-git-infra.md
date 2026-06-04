@@ -9,7 +9,7 @@
 - Проверь remote-репозиторий: `git remote -v`
 - Получи последние изменения: `git fetch origin`
 - Выполни `git status`, чтобы понять текущее состояние.
-- Создай feature-ветку: `git checkout -b hackathon/streamlit-mvp`
+- Создай feature-ветку: `git checkout -b feature/streamlit-mvp`
 - Если есть незакоммиченные изменения — закоммить их в новой ветке.
 
 ## 2. Структура проекта
@@ -18,15 +18,16 @@
 
 ```
 05_video_telematics_single_window/
-├── app/               # Модули Streamlit (app.py, pages/, utils/)
+├── backend/           # Модули Streamlit (app.py, pages/, utils/)
 ├── data/              # CSV-файлы (уже существуют — не изменять)
 ├── sample_data/       # Демо-CSV (уже существуют — не изменять)
 ├── output/            # Сгенерированные отчеты (создать mkdir, если нет)
+├── run.py             # Точка запуска приложения
 ├── requirements.txt   # Зависимости Python
 └── README.md          # Инструкция по запуску
 ```
 
-Создай недостающие директории (`app/`, `output/`) и базовые файлы (`requirements.txt`, `README.md`), только если они отсутствуют.
+Создай недостающие директории (`backend/`, `output/`) и базовые файлы (`run.py`, `requirements.txt`, `README.md`), только если они отсутствуют.
 
 ## 3. `.gitignore`
 
@@ -69,15 +70,15 @@ pandas>=2.0.0
 
 ## 7. Проверка запуска
 
-Убедись, что `streamlit run app/app.py` стартует (даже с заглушкой-плейсхолдером).
+Убедись, что `python run.py` стартует (даже с заглушкой-плейсхолдером).
 
-Минимальный `app/app.py`:
+Минимальный `backend/app.py`:
 
 ```python
 import streamlit as st
 
 st.set_page_config(page_title="Единое окно видео и телематики", layout="wide")
-st.title("SKAI Hackathon: Единое окно видео и телематики")
+st.title("SKAI: Единое окно видео и телематики")
 st.write("MVP готова к наполнению.")
 ```
 
@@ -89,4 +90,4 @@ st.write("MVP готова к наполнению.")
 
 ## Результат
 
-Чистый `git status` на ветке `hackathon/streamlit-mvp`, готовое виртуальное окружение, `streamlit run app/app.py` стартует без ошибок.
+Чистый `git status` на ветке `feature/streamlit-mvp`, готовое виртуальное окружение, `python run.py` стартует без ошибок.

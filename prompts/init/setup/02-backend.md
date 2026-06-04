@@ -2,15 +2,15 @@
 
 Задача: настроить слой данных для Streamlit-приложения — **НЕ** FastAPI-сервер, а Python-модули для загрузки CSV, моделей и сохранения действий.
 
-Рабочая директория: `05_video_telematics_single_window/` (или корень проекта, где лежит `app/`).
+Рабочая директория: `05_video_telematics_single_window/` (или корень проекта, где лежит `backend/`).
 
 ---
 
 ## 1. Пакетная структура
 
-Убедись, что `app/__init__.py` существует (пустой файл), чтобы Python видел пакет.
+Убедись, что `backend/__init__.py` существует (пустой файл), чтобы Python видел пакет.
 
-## 2. Модуль `app/data_loader.py`
+## 2. Модуль `backend/data_loader.py`
 
 Проверь, что модуль содержит две функции:
 
@@ -28,7 +28,7 @@
 - Создаёт директорию и файл при первом вызове.
 - При повторном вызове дописывает без перезаписи заголовка.
 
-## 3. Модуль `app/models.py`
+## 3. Модуль `backend/models.py`
 
 Создай (или проверь) модуль с датаклассами, описывающими предметную область. Используй `dataclasses.dataclass`:
 
@@ -105,7 +105,7 @@ class Action:
 cd 05_video_telematics_single_window
 python -c "
 from pathlib import Path
-from app.data_loader import load_csv_files
+from backend.data_loader import load_csv_files
 ds = load_csv_files(Path('data'))
 print(f'Loaded {len(ds)} datasets, {sum(len(d) for d in ds.values())} total rows')
 for name, df in sorted(ds.items()):
@@ -120,7 +120,7 @@ for name, df in sorted(ds.items()):
 ```bash
 python -c "
 from pathlib import Path
-from app.data_loader import save_action
+from backend.data_loader import save_action
 save_action(Path('output'), 'test-001', 'mark_reviewed', 'Test comment')
 print('Action saved')
 "
@@ -130,12 +130,12 @@ print('Action saved')
 
 ## 6. Чек-лист успешного выполнения
 
-- [ ] `app/__init__.py` существует (пустой)
-- [ ] `app/data_loader.py` содержит `load_csv_files()` и `save_action()`
-- [ ] `app/models.py` содержит все 7 датаклассов
+- [ ] `backend/__init__.py` существует (пустой)
+- [ ] `backend/data_loader.py` содержит `load_csv_files()` и `save_action()`
+- [ ] `backend/models.py` содержит все 7 датаклассов
 - [ ] Тест загрузки показывает 7+ датасетов и 7000+ строк
 - [ ] Тест сохранения создаёт `output/actions.csv`
-- [ ] Импорты внутри `app/` используют относительные пути (`.data_loader`, `.models`, `.constants`)
+- [ ] Импорты внутри `backend/` используют относительные пути (`.data_loader`, `.models`, `.constants`)
 
 ## Примечания
 

@@ -1,30 +1,18 @@
-.PHONY: help install run dev clean lint test
+.PHONY: help install clean lint test
 
 PYTHON := .venv/bin/python
-STREAMLIT := .venv/bin/streamlit
 PIP := .venv/bin/pip
 
-APP_ENTRY := run.py
-APP_PORT := 8501
+help: ## Показать список команд
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
 
-stop: ## Убить процесс на порту $(APP_PORT)
-	@echo "==> Ищем процесс на порту $(APP_PORT)..."
-	@lsof -ti:$(APP_PORT) | xargs kill -9 2>/dev/null || true
-	@echo "==> Процесс остановлен."
+install: ## Установить зависимости
+	$(PIP) install -r requirements.txt
 
-run: stop ## Запустить Streamlit (production mode, убивает старый процесс)
-	@echo "==> Запуск SKAI Единое окно на http://localhost:$(APP_PORT)"
-	$(STREAMLIT) run $(APP_ENTRY) --server.port=$(APP_PORT) --server.headless=true
-
-dev: stop ## Запустить Streamlit в dev-режиме (auto-reload, убивает старый процесс)
-	@echo "==> Запуск SKAI в dev-режиме на http://localhost:$(APP_PORT)"
-	$(STREAMLIT) run $(APP_ENTRY) --server.port=$(APP_PORT) --server.runOnSave=true --server.fileWatcherType=poll
-
-clean: ## Очистить кеш Streamlit и __pycache__
+clean: ## Очистить кеш и __pycache__
 	@echo "==> Очистка кеша..."
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
-	rm -rf .streamlit/cache 2>/dev/null || true
 	@echo "==> Кеш очищен."
 
 lint: ## Проверить код ruff (если установлен)

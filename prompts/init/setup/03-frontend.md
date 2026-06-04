@@ -9,7 +9,7 @@
 Файл `app/app.py` должен содержать:
 
 ```python
-st.set_page_config(page_title="SKAI Hackathon MVP", layout="wide")
+st.set_page_config(page_title="SKAI", layout="wide")
 ```
 
 Три вкладки в `st.tabs`:
@@ -36,7 +36,7 @@ st.set_page_config(page_title="SKAI Hackathon MVP", layout="wide")
 - `ALARM_TYPE_LABELS` — русские метки типов алармов (Drowsiness → Засыпание, и т.д.).
 - `ACTION_TYPES` — список: `["mark_reviewed", "create_task", "export_report"]`.
 - `ACTION_LABELS` — русские подписи к типам действий.
-- `PAGE_TITLE = "SKAI Hackathon MVP"`.
+- `PAGE_TITLE = "SKAI"`.
 - `PAGE_ICON = "SKAI"`.
 - `LAYOUT = "wide"`.
 - `RISK_THRESHOLD = 70`.

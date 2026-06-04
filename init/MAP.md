@@ -1,7 +1,6 @@
 # КАРТА ПРОДУКТА — SKAI Unified Incident Window
 
 > Один документ: все идеи, все промпты, все данные, последовательность.
-> Команда 7, Тема 5. Хакатон 21 мая 2026.
 
 ---
 
@@ -33,9 +32,9 @@
 
 | Тип | Файл |
 |-----|------|
-| 💡 Идея | `hackathon/ideas/01-idea-unified-window.md` + `09-role-based-map.md` |
+| 💡 Идея | `init/ideas/01-idea-unified-window.md` + `09-role-based-map.md` |
 | 🎨 Claude Design | `design-prompts/claude-design/01-events-feed.md` |
-| ⚙️ Dev | `prompts/hackathon/wave-03-screens/P4-03A-events-feed--qwen3.md` |
+| ⚙️ Dev | `prompts/waves/wave-03-screens/P4-03A-events-feed.md` |
 | 📦 Mock | `data/mock/incidents.json` · `data/mock/events-feed.json` |
 
 ---
@@ -51,7 +50,7 @@
 | Тип | Файл |
 |-----|------|
 | 🎨 Claude Design | `design-prompts/claude-design/02-live-monitor.md` |
-| ⚙️ Dev | `prompts/hackathon/wave-03-screens/P1-03E-live-monitor--kimi-k2.6.md` |
+| ⚙️ Dev | `prompts/waves/wave-03-screens/P1-03E-live-monitor.md` |
 | 📦 Mock | `data/mock/incidents.json` · `data/mock/live-monitor.json` · `data/mock/vehicles.json` |
 
 ---
@@ -68,9 +67,9 @@
 
 | Тип | Файл |
 |-----|------|
-| 💡 Идея | `hackathon/ideas/01-idea-unified-window.md` |
+| 💡 Идея | `init/ideas/01-idea-unified-window.md` |
 | 🎨 Claude Design | `design-prompts/claude-design/03-idea1-incident-video.md` |
-| ⚙️ Dev (экран) | `prompts/hackathon/wave-03-screens/P3-03B-incident-card--kimi-k2.6.md` |
+| ⚙️ Dev (экран) | `prompts/waves/wave-03-screens/P3-03B-incident-card.md` |
 | ⚙️ Dev (компоненты) | `02A-idea1-IncidentCard` · `02B-idea1-VideoPanel` · `02C-idea1-TelemetryChart` · `02D-idea1-ActionButtons` · `02F` · `02G` · `02H` |
 | 📦 Mock | `data/mock/incidents.json` · `data/mock/incident-video.json` |
 
@@ -86,9 +85,9 @@
 
 | Тип | Файл |
 |-----|------|
-| 💡 Идея | `hackathon/ideas/01-idea-unified-window.md` |
+| 💡 Идея | `init/ideas/01-idea-unified-window.md` |
 | 🎨 Claude Design | `design-prompts/claude-design/04-idea1-incident-no-video.md` |
-| ⚙️ Dev (экран) | `prompts/hackathon/wave-03-screens/P3-03B-incident-card--kimi-k2.6.md` |
+| ⚙️ Dev (экран) | `prompts/waves/wave-03-screens/P3-03B-incident-card.md` |
 | 📦 Mock | `data/mock/incidents.json` · `data/mock/incident-no-video.json` |
 
 ---
@@ -107,10 +106,10 @@
 
 | Тип | Файл |
 |-----|------|
-| 💡 Идея | `hackathon/ideas/02-idea-interactive-report.md` |
+| 💡 Идея | `init/ideas/02-idea-interactive-report.md` |
 | 🎨 Claude Design | `design-prompts/claude-design/05-idea2-interactive-report.md` |
-| ⚙️ Dev (экран) | `prompts/hackathon/wave-03-screens/P2-03D-analytics-screen--kimi-k2.6.md` |
-| ⚙️ Dev (компоненты) | `02E-idea2-analytics-components--qwen3.md` (13 компонентов) |
+| ⚙️ Dev (экран) | `prompts/waves/wave-03-screens/P2-03D-analytics-screen.md` |
+| ⚙️ Dev (компоненты) | `02E-idea2-analytics-components.md` (13 компонентов) |
 | 📦 Mock В-1 | `data/mock/driver-report.json` — Иванов, 7 нарушений, 487 км |
 | 📦 Mock В-2 | `data/mock/fleet.json` · (нужно создать: fleet-report.json, fleet-vehicles.json) |
 
@@ -126,7 +125,7 @@
 
 | Тип | Файл |
 |-----|------|
-| 💡 Идея | `hackathon/ideas/08-camera-sabotage.md` |
+| 💡 Идея | `init/ideas/08-camera-sabotage.md` |
 | 🎨 Claude Design | `design-prompts/claude-design/06-dispatch-alert-plus.md` |
 | 📦 Mock | `data/mock/dispatch-alert.json` |
 
@@ -137,17 +136,17 @@
 | Тип | Файл |
 |-----|------|
 | 🎨 Claude Design | `design-prompts/claude-design/07-tickets-screen.md` |
-| ⚙️ Dev | `prompts/hackathon/wave-05-polish/05A-tickets-table--qwen3.md` · `05B-tickets-screen--qwen3.md` |
+| ⚙️ Dev | `prompts/waves/wave-05-polish/05A-tickets-table.md` · `05B-tickets-screen.md` |
 | 📦 Mock | `data/mock/tickets.json` |
 
 ---
 
 ### Экран 7 — Видеодосье рейса [P1]
-**Источник:** Бриф организаторов хакатона (сценарий Т+В)
+**Источник:** Бриф организаторов (сценарий Т+В)
 
 | Тип | Файл |
 |-----|------|
-| 💡 Идея | `hackathon/ideas/09-role-based-map.md` |
+| 💡 Идея | `init/ideas/09-role-based-map.md` |
 | 🎨 Claude Design | `design-prompts/claude-design/08-trip-dossier.md` |
 | 📦 Mock | `data/mock/trip-dossier.json` |
 
@@ -158,7 +157,7 @@
 
 | Тип | Файл |
 |-----|------|
-| 💡 Идея | `hackathon/ideas/04-competitors-analysis.md` |
+| 💡 Идея | `init/ideas/04-competitors-analysis.md` |
 | 🎨 Claude Design | `design-prompts/claude-design/09-reb-route-recovery.md` |
 | 📦 Mock | `data/mock/reb-route.json` |
 
@@ -168,24 +167,24 @@
 
 | Идея | Источник | Файл идеи | Что нужно |
 |------|----------|-----------|-----------|
-| Детекция саботажа камеры | Фомин (PepsiCo) | `hackathon/ideas/08-camera-sabotage.md` | Создать `design-prompts/claude-design/ (промпт не создан)` |
-| Карта по ролям (полная) | Маслов (Балтика) | `hackathon/ideas/09-role-based-map.md` | Расширить 01/02 или создать `11-role-map.md` |
+| Детекция саботажа камеры | Фомин (PepsiCo) | `init/ideas/08-camera-sabotage.md` | Создать `design-prompts/claude-design/ (промпт не создан)` |
+| Карта по ролям (полная) | Маслов (Балтика) | `init/ideas/09-role-based-map.md` | Расширить 01/02 или создать `11-role-map.md` |
 
 ---
 
 ## ПОСЛЕДОВАТЕЛЬНОСТЬ РАЗРАБОТКИ
 
 ```
-ЧАС 0   Все читают: AGENTS.md + hackathon/ideas/01 + 02
+ШАГ 0   Все читают: AGENTS.md + init/ideas/01 + 02
 
-ЧАС 1   ПАРАЛЛЕЛЬНО — Wave 1 (Foundation):
+ШАГ 1   ПАРАЛЛЕЛЬНО — Wave 1 (Foundation):
          01A types       01B constants    01C incidents.json
          01D vehicles    01E app shell
          01F-A driver-report.json         (Идея #2 В-1)
          01F-B fleet-reports.json         (Идея #2 В-2, нужно создать)
          01F-C presets + types
 
-ЧАС 2   ПАРАЛЛЕЛЬНО — три потока:
+ШАГ 2   ПАРАЛЛЕЛЬНО — три потока:
 
   ПОТОК 1 — Экран 1:
     03A EventFeedScreen       03E LiveMonitorScreen
@@ -203,18 +202,18 @@
       FleetDriversList · FleetBarChart · FleetMap
       DriverMiniDashboard · FleetVehiclesList · VehicleMiniDashboard
 
-ЧАС 3   ПАРАЛЛЕЛЬНО — экраны P0:
+ШАГ 3   ПАРАЛЛЕЛЬНО — экраны P0:
   ПОТОК 2: 03B UnifiedIncidentWindow  (зависит от 02A-H)
   ПОТОК 3: 03D AnalyticsScreen        (зависит от 02E, 01F)
 
-ЧАС 4   04-wire-routing (сходятся все потоки)
+ШАГ 4   04-wire-routing (сходятся все потоки)
          Маршруты: / · /monitor · /incident/:id · /analytics
 
-ЧАС 5   ПАРАЛЛЕЛЬНО — полировка:
+ШАГ 5   ПАРАЛЛЕЛЬНО — полировка:
          05A tickets-table    05B tickets-screen
          05C smoke-checklist  05D demo-script
 
-ЧАС 5+  Демо по 05D-demo-script--gpt-oss.md:
+ШАГ 6   Демо по 05D-demo-script.md:
          Flow 1: inc-002 → видео + телеметрия + [Создать заявку]
          Flow 2: inc-003 → нет видео → [Запросить архив]
          Flow 3: голос «Нарушения Иванова за 3 дня» → подтверждение → отчёт
@@ -233,8 +232,8 @@
 | `sensor_catalog.csv` | 627 датчиков: id, имя, группа, единицы | Выбор датчиков |
 | `reference/*.csv` | Сопоставление id машин между системами | Соединение данных |
 | `training/` | 94 MP4 (728 сек) | Видеоплееры |
-| `fuel_reconciliation/` | Топливная сверка (30 строк) | Не для темы 5 |
-| `navigation_problem_tracks/` | Проблемные треки | Не для темы 5 |
+| `fuel_reconciliation/` | Топливная сверка (30 строк) | Не для основного сценария |
+| `navigation_problem_tracks/` | Проблемные треки | Не для основного сценария |
 
 > ⚠️ data/mock/*.json — ПРИМЕРЫ, не соответствующие реальной структуре CSV. НЕ использовать.
 
@@ -250,6 +249,6 @@
 | MP4 для плеера | 2-4 ролика (каналы 1 и 5) |
 | Период | 14-15.05.2026 (видео) / 04-10.05.2026 (датчики/треки) |
 | STT | faster-whisper large-v3 (open-source, RU 🇷🇺 / KK 🇰🇿 / EN 🇬🇧) |
-| NLU | Groq API + LLaMA 3.3 70B |
+| NLU | LLM (текст → структурированный запрос) |
 | Primary color | #1E3A8A |
 | Font | Inter |

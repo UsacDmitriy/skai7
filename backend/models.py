@@ -1,4 +1,4 @@
-"""Модели данных для SKAI Hackathon MVP — dataclass-описания CSV-структур."""
+"""Модели данных для SKAI — dataclass-описания CSV-структур."""
 
 from __future__ import annotations
 

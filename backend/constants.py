@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Константы для SKAI Hackathon — единое окно видео и телематики."""
+"""Константы для SKAI — единое окно видео и телематики."""
 
 __all__ = [
     "COLORS",
@@ -13,9 +13,7 @@ __all__ = [
     "ACTION_LABELS",
     "STATUS_LABELS",
     "SOURCE_LABELS",
-    "PAGE_TITLE",
-    "PAGE_ICON",
-    "LAYOUT",
+    "APP_TITLE",
     "CHART_HEIGHT",
 ]
 
@@ -124,8 +122,6 @@ SOURCE_LABELS = {
     "COMBINED": "⚡📹 Оба",
 }
 
-PAGE_TITLE = "SKAI — Единое окно видео и телематики"
-PAGE_ICON = "SKAI"
-LAYOUT = "wide"
+APP_TITLE = "SKAI — Единое окно видео и телематики"
 
 CHART_HEIGHT = 320

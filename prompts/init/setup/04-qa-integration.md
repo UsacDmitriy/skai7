@@ -18,7 +18,7 @@ mkdir -p 05_video_telematics_single_window/tests
 
 ```python
 from pathlib import Path
-from app.data_loader import load_csv_files, save_action
+from backend.data_loader import load_csv_files, save_action
 
 
 def test_load_csv_files():
@@ -41,7 +41,7 @@ def test_save_action(tmp_path):
 
 ```python
 import pandas as pd
-from app.metrics import build_dashboard_metrics
+from backend.metrics import build_dashboard_metrics
 
 
 def test_build_dashboard_metrics():
@@ -75,11 +75,11 @@ python -m pytest tests/ -v
 ```bash
 #!/bin/bash
 echo "=== Smoke Test SKAI MVP ==="
-python -c "from app.data_loader import load_csv_files; ds = load_csv_files('data'); print(f'OK: {len(ds)} datasets loaded')"
-python -c "from app.metrics import build_dashboard_metrics; print('OK: metrics module')"
-python -c "from app.charts import build_scatter_chart; print('OK: charts module')"
-python -c "from app.risk_table import render_risk_table; print('OK: risk table module')"
-python -c "from app.actions import render_action_form; print('OK: actions module')"
+python -c "from backend.data_loader import load_csv_files; ds = load_csv_files('data'); print(f'OK: {len(ds)} datasets loaded')"
+python -c "from backend.metrics import build_dashboard_metrics; print('OK: metrics module')"
+python -c "from backend.charts import build_scatter_chart; print('OK: charts module')"
+python -c "from backend.risk_table import render_risk_table; print('OK: risk table module')"
+python -c "from backend.actions import render_action_form; print('OK: actions module')"
 echo "=== ALL SMOKE TESTS PASSED ==="
 ```
 

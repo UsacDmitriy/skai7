@@ -4,7 +4,7 @@
 
 Сделать MVP интерфейса, который показывает ценность объединения телематики и видео в одном окне: событие, трек, контекст, медиа-доказательство и быстрое действие.
 
-Строим рабочий оффлайн-прототип за 8 часов. Не оверинжинирить.
+Строим рабочий оффлайн-прототип. Не оверинжинирить.
 
 ## Inputs
 
@@ -64,41 +64,21 @@
 
 ## AI Tooling & Model Policy
 
-Use Cherry Studio + OpenRouter as the default AI access layer.
+Ограничений на модели нет — используйте наиболее способные доступные модели
+(например, Claude Opus). Параллельный запуск нескольких агентов разрешён.
 
-Recommended models:
-- Kimi K2.5 - default model for coding and code-agent work.
-- Devstral - backup model for coding if Kimi gets stuck.
-- Qwen - product analysis, requirements, decomposition, metrics, demo script.
-- gpt-oss / OSS/free models - drafts, quick ideas, rewriting, simple explanations.
+Контекстная гигиена (по-прежнему полезна):
 
-Do not use expensive models as the default.
-Do not use Gemini for this hackathon setup.
-Do not run multiple code agents in parallel on the same team API key unless explicitly approved.
-
-Model usage rule:
-- Simple code edits: use gpt-oss/free or a cheap model first.
-- Main coding: use Kimi K2.5.
-- If Kimi fails: try Devstral.
-- Product/analytics work: use Qwen.
-- If a single request becomes expensive or too slow, stop and reduce context.
-
-## Cost & Context Rules
-
-- Team budget is limited: target roughly $40-50 total AI spend per team.
-- Do not use expensive models for continuous repository scanning.
-- Do not paste entire repositories, large CSV files, raw media, or generated outputs into the model context.
-- Read only the files needed for the current step; summarize findings before opening more context.
-- Prefer small prompts with concrete tasks: one bug, one screen, one rule, one CSV transform.
-- Stop long agent loops early. If the agent is guessing, reduce scope and provide the exact file/function.
-- Keep raw data local. Do not upload private datapacks, tokens, keys, or production-like secrets to AI tools.
+- Не вставляйте в контекст целые репозитории, большие CSV, сырые медиа или сгенерированный вывод без нужды.
+- Читайте только файлы, нужные для текущего шага; резюмируйте перед открытием нового контекста.
+- Предпочитайте конкретные задачи: один баг, один экран, одно правило, один CSV-трансформ.
+- Держите сырые данные локально. Не загружайте приватные датапаки, токены, ключи и секреты во внешние сервисы.
 
 ## Implementation Constraints
 
-- Build an 8-hour MVP, not a production system.
-- Keep the default stack simple: Python 3.12 + Streamlit unless the team deliberately accepts another stack as-is.
+- Keep the default stack simple: Python 3.12 unless a different stack is deliberately accepted as-is.
 - Work offline by default: local CSV files and local media folders.
-- Do not integrate with real SKAI production services in the MVP.
-- Do not call CRUD/action APIs against real systems unless explicitly approved by organizers.
+- Do not integrate with real SKAI production services in the prototype.
+- Do not call CRUD/action APIs against real systems unless explicitly approved.
 - Avoid microservices, Kubernetes, complex queues, custom auth, background workers, and platform rewrites.
-- Prioritize two working user flows, explainable logic, a value metric, and a demo-ready action saved to `output/`.
+- Prioritize working user flows, explainable logic, a value metric, and an action saved to `output/`.
