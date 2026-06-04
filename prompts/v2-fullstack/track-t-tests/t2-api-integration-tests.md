@@ -1,6 +1,6 @@
 # T2 · API интеграционные тесты (pytest + TestClient)
 
-> Codex-task. Против `00-CONTRACT.md` §3 (эндпоинты/схемы) + §7.4/§7.5. **Владеет:** `api/tests/integration/**`.
+> Track T (Claude Code, `feat/tests`). Против `00-CONTRACT.md` §3 (эндпоинты/схемы) + §7.4/§7.5. **Владеет:** `api/tests/integration/**`.
 > Запускается после b6 (P0) и b11–b13 (P1/P2). Использует `make db`. Не редактирует продуктовый код.
 
 ## Цель

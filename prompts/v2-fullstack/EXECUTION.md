@@ -11,7 +11,7 @@ skai_7/
 └── .worktrees/            (gitignored)
     ├── backend  [feat/backend]      ← окно 1: api/, data/seed/
     ├── web      [feat/web]          ← окно 2: web/
-    └── tests    [feat/tests]        ← окно 3: Codex desktop (api/tests, web vitest)
+    └── tests    [feat/tests]        ← окно 3: Claude Code · track-t-tests (api/tests, web vitest)
 ```
 В каждой `.worktrees/<name>/START.md` — очередь промптов и владение.
 
@@ -63,10 +63,24 @@ integration (x1/x2), поэтому в параллельной фазе их н
 - **Барьер 1 — интеграция P0** (`skai_7`, ветка `integration`): x1→x2→x3.
 - **Волна 2 — расширение P1/P2** (макс. параллельно): BACKEND b7→b10, b8∥b9, b11∥b12∥b13 ; WEB d4∥d5, f5–f13 ; TESTS T1–T3.
 - **Барьер 2 — финал** (`skai_7`, `integration`): x4 (+ повтор x2/x3) → merge в `main`.
+- **Волна 3 — доработки (бэклог)**: накопленные неблокирующие правки из аудитов. Не блокирует P0/P1/P2; выполняется по мере готовности треков. См. раздел [«Волна 3 · бэклог доработок»](#волна-3--бэклог-доработок).
 
 > **Заморозка `main` на время волн.** Все коммиты идут в `feat/*` и `integration`; **в `main` напрямую
 > не коммитим**. `main` продвигается только барьерами через `git merge --ff-only integration` (x3 для P0,
 > x4 для P1/P2). Любой прямой коммит в `main` во время волн разведёт ветки и сломает ff-only.
+
+## Волна 3 · бэклог доработок
+
+Неблокирующие правки, выявленные аудитами после Волны 1. Не входят в P0/P1/P2-скоуп;
+выполняются по мере готовности соответствующего трека. Каждый пункт — трек-владелец и источник.
+
+| # | Доработка | Трек | Источник / детали | Приоритет |
+| --- | --- | --- | --- | --- |
+| W3-1 | Синхронизировать промпт `b13` с contract-change #1: дефолт статуса `Ticket` `"new"` → `"active"` (значение `new` удалено из enum `Status`); в описании схемы `Ticket` добавить поля `deadline` и `is_overdue` (оверлей «⏱ Просрочено», не статус). Эталон — `actions_service.py` уже на новом enum. | b13 | `prompts/.../track-b-backend/b13-tickets-alerts-trips.md:15,17` vs `00-CONTRACT.md` §7.5 | Средний (до реализации `tickets_service`) |
+| W3-2 | Данные/каталог: значение `Source = DIAGNOSTIC` объявлено в контракте (§3.1) и enum, но в `data/analysis/alarm_types.json` нет ни одной строки с `source:"DIAGNOSTIC"` и нет кода «камера офлайн» → бейдж «⚙ Диагностика» (макет 07) ни на чём не сработает. Добавить запись в каталог/датасет, если демо требует этот кейс. | b1 / данные | `00-CONTRACT.md` §3.1 (changelog #1) vs `alarm_type_catalog` (14 строк) | Низкий (демо-опционально) |
+
+> Закрытый аудитом дефект Волны 1 (b2 `_SPEED_LIMIT_TABLE` на legacy-кодах) исправлен в рамках Волны 1
+> (ветка `feat/backend`, fix(b2)) и в бэклог не выносится.
 
 ## Подробная схема выполнения
 
@@ -121,12 +135,12 @@ flowchart TD
             wd["d4 map ∥ d5 voice-timeline"]
             wf["f5…f13 (все параллельно)"]
         end
-        subgraph T2["🪟 Окно 3 · tests (feat/tests, Codex)"]
+        subgraph T2["🪟 Окно 3 · tests (feat/tests, Claude Code)"]
             direction TB
-            t4["T4 chores — сразу"]
-            t1["T1 unit — после b2/b7/b10"]
-            t2["T2 API — после b6 + b11–b13"]
-            t3["T3 front — после d2/f2/f4"]
+            t4["t4 chores — сразу"]
+            t1["t1 unit — после b2/b7/b10"]
+            t2["t2 API — после b6 + b11–b13"]
+            t3["t3 front — после d2/f2/f4"]
         end
     end
 
@@ -154,7 +168,7 @@ flowchart TD
 | --- | --- | --- | --- |
 | 1 · Backend | `.worktrees/backend` / `feat/backend` | `api/`, `data/seed/`, `data/skai.duckdb` | `code .worktrees/backend` |
 | 2 · Web | `.worktrees/web` / `feat/web` | `web/` | `code .worktrees/web` |
-| 3 · Tests | `.worktrees/tests` / `feat/tests` (Codex) | `api/tests/`, vitest | `code .worktrees/tests` |
+| 3 · Tests | `.worktrees/tests` / `feat/tests` (Claude Code · `track-t-tests`) | `api/tests/`, vitest | `code .worktrees/tests` |
 | Интеграция | `skai_7` / `integration` | корневые: `App.tsx`, `Makefile`, `requirements*` | основное окно |
 
 ### Волна 1 — P0 core (окна 1 и 2 одновременно)
@@ -189,7 +203,7 @@ git checkout integration && git merge feat/backend && git merge feat/web
 | --- | --- | --- |
 | 1 Backend | `b7`→`b10` ; `b8` ∥ `b9` ; `b11` ∥ `b12` ∥ `b13` | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
 | 2 Web | `d4` ∥ `d5` ; `f5`…`f13` (все параллельно) | — |
-| 3 Tests | `T4` сразу · `T1` после `b2/b7/b10` · `T2` после `b6`+`b11–b13` · `T3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
+| 3 Tests | `t4` сразу · `t1` после `b2/b7/b10` · `t2` после `b6`+`b11–b13` · `t3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
 
 ### Барьер 2 — финальный e2e (основное окно `skai_7`)
 
@@ -221,7 +235,7 @@ git add -A && git commit -m "feat(backend): wave 1"
 # в основном репо:
 cd /Users/dimausac/projects/skai_7
 git checkout integration && git merge feat/backend && git merge feat/web
-# Codex перед тестами: в .worktrees/tests → git merge integration
+# track-t-tests перед тестами: в .worktrees/tests → git merge integration
 ```
 Финал: `integration` → `main`.
 
