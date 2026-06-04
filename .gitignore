@@ -29,3 +29,6 @@ skai7_clean/
 **/.DS_Store
 .DS_Store
 *.log
+
+# git worktrees (вложенные, не трекаются)
+.worktrees/
