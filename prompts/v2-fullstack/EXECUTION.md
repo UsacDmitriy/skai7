@@ -354,7 +354,7 @@ Git-склейка и продвижение `main` — **внутри пром�
 git **внутри промптов** (x2 идемпотентно подтягивает 2.1 в `integration`; x4a — только smoke, `main` не трогает):
 
 ```text
-Выполни @prompts/v2-fullstack/barrier-1-p0/x2-wiring.md
+Выполни @prompts/v2-fullstack/barrier-2-1-reports-voice/x2-wiring.md
 Выполни @prompts/v2-fullstack/barrier-2-1-reports-voice/x4a-smoke-reports-voice.md
 ```
 
@@ -370,7 +370,7 @@ git **внутри промптов** (x2 идемпотентно подтяг�
 ### Барьер 2.2 — smoke прикладных (основное окно `skai_7`)
 
 ```text
-Выполни @prompts/v2-fullstack/barrier-1-p0/x2-wiring.md
+Выполни @prompts/v2-fullstack/barrier-2-2-applied/x2-wiring.md
 Выполни @prompts/v2-fullstack/barrier-2-2-applied/x4b-smoke-applied-screens.md
 ```
 
@@ -387,8 +387,8 @@ git **внутри промптов** (x2 идемпотентно подтяг�
 git **внутри промптов** (x2 подтягивает тесты в `integration`; x4 продвигает `main`). Подавай по одному, дожидаясь зелёного check:
 
 ```text
-Выполни @prompts/v2-fullstack/barrier-1-p0/x2-wiring.md
-Выполни @prompts/v2-fullstack/barrier-1-p0/x3-e2e-smoke.md
+Выполни @prompts/v2-fullstack/barrier-2-3-tests/x2-wiring.md
+Выполни @prompts/v2-fullstack/barrier-2-3-tests/x3-e2e-smoke.md
 Выполни @prompts/v2-fullstack/barrier-2-3-tests/x4-e2e-p1p2.md
 ```
 
