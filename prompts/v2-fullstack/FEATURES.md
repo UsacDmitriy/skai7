@@ -12,7 +12,7 @@
 > и **оператора барьера** (per-feature приёмка). Исполнитель отдельного промпта его не открывает —
 > поэтому **сама глубина (edge-cases, негативы, состояния) впечатана в секцию `## Check` каждого
 > фич-промпта** (`b7`–`b14`, `f5`–`f14`, `d4`/`d5`). Матрица и DoD — чтобы держать это в синхроне.
-> P0-фичи #1/#3 (`b2`/`f4`) уже выполнены в Волне 1 → их DoD-доработка вынесена в `b14`/`f14` (Волна 2.1).
+> P0-промпты Волны 1 (`b2`/`f4`/`b3`/`d2`) уже выполнены → их DoD/Opus-доработка вынесена в `b14`/`f14` и `b15`/`d6` (Волна 2.1, поверх готового).
 
 ## Единый Definition of Done (для любой фичи)
 
@@ -34,7 +34,7 @@
 
 | # | Фича | Данные / схема (§) | Backend | Web (+design) | Tests | Волна | Приёмка |
 |---|---|---|---|---|---|---|---|
-| #1 | Синк видео↔маркер телеметрии | `track_points`, `TelemetryPoint` §3.1, §6 | b3, b5 (`get_telemetry`) | f4 IncidentCard **+ f14 (хардненинг)** ; d2/d3 | t3 (sync) | 1 (P0) + 2.1 (f14) | x3 / x4 |
+| #1 | Синк видео↔маркер телеметрии | `track_points`, `TelemetryPoint` §3.1, §6 | b3 **+ b15 (спайн-хардненинг)**, b5 (`get_telemetry`) | f4 IncidentCard **+ f14 (хардненинг)** ; d2 **+ d6 (sync-хардненинг)**/d3 | t3 (sync) | 1 (P0) + 2.1 (f14/b15/d6) | x3 / x4 |
 | #3 | Обогащение / risk-score | `alarm_type_catalog`, enrichment §2 | b1, b2 **+ b14 (хардненинг)** | f4 (badge/score) ; d2 | tu-enrichment | 1 (P0) + 2.1 (b14) | x3 / x4 |
 | #2 | Voice/NLU + отчёты В-1/В-2 | `driver_reference` §7.1, `v_driver_report`/`v_fleet`/`v_vehicle`, `DriverReport`/`FleetReport`/`VehicleReport` §7.5 | b7→b10, b8 (stt), b9 (nlu) | d5 voice-timeline → f7 analytics-voice | tu-driver/nlu/reports, t2, t3 | 2.1 | x4a |
 | #4 | Лента событий (`/`) | `v_incidents`, `IncidentRow` §3.1 | b3, b6 | f5 events-feed ; d3 | t3 | 2.2 | x4b |
@@ -57,7 +57,7 @@
 ### #1 · Синк видео↔маркер телеметрии (P0, x3; доработка — `f14`, Волна 2.1)
 - **Depth:** при `onTimeUpdate` плеера маркер на `TelemetryChart` движется к точке за `currentTime`; клик по графику перематывает видео (§6).
 - **Edge:** нет видео → плеер показывает placeholder, график живёт автономно; пустой `track` → «нет телеметрии», не падать.
-- **Реализация глубины:** базовый экран — `f4` (выполнен, Волна 1); состояния/sync/a11y/локали — `wave-2-1-reports-voice/track-f-frontend/f14-incidentcard-hardening`.
+- **Реализация глубины:** базовый экран — `f4` (выполнен, Волна 1); состояния/sync/a11y/локали — `wave-2-1-reports-voice/track-f-frontend/f14-incidentcard-hardening`; робастность синк-примитивов (троттлинг/cleanup/петли) — `track-d-design/d6-sync-hardening`; целостность спайна `v_incidents` — `track-b-backend/b15-vincidents-hardening` (всё Opus, Волна 2.1, поверх готового).
 - **Tests:** `playheadOffset` обновляется на `onTimeUpdate`; seek по графику → `seekTo`.
 
 ### #3 · Обогащение / risk-score (P0, x3; доработка — `b14`, Волна 2.1)

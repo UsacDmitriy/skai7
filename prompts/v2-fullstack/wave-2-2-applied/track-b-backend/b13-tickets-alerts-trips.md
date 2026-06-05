@@ -1,7 +1,7 @@
 # b13 · Tickets + Alerts + Trips — сервис и роутеры
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §7.4/§7.5 (идеи #5/#6/#7). **Владеет:** `api/services/tickets_service.py`, роутеры `api/routers/tickets.py`, `api/routers/alerts.py`, `api/routers/trips.py`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > Кодит против контракта. **Зависит от:** b5 (схемы `IncidentDetail`, `TelemetryPoint`, репозитории/сервис incidents), b6 (паттерн роутеров, `actions_service` пишет `output/actions.csv`). Параллелится с b10/b11/b12. Роутеры включаются в `api/main.py` (x2/b6).
 
 ## Цель
