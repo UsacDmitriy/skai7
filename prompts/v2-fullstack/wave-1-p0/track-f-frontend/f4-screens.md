@@ -14,7 +14,7 @@
 Маршрут `/incidents/:id`. Через `client.getIncident(id)` (+ `getTelemetry`):
 - **Топбар инцидента**: тип (`alarm_label_ru`), `SeverityBadge`, `ScoreBar(risk_score)`, источник (`source`, в т.ч. «Оба»/COMBINED), ТС/водитель (+`driver_region`, `driver_safety_score`)/время/адрес.
 - **Блок причины**: `evidence_summary` + **«версия события · уверенность `confidence`%»** (`event_version`).
-- **Два видео** (`VideoPlayer`): ADAS (ch1) и DMS (ch5); доп. каналы из `cam_extra[]` («Другие камеры»). **Источник `src` — `client.videoUrl(inc.id, channel)` (НЕ сырой `cam_*_url`!).** Поля `cam_front_url`/`cam_dms_url`/`cam_extra[].url` — лишь индикатор наличия + выбор канала: `src = inc.cam_front_url ? client.videoUrl(inc.id, 1) : undefined`, `inc.cam_dms_url ? videoUrl(inc.id, 5) : undefined`, доп. — `videoUrl(inc.id, cam.channel)` (§6, анти-регресс DEF-3). Если `video_available=false` — пустое состояние + «Запросить архив»; показать окно offline (`Camera.offline_from/to`) и `sensor_active_after_sec` («DMS-сенсор работал +N сек»).
+- **Два видео** (`VideoPlayer`): `cam_front_url` (ADAS) и `cam_dms_url` (DMS); доп. каналы из `cam_extra[]` («Другие камеры»). Если `video_available=false` — пустое состояние + «Запросить архив»; показать окно offline (`Camera.offline_from/to`) и `sensor_active_after_sec` («DMS-сенсор работал +N сек»).
 - **График телеметрии** (`TelemetryChart`) по `telemetry[]`, статичный маркер события x=0 (акселерометр `ax` — производная скорости, не плоский ноль).
 - **Синхронизация видео↔телеметрия (idea #1, §6):** экран хранит `currentSec` (из `VideoPlayer.onTimeUpdate`) и
   передаёт его как `playheadOffset` в `TelemetryChart` — движущаяся вертикаль идёт за воспроизведением. Оба плеера
@@ -40,16 +40,6 @@ severity-border, сортировка по `ts`/`risk_score`, фильтры п�
 ## Check
 
 - `/incidents/:id` рендерит карточку на живом API (после `make db`+бэк) и на фикстурах (`VITE_USE_FIXTURES=true`).
-- Кейс «нет видео» (`video_available=false`): placeholder вместо плеера + «Запросить архив»; график телеметрии остаётся автономным и работает.
-- Пустой `telemetry[]` → блок графика показывает «нет телеметрии» (не пустой холст, не падение).
-- Sync: `onTimeUpdate` плеера обновляет `playheadOffset` графика; клик по графику → `seekTo` на обоих плеерах (ADAS+DMS синхронны).
+- Кейс «нет видео» показывает пустое состояние и «Запросить архив».
 - Действия пишутся (`POST /api/actions`), статус инцидента обновляется.
 - `/monitor` и `/report` открываются без ошибок (scaffold).
-
-## Состояния и edge-cases (IncidentCard, P0)
-
-- **loading**: скелет топбара/видео/графика; **error/404**: явное состояние + «Назад к ленте», не белый экран.
-- **a11y**: `<video>` с `aria-label` (ADAS/DMS) и управлением с клавиатуры; график — `role="img"` + текстовое summary события (ax, скорость) для скринридера; фокус-кольца на плеерах и кнопках действий; модалки/панели возвращают фокус.
-- **Локали/таймзона**: `ts` — ISO-8601 **UTC** (§контракт); время/окна offline (`offline_from/to`) выводить в таймзоне парка через `toLocaleString` (не «сырой» UTC); числа `tabular-nums`.
-- **Роли**: деструктивные действия «Стоп ТС»/«Валидация» доступны только Безопаснику; Логисту/Диспетчеру — скрыты/disabled с подсказкой.
-- **Негативы**: `cam_extra[]` пуст → секция «Другие камеры» скрыта; камера `warning` → бейдж «Нестабильна», не блокирует плеер; повторный `postAction` идемпотентен в UI (кнопка disabled на время запроса, ошибка → тост + откат состояния).

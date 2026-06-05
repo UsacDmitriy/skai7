@@ -9,7 +9,9 @@
 > поэтому сквозная проработанность каждой идеи #1–#10 (data→backend→web→tests→приёмка) и единый
 > **Definition of Done** вынесены в [`FEATURES.md`](FEATURES.md) — карта для ведущего и оператора барьера.
 > Сама глубина (edge-cases, негативы, состояния loading/empty/error, a11y, локали) **впечатана в секцию
-> `## Check` каждого фич-промпта** (`b2`,`b7`–`b13`, `f4`–`f13`, `d4`/`d5`) — её видит исполнитель.
+> `## Check` каждого фич-промпта** (`b7`–`b14`, `f5`–`f14`, `d4`/`d5`) — её видит исполнитель.
+> P0-фичи #1/#3 (`b2`/`f4`) уже выполнены в Волне 1, поэтому их доработка вынесена в отдельные
+> промпты **`b14`/`f14` (Волна 2.1)** — правка поверх готового кода, а не переисполнение Волны 1.
 
 ## Структура
 ```
@@ -68,7 +70,7 @@ integration (x1/x2), поэтому в параллельной фазе их н
 - **Барьер 0 — контракт** (`skai_7`, `main`): заморозить `00-CONTRACT.md`. Без него треки не стартуют.
 - **Волна 1 — P0 core** (backend ∥ web): BACKEND b1→b6 ; WEB d1→d3, f1→f4.
 - **Барьер 1 — интеграция P0** (`skai_7`, ветка `integration`): x1→x2→x3.
-- **Волна 2.1 — Reports & Voice** (backend ∥ web): BACKEND b7→b10, b8∥b9 ; WEB d5, f7.
+- **Волна 2.1 — Reports & Voice** (backend ∥ web): BACKEND b7→b10, b8∥b9, b14 (P0-доработка enrichment) ; WEB d5, f7, f14 (P0-доработка IncidentCard).
 - **Барьер 2.1 — smoke отчёты/voice** (`skai_7`, `integration`): x4a (merge → x2 rewire → smoke reports/voice).
 - **Волна 2.2 — Прикладные экраны** (backend ∥ web): BACKEND b11∥b12∥b13 ; WEB d4, f5,f6,f8–f13.
 - **Барьер 2.2 — smoke прикладных** (`skai_7`, `integration`): x4b (merge → x2 rewire → smoke tickets/alerts/trips/reb/sabotage/map/roles).
@@ -171,10 +173,12 @@ flowchart TD
             b7["b7 driver-reference"] --> b10["b10 reports-views"]
             b8["b8 stt-service"]
             b9["b9 nlu-service"]
+            b14["b14 enrichment-hardening<br/>(P0-доработка поверх b2)"]
         end
         subgraph F21["🪟 Окно 2 · web (feat/web)"]
             direction TB
             d5["d5 voice-timeline"] --> f7["f7 analytics-voice"]
+            f14["f14 incidentcard-hardening<br/>(P0-доработка поверх f4)"]
         end
     end
 
@@ -310,8 +314,10 @@ Git-склейка и продвижение `main` — **внутри пром�
 
 | Окно | Промпты (порядок) | Проверка |
 | --- | --- | --- |
-| 1 Backend | `b7` → `b10` ; `b8` ∥ `b9` | `make db` (`driver_reference`>0, `v_driver_report`/`v_fleet`/`v_vehicle`), `GET /api/reports/driver/{plate}` |
-| 2 Web | `d5` → `f7` | экран «Аналитика/Voice»: 🎤→`transcribe`→`query`→дашборд В-1/В-2 |
+| 1 Backend | `b7` → `b10` ; `b8` ∥ `b9` ; `b14` (P0-доработка enrichment поверх b2) | `make db` (`driver_reference`>0, `v_driver_report`/`v_fleet`/`v_vehicle`), `GET /api/reports/driver/{plate}` ; enrichment-clamp/дефолты |
+| 2 Web | `d5` → `f7` ; `f14` (P0-доработка IncidentCard поверх f4) | экран «Аналитика/Voice»: 🎤→`transcribe`→`query`→дашборд В-1/В-2 ; карточка: состояния/sync/a11y |
+
+> `b14`/`f14` — доработка **уже выполненной** Волны 1 (DoD-глубина идей #3/#1): правят `enrichment.py`/`IncidentCard.tsx` поверх готового кода, не переисполняя b2/f4. Папки: `wave-2-1-reports-voice/track-{b,f}/`.
 
 ### Барьер 2.1 — smoke отчёты/voice (основное окно `skai_7`)
 
