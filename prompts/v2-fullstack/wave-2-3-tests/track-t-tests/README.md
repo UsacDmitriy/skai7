@@ -30,7 +30,9 @@
 
 Открыть worktree `feat/tests` отдельным окном VS Code (`code .worktrees/tests`), в панели Claude Code
 дать промпт (`Выполни @prompts/v2-fullstack/wave-2-3-tests/track-t-tests/t1-backend-unit-tests.md`) и держать
-`00-CONTRACT.md` в контексте. Перед прогоном подтянуть готовый код:
-`git fetch && git merge origin/integration`.
+`00-CONTRACT.md` в контексте. Перед прогоном подтянуть готовый код — **сначала закоммить свой результат**
+(`git add -A && git commit`, секция `## Коммит`), затем `git fetch && git merge origin/integration`.
 
 Тесты не пересекаются по файлам с продуктовыми треками → можно гнать параллельно и мержить чисто.
+Барьер (`x4`/`x5`) перед `git merge feat/tests` проверяет, что worktree `tests` чист (GUARD) — незакоммиченные
+тесты на барьер не попадут.

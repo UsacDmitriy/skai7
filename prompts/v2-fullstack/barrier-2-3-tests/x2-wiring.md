@@ -11,6 +11,13 @@
 ```bash
 cd /Users/dimausac/projects/skai_7
 git checkout integration
+
+# GUARD: merge берёт только коммиты — стоп, если в worktree есть незакоммиченные изменения.
+for w in backend web tests; do
+  d=".worktrees/$w"; [ -d "$d" ] || continue
+  test -z "$(git -C "$d" status --porcelain)" || { echo "❌ $w: незакоммичено — закоммить в worktree и повтори барьер"; exit 1; }
+done
+
 git merge --no-ff main feat/backend feat/web
 # Барьер 1: x1 уже всё слил → «Already up to date» (no-op).
 # Барьер 2 (x2 — первый шаг барьера): подтягивает волну 2 (b7–b13, d4/d5, f5–f13).

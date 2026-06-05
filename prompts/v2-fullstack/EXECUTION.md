@@ -144,12 +144,9 @@ integration (x1/x2), поэтому в параллельной фазе их н
 Выполни @prompts/v2-fullstack/wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md
 ```
 
-**Барьер 3 (x5)** — в основном окне `skai_7` на ветке `integration`, после завершения Волны 3:
-
-```bash
-cd /Users/dimausac/projects/skai_7 && git checkout integration
-git merge feat/backend feat/web feat/tests
-```
+**Барьер 3 (x5)** — в основном окне `skai_7` на ветке `integration`, после завершения Волны 3.
+Склейку `feat/*` **делает сам `x5`** (в «Перед стартом»: GUARD чистоты worktree → `git merge feat/*`) —
+вручную сливать не нужно, иначе обойдёшь проверку «всё закоммичено». Просто:
 
 ```text
 Выполни @prompts/v2-fullstack/barrier-3-hardening/x5-wave3-hardening.md
@@ -429,10 +426,15 @@ Git **внутри промпта** (x5 в «Перед стартом» сам 
 ```bash
 # в worktree — коммит ПОСЛЕ КАЖДОГО промпта (секция ## Коммит), не одним коммитом на волну:
 git add -A && git commit -m "b7: driver_reference"     # и т.д. по каждому промпту
-# в основном репо барьер сам проверит чистоту worktree (GUARD) и сольёт ТОЛЬКО коммиты:
+
+# слияние feat/* в integration делают БАРЬЕРЫ (x1/x2/x4a/x4b/x4/x5) — у каждого внутри GUARD.
+# если сливаешь вручную — СНАЧАЛА тот же GUARD (merge берёт только коммиты):
 cd /Users/dimausac/projects/skai_7
+for w in backend web tests; do d=".worktrees/$w"; [ -d "$d" ] || continue; \
+  test -z "$(git -C "$d" status --porcelain)" || { echo "❌ $w: незакоммичено"; exit 1; }; done
 git checkout integration && git merge feat/backend && git merge feat/web
-# track-t-tests перед тестами: в .worktrees/tests → git merge integration
+
+# track-t-tests перед тестами: в .worktrees/tests СНАЧАЛА закоммить свой результат, затем git merge integration
 ```
 > Незакоммиченные изменения в worktree merge **не видит** — поэтому коммит обязателен в каждом промпте,
 > а барьер останавливается, если worktree грязный.
