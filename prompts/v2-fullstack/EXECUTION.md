@@ -61,8 +61,12 @@ integration (x1/x2), поэтому в параллельной фазе их н
 - **Барьер 0 — контракт** (`skai_7`, `main`): заморозить `00-CONTRACT.md`. Без него треки не стартуют.
 - **Волна 1 — P0 core** (backend ∥ web): BACKEND b1→b6 ; WEB d1→d3, f1→f4.
 - **Барьер 1 — интеграция P0** (`skai_7`, ветка `integration`): x1→x2→x3.
-- **Волна 2 — расширение P1/P2** (макс. параллельно): BACKEND b7→b10, b8∥b9, b11∥b12∥b13 ; WEB d4∥d5, f5–f13 ; TESTS T1–T3.
-- **Барьер 2 — финал** (`skai_7`, `integration`): x4 (+ повтор x2/x3) → merge в `main`.
+- **Волна 2.1 — Reports & Voice** (backend ∥ web): BACKEND b7→b10, b8∥b9 ; WEB d5, f7.
+- **Барьер 2.1 — smoke отчёты/voice** (`skai_7`, `integration`): x4a (merge → x2 rewire → smoke reports/voice).
+- **Волна 2.2 — Прикладные экраны** (backend ∥ web): BACKEND b11∥b12∥b13 ; WEB d4, f5,f6,f8–f13.
+- **Барьер 2.2 — smoke прикладных** (`skai_7`, `integration`): x4b (merge → x2 rewire → smoke tickets/alerts/trips/reb/sabotage/map/roles).
+- **Волна 2.3 — Тесты** (окно tests): t1∥t2∥t3∥t4.
+- **Барьер 2 — финал P1/P2** (`skai_7`, `integration`): x4 (полный P1/P2 e2e + повтор x2/x3) → merge в `main`.
 - **Волна 3 — бэклог + тест-хардненинг**: неблокирующие правки из аудитов (W3-1/W3-2) и **дозакрытие unit-покрытия по всему решению** (W3-3 backend, W3-4 frontend). Не блокирует P0/P1/P2; выполняется по мере готовности треков. См. раздел [«Волна 3 · бэклог доработок»](#волна-3--бэклог-доработок).
 - **Барьер 3 — хардненинг** (`skai_7`, `integration`): x5 — полный регресс (unit+API+фронт) + гейт покрытия → merge в `main`.
 
@@ -150,20 +154,54 @@ flowchart TD
     BR1["🚧 БАРЬЕР 1 — ИНТЕГРАЦИЯ P0<br/>(окно skai_7, ветка integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend + feat/web → x1 → x2 → x3"]
     W1 --> BR1
 
-    subgraph W2["ВОЛНА 2 · расширение P1/P2 — макс. параллельно"]
+    subgraph W21["ВОЛНА 2.1 · Reports & Voice — окна 1 и 2 параллельно"]
         direction LR
-        subgraph B2["🪟 Окно 1 · backend"]
+        subgraph B21["🪟 Окно 1 · backend (feat/backend)"]
             direction TB
-            wb7["b7 driver-reference → b10 reports-views"]
-            wb89["b8 stt ∥ b9 nlu"]
-            wb11["b11 sabotage ∥ b12 reb ∥ b13 tickets-alerts-trips<br/>⚠ роутеры в ALL_ROUTERS"]
+            b7["b7 driver-reference"] --> b10["b10 reports-views"]
+            b8["b8 stt-service"]
+            b9["b9 nlu-service"]
         end
-        subgraph F2["🪟 Окно 2 · web"]
+        subgraph F21["🪟 Окно 2 · web (feat/web)"]
             direction TB
-            wd["d4 map ∥ d5 voice-timeline"]
-            wf["f5…f13 (все параллельно)"]
+            d5["d5 voice-timeline"] --> f7["f7 analytics-voice"]
         end
-        subgraph T2["🪟 Окно 3 · tests (feat/tests, Claude Code)"]
+    end
+
+    BR1 --> W21
+
+    BR2a["🚧 БАРЬЕР 2.1 — SMOKE Reports/Voice<br/>(окно skai_7, integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend+feat/web → x2 rewire → x4a (smoke отчёты/voice)"]
+    W21 --> BR2a
+
+    subgraph W22["ВОЛНА 2.2 · Прикладные экраны — окна 1 и 2 параллельно"]
+        direction LR
+        subgraph B22["🪟 Окно 1 · backend (feat/backend) — ⚠ роутеры в ALL_ROUTERS"]
+            direction TB
+            b11["b11 sabotage"]
+            b12["b12 reb"]
+            b13["b13 tickets-alerts-trips"]
+        end
+        subgraph F22["🪟 Окно 2 · web (feat/web)"]
+            direction TB
+            d4["d4 map-primitives"] --> f6["f6 monitor-map"]
+            f5["f5 events-feed"]
+            f8["f8 tickets"]
+            f9["f9 dispatch-alert"]
+            f10["f10 trip-dossier"]
+            f11["f11 reb-recovery"]
+            f12["f12 sabotage"]
+            f13["f13 role-toggle"]
+        end
+    end
+
+    BR2a --> W22
+
+    BR2b["🚧 БАРЬЕР 2.2 — SMOKE прикладных<br/>(окно skai_7, integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend+feat/web → x2 rewire → x4b (tickets/alerts/trips/reb/sabotage/map/roles)"]
+    W22 --> BR2b
+
+    subgraph W23["ВОЛНА 2.3 · Тесты — окно 3"]
+        direction LR
+        subgraph T23["🪟 Окно 3 · tests (feat/tests, Claude Code)"]
             direction TB
             t4["t4 chores — сразу"]
             t1["t1 unit — после b2/b7/b10"]
@@ -172,10 +210,10 @@ flowchart TD
         end
     end
 
-    BR1 --> W2
+    BR2b --> W23
 
-    BR2["🏁 БАРЬЕР 2 — ФИНАЛЬНЫЙ e2e<br/>(окно skai_7, integration)<br/>merge волны 2 → x2 → x3 → x4-e2e-p1p2 → merge в main"]
-    W2 --> BR2
+    BR2["🏁 БАРЬЕР 2 — ФИНАЛ P1/P2<br/>(окно skai_7, integration)<br/>merge feat/tests → x2 → x3 → x4-e2e-p1p2 → merge в main"]
+    W23 --> BR2
 
     subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг — окна 1 и 3 параллельно"]
         direction LR
@@ -206,7 +244,9 @@ flowchart TD
 | --- | --- | --- | --- |
 | 🔒 0 · Контракт | `main` | `00-CONTRACT.md` (артефакт, замораживается вручную) | фиксирует поля, схемы §7.5, токены — источник истины; до заморозки треки не стартуют |
 | 🚧 1 · Интеграция P0 | `integration` | `x1-remove-streamlit.md` → `x2-wiring.md` → `x3-e2e-smoke.md` | выпил Streamlit, склейка React↔FastAPI (`ALL_ROUTERS`, `App.tsx`), сквозной smoke |
-| 🏁 2 · Финальный e2e | `integration` → `main` | повтор `x2`/`x3` → `x4-e2e-p1p2.md` | smoke на полном наборе P1/P2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage) |
+| 🚧 2.1 · Smoke Reports/Voice | `integration` | `x2-wiring.md` → `x4a-smoke-reports-voice.md` | rewire + smoke среза отчётов/voice (b7→b10, b8/b9, f7); `main` не трогает |
+| 🚧 2.2 · Smoke прикладных | `integration` | `x2-wiring.md` → `x4b-smoke-applied-screens.md` | rewire (роутеры b11–b13) + smoke заявок/алерта/досье/РЭБ/саботажа/карты/ролей; `main` не трогает |
+| 🏁 2 · Финал P1/P2 | `integration` → `main` | повтор `x2`/`x3` → `x4-e2e-p1p2.md` | smoke на полном наборе P1/P2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage) → продвигает `main` |
 | 🧪 3 · Хардненинг Волны 3 | `integration` → `main` | `x5-wave3-hardening.md` | полный регресс (unit+API+фронт) + гейт покрытия (`api/`≥85%, `web/src`≥80%); проверка W3-1/W3-2 |
 
 > Файлы барьеров: `prompts/v2-fullstack/wave-x-integration/`.
@@ -242,18 +282,51 @@ Git-склейка и продвижение `main` — **внутри пром�
 
 Красный check → **стоп**, дефект соответствующему треку, чиним на `integration`, `main` не трогаем.
 
-### Волна 2 — расширение P1/P2 (макс. параллельно)
+Волна 2 разбита на 3 фич-подволны с промежуточными smoke-барьерами — стартуют после Барьера 1.
+
+### Волна 2.1 — Reports & Voice (окна 1 и 2 параллельно)
+
+| Окно | Промпты (порядок) | Проверка |
+| --- | --- | --- |
+| 1 Backend | `b7` → `b10` ; `b8` ∥ `b9` | `make db` (`driver_reference`>0, `v_driver_report`/`v_fleet`/`v_vehicle`), `GET /api/reports/driver/{plate}` |
+| 2 Web | `d5` → `f7` | экран «Аналитика/Voice»: 🎤→`transcribe`→`query`→дашборд В-1/В-2 |
+
+### Барьер 2.1 — smoke отчёты/voice (основное окно `skai_7`)
+
+git **внутри промптов** (x2 идемпотентно подтягивает 2.1 в `integration`; x4a — только smoke, `main` не трогает):
+
+```text
+Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
+Выполни @prompts/v2-fullstack/wave-x-integration/x4a-smoke-reports-voice.md
+```
+
+Красный check → **стоп**, дефект трека, чиним на `integration`, к 2.2 не переходим.
+
+### Волна 2.2 — Прикладные экраны (окна 1 и 2 параллельно)
 
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 1 Backend | `b7`→`b10` ; `b8` ∥ `b9` ; `b11` ∥ `b12` ∥ `b13` | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
-| 2 Web | `d4` ∥ `d5` ; `f5`…`f13` (все параллельно) | — |
+| 1 Backend | `b11` ∥ `b12` ∥ `b13` | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
+| 2 Web | `d4` → `f6` ; `f5` ∥ `f8` ∥ `f9` ∥ `f10` ∥ `f11` ∥ `f12` ∥ `f13` | все экраны кодят против контракта/фикстур |
+
+### Барьер 2.2 — smoke прикладных (основное окно `skai_7`)
+
+```text
+Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
+Выполни @prompts/v2-fullstack/wave-x-integration/x4b-smoke-applied-screens.md
+```
+
+Красный check → **стоп**, дефект трека, чиним на `integration`, к 2.3 не переходим.
+
+### Волна 2.3 — Тесты (окно 3)
+
+| Окно | Промпты | Примечание |
+| --- | --- | --- |
 | 3 Tests | `t4` сразу · `t1` после `b2/b7/b10` · `t2` после `b6`+`b11–b13` · `t3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
 
 ### Барьер 2 — финальный e2e (основное окно `skai_7`)
 
-Тот же вид — git **внутри промптов** (x2 в «Перед стартом» сам подтягивает волну 2 в `integration`
-идемпотентной склейкой; x4 продвигает `main`). Подавай по одному, дожидаясь зелёного check:
+git **внутри промптов** (x2 подтягивает тесты в `integration`; x4 продвигает `main`). Подавай по одному, дожидаясь зелёного check:
 
 ```text
 Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
