@@ -25,13 +25,14 @@ def _cameras_ok(row: dict[str, Any]) -> str:
     return f"{min(online, 3)}/3"
 
 
-def _to_summary(row: dict[str, Any]) -> VehicleSummary:
+def _to_summary(db: duckdb.DuckDBPyConnection, row: dict[str, Any]) -> VehicleSummary:
     plate = row.get("unit_state_number") or ""
+    drv = enrichment.driver_for(db, plate)
     return VehicleSummary(
         unit_id=row.get("unit_id") or "",
         plate=plate,
         vehicle_model=enrichment.vehicle_model_for(plate),
-        driver=enrichment.driver_for(plate),
+        driver=drv["driver"],
         alarm_count=int(row.get("alarm_count") or 0),
         alarm_types=row.get("alarm_types"),
         downloaded_video_count=int(row.get("downloaded_video_count") or 0),
@@ -42,4 +43,4 @@ def _to_summary(row: dict[str, Any]) -> VehicleSummary:
 
 def list_summaries(db: duckdb.DuckDBPyConnection) -> list[VehicleSummary]:
     """GET /api/vehicles — все ТС, обогащённые driver/model/cameras_ok."""
-    return [_to_summary(r) for r in vehicles_repo.list_vehicles(db)]
+    return [_to_summary(db, r) for r in vehicles_repo.list_vehicles(db)]

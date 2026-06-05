@@ -28,5 +28,10 @@ class Settings(BaseSettings):
     output_dir: Path = _PROJECT_ROOT / "output"
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
 
+    # Voice/NLU (§7.3) — Groq для nlu_service (b9); пусто → локальный regex-fallback.
+    groq_api_key: str | None = None
+    whisper_model: str = "large-v3"
+    whisper_device: str = "cpu"
+
 
 settings = Settings()

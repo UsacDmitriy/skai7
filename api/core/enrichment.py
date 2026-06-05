@@ -39,6 +39,24 @@ _DRIVER_NAMES: list[str] = [
     "Гусев Вячеслав Александрович",
 ]  # ≥20 names
 
+_DEPARTMENTS: list[str] = [
+    "Логистика · Север",
+    "Логистика · Центр",
+    "Логистика · Юг",
+    "Доставка · Запад",
+    "Доставка · Восток",
+]  # sync: incidents_service.py _DEPARTMENTS, seed_drivers.py DEPARTMENTS
+
+_REGIONS: list[str] = [
+    "Москва",
+    "Московская обл.",
+    "Санкт-Петербург",
+    "Приморский край",
+    "Татарстан",
+    "Свердловская обл.",
+    "Краснодарский край",
+]  # ≥5 регионов; sync: incidents_service.py _REGIONS, seed_drivers.py REGIONS
+
 _VEHICLE_MODELS: list[str] = [
     "ГАЗон NEXT",
     "КамАЗ-5490",
@@ -130,10 +148,31 @@ _CAM_SNZ_ID = "CAM-02"
 # ---------------------------------------------------------------------------
 
 
-def driver_for(plate: str) -> str:
-    """ФИО водителя из пула ≥20 имён, детерминированно по plate."""
+def driver_for(db, plate: str) -> dict:
+    """DB-first: lookup driver_reference, fallback synthetic by crc32(plate).
+
+    Returns {"driver": str, "driver_id": str, "driver_phone": str}.
+    Pass db=None to use synthetic fallback only (e.g. in tests).
+    """
+    if db is not None:
+        try:
+            row = db.execute(
+                'SELECT "driver_name","driver_id","driver_phone" '
+                'FROM "driver_reference" WHERE "vehicle_plate"=?',
+                [plate],
+            ).fetchone()
+            if row:
+                return {"driver": row[0], "driver_id": row[1], "driver_phone": row[2]}
+        except Exception:
+            pass
     seed = zlib.crc32(plate.encode()) & 0xFFFFFFFF
-    return _DRIVER_NAMES[seed % len(_DRIVER_NAMES)]
+    part1 = seed % 100000
+    part2 = (seed // 100000) % 100000
+    return {
+        "driver": _DRIVER_NAMES[seed % len(_DRIVER_NAMES)],
+        "driver_id": "DRV-" + str(seed % 9000 + 1000),
+        "driver_phone": "+7" + f"{part1:05d}{part2:05d}",
+    }
 
 
 def driver_id_for(plate: str) -> str:

@@ -269,16 +269,21 @@ class TestReportsService:
         assert rep.kpi.total == 54
 
     def test_query_routes_fleet_and_driver(self, db):
+        # §7.4: query теперь возвращает обёртку {"query": ReportQuery, "report": ...}.
         from api.services import reports_service
         from api.services.incidents_service import list_summaries
-        from api.domain.reports import DriverReport, FleetReport
+        from api.domain.reports import DriverReport, FleetReport, ReportQuery
 
-        assert isinstance(reports_service.query(db, "Сводка по парку"), FleetReport)
+        fleet = reports_service.query(db, "Сводка по парку")
+        assert isinstance(fleet["query"], ReportQuery)
+        assert isinstance(fleet["report"], FleetReport)
+
         plate = list_summaries(db, {})[0].vehicle_plate
         out = reports_service.query(db, f"Нарушения {plate} за 5 дней")
-        assert isinstance(out, DriverReport)
-        assert out.vehicle_plate == plate
-        assert out.period.days == 5
+        assert isinstance(out["query"], ReportQuery)
+        assert isinstance(out["report"], DriverReport)
+        assert out["report"].vehicle_plate == plate
+        assert out["report"].period.days == 5
 
 
 # ---------------------------------------------------------------------------
