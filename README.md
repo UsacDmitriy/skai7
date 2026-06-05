@@ -35,6 +35,16 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+### Переменные окружения
+
+Скопируй шаблон и при необходимости заполни значения (Groq-ключ, флаги фронта):
+
+```bash
+cp .env.example .env
+```
+
+Состав переменных и значения по умолчанию — в [.env.example](.env.example).
+
 ## Структура проекта
 
 ```
