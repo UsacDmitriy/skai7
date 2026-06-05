@@ -57,13 +57,13 @@
 ### #1 · Синк видео↔маркер телеметрии (P0, x3; доработка — `f14`, Волна 2.1)
 - **Depth:** при `onTimeUpdate` плеера маркер на `TelemetryChart` движется к точке за `currentTime`; клик по графику перематывает видео (§6).
 - **Edge:** нет видео → плеер показывает placeholder, график живёт автономно; пустой `track` → «нет телеметрии», не падать.
-- **Реализация глубины:** базовый экран — `f4` (выполнен, Волна 1); состояния/sync/a11y/локали — `f14-incidentcard-hardening` (Волна 2.1).
+- **Реализация глубины:** базовый экран — `f4` (выполнен, Волна 1); состояния/sync/a11y/локали — `wave-2-1-reports-voice/track-f-frontend/f14-incidentcard-hardening`.
 - **Tests:** `playheadOffset` обновляется на `onTimeUpdate`; seek по графику → `seekTo`.
 
 ### #3 · Обогащение / risk-score (P0, x3; доработка — `b14`, Волна 2.1)
 - **Depth:** `risk_score∈[0,100]`, монотонность по severity; `is_night`, `ax`, `speed_limit_for`, `confidence` детерминированы.
 - **Edge:** неизвестный `alarm_code` → дефолтный label/severity, без NULL; нет видео → `confidence −10`.
-- **Реализация глубины:** базовый модуль — `b2` (выполнен, Волна 1); клампы/дефолты/детерминизм — `b14-enrichment-hardening` (Волна 2.1).
+- **Реализация глубины:** базовый модуль — `b2` (выполнен, Волна 1); клампы/дефолты/детерминизм — `wave-2-1-reports-voice/track-b-backend/b14-enrichment-hardening`.
 - **Tests:** t1 `test_enrichment` (Волна 2.3) + w3-3 углубление (Волна 3).
 
 ### #2 · Voice/NLU + отчёты (2.1, x4a)
