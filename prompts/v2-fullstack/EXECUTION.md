@@ -16,9 +16,13 @@
 ## Модель-исполнитель по промптам
 
 > Каждый промпт помечен рекомендуемой моделью (тег продублирован в blockquote-шапке самого промпта).
-> Критерий: **🟢 Qwen 3.7 max** — механическая транскрипция против точной спеки (гейт ловит ошибку);
-> **🔵 Sonnet** — детерминированная логика/вёрстка против контракта (рабочая лошадка, большинство фич);
-> **🔴 Opus** — кросс-файловая интеграция / анти-регресс / killer-feature и **все барьеры**
+> Это **прод-решение — на сложном не экономим**. Критерий:
+> **🟢 Qwen 3.7 max** — только реально простое: scaffold / токены / транскрипция / данные с **тотальным**
+> гейтом (ошибка ловится структурно).
+> **🔵 Sonnet** — чёткая детерминированная логика/вёрстка в одном файле против контракта, ограниченный
+> blast-radius (включается, только когда это оправдано — не как дефолт).
+> **🔴 Opus** — высокие ставки: спайн данных, синк/алгоритм, killer-feature, сложный интерактив
+> (overlay/focus-trap/очередь), кросс-экранное состояние, анти-регресс и **все барьеры**
 > (судят green/red, продвигают `main`, заводят дефекты).
 >
 > **Правило эскалации:** если секция `## Check` 🟢/🔵-промпта дважды подряд красная — этот конкретный
@@ -26,12 +30,13 @@
 
 | Модель | Промпты |
 | --- | --- |
-| 🟢 Qwen | `b1`, `b4`, `d1`, `f1`, `f3`, `t4`, `w3-2` |
-| 🔵 Sonnet | **W1:** `b2`,`b3`,`b5`,`b6`,`d2`,`d3`,`f2`,`f4` · **W2.1:** `b7`,`b8`,`b9`,`b10`,`b14`,`d5`,`f14` · **W2.2:** `b11`,`b12`,`b13`,`d4`,`f5`,`f6`,`f8`,`f9`,`f10`,`f11`,`f12`,`f13` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5` |
-| 🔴 Opus | `f7` (killer-feature) · барьеры `x1`,`x2`,`x3`,`x4`,`x4a`,`x4b`,`x5` |
+| 🟢 Qwen (7) | `b1`, `b4`, `d1`, `f1`, `f3`, `t4`, `w3-2` |
+| 🔵 Sonnet (32) | **W1:** `b2`,`b5`,`b6`,`d3`,`f2` · **W2.1:** `b7`,`b8`,`b10`,`b14`,`d5` · **W2.2:** `b11`,`b12`,`b13`,`d4`,`f5`,`f8`,`f10`,`f11`,`f12` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` (6) · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5` |
+| 🔴 Opus (16) | **фичи:** `b3` (спайн), `d2` (синк-примитивы), `f4` (флагман P0+синк), `b9` (двухпутевой NLU), `f7` (killer), `f14` (анти-регресс #1), `f6` (дедуп+роли карты), `f9` (overlay/focus-trap/очередь), `f13` (кросс-экранные роли) · **барьеры:** `x1`,`x2`,`x3`,`x4`,`x4a`,`x4b`,`x5` |
 
-> Итог: Opus — только `f7` + 7 барьеров (где цена ошибки максимальна); Qwen — 7 чисто-механических;
-> остальное (~31 + `tu-*`) — Sonnet. Каждый 🟢/🔵-промпт прикрыт детерминированным гейтом из своей `Check`.
+> Итог: **🟢 7 · 🔵 32 · 🔴 16**. Opus покрывает спайн/синк/killer/сложный интерактив/кросс-экранное
+> состояние/анти-регресс + барьеры; Qwen — только тривиально-механическое; Sonnet — оправданный
+> детерминированный «середняк». Sonnet-кандидаты на эскалацию в Opus (синк/breadth): `d5`,`f10`,`f11`,`b13`.
 
 ## Структура
 ```
@@ -155,7 +160,7 @@ flowchart TD
         direction LR
         subgraph B1["🪟 Окно 1 · backend (feat/backend) — api/, data/"]
             direction TB
-            b1["b1 duckdb-etl · 🟢"] --> b3["b3 v-incidents · 🔵"]
+            b1["b1 duckdb-etl · 🟢"] --> b3["b3 v-incidents · 🔴"]
             b1 --> b2["b2 enrichment · 🔵"]
             b1 --> b4["b4 fastapi-scaffold · 🟢"]
             b3 --> b5["b5 schemas-repos-services · 🔵"]
@@ -166,10 +171,10 @@ flowchart TD
         subgraph F1["🪟 Окно 2 · web (feat/web) — web/ + дизайн-система"]
             direction TB
             subgraph D1["Дизайн-система (track-d)"]
-                d1["d1 tailwind-theme · 🟢"] --> d2["d2 ui-primitives · 🔵"] --> d3["d3 component-lib · 🔵"]
+                d1["d1 tailwind-theme · 🟢"] --> d2["d2 ui-primitives · 🔴"] --> d3["d3 component-lib · 🔵"]
             end
             subgraph FR1["Фронт (track-f)"]
-                f1["f1 vite-scaffold · 🟢"] --> f2["f2 api-client · 🔵"] --> f3["f3 mock-fixtures · 🟢"] --> f4["f4 screens · IncidentCard · 🔵"]
+                f1["f1 vite-scaffold · 🟢"] --> f2["f2 api-client · 🔵"] --> f3["f3 mock-fixtures · 🟢"] --> f4["f4 screens · IncidentCard · 🔴"]
             end
             D1 --> FR1
         end
@@ -192,13 +197,13 @@ flowchart TD
             direction TB
             b7["b7 driver-reference · 🔵"] --> b10["b10 reports-views · 🔵"]
             b8["b8 stt-service · 🔵"]
-            b9["b9 nlu-service · 🔵"]
+            b9["b9 nlu-service · 🔴"]
             b14["b14 enrichment-hardening<br/>(P0-доработка поверх b2) · 🔵"]
         end
         subgraph F21["🪟 Окно 2 · web (feat/web)"]
             direction TB
             d5["d5 voice-timeline · 🔵"] --> f7["f7 analytics-voice · 🔴"]
-            f14["f14 incidentcard-hardening<br/>(P0-доработка поверх f4) · 🔵"]
+            f14["f14 incidentcard-hardening<br/>(P0-доработка поверх f4) · 🔴"]
         end
     end
 
@@ -220,14 +225,14 @@ flowchart TD
         end
         subgraph F22["🪟 Окно 2 · web (feat/web)"]
             direction TB
-            d4["d4 map-primitives · 🔵"] --> f6["f6 monitor-map · 🔵"]
+            d4["d4 map-primitives · 🔵"] --> f6["f6 monitor-map · 🔴"]
             f5["f5 events-feed · 🔵"]
             f8["f8 tickets · 🔵"]
-            f9["f9 dispatch-alert · 🔵"]
+            f9["f9 dispatch-alert · 🔴"]
             f10["f10 trip-dossier · 🔵"]
             f11["f11 reb-recovery · 🔵"]
             f12["f12 sabotage · 🔵"]
-            f13["f13 role-toggle · 🔵"]
+            f13["f13 role-toggle · 🔴"]
         end
     end
 
@@ -311,8 +316,8 @@ flowchart TD
 
 | Окно | Промпты (порядок) | Проверка |
 | --- | --- | --- |
-| 1 Backend | `b1`🟢 → (`b2`🔵 ∥ `b4`🟢) + `b3`🔵 → `b5`🔵 → `b6`🔵 | `make db` (54 аларма / 14 типов + `v_incidents`), `make api`, `GET /api/incidents` |
-| 2 Web | `d1`🟢 → `d2`🔵 → `d3`🔵 → `f1`🟢 → `f2`🔵 → `f3`🟢 → `f4`🔵 | `VITE_USE_FIXTURES=true`, `npm run dev`, `npm run typecheck` |
+| 1 Backend | `b1`🟢 → (`b2`🔵 ∥ `b4`🟢) + `b3`🔴 → `b5`🔵 → `b6`🔵 | `make db` (54 аларма / 14 типов + `v_incidents`), `make api`, `GET /api/incidents` |
+| 2 Web | `d1`🟢 → `d2`🔴 → `d3`🔵 → `f1`🟢 → `f2`🔵 → `f3`🟢 → `f4`🔴 | `VITE_USE_FIXTURES=true`, `npm run dev`, `npm run typecheck` |
 
 > Коммит после волны: `git add -A && git commit -m "feat(backend): wave 1"` (аналогично для web).
 
@@ -335,8 +340,8 @@ Git-склейка и продвижение `main` — **внутри пром�
 
 | Окно | Промпты (порядок) | Проверка |
 | --- | --- | --- |
-| 1 Backend | `b7`🔵 → `b10`🔵 ; `b8`🔵 ∥ `b9`🔵 ; `b14`🔵 (P0-доработка enrichment поверх b2) | `make db` (`driver_reference`>0, `v_driver_report`/`v_fleet`/`v_vehicle`), `GET /api/reports/driver/{plate}` ; enrichment-clamp/дефолты |
-| 2 Web | `d5`🔵 → `f7`🔴 ; `f14`🔵 (P0-доработка IncidentCard поверх f4) | экран «Аналитика/Voice»: 🎤→`transcribe`→`query`→дашборд В-1/В-2 ; карточка: состояния/sync/a11y |
+| 1 Backend | `b7`🔵 → `b10`🔵 ; `b8`🔵 ∥ `b9`🔴 ; `b14`🔵 (P0-доработка enrichment поверх b2) | `make db` (`driver_reference`>0, `v_driver_report`/`v_fleet`/`v_vehicle`), `GET /api/reports/driver/{plate}` ; enrichment-clamp/дефолты |
+| 2 Web | `d5`🔵 → `f7`🔴 ; `f14`🔴 (P0-доработка IncidentCard поверх f4) | экран «Аналитика/Voice»: 🎤→`transcribe`→`query`→дашборд В-1/В-2 ; карточка: состояния/sync/a11y |
 
 > `b14`/`f14` — доработка **уже выполненной** Волны 1 (DoD-глубина идей #3/#1): правят `enrichment.py`/`IncidentCard.tsx` поверх готового кода, не переисполняя b2/f4. Папки: `wave-2-1-reports-voice/track-{b,f}/`.
 
@@ -356,7 +361,7 @@ git **внутри промптов** (x2 идемпотентно подтяг�
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
 | 1 Backend | `b11`🔵 ∥ `b12`🔵 ∥ `b13`🔵 | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
-| 2 Web | `d4`🔵 → `f6`🔵 ; `f5`🔵 ∥ `f8`🔵 ∥ `f9`🔵 ∥ `f10`🔵 ∥ `f11`🔵 ∥ `f12`🔵 ∥ `f13`🔵 | все экраны кодят против контракта/фикстур |
+| 2 Web | `d4`🔵 → `f6`🔴 ; `f5`🔵 ∥ `f8`🔵 ∥ `f9`🔴 ∥ `f10`🔵 ∥ `f11`🔵 ∥ `f12`🔵 ∥ `f13`🔴 | все экраны кодят против контракта/фикстур |
 
 ### Барьер 2.2 — smoke прикладных (основное окно `skai_7`)
 
