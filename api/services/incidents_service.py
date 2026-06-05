@@ -133,10 +133,11 @@ def _enrich(db: duckdb.DuckDBPyConnection, row: dict[str, Any]) -> dict[str, Any
     events_7d = repo.count_alarms_in_window(db, plate, ts) if (plate and ts) else 0
     score = enrichment.risk_score(severity, speed_kmh, speed_limit, night, events_7d)
 
+    drv = enrichment.driver_for(db, plate)
     return {
-        "driver": enrichment.driver_for(plate),
-        "driver_id": enrichment.driver_id_for(plate),
-        "driver_phone": enrichment.driver_phone_for(plate),
+        "driver": drv["driver"],
+        "driver_id": drv["driver_id"],
+        "driver_phone": drv["driver_phone"],
         "vehicle_model": enrichment.vehicle_model_for(plate),
         "speed_limit_kmh": speed_limit,
         "is_night": night,

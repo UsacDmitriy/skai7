@@ -26,8 +26,15 @@ from api.core.enrichment import (
 class TestDeterminism:
     def test_driver_for_stable(self):
         plate = "Т780РН198"
-        assert driver_for(plate) == driver_for(plate)
-        assert driver_for(plate) == driver_for(plate)  # third call
+        assert driver_for(None, plate) == driver_for(None, plate)
+        assert driver_for(None, plate) == driver_for(None, plate)  # third call
+
+    def test_driver_for_returns_dict(self):
+        result = driver_for(None, "А777ВВ77")
+        assert set(result) == {"driver", "driver_id", "driver_phone"}
+        assert isinstance(result["driver"], str)
+        assert result["driver_id"].startswith("DRV-")
+        assert result["driver_phone"].startswith("+7")
 
     def test_driver_id_stable(self):
         plate = "Т780РН198"
@@ -42,9 +49,7 @@ class TestDeterminism:
         assert vehicle_model_for(plate) == vehicle_model_for(plate)
 
     def test_different_plates_may_differ(self):
-        # At least the pool is large enough that two common plates differ somewhere
-        results = {driver_for(p) for p in ["А111АА77", "В222ВВ99", "С333СС77", "Д444ДД77"]}
-        # Not all identical — deterministic but distributed
+        results = {driver_for(None, p)["driver"] for p in ["А111АА77", "В222ВВ99", "С333СС77", "Д444ДД77"]}
         assert len(results) >= 1  # can't be zero, just sanity
 
 
@@ -518,6 +523,137 @@ class TestTelemetryFromTrackpoints:
         result = telemetry_from_trackpoints(rows, "2026-05-15T10:00:00Z")
         offsets = [pt["ts_offset"] for pt in result]
         assert offsets == sorted(offsets)
+
+
+# ---------------------------------------------------------------------------
+# b14 · Enrichment hardening — DoD edge-cases поверх b2 (CONTRACT §2)
+# Гейт b14: эти проверки фиксируют граничные ветки/детерминизм.
+# ---------------------------------------------------------------------------
+
+
+class TestB14RiskScoreHardening:
+    """risk_score: clamp [0,100] на крайних входах + монотонность по severity."""
+
+    def test_clamp_low_extreme(self):
+        # speed=0, events=0, day, low → минимально возможный, всё ещё в [0,100]
+        score = risk_score("low", 0.0, 90, False, 0)
+        assert 0 <= score <= 100
+
+    def test_clamp_high_extreme(self):
+        # speed ≫ limit, events ≫ 7, critical, night → максимум, не выходит за 100
+        score = risk_score("critical", 9999.0, 60, True, 9999)
+        assert score == 100
+
+    def test_clamp_zero_speed_limit_no_raise(self):
+        # деление на 0 не должно падать
+        score = risk_score("critical", 80.0, 0, True, 7)
+        assert 0 <= score <= 100
+
+    def test_unknown_severity_defaults_no_raise(self):
+        # неизвестная severity → дефолтный вес (как low), без исключения/NULL
+        score = risk_score("__UNKNOWN__", 70.0, 90, False, 3)
+        assert isinstance(score, int)
+        assert 0 <= score <= 100
+
+    def test_monotonic_by_severity(self):
+        # при фиксированных speed/limit/night/events: critical ≥ high ≥ medium ≥ low
+        kw = dict(speed_kmh=80.0, speed_limit_kmh=90, is_night=True, events_last_7d=4)
+        s_low = risk_score("low", **kw)
+        s_med = risk_score("medium", **kw)
+        s_high = risk_score("high", **kw)
+        s_crit = risk_score("critical", **kw)
+        assert s_crit >= s_high >= s_med >= s_low
+
+    def test_result_always_int(self):
+        for sev in ("low", "medium", "high", "critical"):
+            assert isinstance(risk_score(sev, 55.0, 90, False, 2), int)
+
+
+class TestB14SpeedLimitHardening:
+    """speed_limit_for: неизвестный код → 90, без NULL/исключения."""
+
+    def test_unknown_literal_defaults_to_90(self):
+        assert speed_limit_for("__UNKNOWN__") == 90
+
+    def test_empty_code_defaults_to_90(self):
+        assert speed_limit_for("") == 90
+
+    def test_unknown_never_none(self):
+        assert speed_limit_for("__UNKNOWN__") is not None
+
+    def test_evidence_summary_unknown_not_null(self):
+        # label/«версия» неизвестного кода → дефолтный шаблон, без NULL
+        summary = evidence_summary("__UNKNOWN__", 50.0, "low")
+        assert summary is not None
+        assert isinstance(summary, str) and len(summary) > 0
+
+
+class TestB14CamerasHardening:
+    """cameras: ровно 3, status ∈ {online,warning,offline}, no-video → offline."""
+
+    _STATUSES = {"online", "warning", "offline"}
+
+    def test_empty_yields_three_offline(self):
+        cams = cameras_from_videofiles([])
+        assert len(cams) == 3
+        for cam in cams:
+            assert cam["status"] == "offline"
+            assert cam["hasVideo"] is False
+
+    def test_status_always_in_enum(self):
+        rows = [
+            {"channel": "1", "download_status": "downloaded"},
+            {"channel": "5", "download_status": "partial"},
+            {"channel": "2", "download_status": ""},
+        ]
+        cams = cameras_from_videofiles(rows)
+        assert len(cams) == 3
+        for cam in cams:
+            assert cam["status"] in self._STATUSES
+
+    def test_missing_channel_offline_no_raise(self):
+        # только ADAS — DMS/СНЗ отсутствуют, не падаем
+        cams = cameras_from_videofiles([{"channel": "1", "download_status": "downloaded"}])
+        assert len(cams) == 3
+        assert cams[1]["status"] == "offline" and cams[1]["hasVideo"] is False
+        assert cams[2]["status"] == "offline" and cams[2]["hasVideo"] is False
+
+
+class TestB14IsNightBoundary:
+    """is_night: граница [22, 06) детерминирована."""
+
+    def test_22_is_night(self):
+        assert is_night("2026-05-15T22:00:00Z") is True
+
+    def test_06_is_day(self):
+        assert is_night("2026-05-15T06:00:00Z") is False
+
+    def test_05_59_is_night(self):
+        assert is_night("2026-05-15T05:59:59Z") is True
+
+    def test_21_59_is_day(self):
+        assert is_night("2026-05-15T21:59:59Z") is False
+
+
+class TestB14Determinism:
+    """is_night / speed_limit_for / ax — один вход → один выход."""
+
+    def test_is_night_stable(self):
+        ts = "2026-05-15T23:10:00Z"
+        assert is_night(ts) == is_night(ts) == is_night(ts)
+
+    def test_speed_limit_stable(self):
+        assert speed_limit_for("OVERSPEED") == speed_limit_for("OVERSPEED")
+
+    def test_ax_stable(self):
+        rows = [
+            {"timestamp_utc": "2026-05-15T09:59:30Z", "speed_kmh": "80"},
+            {"timestamp_utc": "2026-05-15T10:00:00Z", "speed_kmh": "72"},
+        ]
+        r1 = telemetry_from_trackpoints(rows, "2026-05-15T10:00:00Z")
+        r2 = telemetry_from_trackpoints(rows, "2026-05-15T10:00:00Z")
+        assert r1 == r2
+        assert r1[0]["ax"] == 0.0  # первая точка — нет предыдущей
 
 
 # Import datetime for helper

@@ -24,3 +24,12 @@ export type { Column, DataTableProps } from './ui/DataTable'
 
 export { TelemetryChart } from './ui/TelemetryChart'
 export type { TelemetryChartProps, TelemetryPoint } from './ui/TelemetryChart'
+
+export { VoiceButton } from './ui/VoiceButton'
+export type { VoiceButtonProps, VoiceButtonState } from './ui/VoiceButton'
+
+export { ConfirmationModal } from './ui/ConfirmationModal'
+export type { ConfirmationModalProps } from './ui/ConfirmationModal'
+
+export { Timeline } from './ui/Timeline'
+export type { TimelineProps, TimelineEvent } from './ui/Timeline'

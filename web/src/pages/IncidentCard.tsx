@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
   AlertTriangle,
   Archive,
+  ArrowLeft,
   CheckCircle2,
   ClipboardList,
   MapPin,
@@ -34,13 +35,13 @@ import {
 import { cn } from '@/components/ui/cn'
 
 /**
- * f4 · Карточка инцидента (P0, сквозной flow на f2-клиенте).
- * Маршрут `/incidents/:id` · контракт §3 · референс `ui/03 Карточка инцидента/`.
- *
- * Ключевой демо-эффект (idea #1, §6): синхронизация видео↔телеметрия.
- * `currentSec` (из VideoPlayer.onTimeUpdate переднего плеера) проецируется в
- * `playheadOffset` графика; клик по графику → общий `seekTo` на обоих плеерах.
+ * f14 · Hardening карточки инцидента (поверх f4, Волна 2.1).
+ * Добавляет: skeleton, error/404 + «Назад к ленте», пустая телеметрия,
+ * таймзона парка, ролевой фильтр действий, a11y видео/графика, предупреждения камер.
  */
+
+// ── Таймзона парка (env VITE_PARK_TIMEZONE, иначе UTC) ────────────────────────
+const PARK_TZ = (import.meta.env.VITE_PARK_TIMEZONE as string | undefined) ?? 'UTC'
 
 // ── Словари маппинга enum → ярлык (контракт §3.1) ─────────────────────────────
 
@@ -51,7 +52,6 @@ const SEVERITY_LABEL: Record<Severity, string> = {
   low: 'Низкий',
 }
 
-/** COMBINED → «Оба источника», DIAGNOSTIC → диагностика (contract-change #1). */
 const SOURCE_LABEL: Record<Source, string> = {
   DMS: 'DMS · видеоаналитика салона',
   ADAS: 'ADAS · фронтальная',
@@ -73,7 +73,20 @@ const CAMERA_STATUS: Record<CameraStatus, { label: string; dot: string; text: st
   warning: { label: 'Нестабильна', dot: 'bg-warning', text: 'text-warning-text' },
 }
 
-// ── Форматтеры ────────────────────────────────────────────────────────────────
+// ── Роли (§7.6) ───────────────────────────────────────────────────────────────
+
+type AppRole = 'logist' | 'dispatcher' | 'safety'
+
+const ROLE_LABELS: Record<AppRole, string> = {
+  logist: 'Логист 🏭',
+  dispatcher: 'Диспетчер 🛡',
+  safety: 'Безопасник 🔒',
+}
+
+/** Деструктивные действия — только Безопасник. */
+const SAFETY_ONLY: ActionType[] = ['validate', 'stop_vehicle']
+
+// ── Форматтеры (таймзона парка) ───────────────────────────────────────────────
 
 function formatDateTime(iso: string): string {
   const d = new Date(iso)
@@ -84,6 +97,7 @@ function formatDateTime(iso: string): string {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: PARK_TZ,
   })
 }
 
@@ -91,7 +105,7 @@ function formatTime(iso: string | null): string {
   if (!iso) return '—'
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return iso
-  return d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+  return d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: PARK_TZ })
 }
 
 // ── Описание панели действий (idea-агностично, из контракта §3.4) ─────────────
@@ -140,19 +154,26 @@ function CameraRow({ cam }: { cam: Camera }) {
   )
 }
 
+function SkeletonBox({ className }: { className?: string }) {
+  return <div className={cn('animate-pulse rounded bg-border', className)} />
+}
+
 // ── Экран ─────────────────────────────────────────────────────────────────────
 
 export default function IncidentCard() {
   const { id = '' } = useParams<{ id: string }>()
+  const navigate = useNavigate()
 
   const [incident, setIncident] = useState<IncidentDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<{ status?: number; message: string } | null>(null)
 
-  // Рантайм-статус (обновляется ответом POST /actions) поверх загруженного.
   const [statusOverride, setStatusOverride] = useState<Status | null>(null)
   const [pending, setPending] = useState<ActionType | null>(null)
-  const [actionFeedback, setActionFeedback] = useState<string | null>(null)
+  const [actionFeedback, setActionFeedback] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
+
+  // Роль пользователя (локальный переключатель — до реализации f13/глобального контекста).
+  const [role, setRole] = useState<AppRole>('dispatcher')
 
   // Синхронизация видео↔телеметрия (idea #1).
   const [currentSec, setCurrentSec] = useState(0)
@@ -184,7 +205,6 @@ export default function IncidentCard() {
     }
   }, [id])
 
-  // Окно телеметрии: [min..max] ts_offset — основа маппинга видео↔график.
   const span = useMemo(() => {
     const offsets = incident?.telemetry.map((p) => p.ts_offset) ?? []
     const min = offsets.length ? Math.min(...offsets) : 0
@@ -192,16 +212,13 @@ export default function IncidentCard() {
     return { min, max, range: Math.max(1, max - min) }
   }, [incident])
 
-  // Жёлтая метка события (t=0) в % длины ролика — для VideoPlayer.eventMarkerPct.
   const eventMarkerPct = useMemo(
     () => ((0 - span.min) / span.range) * 100,
     [span],
   )
 
-  // Видео currentTime (сек от начала окна) → ts_offset графика.
   const playheadOffset = span.min + currentSec
 
-  // Клик по графику → ts_offset → сек от начала окна → общий seekTo обоих плееров.
   const handleChartSeek = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       const box = chartBoxRef.current
@@ -216,36 +233,73 @@ export default function IncidentCard() {
 
   const runAction = useCallback(
     async (action: ActionType) => {
-      if (!incident) return
+      if (!incident || pending != null) return
       setPending(action)
       setActionFeedback(null)
       try {
         const res = await client.postAction({ incident_id: incident.id, action, comment: '' })
         if (res.status) setStatusOverride(res.status)
         const label = ACTIONS.find((a) => a.action === action)?.label ?? action
-        setActionFeedback(`Действие «${label}» отправлено${res.status ? ` · статус: ${STATUS_LABEL[res.status]}` : ''}`)
+        setActionFeedback({
+          kind: 'ok',
+          text: `Действие «${label}» выполнено${res.status ? ` · статус: ${STATUS_LABEL[res.status]}` : ''}`,
+        })
       } catch (e: unknown) {
         const msg = e instanceof ApiError ? e.message : e instanceof Error ? e.message : 'Ошибка'
-        setActionFeedback(`Не удалось выполнить действие: ${msg}`)
+        setActionFeedback({ kind: 'err', text: `Не удалось выполнить действие: ${msg}` })
+        // statusOverride не меняем — состояние откатывается автоматически (не было set)
       } finally {
         setPending(null)
       }
     },
-    [incident],
+    [incident, pending],
   )
 
-  // ── Состояния loading / error / 404 ─────────────────────────────────────────
+  // ── Skeleton loading ─────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="grid h-full place-items-center">
-        <div className="flex items-center gap-3 text-muted">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-border border-t-primary" />
-          Загрузка инцидента…
+      <div className="mx-auto max-w-6xl space-y-4" aria-busy="true" aria-label="Загрузка инцидента">
+        <Card>
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <SkeletonBox className="h-7 w-48" />
+              <SkeletonBox className="h-6 w-20" />
+              <SkeletonBox className="h-6 w-16" />
+            </div>
+            <div className="grid grid-cols-2 gap-4 border-t border-border pt-4 sm:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="space-y-1.5">
+                  <SkeletonBox className="h-3 w-16" />
+                  <SkeletonBox className="h-4 w-28" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <div className="space-y-4 lg:col-span-2">
+            <Card>
+              <SkeletonBox className="mb-3 h-4 w-32" />
+              <div className="grid grid-cols-2 gap-3">
+                <SkeletonBox className="aspect-video" />
+                <SkeletonBox className="aspect-video" />
+              </div>
+            </Card>
+            <Card>
+              <SkeletonBox className="mb-2 h-4 w-24" />
+              <SkeletonBox className="h-60" />
+            </Card>
+          </div>
+          <div className="space-y-4">
+            <Card><SkeletonBox className="h-24" /></Card>
+            <Card><SkeletonBox className="h-44" /></Card>
+          </div>
         </div>
       </div>
     )
   }
 
+  // ── Error / 404 ──────────────────────────────────────────────────────────────
   if (error || !incident) {
     const is404 = error?.status === 404
     return (
@@ -258,6 +312,14 @@ export default function IncidentCard() {
           <p className="mt-1 text-sm text-muted">
             {is404 ? `Инцидент «${id}» не существует.` : error?.message}
           </p>
+          <Button
+            variant="secondary"
+            icon={ArrowLeft}
+            onClick={() => navigate('/')}
+            className="mx-auto mt-4"
+          >
+            Назад к ленте
+          </Button>
         </Card>
       </div>
     )
@@ -270,6 +332,18 @@ export default function IncidentCard() {
       ? `DMS-сенсор работал ещё +${inc.sensor_active_after_sec} сек после ухода камеры в offline`
       : null
   const offlineCam = inc.cameras.find((c) => c.status !== 'online' && c.offline_from)
+
+  // Статус камер фронтальная/DMS для предупреждений рядом с плеерами.
+  const adasStatus = inc.cameras[0]?.status
+  const dmsStatus = inc.cameras[1]?.status
+
+  // a11y: текстовое summary графика для скринридера (скорость + ax, как требует §f14).
+  const chartAriaLabel = (() => {
+    if (!inc.telemetry.length) return 'График телеметрии: данные отсутствуют.'
+    const speeds = inc.telemetry.map((p) => p.speed)
+    const maxAx = Math.max(...inc.telemetry.map((p) => Math.abs(p.ax)))
+    return `График телеметрии: скорость ${Math.min(...speeds)}–${Math.max(...speeds)} км/ч, пик акселерометра ${maxAx.toFixed(1)} м/с², ${inc.telemetry.length} точек данных. Жёлтая пунктирная линия — момент события (t=0).`
+  })()
 
   return (
     <div className="mx-auto max-w-6xl space-y-4">
@@ -301,10 +375,12 @@ export default function IncidentCard() {
           <Field label="Safety-score водителя">
             <span className="tabular-nums">{inc.driver_safety_score}</span> / 100
           </Field>
-          <Field label="Время события">{formatDateTime(inc.ts)}</Field>
+          <Field label="Время события">
+            <span className="tabular-nums">{formatDateTime(inc.ts)}</span>
+          </Field>
           <Field label="Скорость">
-            {inc.speed_kmh} км/ч{' '}
-            <span className="text-muted">(лимит {inc.speed_limit_kmh})</span>
+            <span className="tabular-nums">{inc.speed_kmh}</span> км/ч{' '}
+            <span className="text-muted">(лимит <span className="tabular-nums">{inc.speed_limit_kmh}</span>)</span>
           </Field>
           <div className="col-span-2 min-w-0">
             <div className="text-[11px] uppercase tracking-wide text-muted">Адрес</div>
@@ -342,24 +418,39 @@ export default function IncidentCard() {
             {inc.video_available ? (
               <>
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  {/* ADAS · фронтальная */}
                   <div className="space-y-1">
+                    {adasStatus === 'warning' && (
+                      <span className="inline-flex items-center gap-1 text-xs font-medium text-warning-text">
+                        <span className="h-1.5 w-1.5 rounded-full bg-warning" aria-hidden /> Нестабильна
+                      </span>
+                    )}
                     <VideoPlayer
                       src={inc.cam_front_url ? client.videoUrl(inc.id, 1) : undefined}
                       eventMarkerPct={eventMarkerPct}
                       onTimeUpdate={setCurrentSec}
                       seekTo={seekSec}
+                      ariaLabel="Видео ADAS · фронтальная камера"
                     />
                     <span className="text-xs text-muted">ADAS · фронтальная</span>
                   </div>
+                  {/* DMS · салон */}
                   <div className="space-y-1">
+                    {dmsStatus === 'warning' && (
+                      <span className="inline-flex items-center gap-1 text-xs font-medium text-warning-text">
+                        <span className="h-1.5 w-1.5 rounded-full bg-warning" aria-hidden /> Нестабильна
+                      </span>
+                    )}
                     <VideoPlayer
                       src={inc.cam_dms_url ? client.videoUrl(inc.id, 5) : undefined}
                       eventMarkerPct={eventMarkerPct}
                       seekTo={seekSec}
+                      ariaLabel="Видео DMS · камера салона"
                     />
                     <span className="text-xs text-muted">DMS · салон</span>
                   </div>
                 </div>
+                {/* Другие камеры — только если cam_extra непуст */}
                 {inc.cam_extra.length > 0 && (
                   <div className="mt-3">
                     <div className="mb-1 text-xs font-medium text-muted">Другие камеры</div>
@@ -369,6 +460,7 @@ export default function IncidentCard() {
                           <VideoPlayer
                             src={client.videoUrl(inc.id, cam.channel as VideoChannel)}
                             seekTo={seekSec}
+                            ariaLabel={`Видео · канал ${cam.channel}`}
                           />
                           <span className="text-xs text-muted">Канал {cam.channel}</span>
                         </div>
@@ -397,6 +489,7 @@ export default function IncidentCard() {
                   variant="secondary"
                   icon={Archive}
                   loading={pending === 'request_archive'}
+                  disabled={pending != null && pending !== 'request_archive'}
                   onClick={() => runAction('request_archive')}
                 >
                   Запросить архив
@@ -410,17 +503,33 @@ export default function IncidentCard() {
               <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
                 Телеметрия
               </h2>
-              <span className="text-xs text-muted">
-                клик по графику — перемотка обоих плееров
-              </span>
+              {inc.telemetry.length > 0 && (
+                <span className="text-xs text-muted">
+                  клик по графику — перемотка обоих плееров
+                </span>
+              )}
             </div>
-            {/* Оверлей-клик: вычисляет ts_offset из позиции курсора, не трогая d2-примитив. */}
-            <div ref={chartBoxRef} onClick={handleChartSeek} className="cursor-crosshair">
-              <TelemetryChart data={inc.telemetry} playheadOffset={playheadOffset} />
-            </div>
-            <p className="mt-2 text-xs text-muted">
-              Жёлтая пунктирная вертикаль — маркер события (t=0). Синяя — текущее время видео.
-            </p>
+            {inc.telemetry.length === 0 ? (
+              <div className="flex h-60 items-center justify-center rounded-md border border-dashed border-border bg-bg">
+                <span className="text-sm text-muted">Нет данных телеметрии</span>
+              </div>
+            ) : (
+              <>
+                {/* role="img" + aria-label делают график доступным для скринридеров. */}
+                <div
+                  ref={chartBoxRef}
+                  onClick={handleChartSeek}
+                  className="cursor-crosshair"
+                  role="img"
+                  aria-label={chartAriaLabel}
+                >
+                  <TelemetryChart data={inc.telemetry} playheadOffset={playheadOffset} />
+                </div>
+                <p className="mt-2 text-xs text-muted">
+                  Жёлтая пунктирная вертикаль — маркер события (t=0). Синяя — текущее время видео.
+                </p>
+              </>
+            )}
           </Card>
         </div>
 
@@ -436,23 +545,52 @@ export default function IncidentCard() {
           </Card>
 
           <Card>
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">
-              Действия
-            </h2>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
+                Действия
+              </h2>
+              {/* Ролевой переключатель (локальный до f13) */}
+              <div className="flex gap-1" role="group" aria-label="Роль пользователя">
+                {(Object.keys(ROLE_LABELS) as AppRole[]).map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => setRole(r)}
+                    className={cn(
+                      'rounded px-2 py-0.5 text-[10px] font-medium transition-colors',
+                      role === r
+                        ? 'bg-primary text-white'
+                        : 'bg-primary/10 text-primary hover:bg-primary/20',
+                    )}
+                    aria-pressed={role === r}
+                    title={`Переключить роль на ${ROLE_LABELS[r]}`}
+                  >
+                    {ROLE_LABELS[r]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="flex flex-col gap-2">
-              {ACTIONS.map((a) => (
-                <Button
-                  key={a.action}
-                  variant={a.variant}
-                  icon={a.icon}
-                  loading={pending === a.action}
-                  disabled={pending != null && pending !== a.action}
-                  onClick={() => runAction(a.action)}
-                  className="w-full justify-start"
-                >
-                  {a.label}
-                </Button>
-              ))}
+              {ACTIONS.map((a) => {
+                const isSafetyOnly = SAFETY_ONLY.includes(a.action)
+                const blocked = isSafetyOnly && role !== 'safety'
+                return (
+                  <Button
+                    key={a.action}
+                    variant={a.variant}
+                    icon={a.icon}
+                    loading={pending === a.action}
+                    disabled={blocked || (pending != null && pending !== a.action)}
+                    onClick={() => !blocked && runAction(a.action)}
+                    className="w-full justify-start"
+                    title={blocked ? `Только Безопасник: ${a.label}` : undefined}
+                    aria-disabled={blocked}
+                  >
+                    {a.label}
+                    {blocked && <span className="ml-auto text-[10px] opacity-60">🔒 Безопасник</span>}
+                  </Button>
+                )
+              })}
               {!inc.video_available && (
                 <Button
                   variant="secondary"
@@ -466,8 +604,20 @@ export default function IncidentCard() {
                 </Button>
               )}
             </div>
+
             {actionFeedback && (
-              <p className="mt-3 rounded-md bg-bg px-3 py-2 text-xs text-ink">{actionFeedback}</p>
+              <p
+                role="status"
+                aria-live="polite"
+                className={cn(
+                  'mt-3 rounded-md px-3 py-2 text-xs',
+                  actionFeedback.kind === 'ok'
+                    ? 'bg-ok/10 text-ok-text'
+                    : 'bg-critical/10 text-critical-text',
+                )}
+              >
+                {actionFeedback.text}
+              </p>
             )}
           </Card>
         </div>

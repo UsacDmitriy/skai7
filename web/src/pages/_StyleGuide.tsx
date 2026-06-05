@@ -4,14 +4,19 @@ import {
   Button,
   Card,
   type Column,
+  ConfirmationModal,
   DataTable,
   ScoreBar,
   type Severity,
   SeverityBadge,
   TelemetryChart,
   type TelemetryPoint,
+  Timeline,
+  type TimelineEvent,
   VideoPlayer,
+  VoiceButton,
 } from '@/components'
+import type { ReportQuery } from '@/api/types'
 
 /**
  * `/_styleguide` — витрина всех UI-примитивов d2 во всех состояниях.
@@ -92,6 +97,24 @@ const SHOCK_TELEMETRY: TelemetryPoint[] = [
 const DEMO_VIDEO_SRC =
   'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
 
+// ── Демо-Timeline: события трека видеодосье (#7), t=0 — момент инцидента ───────
+const DEMO_TIMELINE: TimelineEvent[] = [
+  { ts_offset: -8, alarm_code: 'OVERSPEED', label: 'Превышение скорости', severity: 'high', has_video: true },
+  { ts_offset: -3, alarm_code: 'FCW', label: 'Опасное сближение', severity: 'medium', has_video: false },
+  { ts_offset: 0, alarm_code: 'COLLISION', label: 'Удар (датчик)', severity: 'critical', has_video: true },
+  { ts_offset: 4, alarm_code: 'HARSH_BRAKE', label: 'Резкое торможение', severity: 'low', has_video: false },
+  { ts_offset: 9, alarm_code: 'DMS_DISTRACT', label: 'Отвлечение водителя', severity: 'high', has_video: true },
+]
+
+// Демо-ReportQuery для ConfirmationModal (§7.5).
+const DEMO_QUERY: ReportQuery = {
+  kind: 'driver',
+  driver_name: 'Оздоев И. М.',
+  plate: 'А 482 ТР 716',
+  period_days: 3,
+  view: 'drivers',
+}
+
 // ── Хелперы вёрстки витрины ───────────────────────────────────────────────────
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
@@ -122,6 +145,8 @@ function Swatch({ name, value, hex, dark }: { name: string; value: string; hex: 
 export default function StyleGuide() {
   const [selectedCard, setSelectedCard] = useState<Severity | null>('critical')
   const [selectedRow, setSelectedRow] = useState<string>('INC-1042')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null)
 
   return (
     <div className="min-h-screen bg-bg px-8 py-10 font-sans text-ink">
@@ -276,6 +301,74 @@ export default function StyleGuide() {
             <p className="mt-2 text-xs text-muted">
               Жёлтая пунктирная вертикаль — статичный маркер события (t=0). Синяя — playhead (текущее время видео).
             </p>
+          </Card>
+        </Section>
+
+        {/* ── VoiceButton (d5) ─────────────────────────────────────────────── */}
+        <Section
+          title="VoiceButton"
+          hint="3 состояния: idle (primary-outline) · recording (critical-pulse) · processing (spinner)"
+        >
+          <Card>
+            <div className="flex flex-wrap items-center gap-8">
+              <div className="flex flex-col items-center gap-2">
+                <VoiceButton state="idle" onRecorded={() => {}} />
+                <span className="text-xs text-muted">idle</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <VoiceButton state="recording" onRecorded={() => {}} />
+                <span className="text-xs text-muted">recording</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <VoiceButton state="processing" onRecorded={() => {}} />
+                <span className="text-xs text-muted">processing</span>
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-muted">
+              Вид управляется внешним <code>state</code>; запись (MediaRecorder) и отдача blob — внутри
+              компонента. idle-кнопка кликабельна — запросит микрофон.
+            </p>
+          </Card>
+        </Section>
+
+        {/* ── ConfirmationModal (d5) ───────────────────────────────────────── */}
+        <Section title="ConfirmationModal" hint="«Вот как я понял ваш запрос» · [Исправить] / [✓ Показать]">
+          <Card>
+            <Button variant="primary" onClick={() => setModalOpen(true)}>
+              Открыть окно подтверждения
+            </Button>
+            <ConfirmationModal
+              open={modalOpen}
+              query={DEMO_QUERY}
+              onEdit={() => setModalOpen(false)}
+              onConfirm={() => setModalOpen(false)}
+              onClose={() => setModalOpen(false)}
+            />
+          </Card>
+        </Section>
+
+        {/* ── Timeline (d5) ────────────────────────────────────────────────── */}
+        <Section
+          title="Timeline"
+          hint="линия трека · точки по severity · t=0 critical · значок видео · playhead · клик по точке"
+        >
+          <Card className="space-y-6">
+            <div>
+              <Timeline events={DEMO_TIMELINE} playheadOffset={2} onSelect={setSelectedEvent} />
+              <p className="text-xs text-muted">
+                {selectedEvent
+                  ? `Выбрано: ${selectedEvent.label} (${selectedEvent.alarm_code}, t=${selectedEvent.ts_offset}s)`
+                  : 'Кликни по точке — она вызовет onSelect.'}
+              </p>
+            </div>
+            <div>
+              <Timeline events={[DEMO_TIMELINE[2]]} />
+              <p className="text-xs text-muted">Граничный кейс: единственная точка (диапазон=0) — без падения.</p>
+            </div>
+            <div>
+              <Timeline events={[]} />
+              <p className="text-xs text-muted">Граничный кейс: events=[] — только линия трека.</p>
+            </div>
           </Card>
         </Section>
       </div>

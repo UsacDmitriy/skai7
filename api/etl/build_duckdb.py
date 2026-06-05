@@ -125,6 +125,35 @@ def _load_alarm_catalog(conn: duckdb.DuckDBPyConnection, json_path: Path) -> int
     return count
 
 
+def _load_seed_csvs(conn: duckdb.DuckDBPyConnection, seed_dir: Path) -> int:
+    """Load committed data/seed/*.csv as stable tables (stem name).
+
+    Контракт §7.1/b7: seed-артефакты (driver_reference, driver_trips) лежат в git и
+    грузятся при `make db` ПЕРЕД SQL-view (20_/21_/22_ ссылаются на них). `make seed`
+    лишь перегенерирует CSV из источника. Имена таблиц — стабильные (без префикса).
+    """
+    if not seed_dir.exists():
+        print(f"  [seed] {seed_dir} not found — skipping (run `make seed` to generate)")
+        return 0
+
+    seed_files = sorted(seed_dir.glob("*.csv"))
+    if not seed_files:
+        print(f"  [seed] {seed_dir} is empty — skipping")
+        return 0
+
+    for csv_path in seed_files:
+        table = csv_path.stem.lower()  # driver_reference.csv -> "driver_reference"
+        csv_literal = str(csv_path).replace("'", "''")
+        conn.execute(
+            f'CREATE OR REPLACE TABLE "{table}" AS '
+            f"SELECT * FROM read_csv_auto('{csv_literal}', header=true)"
+        )
+        row_count = conn.execute(f'SELECT count(*) FROM "{table}"').fetchone()[0]
+        print(f"  [seed] {table!r:60s} {row_count:>6} rows  <- {csv_path.name}")
+
+    return len(seed_files)
+
+
 def _apply_sql_files(conn: duckdb.DuckDBPyConnection, sql_dir: Path) -> int:
     """Execute all *.sql files in sql_dir in lexicographic order. Returns file count."""
     if not sql_dir.exists():
@@ -184,6 +213,7 @@ def build(
     ready_dir: Path = Path("datasets/ready"),
     json_path: Path = Path("data/analysis/alarm_types.json"),
     sql_dir: Path = Path("api/sql"),
+    seed_dir: Path = Path("data/seed"),
 ) -> None:
     """Build (or rebuild) data/skai.duckdb idempotently."""
     db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -196,6 +226,10 @@ def build(
         print("\n-- Loading alarm_type_catalog --")
         _load_alarm_catalog(conn, json_path)
         n_tables += 1  # catalog counts as a table
+
+        # Seed-таблицы (driver_reference/driver_trips) — ДО SQL-view: 21_/22_ их используют.
+        print("\n-- Loading seed tables --")
+        n_tables += _load_seed_csvs(conn, seed_dir)
 
         print("\n-- Applying SQL files --")
         n_sql = _apply_sql_files(conn, sql_dir)
@@ -217,4 +251,6 @@ if __name__ == "__main__":
         kwargs["json_path"] = Path(args[2])
     if len(args) >= 4:
         kwargs["sql_dir"] = Path(args[3])
+    if len(args) >= 5:
+        kwargs["seed_dir"] = Path(args[4])
     build(**kwargs)

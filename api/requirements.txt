@@ -4,5 +4,8 @@ duckdb
 pydantic>=2
 pydantic-settings
 pandas
+python-multipart        # multipart/form-data для POST /reports/transcribe (b8)
+faster-whisper          # STT-движок (lazy import + fallback в stt_service, b8)
+groq                    # NLU-движок (lazy import + regex-fallback в nlu_service, b9)
 pytest
 httpx        # для тестов TestClient

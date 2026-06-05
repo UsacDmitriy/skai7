@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { cn } from './cn'
 
 /** Точка телеметрии — форма из CONTRACT §3.1 (`ax` = производная скорости). */
 export interface TelemetryPoint {
@@ -21,6 +22,7 @@ export interface TelemetryChartProps {
   data: TelemetryPoint[]
   /**
    * Движущаяся синяя вертикаль = текущее время видео (idea #1).
+   * Позиционируется непрерывно между дискретными точками ts_offset (recharts numeric scale).
    * Не путать со статичным маркером события (x=0). undefined → не рисуется.
    */
   playheadOffset?: number
@@ -41,8 +43,38 @@ export function TelemetryChart({
   height = 240,
   className,
 }: TelemetryChartProps) {
+  if (data.length === 0) {
+    return (
+      <div
+        role="img"
+        aria-label="Телеметрия недоступна"
+        className={cn(
+          'flex items-center justify-center rounded-md bg-surface text-muted',
+          className,
+        )}
+        style={{ height }}
+      >
+        <span className="text-sm">Нет телеметрии</span>
+      </div>
+    )
+  }
+
+  const speeds = data.map((d) => d.speed)
+  const axValues = data.map((d) => d.ax)
+  const avgSpeed = (speeds.reduce((a, b) => a + b, 0) / speeds.length).toFixed(1)
+  const maxAx = Math.max(...axValues).toFixed(2)
+
   return (
-    <div className={className} style={{ width: '100%', height }}>
+    <div
+      role="img"
+      aria-label={`Телеметрия: средняя скорость ${avgSpeed} км/ч, макс. ускорение ${maxAx} м/с²`}
+      tabIndex={0}
+      className={cn(
+        'rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+        className,
+      )}
+      style={{ width: '100%', height }}
+    >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 8, right: 12, bottom: 8, left: 0 }}>
           <CartesianGrid stroke={COLOR_GRID} strokeDasharray="2 2" />

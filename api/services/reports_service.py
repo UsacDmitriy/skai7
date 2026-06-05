@@ -1,19 +1,20 @@
-"""Сервис домена reports (§3.3 / §7.5) — рабочая реализация.
+"""Сервис домена reports (§7.2/§7.4/§7.5) — рабочая реализация (b5 + b10).
 
-Строит DriverReport/FleetReport поверх обогащённых сводок incidents_service +
-метрик ТС из vehicles_repo. `query` — regex-NLU-заглушка (§3.3); реальный
-Groq/Whisper-парсер придёт в b9 (`nlu_service`), сюда подключится через ReportQuery.
+Строит DriverReport/FleetReport/VehicleReport поверх обогащённых сводок
+incidents_service (источник risk_score — формула §2, как в §1.3 для v_incidents),
+справочника водителей `driver_reference`/`driver_trips` (b7) и SQL-views
+v_driver_report/v_fleet/v_vehicle (b10). `query` использует реальный NLU
+(`nlu_service.parse`, b9): голос/текст → ReportQuery → отчёт (формат ответа §7.4).
 """
 
 from __future__ import annotations
 
-import re
 from typing import Any
 
 import duckdb
 
 from api.core import enrichment
-from api.domain.incidents import IncidentSummary
+from api.domain.incidents import Camera, IncidentSummary
 from api.domain.reports import (
     DriverRef,
     DriverReport,
@@ -23,10 +24,11 @@ from api.domain.reports import (
     ReportKPI,
     ReportPeriod,
     ReportQuery,
+    VehicleReport,
     ViolationRow,
 )
-from api.repositories import vehicles_repo
-from api.services import incidents_service
+from api.repositories import rows_to_dicts, vehicles_repo
+from api.services import incidents_service, nlu_service
 
 # «Грубые» нарушения (§7.5): critical ИЛИ курение/превышение.
 _GROSS_CODES = {"OVERSPEED", "DMS_SMOKING"}
@@ -34,8 +36,14 @@ _GROSS_CODES = {"OVERSPEED", "DMS_SMOKING"}
 _VIDEO_SOURCES = {"DMS", "ADAS", "COMBINED"}
 
 
-def _is_gross(severity: str, alarm_code: str) -> bool:
-    return severity == "critical" or alarm_code in _GROSS_CODES
+# ---------------------------------------------------------------------------
+# Единое правило «грубых» (§7.5) — один хелпер для driver/fleet/vehicle.
+# ---------------------------------------------------------------------------
+
+
+def is_gross(row: IncidentSummary) -> bool:
+    """Грубое нарушение (§7.5): severity=critical ИЛИ alarm_code ∈ {OVERSPEED, DMS_SMOKING}."""
+    return row.severity == "critical" or row.alarm_code in _GROSS_CODES
 
 
 def _violation_row(s: IncidentSummary) -> ViolationRow:
@@ -46,7 +54,7 @@ def _violation_row(s: IncidentSummary) -> ViolationRow:
         alarm_label_ru=s.alarm_label_ru,
         source=s.source,
         severity=s.severity,
-        is_gross=_is_gross(s.severity, s.alarm_code),
+        is_gross=is_gross(s),
     )
 
 
@@ -55,7 +63,7 @@ def _kpi(summaries: list[IncidentSummary]) -> ReportKPI:
         total=len(summaries),
         video_da=sum(1 for s in summaries if s.source in _VIDEO_SOURCES),
         telematics=sum(1 for s in summaries if s.source == "TELEMATICS"),
-        gross=sum(1 for s in summaries if _is_gross(s.severity, s.alarm_code)),
+        gross=sum(1 for s in summaries if is_gross(s)),
     )
 
 
@@ -72,34 +80,74 @@ def _avg_risk(summaries: list[IncidentSummary]) -> int:
     return round(sum(s.risk_score for s in summaries) / len(summaries))
 
 
-def _cameras_ok(vehicle: dict[str, Any] | None) -> str:
-    """Доля онлайн-камер «N/3». Без точного источника — по downloaded_video_count."""
-    # TODO: реальный статус камер из v_vehicle (§7.2, b10).
-    if not vehicle:
-        return "0/3"
-    online = 3 if (vehicle.get("downloaded_video_count") or 0) > 0 else 1
-    return f"{min(online, 3)}/3"
+# ---------------------------------------------------------------------------
+# driver_reference (§7.1, b7): safety_score водителя ТС с синтетическим фолбэком.
+# ---------------------------------------------------------------------------
+
+
+def _safety_score(
+    db: duckdb.DuckDBPyConnection, plate: str, summaries: list[IncidentSummary]
+) -> int:
+    """safety_score из driver_reference (§7.1); иначе 100 − среднего risk (синтетика)."""
+    if db is not None and plate:
+        try:
+            row = db.execute(
+                'SELECT "safety_score" FROM "driver_reference" WHERE "vehicle_plate"=?',
+                [plate],
+            ).fetchone()
+            if row and row[0] is not None:
+                return int(row[0])
+        except Exception:
+            pass
+    return max(0, min(100, 100 - _avg_risk(summaries)))
+
+
+def _cameras_ok(cameras: list[Camera]) -> str:
+    """Доля онлайн-камер «N/3» (всегда из 3 канонических слотов)."""
+    online = sum(1 for c in cameras if c.status == "online")
+    return f"{online}/3"
+
+
+def _vehicle_cameras(db: duckdb.DuckDBPyConnection, plate: str) -> list[Camera]:
+    """3 канонических Camera ТС из video_files (по всем алярмам ТС)."""
+    try:
+        files = rows_to_dicts(
+            db.execute(
+                'SELECT * FROM "video_events__video_files" '
+                'WHERE "unit_state_number"=?',
+                [plate],
+            )
+        )
+    except Exception:
+        files = []
+    return [Camera(**c) for c in enrichment.cameras_from_videofiles(files)]
+
+
+# ---------------------------------------------------------------------------
+# driver_report / fleet_report / vehicle_report
+# ---------------------------------------------------------------------------
 
 
 def driver_report(
     db: duckdb.DuckDBPyConnection, plate: str, period_days: int = 3
 ) -> DriverReport:
-    """GET /api/reports/driver/{plate} (§7.5, идея #2 В-1)."""
+    """GET /api/reports/driver/{plate} (§7.5, идея #2 В-1) — поверх v_driver_report."""
     summaries = incidents_service.list_summaries(db, {"vehicle_plate": plate})
     vehicle = vehicles_repo.get_vehicle(db, plate)
 
     risk = _avg_risk(summaries)
-    safety_score = max(0, min(100, 100 - risk))
-    gross = sum(1 for s in summaries if _is_gross(s.severity, s.alarm_code))
+    safety_score = _safety_score(db, plate, summaries)
+    gross = sum(1 for s in summaries if is_gross(s))
     trips = int(vehicle.get("track_window_count") or 0) if vehicle else 0
     mileage = float(vehicle.get("total_track_mileage_km") or 0.0) if vehicle else 0.0
     model = (
         summaries[0].vehicle_model if summaries else enrichment.vehicle_model_for(plate)
     )
 
+    drv = enrichment.driver_for(db, plate)
     driver_ref = DriverRef(
-        driver_id=enrichment.driver_id_for(plate),
-        driver_name=enrichment.driver_for(plate),
+        driver_id=drv["driver_id"],
+        driver_name=drv["driver"],
         role="main",
         trips=trips,
         safety_score=safety_score,
@@ -119,8 +167,14 @@ def driver_report(
     )
 
 
-def fleet_report(db: duckdb.DuckDBPyConnection, period_days: int = 3) -> FleetReport:
-    """GET /api/reports/fleet (§7.5, идея #2 В-2)."""
+def fleet_report(
+    db: duckdb.DuckDBPyConnection, period_days: int = 3, view: str = "drivers"
+) -> FleetReport:
+    """GET /api/reports/fleet (§7.5, идея #2 В-2) — поверх v_fleet.
+
+    `view ∈ {"drivers","vehicles"}` — какой разрез приоритетен на UI; оба массива
+    (`by_drivers`/`by_vehicles`) всегда заполнены из одного источника (v_incidents).
+    """
     summaries = incidents_service.list_summaries(db, {})
 
     by_plate: dict[str, list[IncidentSummary]] = {}
@@ -131,21 +185,23 @@ def fleet_report(db: duckdb.DuckDBPyConnection, period_days: int = 3) -> FleetRe
     by_vehicles: list[FleetByVehicle] = []
     for plate, items in sorted(by_plate.items()):
         risk = _avg_risk(items)
-        gross = sum(1 for s in items if _is_gross(s.severity, s.alarm_code))
+        gross = sum(1 for s in items if is_gross(s))
         model = items[0].vehicle_model
         vehicle = vehicles_repo.get_vehicle(db, plate)
         mileage = float(vehicle.get("total_track_mileage_km") or 0.0) if vehicle else 0.0
         trips = int(vehicle.get("track_window_count") or 0) if vehicle else 0
-        driver_name = enrichment.driver_for(plate)
+        safety = _safety_score(db, plate, items)
+        drv = enrichment.driver_for(db, plate)
+        driver_name = drv["driver"]
 
         by_drivers.append(
             FleetByDriver(
                 driver=DriverRef(
-                    driver_id=enrichment.driver_id_for(plate),
+                    driver_id=drv["driver_id"],
                     driver_name=driver_name,
                     role="main",
                     trips=trips,
-                    safety_score=max(0, min(100, 100 - risk)),
+                    safety_score=safety,
                     risk_score=risk,
                 ),
                 vehicle_plate=plate,
@@ -165,7 +221,7 @@ def fleet_report(db: duckdb.DuckDBPyConnection, period_days: int = 3) -> FleetRe
                 risk_score=risk,
                 gross=gross,
                 total=len(items),
-                cameras_ok=_cameras_ok(vehicle),
+                cameras_ok=_cameras_ok(_vehicle_cameras(db, plate)),
             )
         )
 
@@ -178,13 +234,112 @@ def fleet_report(db: duckdb.DuckDBPyConnection, period_days: int = 3) -> FleetRe
     )
 
 
+def _driver_trips(db: duckdb.DuckDBPyConnection, plate: str) -> list[dict[str, Any]]:
+    """Строки driver_trips ТС (1 ТС = N водителей), детерминированный порядок."""
+    try:
+        return rows_to_dicts(
+            db.execute(
+                'SELECT "driver_id","driver_name","role","trips" '
+                'FROM "driver_trips" WHERE "vehicle_plate"=? '
+                "ORDER BY CASE WHEN \"role\"='main' THEN 0 ELSE 1 END, \"driver_id\"",
+                [plate],
+            )
+        )
+    except Exception:
+        return []
+
+
+def vehicle_report(
+    db: duckdb.DuckDBPyConnection, plate: str, period_days: int = 3
+) -> VehicleReport:
+    """GET /api/reports/vehicle/{plate} (§7.5, идея #2 В-2/ТС, #10) — поверх v_vehicle.
+
+    `drivers` строится из driver_trips (1 ТС = N водителей, ровно один main);
+    неизвестный ТС → синтетический main из driver_for (не падать, §61).
+    `cameras` всегда длины 3.
+    """
+    summaries = incidents_service.list_summaries(db, {"vehicle_plate": plate})
+    vehicle = vehicles_repo.get_vehicle(db, plate)
+
+    risk = _avg_risk(summaries)
+    safety = _safety_score(db, plate, summaries)
+    model = (
+        summaries[0].vehicle_model if summaries else enrichment.vehicle_model_for(plate)
+    )
+    trips_total = int(vehicle.get("track_window_count") or 0) if vehicle else 0
+    mileage = float(vehicle.get("total_track_mileage_km") or 0.0) if vehicle else 0.0
+
+    trip_rows = _driver_trips(db, plate)
+    drivers: list[DriverRef] = []
+    for r in trip_rows:
+        drivers.append(
+            DriverRef(
+                driver_id=r["driver_id"],
+                driver_name=r["driver_name"],
+                role="secondary" if r.get("role") == "secondary" else "main",
+                trips=int(r.get("trips") or 0),
+                safety_score=safety,
+                risk_score=risk,
+            )
+        )
+    if not drivers:  # неизвестный ТС / нет driver_trips → синтетический main (§61).
+        drv = enrichment.driver_for(db, plate)
+        drivers.append(
+            DriverRef(
+                driver_id=drv["driver_id"],
+                driver_name=drv["driver"],
+                role="main",
+                trips=trips_total,
+                safety_score=safety,
+                risk_score=risk,
+            )
+        )
+
+    return VehicleReport(
+        plate=plate,
+        vehicle_model=model,
+        risk_score=risk,
+        cameras=_vehicle_cameras(db, plate),
+        drivers=drivers,
+        period=_period(summaries, period_days),
+        period_alarms=[_violation_row(s) for s in summaries],
+        mileage_km=mileage,
+        trips=trips_total,
+    )
+
+
+# ---------------------------------------------------------------------------
+# NLU-запрос (§7.4): реальный nlu_service.parse → ReportQuery → отчёт.
+# ---------------------------------------------------------------------------
+
+
+def _empty_driver_report(driver_name: str, period_days: int) -> DriverReport:
+    """Пустой driver-отчёт для нерезолвенного ФИО (§61/§62): нулевые KPI, не падать."""
+    return DriverReport(
+        driver=DriverRef(
+            driver_id="—",
+            driver_name=driver_name,
+            role="main",
+            trips=0,
+            safety_score=100,
+            risk_score=0,
+        ),
+        vehicle_plate="",
+        vehicle_model="—",
+        period=ReportPeriod(**{"from": "", "to": "", "days": period_days}),
+        mileage_km=0.0,
+        trips=0,
+        kpi=ReportKPI(total=0, video_da=0, telematics=0, gross=0),
+        disciplinary_warning=False,  # safety_score=100 → дисциплина не назначается.
+        violations=[],
+    )
+
+
 def report_for_query(
     db: duckdb.DuckDBPyConnection, q: ReportQuery
 ) -> DriverReport | FleetReport:
-    """POST /api/reports/query (§7.5): уже разобранный ReportQuery → отчёт.
-
-    kind="driver": берём plate напрямую или резолвим по driver_name; нет ТС →
-    fleet-отчёт как фолбэк. kind="fleet": сводка по парку.
+    """ReportQuery → отчёт. kind=driver: plate напрямую или резолв ФИО→plate;
+    ФИО без совпадения → пустой driver-отчёт (§62). kind=fleet: сводка по парку.
     """
     if q.kind == "driver":
         plate = q.plate
@@ -192,53 +347,64 @@ def report_for_query(
             plate = _plate_for_driver_name(db, q.driver_name)
         if plate:
             return driver_report(db, plate.upper().replace(" ", ""), q.period_days)
-    return fleet_report(db, q.period_days)
-
-
-# ---------------------------------------------------------------------------
-# NLU-заглушка (§3.3). Реальный парсер — b9 nlu_service (Groq/Whisper).
-# ---------------------------------------------------------------------------
-
-# Госномер РФ: буква + 3 цифры + 2 буквы + 2–3 цифры региона (кириллица), пробелы опц.
-_PLATE_RE = re.compile(r"[АВЕКМНОРСТУХ]\s?\d{3}\s?[АВЕКМНОРСТУХ]{2}\s?\d{2,3}", re.IGNORECASE)
-_PERIOD_RE = re.compile(r"за\s+(\d+)\s+(?:дн|день|дня|дней)", re.IGNORECASE)
-# ФИО: 2–3 слова с заглавной кириллической буквы.
-_NAME_RE = re.compile(r"[А-ЯЁ][а-яё]+(?:\s+[А-ЯЁ][а-яё]+){1,2}")
+        if q.driver_name:  # ФИО не резолвится в ТС → пустой driver-отчёт, не fleet.
+            return _empty_driver_report(q.driver_name, q.period_days)
+    return fleet_report(db, q.period_days, q.view or "drivers")
 
 
 def query(
-    db: duckdb.DuckDBPyConnection, text: str
-) -> DriverReport | FleetReport:
-    """POST /api/reports/query (§3.3): regex-парс «ФИО/госномер/период» → отчёт.
+    db: duckdb.DuckDBPyConnection, text: str, period_days: int | None = None
+) -> dict[str, Any]:
+    """POST /api/reports/query (§7.4): текст → NLU (b9) → отчёт.
 
-    Возвращает DriverReport если найден госномер/ФИО, иначе FleetReport.
-    # TODO: заменить regex на Groq/Whisper (b9 nlu_service, §7.3).
+    Возвращает обёртку `{"query": ReportQuery, "report": DriverReport|FleetReport}`.
+    Без ключа Groq nlu_service детерминированно уходит в regex (Check b10).
     """
-    period_match = _PERIOD_RE.search(text)
-    period_days = int(period_match.group(1)) if period_match else 3
-
-    plate_match = _PLATE_RE.search(text)
-    if plate_match:
-        plate = plate_match.group(0).upper().replace(" ", "")
-        return driver_report(db, plate, period_days)
-
-    name_match = _NAME_RE.search(text)
-    if name_match:
-        # ФИО → ищем ТС с таким водителем (enrichment детерминирован по plate).
-        plate = _plate_for_driver_name(db, name_match.group(0))
-        if plate:
-            return driver_report(db, plate, period_days)
-
-    return fleet_report(db, period_days)
+    q = nlu_service.parse(text)
+    if period_days is not None:  # явный период из API перекрывает распознанный.
+        q = q.model_copy(update={"period_days": period_days})
+    report = report_for_query(db, q)
+    return {"query": q, "report": report}
 
 
 def _plate_for_driver_name(
     db: duckdb.DuckDBPyConnection, name: str
 ) -> str | None:
-    """Обратный поиск ТС по ФИО (enrichment.driver_for детерминирован по plate)."""
-    target = name.strip().lower()
+    """ФИО → vehicle_plate через driver_reference (фамилия с учётом падежей).
+
+    Детерминированный выбор при неоднозначности — первый по "vehicle_plate".
+    Фолбэк (нет таблицы) — обратный скан по enrichment.driver_for.
+    """
+    parts = name.strip().lower().split()
+    if not parts:
+        return None
+    target = parts[0]
+    if len(target) < 3:
+        return None
+
+    try:
+        rows = db.execute(
+            'SELECT "vehicle_plate","driver_name" FROM "driver_reference" '
+            'ORDER BY "vehicle_plate"'
+        ).fetchall()
+        for plate, dname in rows:
+            surname = (dname or "").lower().split()
+            if not surname:
+                continue
+            short, long = sorted([target, surname[0]], key=len)
+            if len(short) >= 4 and long.startswith(short):
+                return plate
+    except Exception:
+        pass
+
+    # Фолбэк: обратный поиск через синтетику driver_for (enrichment детерминирован).
     for vehicle in vehicles_repo.list_vehicles(db):
         plate = vehicle.get("unit_state_number") or ""
-        if plate and enrichment.driver_for(plate).lower() == target:
-            return plate
+        if not plate:
+            continue
+        surname = enrichment.driver_for(db, plate)["driver"].lower().split()
+        if surname:
+            short, long = sorted([target, surname[0]], key=len)
+            if len(short) >= 4 and long.startswith(short):
+                return plate
     return None
