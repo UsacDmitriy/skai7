@@ -158,7 +158,10 @@ flowchart TD
 
     C0 --> W1
 
-    BR1["🚧 БАРЬЕР 1 — ИНТЕГРАЦИЯ P0<br/>(окно skai_7, ветка integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend + feat/web → x1 → x2 → x3"]
+    subgraph BR1["🚧 БАРЬЕР 1 · интеграция P0 — skai_7 · integration (последовательно)"]
+        direction LR
+        x1["x1 remove-streamlit<br/>merge main+feat/backend+feat/web"] --> x2_1["x2 wiring<br/>роутеры/proxy/Makefile"] --> x3_1["x3 e2e-smoke P0<br/>→ main (ff)"]
+    end
     W1 --> BR1
 
     subgraph W21["ВОЛНА 2.1 · Reports & Voice — окна 1 и 2 параллельно"]
@@ -177,7 +180,10 @@ flowchart TD
 
     BR1 --> W21
 
-    BR2a["🚧 БАРЬЕР 2.1 — SMOKE Reports/Voice<br/>(окно skai_7, integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend+feat/web → x2 rewire → x4a (smoke отчёты/voice)"]
+    subgraph BR2a["🚧 БАРЬЕР 2.1 · smoke Reports/Voice — skai_7 · integration (последовательно)"]
+        direction LR
+        x2_a["x2 rewire<br/>merge feat/backend+feat/web"] --> x4a["x4a smoke<br/>отчёты/voice · main не трогает"]
+    end
     W21 --> BR2a
 
     subgraph W22["ВОЛНА 2.2 · Прикладные экраны — окна 1 и 2 параллельно"]
@@ -203,7 +209,10 @@ flowchart TD
 
     BR2a --> W22
 
-    BR2b["🚧 БАРЬЕР 2.2 — SMOKE прикладных<br/>(окно skai_7, integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend+feat/web → x2 rewire → x4b (tickets/alerts/trips/reb/sabotage/map/roles)"]
+    subgraph BR2b["🚧 БАРЬЕР 2.2 · smoke прикладных — skai_7 · integration (последовательно)"]
+        direction LR
+        x2_b["x2 rewire<br/>роутеры b11–b13 (авто-обход)"] --> x4b["x4b smoke<br/>tickets/alerts/trips/reb/sabotage/map/roles · main не трогает"]
+    end
     W22 --> BR2b
 
     subgraph W23["ВОЛНА 2.3 · Тесты — окно 3"]
@@ -219,7 +228,10 @@ flowchart TD
 
     BR2b --> W23
 
-    BR2["🏁 БАРЬЕР 2 — ФИНАЛ P1/P2<br/>(окно skai_7, integration)<br/>merge feat/tests → x2 → x3 → x4-e2e-p1p2 → merge в main"]
+    subgraph BR2["🏁 БАРЬЕР 2 · финал P1/P2 — skai_7 · integration → main"]
+        direction LR
+        x2_2["x2 rewire<br/>merge feat/tests"] --> x3_2["x3 P0-регресс"] --> x4["x4 e2e P1/P2<br/>→ main (ff)"]
+    end
     W23 --> BR2
 
     subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг — окна 1 и 3 параллельно"]
@@ -239,7 +251,10 @@ flowchart TD
 
     BR2 --> W3
 
-    BR3["🧪 БАРЬЕР 3 — ХАРДНЕНИНГ<br/>(окно skai_7, integration, ПОСЛЕДОВАТЕЛЬНО)<br/>merge feat/backend + feat/tests → x5-wave3-hardening<br/>(регресс + гейт покрытия api≥85% / web≥80%) → merge в main"]
+    subgraph BR3["🧪 БАРЬЕР 3 · хардненинг — skai_7 · integration → main (последовательно)"]
+        direction LR
+        x5["x5 wave3-hardening<br/>merge feat/backend+feat/tests → регресс + гейт покрытия (api≥85% / web≥80%)<br/>→ main (ff)"]
+    end
     W3 --> BR3
 ```
 
