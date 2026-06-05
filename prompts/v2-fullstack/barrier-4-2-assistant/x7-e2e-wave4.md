@@ -38,11 +38,22 @@ End-to-end по всему AI-слою на кэше/фолбэке (офлай�
 4. `make web` + `npm run typecheck`: карточка показывает сцену+расхождение; отчёт — спарклайн+рекомендации;
    копилот отвечает; монитор — heatmap+зоны (incident/reb); виджет саботажа — умный вердикт. `npm run test` зелёный.
 
+### Дополнения research-отчёта (§8.6–§8.9)
+
+5. **Governance:** флаг `forecast=off` → эндпоинт «disabled» (200), UI скрывает блок; превышение latency →
+   `source="cache"/"fallback"`; мета `AiFeatureState` присутствует.
+6. **Метрики/качество:** `GET /api/metrics/ai` и `/api/metrics/data-quality` → 200; `/metrics` экран рисует KPI.
+7. **Explainability:** `GET /api/incidents/{id}/risk-breakdown` → 200; waterfall на карточке, сумма = `risk_score`.
+8. **Hardening:** `python scripts/gen_status.py` обновляет `CURRENT_STATUS.md`; CI-workflow зелёный;
+   **nightly smoke на ЖИВОМ API** (`VITE_USE_FIXTURES=false`) проходит — не только фикстуры.
+9. **Security (если `SECURITY_ENABLED=true`):** без токена 401; мутации пишут `output/audit.csv`; throttle → 429.
+
 ## Критерии приёмки
 
-- Все 6 идей (#11–#16) проходят сквозь стек на офлайн-кэше; нет сети/ключей — не падает (фолбэк).
+- Все идеи (#11–#20) проходят сквозь стек на офлайн-кэше; нет сети/ключей — не падает (фолбэк).
+- **Live-API smoke зелёный** (fixtures не маскируют backend-регресс).
 - Обратная совместимость: P0/P1/P2 регресс зелёный (risk_score/sabotage/отчёты не сломаны).
-- Типы §8.4 совпадают; фронт без ошибок typecheck.
+- Типы §8.4 совпадают; фронт без ошибок typecheck; `CURRENT_STATUS.md` отражает фактический статус.
 
 ## Финализация — продвинуть main
 

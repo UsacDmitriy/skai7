@@ -30,11 +30,11 @@
 
 | Модель | Промпты |
 | --- | --- |
-| 🟢 Qwen (7) | `b1`, `b4`, `d1`, `f1`, `f3`, `t4`, `w3-2` |
-| 🔵 Sonnet (43) | **W1:** `b2`,`b5`,`b6`,`d3`,`f2` · **W2.1:** `b7`,`b8`,`b10`,`b14` · **W2.2:** `b11`,`b12`,`d4`,`f5`,`f8`,`f12` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` (6) · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5` · **W4.1:** `b17`,`b20`,`d7`,`tu-scene/weather/forecast/zones/fatigue` · **W4.2:** `b22`,`b23`,`f15`,`f16`,`f19`,`tu-copilot`,`t-wave4-frontend` |
-| 🔴 Opus (30) | **фичи:** `b3` (спайн), `d2` (синк-примитивы), `f4` (флагман P0+синк), `b9` (двухпутевой NLU), `b13` (3 домена #5/#6/#7), `d5` (voice-UI killer #2), `f6` (дедуп+роли карты), `f7` (killer), `f9` (overlay/focus-trap/очередь), `f10` (таймлайн↔видео синк), `f11` (РЭБ-валидатор), `f13` (кросс-экранные роли), `f14` (анти-регресс #1) · **доработки Волны 1:** `b15`,`d6` · **AI-слой (Волна 4):** `b16` (VLM-пайплайн), `b18` (прогноз-алгоритм), `b19` (DBSCAN-зоны), `b21` (copilot tool-use), `f17` (чат-UI), `f18` (heatmap-карта) · **барьеры:** `x1`,`x2`,`x3`,`x4`,`x4a`,`x4b`,`x5`,`x6`,`x7` |
+| 🟢 Qwen (8) | `b1`, `b4`, `d1`, `f1`, `f3`, `t4`, `w3-2`, `t5` (CURRENT_STATUS) |
+| 🔵 Sonnet (57) | **W1:** `b2`,`b5`,`b6`,`d3`,`f2` · **W2.1:** `b7`,`b8`,`b10`,`b14` · **W2.2:** `b11`,`b12`,`d4`,`f5`,`f8`,`f12` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` (6) · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5`,`w3-6`,`w3-7`,`w3-8`,`w3-10`,`w3-11`,`w3-12`,`w3-13`,`w3-14`,`w3-15` · **W4.1:** `b17`,`b20`,`b24`,`d7`,`t6`,`tu-scene/weather/forecast/zones/fatigue` · **W4.2:** `b22`,`b23`,`b25`,`f15`,`f16`,`f19`,`f20`,`f21`,`tu-copilot`,`t-wave4-frontend` |
+| 🔴 Opus (32) | **фичи:** `b3` (спайн), `d2` (синк-примитивы), `f4` (флагман P0+синк), `b9` (двухпутевой NLU), `b13` (3 домена #5/#6/#7), `d5` (voice-UI killer #2), `f6` (дедуп+роли карты), `f7` (killer), `f9` (overlay/focus-trap/очередь), `f10` (таймлайн↔видео синк), `f11` (РЭБ-валидатор), `f13` (кросс-экранные роли), `f14` (анти-регресс #1) · **доработки Волны 1:** `b15`,`d6` · **W3:** `w3-9` (кросс-доменный join fleet-health) · **AI-слой (Волна 4):** `b16` (VLM-пайплайн), `b18` (прогноз-алгоритм), `b19` (DBSCAN-зоны), `b21` (copilot tool-use), `b26` (security-baseline), `f17` (чат-UI), `f18` (heatmap-карта) · **барьеры:** `x1`,`x2`,`x3`,`x4`,`x4a`,`x4b`,`x5`,`x6`,`x7` |
 
-> Итог: **🟢 7 · 🔵 43 · 🔴 30** (80 промптов). Прод-приоритет: на сложном не экономим — Opus покрывает спайн/синк/
+> Итог: **🟢 8 · 🔵 57 · 🔴 32** (97 промптов). Прод-приоритет: на сложном не экономим — Opus покрывает спайн/синк/
 > killer/сложный интерактив/кросс-экранное состояние/breadth/анти-регресс + барьеры; Qwen — только
 > тривиально-механическое; Sonnet — оправданный детерминированный «середняк».
 > **Волна 1 заморожена** (`b1`–`f4` выполнены) — её Opus-глубина (по `b3`/`d2`) перенесена в доработки
@@ -110,7 +110,7 @@ integration (x1/x2), поэтому в параллельной фазе их н
 - **Барьер 2.2 — smoke прикладных** (`skai_7`, `integration`): x4b (merge → x2 rewire → smoke tickets/alerts/trips/reb/sabotage/map/roles).
 - **Волна 2.3 — Тесты** (окно tests): t1∥t2∥t3∥t4.
 - **Барьер 2 — финал P1/P2** (`skai_7`, `integration`): x4 (полный P1/P2 e2e + повтор x2/x3) → merge в `main`.
-- **Волна 3 — бэклог + тест-хардненинг**: неблокирующие правки из аудитов (W3-1/W3-2) и **дозакрытие unit-покрытия по всему решению** (W3-3 backend, W3-4 frontend). Не блокирует P0/P1/P2; выполняется по мере готовности треков. См. раздел [«Волна 3 · бэклог доработок»](#волна-3--бэклог-доработок).
+- **Волна 3 — бэклог + тест-хардненинг + целостность MVP**: неблокирующие правки из аудитов (W3-1/W3-2/W3-5), **дозакрытие unit-покрытия** (W3-3/W3-4) и **раскрытие тёмных данных + кросс-врезки** (W3-6…W3-15 · §9): домены fuel/sensors/navigation (снять 501), хаб «Здоровье парка», связки incident↔trip↔tickets, `ComingSoon` вместо пустого 404. Не блокирует P0/P1/P2; backend ∥ web ∥ tests. См. раздел [«Волна 3 · бэклог доработок»](#волна-3--бэклог-доработок).
 - **Барьер 3 — хардненинг** (`skai_7`, `integration`): x5 — полный регресс (unit+API+фронт) + гейт покрытия → merge в `main`.
 - **Волна 4.1 — Умное событие + прогнозы** (backend ∥ web): BACKEND b16→b17, b18∥b19∥b20 ; WEB d7 ; TESTS tu-scene/weather/forecast/zones/fatigue. Внешние API/VLM — оффлайн-предрасчёт → кэш.
 - **Барьер 4.1 — smoke умное событие/прогнозы** (`skai_7`, `integration`): x6 (GUARD+merge → smoke; `main` не трогает).
@@ -123,12 +123,14 @@ integration (x1/x2), поэтому в параллельной фазе их н
 
 ## Волна 3 · бэклог доработок
 
-Неблокирующие правки и улучшения продукта из аудитов (W3-1/W3-2) плюс **тест-хардненинг —
-дозакрытие unit-покрытия по всему решению** (W3-3/W3-4). Не входят в P0/P1/P2-скоуп; каждый пункт
-выполняется на ветке трека-владельца по мере её готовности, порядок между пунктами не важен
-(зависимостей нет). Сходятся на **Барьере 3 (x5)** — полный регресс + гейт покрытия → `main`.
-Промпты разложены по трекам-владельцам внутри `prompts/v2-fullstack/wave-3-backlog/`
-(`track-b-backend/`, `track-t-tests/`; один пункт = один файл — структура и граф в README папки).
+Неблокирующие правки и улучшения продукта из аудитов (W3-1/W3-2/W3-5), **тест-хардненинг —
+дозакрытие unit-покрытия** (W3-3/W3-4) и **целостность MVP — раскрытие тёмных данных + кросс-врезки
+экранов** (W3-6…W3-15, контракт §9). Не входят в P0/P1/P2-скоуп; пункты выполняются на ветках
+треков-владельцев по мере готовности — в основном параллельно (зависимости: `w3-9` после `w3-6/7/8`;
+`w3-11/12/13` после `w3-10`; `w3-14/15` после своих доменов/экранов). Сходятся на **Барьере 3 (x5)** —
+полный регресс + гейт покрытия + сквозная навигация → `main`. Промпты — по трекам-владельцам внутри
+`prompts/v2-fullstack/wave-3-backlog/` (`track-b-backend/`, **`track-f-frontend/`**, `track-t-tests/`;
+один пункт = один файл — структура и граф в README папки).
 
 | # | Промпт | Трек | Источник / детали | Приоритет |
 | --- | --- | --- | --- | --- |
@@ -137,12 +139,26 @@ integration (x1/x2), поэтому в параллельной фазе их н
 | W3-5 | [`wave-3-backlog/track-b-backend/w3-5-no-video-incident-reachable.md`](wave-3-backlog/track-b-backend/w3-5-no-video-incident-reachable.md) — no-video инцидент достижим в живых данных: `v_incidents.video_available` всегда `1` (источник — только видео-алярмы), поэтому UI-ветка «нет видео» + «Запросить архив» + `sensor_active_after_sec` (§2) мертва. | b3 / данные (+T) | smoke x3 vs `00-CONTRACT.md` §2 | Средний (закрывает мёртвую P0-ветку) |
 | W3-3 | [`wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md`](wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md) — backend unit-покрытие **всех** модулей `b1–b13` (дозакрытие t1: b1/b3/b4/b5/b6/b8/b9/b11/b12/b13), гейт `api/` ≥ 85%. | T / tests | по промптам `b1–b13` + `00-CONTRACT.md` §1–§3/§7.5 | Высокий (качество релиза) |
 | W3-4 | [`wave-3-backlog/track-t-tests/w3-4-frontend-unit-coverage.md`](wave-3-backlog/track-t-tests/w3-4-frontend-unit-coverage.md) — frontend unit/компонентное покрытие `d3–d5`, `f5–f13` (дозакрытие t3), гейт `web/src` ≥ 80%. | T / tests | по промптам `d3–d5`/`f5–f13` + §3.1/§4/§7.5 | Высокий (качество релиза) |
+| W3-6 | [`wave-3-backlog/track-b-backend/w3-6-fuel-domain.md`](wave-3-backlog/track-b-backend/w3-6-fuel-domain.md) — домен `fuel` (`v_fuel`+сервис+роутер), снять 501; сверка ЗИС vs карты. | b / данные | `00-CONTRACT.md` §9 vs `api/routers/fuel.py` (501) | Высокий (целостность) |
+| W3-7 | [`wave-3-backlog/track-b-backend/w3-7-sensors-domain.md`](wave-3-backlog/track-b-backend/w3-7-sensors-domain.md) — домен `sensors` (CAN−GPS, спарклайн; 959k graph_points не отдавать), снять 501. | b / данные | §9 vs `api/routers/sensors.py` (501) | Высокий (целостность) |
+| W3-8 | [`wave-3-backlog/track-b-backend/w3-8-navigation-list.md`](wave-3-backlog/track-b-backend/w3-8-navigation-list.md) — `navigation`-список → вход в существующий `/api/reb` (экран-сирота РЭБ). | b / данные | §9 vs `api/routers/navigation.py` (501) | Высокий (целостность) |
+| W3-9 | [`wave-3-backlog/track-b-backend/w3-9-fleet-health-view.md`](wave-3-backlog/track-b-backend/w3-9-fleet-health-view.md) — 🔴 `v_fleet_health` (объединение 17 ТС, disjoint-домены) + `/api/fleet-health`. | b / данные | §9.0/§9.3; после W3-6/7/8 | Высокий (целостность) |
+| W3-10 | [`wave-3-backlog/track-f-frontend/w3-10-api-layer.md`](wave-3-backlog/track-f-frontend/w3-10-api-layer.md) — types/client/fixtures fleet-health (+fix `getReb`/`getVehicleReport` фикстуры). | f2/f3 | §9.2/§9.4 | Высокий (целостность) |
+| W3-11 | [`wave-3-backlog/track-f-frontend/w3-11-fleet-health-hub.md`](wave-3-backlog/track-f-frontend/w3-11-fleet-health-hub.md) — `FleetHealth` хаб + `FuelCard`/`SensorCard`/`NavProblemList`. | f | §9.4; после W3-10 | Высокий (целостность) |
+| W3-12 | [`wave-3-backlog/track-f-frontend/w3-12-cross-wiring.md`](wave-3-backlog/track-f-frontend/w3-12-cross-wiring.md) — кросс-врезки: incident↔trip↔tickets, report→incident, feed→trip. | f | §9.4; после W3-10 | Высокий (целостность) |
+| W3-13 | [`wave-3-backlog/track-f-frontend/w3-13-nav-signposting.md`](wave-3-backlog/track-f-frontend/w3-13-nav-signposting.md) — роуты fleet-health/navigation + `ComingSoon` (Волна 4) вместо пустого 404. | f1 | §9.4; после W3-11 | Средний |
+| W3-14 | [`wave-3-backlog/track-t-tests/w3-14-darkdata-api-tests.md`](wave-3-backlog/track-t-tests/w3-14-darkdata-api-tests.md) — API-тесты fuel/sensors/navigation/fleet-health (happy+негатив; анти-регресс «нет graph_points»). | T / tests | §9; после W3-6…W3-9 | Высокий |
+| W3-15 | [`wave-3-backlog/track-t-tests/w3-15-fleet-health-frontend-tests.md`](wave-3-backlog/track-t-tests/w3-15-fleet-health-frontend-tests.md) — vitest хаб + кросс-врезки + `ComingSoon`. | T / tests | §9.4; после W3-10…W3-13 | Высокий |
 
 > Закрытый аудитом дефект Волны 1 (b2 `_SPEED_LIMIT_TABLE` на legacy-кодах) исправлен в рамках Волны 1
 > (ветка `feat/backend`, fix(b2)) и в бэклог не выносится.
 
-**Как запускать пункты.** В окне трека-владельца (`.worktrees/backend` для W3-1/W3-2/W3-5,
-`.worktrees/tests` для W3-3/W3-4) дай промпт из папки его трека:
+**Контракт §9** (раскрытие тёмных данных) — аддендум в `00-CONTRACT.md` (авторская правка
+оркестратора, не FROZEN, contract-change #2). На него опираются W3-6…W3-15; он отменяет строку §7.4
+«fuel/sensors/navigation остаются стабами 501» в части этих доменов.
+
+**Как запускать пункты.** В окне трека-владельца (`.worktrees/backend` для W3-1/W3-2/W3-5 + W3-6…W3-9,
+`.worktrees/web` для W3-10…W3-13, `.worktrees/tests` для W3-3/W3-4 + W3-14/W3-15) дай промпт из папки его трека:
 
 ```text
 Выполни @prompts/v2-fullstack/wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md
@@ -275,18 +291,32 @@ flowchart TD
     end
     W23 --> BR2
 
-    subgraph W3["ВОЛНА 3 · бэклог + тест-хардненинг — окна 1 и 3 параллельно"]
+    subgraph W3["ВОЛНА 3 · бэклог + хардненинг + целостность MVP (§9) — окна 1, 2, 3 параллельно"]
         direction LR
         subgraph B3["🪟 Окно 1 · backend (feat/backend) — track-b-backend/"]
             direction TB
             w31["w3-1 b13-ticket-sync · 🔵"]
             w32["w3-2 diagnostic-source-data · 🟢"]
             w35["w3-5 no-video-incident-reachable · 🔵"]
+            w36["w3-6 fuel-domain · 🔵"]
+            w37["w3-7 sensors-domain · 🔵"]
+            w38["w3-8 navigation-list · 🔵"]
+            w36 --> w39["w3-9 fleet-health-view · 🔴"]
+            w37 --> w39
+            w38 --> w39
+        end
+        subgraph F3["🪟 Окно 2 · web (feat/web) — track-f-frontend/"]
+            direction TB
+            w310["w3-10 api-layer · 🔵"] --> w311["w3-11 fleet-health-hub · 🔵"]
+            w310 --> w312["w3-12 cross-wiring · 🔵"]
+            w311 --> w313["w3-13 nav-signposting · 🔵"]
         end
         subgraph T3["🪟 Окно 3 · tests (feat/tests, Claude Code) — track-t-tests/"]
             direction TB
             w33["w3-3 backend-unit-coverage · 🔵"]
             w34["w3-4 frontend-unit-coverage · 🔵"]
+            w314["w3-14 darkdata-api-tests · 🔵"]
+            w315["w3-15 fleet-health-frontend · 🔵"]
         end
     end
 
@@ -294,7 +324,7 @@ flowchart TD
 
     subgraph BR3["🧪 БАРЬЕР 3 · хардненинг — skai_7 · integration → main (последовательно)"]
         direction LR
-        x5["x5 wave3-hardening<br/>merge feat/backend+feat/tests → регресс + гейт покрытия (api≥85% / web≥80%)<br/>→ main (ff) · 🔴"]
+        x5["x5 wave3-hardening<br/>merge feat/backend+feat/web+feat/tests → регресс + гейт покрытия (api≥85% / web≥80%) + сквозная навигация<br/>→ main (ff) · 🔴"]
     end
     W3 --> BR3
 
@@ -306,10 +336,16 @@ flowchart TD
             b18["b18 risk-forecast · 🔴"]
             b19["b19 geozone-risk (DBSCAN+РЭБ) · 🔴"]
             b20["b20 fatigue-chain · 🔵"]
+            b24["b24 ai-runtime-governance<br/>флаги/latency/cache · 🔵"]
         end
         subgraph F41["🪟 Окно 2 · web (feat/web)"]
             direction TB
             d7["d7 ai-primitives · 🔵"]
+        end
+        subgraph T41["🪟 Окно 3 · tests/CI (feat/tests)"]
+            direction TB
+            t5["t5 CURRENT_STATUS · 🟢"]
+            t6["t6 remote-CI + live-smoke · 🔵"]
         end
     end
     BR3 --> W41
@@ -327,6 +363,8 @@ flowchart TD
             b21["b21 copilot (tool-use, RU/EN) · 🔴"]
             b22["b22 narrative-reports · 🔵"]
             b23["b23 sabotage-verdict · 🔵"]
+            b25["b25 ai-metrics + data-quality · 🔵"]
+            b26["b26 security-baseline (auth/audit/throttle) · 🔴"]
         end
         subgraph F42["🪟 Окно 2 · web (feat/web)"]
             direction TB
@@ -334,6 +372,8 @@ flowchart TD
             f17["f17 copilot-ui · 🔴"]
             f18["f18 risk-heatmap · 🔴"]
             f19["f19 sabotage-verdict · 🔵"]
+            f20["f20 risk-waterfall · 🔵"]
+            f21["f21 metrics/data-quality · 🔵"]
         end
     end
     BR41 --> W42
@@ -356,7 +396,7 @@ flowchart TD
 | 🚧 2.1 · Smoke Reports/Voice | `integration` | `x2-wiring.md` → `x4a-smoke-reports-voice.md` | rewire + smoke среза отчётов/voice (b7→b10, b8/b9, f7); `main` не трогает |
 | 🚧 2.2 · Smoke прикладных | `integration` | `x2-wiring.md` → `x4b-smoke-applied-screens.md` | rewire (роутеры b11–b13) + smoke заявок/алерта/досье/РЭБ/саботажа/карты/ролей; `main` не трогает |
 | 🏁 2 · Финал P1/P2 | `integration` → `main` | повтор `x2`/`x3` → `x4-e2e-p1p2.md` | smoke на полном наборе P1/P2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage) → продвигает `main` |
-| 🧪 3 · Хардненинг Волны 3 | `integration` → `main` | `x5-wave3-hardening.md` | полный регресс (unit+API+фронт) + гейт покрытия (`api/`≥85%, `web/src`≥80%); проверка W3-1/W3-2 |
+| 🧪 3 · Хардненинг Волны 3 | `integration` → `main` | `x5-wave3-hardening.md` | merge `feat/backend`+`feat/web`+`feat/tests`; полный регресс (unit+API+фронт) + гейт покрытия (`api/`≥85%, `web/src`≥80%); проверка W3-1/W3-2 + liveness §9 (fuel/sensors/navigation не 501) + сквозная навигация (incident↔trip↔tickets, fleet-health, ComingSoon) |
 | 🚧 4.1 · Smoke умное событие/прогнозы | `integration` | `x6-smoke-context-forecast.md` | GUARD+merge → smoke `incident_scene`/`incident_weather`/`/forecast`/`/zones`/`/fatigue`; `main` не трогает |
 | 🏁 4.2 · Финал AI-слоя | `integration` → `main` | `x7-e2e-wave4.md` | GUARD+merge → e2e Волны 4 (#11–#16) + регресс P0/P1/P2 → продвигает `main` |
 
@@ -453,16 +493,17 @@ git **внутри промптов** (x2 подтягивает тесты в `
 
 Красный check → **стоп**, дефект трека, `main` остаётся на стабильном P0.
 
-### Волна 3 — бэклог + тест-хардненинг (макс. параллельно)
+### Волна 3 — бэклог + хардненинг + целостность MVP (макс. параллельно)
 
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 1 Backend | `track-b-backend/`: `w3-1`🔵 (b13/Ticket) ∥ `w3-2`🟢 (данные `source=DIAGNOSTIC`) ∥ `w3-5`🔵 (no-video ветка) | неблокирующие доработки из аудита; до реализации `tickets_service` |
-| 3 Tests | `track-t-tests/`: `w3-3`🔵 (backend unit `b1–b13`) ∥ `w3-4`🔵 (frontend unit `d3–d5`/`f5–f13`) | дозакрытие покрытия `tu-*`/t3; перед прогоном `git fetch && git merge integration`; баги эскалируются |
+| 1 Backend | `track-b-backend/`: `w3-1`🔵 ∥ `w3-2`🟢 ∥ `w3-5`🔵 ∥ `w3-6`🔵 (fuel) ∥ `w3-7`🔵 (sensors) ∥ `w3-8`🔵 (navigation) ; **`w3-9`🔴 (fleet-health-view) после `w3-6/7/8`** | домены §9 снимают 501-стабы; `w3-9` — кросс-доменный join (disjoint-популяции) |
+| 2 Web | `track-f-frontend/`: **`w3-10`🔵 (api-layer) → `w3-11`🔵 (хаб) ∥ `w3-12`🔵 (кросс-врезки) ∥ `w3-13`🔵 (сигнпостинг)** | `w3-10` владеет `api/*` (без кросс-трек конфликта); экраны/врезки — после него |
+| 3 Tests | `track-t-tests/`: `w3-3`🔵 ∥ `w3-4`🔵 ; **`w3-14`🔵 (dark-data API) после доменов ∥ `w3-15`🔵 (хаб+врезки) после фронта** | дозакрытие покрытия + тесты §9; перед прогоном `git fetch && git merge integration`; баги эскалируются |
 
-> Окно 2 (web) в Волне 3 не участвует. Файлы — по трекам в `prompts/v2-fullstack/wave-3-backlog/`
-> (структура и граф — в README папки). Запуск в окне:
-> `Выполни @prompts/v2-fullstack/wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md`.
+> Окно 2 (web) теперь **участвует** в Волне 3 (раскрытие тёмных данных + кросс-врезки, §9).
+> Файлы — по трекам в `prompts/v2-fullstack/wave-3-backlog/` (структура и граф — в README папки). Запуск:
+> `Выполни @prompts/v2-fullstack/wave-3-backlog/track-f-frontend/w3-10-api-layer.md`.
 
 ### Барьер 3 — хардненинг (основное окно `skai_7`)
 
@@ -481,9 +522,9 @@ Git **внутри промпта** (x5 в «Перед стартом» сам 
 
 | Окно | Промпты (порядок) | Проверка |
 | --- | --- | --- |
-| 1 Backend | `b16`🔴 → `b17`🔵 ; `b18`🔴 ∥ `b19`🔴 ∥ `b20`🔵 | `make db` (`incident_scene`/`incident_weather`=54, `v_risk_zones`), `/forecast`/`/zones`/`/fatigue` 200 |
+| 1 Backend | `b16`🔴 → `b17`🔵 ; `b18`🔴 ∥ `b19`🔴 ∥ `b20`🔵 ∥ `b24`🔵 (governance-основа) | `make db` (`incident_scene`/`incident_weather`=54, `v_risk_zones`), `/forecast`/`/zones`/`/fatigue` 200, флаги/latency/cache |
 | 2 Web | `d7`🔵 (AI-примитивы) | `tsc --noEmit`; чип/бейдж/спарклайн/heat-слой |
-| 3 Tests | `per-feature/`: `tu-scene` ∥ `tu-weather` ∥ `tu-forecast` ∥ `tu-zones` ∥ `tu-fatigue` 🔵 | `pytest api/tests/unit` зелёный (офлайн) |
+| 3 Tests/CI | `per-feature/`: `tu-scene` ∥ `tu-weather` ∥ `tu-forecast` ∥ `tu-zones` ∥ `tu-fatigue` 🔵 ; `t5`🟢 (CURRENT_STATUS) ∥ `t6`🔵 (remote-CI + live-smoke) | `pytest api/tests/unit` зелёный (офлайн); CI зелёный |
 
 ### Барьер 4.1 — smoke (основное окно `skai_7`)
 
@@ -497,8 +538,8 @@ git **внутри промпта** (`x6` сам делает GUARD+merge; `main
 
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 1 Backend | `b21`🔴 ∥ `b22`🔵 ∥ `b23`🔵 | ⚠ `b20`/`b21`/`b23` регистрируют роутеры в `ALL_ROUTERS` |
-| 2 Web | `f15`🔵 → `f16`🔵 ; `f17`🔴 ∥ `f18`🔴 ∥ `f19`🔵 | аддитивно поверх IncidentCard/Report/Monitor/SabotageWidget |
+| 1 Backend | `b21`🔴 ∥ `b22`🔵 ∥ `b23`🔵 ∥ `b25`🔵 (метрики) ∥ `b26`🔴 (security) | ⚠ `b20`/`b21`/`b23`/`b25`/`b26` регистрируют роутеры/middleware в `ALL_ROUTERS`/`main.py` |
+| 2 Web | `f15`🔵 → `f16`🔵 ; `f17`🔴 ∥ `f18`🔴 ∥ `f19`🔵 ∥ `f20`🔵 (waterfall) ∥ `f21`🔵 (`/metrics`) | аддитивно поверх IncidentCard/Report/Monitor/SabotageWidget |
 | 3 Tests | `per-feature/tu-copilot`🔵 ∥ `t-wave4-frontend`🔵 | фолбэк копилота + vitest AI-компонентов |
 
 ### Барьер 4.2 — финал AI-слоя (основное окно `skai_7`)

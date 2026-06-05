@@ -16,6 +16,11 @@
 >   (b) `Ticket.status` (§7.5) приведён к единому enum `Status` (§3.1) `active|in_progress|validated|closed`
 >   вместо прежнего `new|in_progress|closed`; «Просрочена» больше **не статус** — добавлены производные
 >   поля `deadline` и `is_overdue`. Синхронно поправлен промпт `prompts/claude-design/07-tickets-screen`.
+> - **2026-06-05 · #2 (Волна 3 — раскрытие тёмных данных, аддендум §9):** домены `fuel`/`sensors`
+>   повышены из `501`-стабов до реальных эндпоинтов; `navigation` получает list-эндпоинт, ведущий в
+>   существующий `/api/reb/{id}`. Добавлен экран «Здоровье парка» (`/fleet-health`) на объединении ТС.
+>   Изменение **аддитивное**: §1–§8 не трогаются, новые контракты живут в **§9** (не FROZEN).
+>   Отменяет строку §7.4 «fuel/sensors/navigation остаются стабами 501» в части `fuel`/`sensors`/`navigation-list`.
 
 ## 0. Конвенции (из CLAUDE.md)
 
@@ -479,3 +484,170 @@ leaflet tiles: тёмная тема для /monitor (24/7)
 `api/services/zones_service.py`, `api/services/copilot_service.py`, `web/src/components/ai/*`,
 `data/ai/*.json`. Правки `enrichment.py`/`v_sabotage`/`Report.tsx`/`IncidentCard.tsx`/`Monitor.tsx` —
 строго аддитивные, против этого §8.
+
+### 8.6 Runtime-governance AI (по второму research-отчёту)
+
+Чтобы AI-слой не стал непрозрачным, вводится управляемость:
+
+- **Feature-flags** на каждую AI-фичу (`scene`, `forecast`, `zones`, `fatigue`, `copilot`, `verdict`):
+  конфиг `api/core/ai_flags.py` + env; выкл → эндпоинт отдаёт «feature disabled» (не падение), UI скрывает блок.
+- **Latency-budget** на запрос (per-feature, мс) + **offline-cache policy/TTL** (кэш `data/ai/*`): нет сети/
+  превышен бюджет → отдать кэш/деградировать, не блокировать UI. Контракт деградации единый (как `nlu`).
+- Схема `AiFeatureState { name, enabled, source: 'live'|'cache'|'fallback', latency_ms }` в мете AI-ответов.
+
+### 8.7 Измеримость: метрики и качество данных
+
+- `GET /api/metrics/ai` → `AiMetrics` — KPI AI-слоя: `recommendation_acceptance`, `copilot_tool_success`,
+  `weather_mismatch_rate`, `zone_hit_rate`, `avg_time_to_triage`, `forecast_coverage`. Источник —
+  событийная таблица `ai_metric_events` (аддитивно; пишется эндпоинтами/UI).
+- `GET /api/metrics/data-quality` → `DataQuality` — `camera_offline_ratio`, `missing_gps_ratio`,
+  `missing_media_ratio`, `weather_mismatch_rate`, `incidents_with_video_ratio`.
+
+### 8.8 Explainability: декомпозиция риска
+
+- `GET /api/incidents/{id}/risk-breakdown` → `RiskBreakdown` — вклад каждого слагаемого `risk_score`
+  (§2): `{ severity_w, speed_ratio, night, freq_w, weather_bonus }` + итог; для waterfall-визуализации.
+  Чисто детерминированно из enrichment (без ML), зеркалит формулу §2/§8.2.
+
+### 8.9 Hardening-трек (foundation, параллельно AI)
+
+- **Единый источник истины** `CURRENT_STATUS.md` (авто/полу-авто из тестов+контракта): «реализовано vs
+  план» — против дрейфа README↔RUNBOOK↔contract.
+- **Remote CI** (`.github/workflows/*`) зеркалит `scripts/check.sh` (lint/typecheck/test) + **nightly smoke
+  на ЖИВОМ API** (fixtures маскируют backend-регресс).
+- **Security baseline** (демо-уровень, аддитивно): bearer/API-key scaffold, **audit-trail** действий,
+  rate-limit/throttle на тяжёлые эндпоинты (STT/copilot), документ SLO/SLA. Без ломки текущих эндпоинтов.
+
+## 9. Волна 3 — раскрытие тёмных данных (fuel / sensors / navigation) · аддендум
+
+> **Аддендум (не FROZEN), 2026-06-05 (contract-change #2).** Цель — целостность MVP: данные, уже
+> загруженные в `data/skai.duckdb` (`fuel__*`, `sensors__*`, `navigation__*`), перестают быть «мёртвым
+> грузом» и получают экраны + кросс-связи. §1–§8 не трогаются; всё новое — здесь. Эндпоинты `fuel`/
+> `sensors` повышены из `501`-стабов; `navigation` получает list-эндпоинт, ведущий в существующий
+> `/api/reb/{id}` (§7.4). Детерминизм как везде: без `Date.now()`/`random` в логике.
+
+### 9.0 Принцип покрытия (disjoint-популяции ТС)
+
+Популяции ТС по доменам почти не пересекаются (проверено по БД, госномера нормализованы — без
+пробелов/регистра): **fuel = 10 ТС (пересечение с видеопарком 0)**, **sensors = 7**, **navigation = 5**,
+объединение = **17 ТС, из них только 2 в видеопарке** (`О802УЕ198`, `С725АТ159`). Это отражает реальный
+фрагментированный телематический парк заказчика, а не баг.
+
+- Хаб «Здоровье парка» строится на **объединении** ТС: sensors/navigation резолвятся через
+  `reference__vehicle_matches` (`source_list ∈ {sensors_bv, navigation_problem}`, поле `public_state_number`),
+  топливо — по собственному ключу `fuel__fuel_vehicles.vehicle_id` (**в `reference__vehicle_matches` топлива нет**).
+- Отсутствующий у ТС домен рендерится «—» (не ошибка). Баннер покрытия обязателен: «Топливо:10 · Сенсоры:7 · Навигация:5 · в видеопарке:2».
+- **Не обещать кросс-связи там, где нет общих ТС**: топливо ↔ инцидент/водитель/РЭБ не линкуется (0 пересечения).
+
+### 9.1 Эндпоинты (Track B, заменяют стабы `fuel`/`sensors`/`navigation`)
+
+| Метод | Путь | Ответ | Идея |
+|---|---|---|---|
+| GET | `/api/fuel` | `FuelVehicleSummary[]` (10) | Топливная сверка ЗИС vs карты |
+| GET | `/api/fuel/{plate}` | `FuelVehicleCard` (404 при неизв. ТС) | Карточка топлива ТС |
+| GET | `/api/sensors` | `SensorVehicleSummary[]` (7) | Сенсорная диагностика (CAN−GPS) |
+| GET | `/api/sensors/{plate}` | `SensorVehicleCard` (404) | Карточка сенсоров ТС |
+| GET | `/api/navigation` | `NavProblemVehicle[]` (5–6) | Список проблемных треков → РЭБ |
+| GET | `/api/navigation/{plate}` | `NavProblemVehicle` (404) | Сводка ТС (deep-view = `/api/reb/{id}`) |
+
+> `/api/reb/{id}` (§7.4) **уже реализован** — `/api/navigation` это **список-вход** к нему.
+> Госномера матчатся с нормализацией (strip пробелов/регистра), чтобы `/api/fuel/А144ЕВ193` работал из UI.
+
+### 9.2 Pydantic-схемы (b-сервисы; §3.1/§7.5-стиль, провенанс колонок указан)
+
+```text
+# fuel (из fuel__fuel_vehicles / fuel__fuel_summary / fuel__fuel_reconciliation / fuel__fuel_events)
+FuelVehicleSummary { vehicle_id: str, model: str, vin: str,
+  fuel_volume_zis_l: float, fuel_volume_card_l: float, volume_delta_zis_minus_card_l: float,  # headline KPI
+  refuel_count_zis: int, transaction_count_card: int, period_start: str, period_end: str,
+  recon_status: "matched"|"review"|"missing_sensor_event" }   # худший статус сверки по ТС
+FuelReconRow { row_id: str, transaction_ts: str|null, event_ts: str|null,
+  transaction_volume_l: float|null, sensor_volume_l: float|null, volume_delta_l: float|null,
+  time_delta_min: float|null, amount_rub: float|null, status: str, reason: str|null }
+FuelEvent { event_id: str, event_ts: str, event_name: str, volume_l: float,
+  before_l: float|null, after_l: float|null, lat: float|null, lon: float|null, address: str|null }
+FuelVehicleCard extends FuelVehicleSummary {
+  summary: { fuel_spent_l, total_mileage_km, average_consumption_l_per_100km, average_speed_kmh,
+             fuelings_count, defuelings_count },        # fuel__fuel_summary
+  reconciliation: FuelReconRow[], events: FuelEvent[] }
+
+# sensors (из sensors__mileage_and_speed / online_snapshot / daily_mileage / engine_statistics / fuel_level_summary / sensor_catalog)
+SensorVehicleSummary { public_unit_id: str, vehicle_label: str, plate: str|null,
+  gps_total_distance_km: float, distance_odometer_km: float,
+  distance_gap_odometer_minus_gps_km: float|null,       # CAN−GPS KPI (может быть null → «нет данных»)
+  max_speed_kmh: float, average_speed_kmh: float, satellite_amount: int,
+  online_status: "online"|"stale"|"offline", sensor_count: int }
+SensorDailyPoint { date: str, distance_km: float }       # ровно 7/ТС → спарклайн (НЕ 959k graph_points)
+SensorVehicleCard extends SensorVehicleSummary {
+  daily_mileage: SensorDailyPoint[],
+  engine: { first_ignition_on, last_ignition_off, ignition_duration, idle_duration },
+  fuel_level: { first_fuel_level, last_fuel_level, delta_fuel_level },
+  snapshot: { speed_kmh, fuel_volume, satellite_amount, timestamp_utc,
+              last_valid_navigation_timestamp, odometer_mileage, longitude, latitude } }
+
+# navigation (из navigation__navigation_problem_vehicles / navigation__track_periods)
+NavProblemVehicle { public_unit_id: str|null, plate: str|null, vehicle_label: str|null, brand: str|null,
+  problem_description: str,                              # человеческая «история» проблемы (free text)
+  match_status: "matched"|"unmatched",
+  gap_count: int, total_periods: int, total_gap_duration_sec: int,   # gap = period_type=3
+  reb_link_id: str|null,                                 # = public_unit_id (UUID есть в обеих таблицах); null у unmatched
+  in_video_fleet: bool }                                 # plate ∈ v_incidents.vehicle_plate (норм.)
+```
+
+### 9.3 SQL-views (Track B, файлы `api/sql/2x_*.sql`, идемпотентный `DROP VIEW IF EXISTS`)
+
+- `25_v_fuel.sql` — `v_fuel` = `fuel__fuel_vehicles` ⋈ агрегат `fuel__fuel_reconciliation` по `vehicle_id`
+  (`recon_status` = худший: `missing_sensor_event` > `review` > `matched`). Списки `reconciliation`/`events`
+  сервис читает по `vehicle_id` напрямую (во view не материализуются).
+- `26_v_sensors.sql` — `v_sensors` = `sensors__mileage_and_speed` ⋈ `online_snapshot` ⋈ count(`sensor_catalog`)
+  по `public_unit_id`, LEFT JOIN `reference__vehicle_matches` (`source_list='sensors_bv'`) → `plate`.
+  **959k `sensors__graph_points` и `graph_status` не отдаются.** `online_status`: сравнение
+  `last_valid_navigation_timestamp` с `timestamp_utc` строки (не с `Date.now()`); NULL → `stale`.
+- `27_v_nav_problem.sql` — `v_nav_problem` = `navigation__navigation_problem_vehicles` LEFT JOIN агрегат
+  `navigation__track_periods` по `public_unit_id` (`gap_count`/`total_gap_duration_sec` по `period_type=3`,
+  парс `HH:MM:SS` как в `24_v_reb.sql`). **`reb_link_id = public_unit_id`** (т.к. `track_periods.vehicle_id`
+  хранит «грязный» лейбл `С725АТ159(ТМ)` ≠ чистый `public_state_number`).
+- `28_v_fleet_health.sql` — `v_fleet_health` = объединение ТС по нормализованному госномеру:
+  fuel (own-key) ∪ sensors/navigation (через `reference__vehicle_matches`), с флагами наличия по доменам.
+
+### 9.4 Frontend (Track F; `VITE_USE_FIXTURES=true` обязателен для каждого экрана)
+
+- **Роуты** (`web/src/App.tsx`, внутри `AppShell`): `/fleet-health` (хаб-ростер), `/fleet-health/fuel/:plate`,
+  `/fleet-health/sensors/:plate`, `/navigation` (список проблем→`/reb/:id`). `/reb/:id` и `/trip/:id` уже есть.
+- **API-слой** (f2/f3): `types.ts` (+`FuelVehicle*`/`SensorVehicle*`/`NavProblemVehicle`), `client.ts`
+  (`listFuel/getFuel/listSensors/getSensors/listNavProblems` с fixtures-веткой; **починить отсутствующую
+  fixtures-ветку `getReb`/`getVehicleReport`**), `fixtures.ts` (2–3 реальные строки на домен).
+- **Хаб «Здоровье парка»**: таблица «одна строка = одно ТС объединения», KPI-колонки (топливо Δ ЗИС−карта;
+  пробег CAN−GPS; сенсоры online; навигация gap-бейдж→`/reb/:id`), «—» для отсутствующих доменов, баннер покрытия.
+  Клик по строке → самый «богатый» доступный домен (fuel → sensor → REB).
+- **Кросс-врезки (целостность, аддитивно — killer-features не ломать):**
+  - `IncidentCard.tsx`: «Показать маршрут поездки»→`/trip/${inc.id}` (`trip_id==incident_id`);
+    блок «Связанные заявки» (`getTickets().filter(t.incident_id===inc.id)`→`/tickets`); при `create_task` —
+    ссылка «Открыть в Заявках».
+  - `TripDossier.tsx`: бэк-ссылка «К карточке инцидента»→`/incidents/${id}`.
+  - `Report.tsx`: строка нарушения — доп. ссылка→`/incidents/${id}` (инлайн-видео сохранить); строки
+    fleet-отчёта — drill в `DriverReport`/фильтрованную ленту.
+  - `EventsFeed.tsx`: иконка-экшен в строке→`/trip/${row.id}` (`stopPropagation`).
+- **Сигнпостинг**: generic `Placeholder` («Раздел в разработке») заменяется компонентом `ComingSoon`
+  (название секции + описание + пилюля «Скоро · Волна 4»); мёртвые пункты меню помечаются бейджем `W4`.
+
+### 9.5 Негативные кейсы
+
+- Неизвестный госномер → `404`; пустые списки `reconciliation`/`events`/`gap_periods` — валидны (не ошибка).
+- Сенсорные ТС с `last_valid_navigation_timestamp = NULL` (2 из 7) → `online_status="stale"`, не падение.
+- 1 unmatched навигационный ТС (`public_unit_id=null`) — в списке есть (у него реальный `problem_description`),
+  но `reb_link_id=null` → строка не кликабельна в РЭБ.
+- ТС без CAN−GPS разрыва (`distance_gap…=NULL`) → ячейка «нет данных», не 0.
+
+### 9.6 Владение новыми файлами (без пересечений)
+
+| Агент | Владеет | Зависит от |
+|---|---|---|
+| w3-6 fuel | `api/sql/25_v_fuel.sql`, `api/services/fuel_service.py`, роутер `api/routers/fuel.py` | b1, §9.2 |
+| w3-7 sensors | `api/sql/26_v_sensors.sql`, `api/services/sensors_service.py`, роутер `api/routers/sensors.py` | b1, §9.2 |
+| w3-8 navigation | `api/sql/27_v_nav_problem.sql`, `api/services/navigation_service.py`, роутер `api/routers/navigation.py` | b1, b12 (reb) |
+| w3-9 fleet-health-view | `api/sql/28_v_fleet_health.sql`, `api/services/fleet_health_service.py`, роутер `api/routers/fleet_health.py` (`GET /api/fleet-health`) | w3-6/7/8 |
+| w3-10 api-layer (f2/f3) | `web/src/api/{types,client,fixtures}.ts` (аддитивно) | §9.2 |
+| w3-11 fleet-health-hub | `web/src/pages/{FleetHealth,FuelCard,SensorCard,NavProblemList}.tsx` | w3-10, d2/d4 |
+| w3-12 cross-wiring | правки `web/src/pages/{IncidentCard,TripDossier,Report,EventsFeed}.tsx` (аддитивно) | w3-10 |
+| w3-13 nav-signposting | `web/src/App.tsx`, `web/src/components/.../ComingSoon.tsx` | w3-11 |
