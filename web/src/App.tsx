@@ -182,6 +182,7 @@ const IncidentCard = lazy(() => import('@/pages/IncidentCard')) as ComponentType
 const Report = lazy(() => import('@/pages/Report')) as ComponentType
 const Tickets = lazy(() => import('@/pages/Tickets')) as ComponentType
 const TripDossier = lazy(() => import('@/pages/TripDossier')) as ComponentType
+const RebRecovery = lazy(() => import('@/pages/RebRecovery')) as ComponentType
 const StyleGuide = lazy(() => import('@/pages/_StyleGuide')) as ComponentType
 const DispatchAlert = lazy(() => import('@/pages/DispatchAlert')) as ComponentType
 
@@ -245,6 +246,14 @@ function AppRoutes() {
             element={
               <Suspense fallback={<Placeholder title="Загрузка…" />}>
                 <TripDossier />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/reb/:id"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <RebRecovery />
               </Suspense>
             }
           />
