@@ -5,7 +5,8 @@ import * as client from '@/api/client'
 import type { IncidentSummary, Severity, Source } from '@/api/types'
 import { Card, ScoreBar, SeverityBadge } from '@/components'
 import { RoleToggle } from '@/components/map'
-import type { Role } from '@/components/map'
+import { useRole } from '@/state/role'
+import { filterByRole } from '@/state/roleFilter'
 import { cn } from '@/components/ui/cn'
 
 /**
@@ -54,9 +55,6 @@ const SOURCE_BADGE: Record<Source, { emoji: string; text: string }> = {
   TELEMATICS: { emoji: '⚡', text: 'Тел' },
   DIAGNOSTIC: { emoji: '⚙', text: 'Диагностика' },
 }
-
-/** Логист видит только телематику/ADAS (без DMS-алармов и COMBINED по DMS-части). */
-const LOGIST_SOURCES: Source[] = ['TELEMATICS', 'ADAS']
 
 // ── Форматтеры ────────────────────────────────────────────────────────────────
 
@@ -156,7 +154,7 @@ export default function EventsFeed() {
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
 
-  const [role, setRole] = useState<Role>('dispatcher')
+  const { role, setRole } = useRole()
   const [noVideo, setNoVideo] = useState(false)
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounced(query, SEARCH_DEBOUNCE_MS)
@@ -181,13 +179,15 @@ export default function EventsFeed() {
     }
   }, [reloadKey])
 
+  // Ролевая видимость (f13: единое правило `filterByRole` — общее с картой/монитором).
+  const roleVisible = useMemo(() => filterByRole(role, incidents), [role, incidents])
+
   // Ролевая + «нет видео» фильтрация — общая база для счётчиков и поиска.
   const filtered = useMemo(() => {
-    let rows = incidents
-    if (role === 'logist') rows = rows.filter((r) => LOGIST_SOURCES.includes(r.source))
+    let rows = roleVisible
     if (noVideo) rows = rows.filter((r) => r.video_available === false)
     return rows
-  }, [incidents, role, noVideo])
+  }, [roleVisible, noVideo])
 
   // Счётчики синхронны с фильтрами (роль + «нет видео»), независимо от поиска.
   const stats = useMemo(
@@ -277,7 +277,11 @@ export default function EventsFeed() {
         )}
 
         {isEmpty && (
-          <p className="px-4 py-16 text-center text-sm text-muted">Нет алярмов</p>
+          <p className="px-4 py-16 text-center text-sm text-muted">
+            {incidents.length > 0 && roleVisible.length === 0
+              ? 'Под выбранную роль событий нет'
+              : 'Нет алярмов'}
+          </p>
         )}
 
         {!loading && !error && !isEmpty && (

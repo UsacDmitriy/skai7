@@ -6,7 +6,9 @@ import type { IncidentSummary, Severity, Source } from '@/api/types'
 import { Card, ScoreBar, SeverityBadge } from '@/components'
 import { SabotageWidget } from '@/components/SabotageWidget'
 import { MapView, MarkerLayer, RoleToggle } from '@/components/map'
-import type { MapUnit, Role } from '@/components/map'
+import type { MapUnit } from '@/components/map'
+import { useRole } from '@/state/role'
+import { dedupeByUnit, filterByRole } from '@/state/roleFilter'
 import { cn } from '@/components/ui/cn'
 
 /**
@@ -37,9 +39,6 @@ const SOURCE_LABEL: Record<Source, string> = {
   COMBINED: 'Оба',
   DIAGNOSTIC: 'Диагностика',
 }
-
-/** Ранг severity для выбора наихудшего алярма ТС при дедупе. */
-const SEVERITY_RANK: Record<Severity, number> = { critical: 4, high: 3, medium: 2, low: 1 }
 
 type SortKey = 'ts' | 'risk_score'
 type FilterKey = 'all' | 'critical' | 'no_video'
@@ -74,12 +73,6 @@ function hasCoords(inc: IncidentSummary): boolean {
   return inc.lat != null && inc.lon != null && Number.isFinite(inc.lat) && Number.isFinite(inc.lon)
 }
 
-/** Логист видит телематику/ADAS, но не DMS (и COMBINED-по-DMS). §7.8. */
-function passesRole(inc: IncidentSummary, role: Role): boolean {
-  if (role === 'logist') return inc.source !== 'DMS' && inc.source !== 'COMBINED'
-  return true
-}
-
 function passesFilter(inc: IncidentSummary, filter: FilterKey): boolean {
   if (filter === 'critical') return inc.severity === 'critical'
   if (filter === 'no_video') return inc.video_available === false
@@ -92,22 +85,16 @@ function isOnline(inc: IncidentSummary): boolean {
 }
 
 /**
- * Дедуп ленты в `MapUnit[]`: один объект на госномер (= `unit_id` карты).
+ * Дедуп ленты в `MapUnit[]`: один объект на госномер (= `unit_id` карты), через
+ * общий хелпер f13 `dedupeByUnit` (1 `unit_id` = 1 маркер, НЕ на каждый `AlarmId`).
  * Остаётся наихудший по severity, при равенстве — последний по `ts`. Координаты
  * берём как есть (null → NaN): `MarkerLayer` сам отсеет точки без координат,
  * но в ленте такие алярмы остаются (бейдж «без координат»).
  */
 function buildUnits(incidents: IncidentSummary[]): MapUnit[] {
-  const byPlate = new Map<string, IncidentSummary>()
-  for (const inc of incidents) {
-    const prev = byPlate.get(inc.vehicle_plate)
-    const better =
-      !prev ||
-      SEVERITY_RANK[inc.severity] > SEVERITY_RANK[prev.severity] ||
-      (SEVERITY_RANK[inc.severity] === SEVERITY_RANK[prev.severity] && inc.ts >= prev.ts)
-    if (better) byPlate.set(inc.vehicle_plate, inc)
-  }
-  return [...byPlate.values()].map((inc) => ({
+  // `unit_id` карты = госномер (в IncidentSummary нет unit_id — он в IncidentDetail).
+  const tagged = incidents.map((inc) => ({ ...inc, unit_id: inc.vehicle_plate }))
+  return dedupeByUnit(tagged).map((inc) => ({
     unit_id: inc.vehicle_plate,
     vehicle_plate: inc.vehicle_plate,
     lat: inc.lat ?? Number.NaN,
@@ -164,10 +151,15 @@ export default function Monitor() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const [role, setRole] = useState<Role>('dispatcher')
+  const { role, setRole } = useRole()
   const [filter, setFilter] = useState<FilterKey>('all')
   const [sortKey, setSortKey] = useState<SortKey>('ts')
   const [selected, setSelected] = useState<string | null>(null)
+
+  // Безопасник — акцент на риск: лента по умолчанию сортируется по risk_score.
+  useEffect(() => {
+    if (role === 'security') setSortKey('risk_score')
+  }, [role])
 
   // Ссылки на карточки ленты по госномеру — для скролла при onSelect.
   const cardRefs = useRef(new Map<string, HTMLDivElement>())
@@ -188,15 +180,16 @@ export default function Monitor() {
 
   useEffect(() => load(), [load])
 
+  // Ролевая видимость (f13: единое правило `filterByRole` — общее с лентой событий).
+  const roleVisible = useMemo(() => filterByRole(role, incidents), [role, incidents])
+
   // Лента: роль + фильтр + сортировка. Показываем ВСЕ алярмы (в т.ч. без координат).
   const visible = useMemo(() => {
-    const rows = incidents
-      .filter((inc) => passesRole(inc, role))
-      .filter((inc) => passesFilter(inc, filter))
+    const rows = roleVisible.filter((inc) => passesFilter(inc, filter))
     return [...rows].sort((a, b) =>
       sortKey === 'risk_score' ? b.risk_score - a.risk_score : b.ts.localeCompare(a.ts),
     )
-  }, [incidents, role, filter, sortKey])
+  }, [roleVisible, filter, sortKey])
 
   // Маркеры: дедуп ленты по госномеру (MarkerLayer ещё раз защитит от дублей).
   const units = useMemo(() => buildUnits(visible), [visible])
@@ -313,9 +306,13 @@ export default function Monitor() {
               </div>
             )}
 
-            {/* empty */}
+            {/* empty: роль отфильтровала всё → отдельный текст, иначе — фильтры */}
             {!loading && !error && visible.length === 0 && (
-              <p className="py-8 text-center text-sm text-muted">Нет активных алярмов по фильтрам.</p>
+              <p className="py-8 text-center text-sm text-muted">
+                {incidents.length > 0 && roleVisible.length === 0
+                  ? 'Под выбранную роль событий нет'
+                  : 'Нет активных алярмов по фильтрам.'}
+              </p>
             )}
 
             {/* лента */}

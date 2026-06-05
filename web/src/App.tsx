@@ -24,11 +24,14 @@ import {
   useLocation,
 } from 'react-router-dom'
 import { cn } from '@/components/ui/cn'
+import { RoleProvider } from '@/state/role'
 
 /**
  * Каркас SPA (f1): BrowserRouter + AppShell (сайдбар 48/240 + header 56) + роуты.
  * Экраны f4 (Monitor/IncidentCard/Report) подключены ленивым импортом.
  * Витрина d3 (`_StyleGuide`) подключается ленивым импортом.
+ * Роль оператора (f13) — общий `RoleProvider` над всем деревом: лента и карта
+ * читают одну роль согласованно, значение персистится в localStorage.
  */
 
 // ── Навигация (источник — DESIGN.md §Components/Боковое меню) ──────────────────
@@ -276,10 +279,12 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-    >
-      <AppRoutes />
-    </BrowserRouter>
+    <RoleProvider>
+      <BrowserRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        <AppRoutes />
+      </BrowserRouter>
+    </RoleProvider>
   )
 }
