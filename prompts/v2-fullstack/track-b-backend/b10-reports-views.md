@@ -51,3 +51,14 @@
 - `reports_service.query(db, "Нарушения Иванова за 3 дня")` без ключа Groq возвращает `{"query": ReportQuery, "report": DriverReport}`.
 - `query(db, "отчёт по парку")` → `kind="fleet"`, `report` — `FleetReport`.
 - Повторный `make db` пересоздаёт view без дублей (`DROP VIEW IF EXISTS`).
+
+## Edge cases / поведение
+
+- **Правило gross:** `is_gross(row)` истинно ⟺ `severity="critical"` ИЛИ `alarm_code ∈ {OVERSPEED, DMS_SMOKING}` (§7.5); один и тот же хелпер в driver/fleet/vehicle (нет расхождений между разрезами).
+- **`disciplinary_warning`:** истинно ⟺ `gross>=3` ИЛИ `safety_score<60`; на границах `gross=3`/`safety_score=59` → `true`, `gross=2`+`safety_score=60` → `false`.
+- **Пустой период / нет алярмов:** `driver_report`/`fleet_report`/`vehicle_report` за период без событий → KPI все `0` (`total/video_da/telematics/gross`), `violations=[]`, `disciplinary_warning` только по `safety_score`; **не ошибка**.
+- **Неизвестный plate:** `driver_report`/`vehicle_report` для plate вне `driver_reference`/данных → по контракту: пустой отчёт (нулевые KPI, водитель из синтетики `driver_for`) либо 404 на уровне роутера; сервис не бросает необработанное исключение.
+- **ФИО→plate резолв:** `query` по `driver_name` без совпадения в `driver_reference` → безопасный дефолт (fleet или пустой driver-отчёт), не падать; неоднозначное ФИО (несколько ТС) — детерминированный выбор.
+- **Согласованность сумм KPI:** `total == video_da + telematics`; `gross<=total`; в `FleetReport` сумма `total`/`gross` по `by_drivers` согласована с агрегатной `kpi` (один источник `v_incidents`).
+- **vehicle: 1 ТС = N водителей:** `drivers` берётся из `driver_trips` (не `driver_reference`), ≥1 строка, ровно один `role="main"`; `cameras` всегда длины 3, `cameras_ok` формата `"N/3"`.
+- **Детерминизм по входу:** одинаковый `(plate, period_days)` → идентичный отчёт между вызовами (NLU regex-fallback детерминирован, view стабильны).

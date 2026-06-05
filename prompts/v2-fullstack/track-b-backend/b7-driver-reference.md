@@ -66,3 +66,12 @@ SQL, подхватываемый b1) шаг:
 - `safety_score` ∈ `[0, 100]` для всех строк; пул ФИО ≥20, регионов ≥5.
 - `enrichment.driver_for(db, plate)` для plate из справочника возвращает имя из `driver_reference`;
   для отсутствующего plate — синтетику по `crc32` (без исключения).
+
+## Edge cases / поведение
+
+- **Идемпотентность сидов:** третий+ прогон `seed_drivers.py` не меняет ни `driver_reference.csv`, ни `driver_trips.csv` (побайтно), включая порядок строк (стабильная сортировка по `"vehicle_plate"`).
+- **Ровно 1 строка на ТС:** `SELECT "vehicle_plate", count(*) FROM "driver_reference" GROUP BY 1 HAVING count(*)>1` → пусто; `driver_trips` допускает 1–2 строки на ТС (main + опц. secondary), вторичный — не дубль main (`driver_id` различны).
+- **Диапазоны:** `safety_score` ∈ `[0,100]` даже при ТС без алярмов (нет строк → `safety_score=100`, без NaN/NULL); `trips≥0`, сумма `trips` по ТС в `driver_trips` не превышает рейсов ТС.
+- **Отсутствие ТС / пустой источник:** нет уникальных пар в `"video_events__selected_video_alarms"` → CSV содержит только header, `CREATE OR REPLACE TABLE` даёт пустую таблицу (не падать); `driver_for` любого plate → синтетика.
+- **Детерминизм CSV:** одинаковый `crc32(plate)` → одинаковые `driver_id`/`driver_name`/`driver_phone`/`region` между прогонами; пулы (`NAMES`/`REGIONS`) не пересортированы.
+- **Стабильность таблицы:** имя в API-слое всегда `"driver_reference"` (не `seed__*`); `make db` повторно не плодит дублей строк (`CREATE OR REPLACE`).

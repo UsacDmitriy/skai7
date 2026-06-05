@@ -38,7 +38,19 @@ def telemetry_from_trackpoints(rows: list[dict], event_ts_iso: str) -> list[dict
 - `risk_score(critical,107,90,True,5)` > `risk_score(low,30,90,False,0)`; оба в [0,100].
 - `is_night("2026-05-14T23:37:22Z") is True`; `is_night("2026-05-15T10:15:00Z") is False`.
 
+## Edge cases / поведение
+
+- `risk_score`: результат всегда ∈ [0,100] (clamp); монотонен по severity при равных прочих — `critical ≥ high ≥ medium ≥ low`.
+- `speed_limit_for(неизвестный alarm_code)` → дефолт `90` (не NULL, не исключение); городские/DMS-коды → `60`.
+- `cameras_from_videofiles`: длина ровно `3` (каналы 1/5 + один доп.); каждая камера имеет `status ∈ {online, warning, offline}`; нет видео по каналу → `status="offline"`, `hasVideo=false`, `url=null` (не выпадаем).
+- `is_night`, `speed_limit_for`, `ax` (Δspeed/Δt) детерминированы: один вход → один выход; без `random`/`datetime.now`.
+
 ## Check
 
 - `python -c "from api.core import enrichment"` без ошибок.
 - Все функции — чистые (нет I/O, нет глобального состояния, нет недетерминизма).
+- `risk_score` clamp в [0,100] на крайних входах (speed=0, events=0 и speed≫limit, events≫7); монотонность по severity при фиксированных speed/limit/night/events.
+- `speed_limit_for("__UNKNOWN__")` → `90` (label/severity по неизвестному коду — дефолтные, без NULL).
+- `cameras_from_videofiles([])` → 3 камеры со `status="offline"`/`hasVideo=false`; при отсутствии видеоканала `confidence` инцидента −10 (нет видео).
+- `cameras` всегда длины 3, каждый `status ∈ {online, warning, offline}`.
+- `is_night("...T22:00:00Z") is True`, `is_night("...T06:00:00Z") is False` (граница [22,6)).
