@@ -30,7 +30,7 @@ wave-3-backlog/
   w3-5 no-video-incident   ┘                       (зависимостей между пунктами нет)
         └──────────────────────────┬──────────────────────────┘
                                     ▼
-                  🧪 БАРЬЕР 3 · wave-x-integration/x5-wave3-hardening
+                  🧪 БАРЬЕР 3 · barrier-3-hardening/x5-wave3-hardening
                   merge feat/backend+feat/tests → регресс (unit+API+фронт)
                   + гейт покрытия (api≥85% / web≥80%) → merge в main (ff-only)
 ```
@@ -47,7 +47,7 @@ wave-3-backlog/
 **Барьер 3** — в основном окне `skai_7` на ветке `integration`, после завершения пунктов:
 
 ```text
-Выполни @prompts/v2-fullstack/wave-x-integration/x5-wave3-hardening.md
+Выполни @prompts/v2-fullstack/barrier-3-hardening/x5-wave3-hardening.md
 ```
 
 ## Очередь — детали и приоритеты

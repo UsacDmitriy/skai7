@@ -21,7 +21,7 @@
 ## Как запускать в Claude Code
 
 Открыть worktree `feat/tests` отдельным окном VS Code (`code .worktrees/tests`), в панели Claude Code
-дать промпт (`Выполни @prompts/v2-fullstack/track-t-tests/t1-backend-unit-tests.md`) и держать
+дать промпт (`Выполни @prompts/v2-fullstack/wave-2-3-tests/track-t-tests/t1-backend-unit-tests.md`) и держать
 `00-CONTRACT.md` в контексте. Перед прогоном подтянуть готовый код:
 `git fetch && git merge origin/integration`.
 
