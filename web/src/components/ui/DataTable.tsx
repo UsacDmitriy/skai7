@@ -74,27 +74,42 @@ export function DataTable<T>({
           <tr className="border-b-2 border-border bg-bg">
             {columns.map((col) => {
               const active = sort?.id === col.id
+              const ariaSort: 'ascending' | 'descending' | 'none' | undefined =
+                col.sortable
+                  ? active
+                    ? sort?.dir === 'asc'
+                      ? 'ascending'
+                      : 'descending'
+                    : 'none'
+                  : undefined
               return (
                 <th
                   key={col.id}
-                  onClick={() => toggleSort(col)}
+                  scope="col"
+                  aria-sort={ariaSort}
                   className={cn(
                     'px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted',
                     ALIGN[col.align ?? 'left'],
-                    col.sortable && 'cursor-pointer select-none hover:text-ink',
                   )}
                 >
-                  <span className="inline-flex items-center gap-1">
-                    {col.header}
-                    {col.sortable &&
-                      (!active ? (
+                  {col.sortable ? (
+                    <button
+                      type="button"
+                      onClick={() => toggleSort(col)}
+                      className="inline-flex select-none items-center gap-1 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    >
+                      {col.header}
+                      {!active ? (
                         <ChevronsUpDown size={12} className="text-muted" aria-hidden />
                       ) : sort?.dir === 'asc' ? (
                         <ChevronUp size={12} aria-hidden />
                       ) : (
                         <ChevronDown size={12} aria-hidden />
-                      ))}
-                  </span>
+                      )}
+                    </button>
+                  ) : (
+                    <span className="inline-flex items-center gap-1">{col.header}</span>
+                  )}
                 </th>
               )
             })}

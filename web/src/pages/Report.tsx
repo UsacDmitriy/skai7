@@ -42,6 +42,7 @@ import {
   type VoiceButtonState,
   ConfirmationModal,
 } from '@/components'
+import { SabotageWidget } from '@/components/SabotageWidget'
 
 /**
  * f7 · Аналитика + голос (`/report`). Полная версия, замещает scaffold f4 (§7.7).
@@ -790,6 +791,11 @@ export default function Report() {
           </p>
         </Card>
       )}
+
+      {/* ── Секция «Саботаж» (f12, идея #9) ───────────────────────────────────── */}
+      <div className="border-t border-border pt-4">
+        <SabotageWidget variant="full" />
+      </div>
 
       {/* ── Подтверждение разбора NLU (d5) ────────────────────────────────────── */}
       {pending && (
