@@ -9,11 +9,14 @@ prompts/
 ├── v2-fullstack/           ← актуальный план: пересборка SKAI как полноценного продукта
 │   ├── 00-CONTRACT.md          общий контракт данных и API между треками
 │   ├── README.md               обзор волн и порядок запуска
-│   ├── track-b-backend/        DuckDB ETL + обогащение + FastAPI (b1…b6)
-│   ├── track-d-design/         Tailwind-тема, UI-примитивы, библиотека компонентов (d1…d3)
-│   ├── track-f-frontend/       Vite-скелет, API-клиент, фикстуры, экраны (f1…f4)
-│   ├── track-t-tests/          pytest + vitest, рутина/chores (t1…t4, worktree feat/tests)
-│   └── wave-x-integration/     удаление Streamlit, связка, e2e-smoke (x1…x3)
+│   ├── wave-1-p0/              P0 core: track-b (b1–b6) ‖ track-d (d1–d3) ‖ track-f (f1–f4)
+│   ├── wave-2-1-reports-voice/ P1 Reports&Voice: track-b (b7–b10) ‖ track-d (d5) ‖ track-f (f7)
+│   ├── wave-2-2-applied/       P1/P2 экраны: track-b (b11–b13) ‖ track-d (d4) ‖ track-f (f5,f6,f8–f13)
+│   ├── wave-2-3-tests/         track-t (t1–t4, worktree feat/tests)
+│   ├── wave-3-backlog/         бэклог доработок + тест-хардненинг (w3-*)
+│   ├── barrier-1-integration-p0/  выпил Streamlit, связка, e2e-smoke (x1–x3)
+│   ├── barrier-2-p1p2/         smoke P1/P2 (x4a, x4b, x4)
+│   └── barrier-3-hardening/    регресс + гейт покрытия (x5)
 │
 └── init/                   ← инициализационные промпты (запускаются на старте)
     ├── discovery-prompt.md       дискавери: 12 вопросов системного аналитика → черновик AGENTS.md
@@ -52,7 +55,7 @@ prompts/
 - **Frontend:** `f1-vite-scaffold` → `f2-api-client` (владеет всеми типами/методами §3.1+§7.5) → `f3-mock-fixtures` → `f4-screens` (IncidentCard P0, видео↔телеметрия sync)
   - Фронт работает на `VITE_USE_FIXTURES=true` — бэкенд для разработки не нужен.
 
-### Барьер 1 — интеграция (`wave-x-integration`, последовательно)
+### Барьер 1 — интеграция (`barrier-1-integration-p0`, последовательно)
 
 `x1-remove-streamlit` → `x2-wiring` (склейка React↔FastAPI, авто-сбор `ALL_ROUTERS`) → `x3-e2e-smoke`.
 
