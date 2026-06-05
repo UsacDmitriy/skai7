@@ -1,0 +1,32 @@
+# pre-commit (опц., t4): ruff (Python: api/ + scripts/) + prettier (web/src) на изменённых файлах.
+# Локальные хуки опираются на уже установленные инструменты проекта (ruff на PATH,
+# web/node_modules/.bin/prettier) — без сетевого клонирования и привязки к ревизиям зеркал.
+#
+#   pip install pre-commit && pre-commit install     # включить хуки
+#   pre-commit run --all-files                        # прогнать вручную
+#
+# Альтернатива — hosted-репозитории astral-sh/ruff-pre-commit и rbubley/mirrors-prettier;
+# тогда ревизии обновляются через `pre-commit autoupdate`.
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-lint
+        name: ruff check (api + scripts)
+        entry: ruff check --force-exclude --fix
+        language: system
+        files: ^(api|scripts)/.*\.py$
+        pass_filenames: true
+
+      - id: ruff-format
+        name: ruff format (api + scripts)
+        entry: ruff format --force-exclude
+        language: system
+        files: ^(api|scripts)/.*\.py$
+        pass_filenames: true
+
+      - id: prettier-web
+        name: prettier (web ts/tsx/css)
+        entry: web/node_modules/.bin/prettier --write --ignore-unknown
+        language: system
+        files: ^web/src/.*\.(ts|tsx|css)$
+        pass_filenames: true

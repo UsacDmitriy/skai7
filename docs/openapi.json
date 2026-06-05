@@ -1,0 +1,2592 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SKAI API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Api Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/actions": {
+      "post": {
+        "tags": [
+          "actions"
+        ],
+        "summary": "Record Action",
+        "description": "Записать действие и вернуть обновлённый статус инцидента (§3.4).",
+        "operationId": "record_action_api_actions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Action"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/alerts/{alert_id}": {
+      "get": {
+        "tags": [
+          "alerts"
+        ],
+        "summary": "Get Alert",
+        "description": "Диспетчерский алерт инцидента (§7.5), video_window_sec=15. 404 если нет.",
+        "operationId": "get_alert_api_alerts__alert_id__get",
+        "parameters": [
+          {
+            "name": "alert_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Alert Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DispatchAlert"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fuel": {
+      "get": {
+        "tags": [
+          "fuel"
+        ],
+        "summary": "List Fuel",
+        "operationId": "list_fuel_api_fuel_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fuel/{plate}": {
+      "get": {
+        "tags": [
+          "fuel"
+        ],
+        "summary": "Get Fuel",
+        "operationId": "get_fuel_api_fuel__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/incidents": {
+      "get": {
+        "tags": [
+          "incidents"
+        ],
+        "summary": "List Incidents",
+        "description": "Лента инцидентов (§3.2) с фильтрами; `status` — рантайм-журнал (сервис).",
+        "operationId": "list_incidents_api_incidents_get",
+        "parameters": [
+          {
+            "name": "severity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "critical",
+                    "high",
+                    "medium",
+                    "low"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Severity"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "DMS",
+                    "ADAS",
+                    "TELEMATICS",
+                    "COMBINED",
+                    "DIAGNOSTIC"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Source"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "active",
+                    "in_progress",
+                    "validated",
+                    "closed"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "vehicle_plate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Vehicle Plate"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IncidentSummary"
+                  },
+                  "title": "Response List Incidents Api Incidents Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/incidents/{incident_id}": {
+      "get": {
+        "tags": [
+          "incidents"
+        ],
+        "summary": "Get Incident",
+        "description": "Карточка инцидента со всеми enrichment-полями (§3.1). 404 если нет.",
+        "operationId": "get_incident_api_incidents__incident_id__get",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Incident Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncidentDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/incidents/{incident_id}/telemetry": {
+      "get": {
+        "tags": [
+          "incidents"
+        ],
+        "summary": "Get Telemetry",
+        "description": "Телеметрия трека инцидента (§3.1). Пустой список, если точек нет.",
+        "operationId": "get_telemetry_api_incidents__incident_id__telemetry_get",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Incident Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TelemetryPoint"
+                  },
+                  "title": "Response Get Telemetry Api Incidents  Incident Id  Telemetry Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/incidents/{incident_id}/video/{channel}": {
+      "get": {
+        "tags": [
+          "incidents"
+        ],
+        "summary": "Get Video",
+        "description": "Видеофайл mp4 канала из settings.media_dir (§3.2). 404 если нет файла.",
+        "operationId": "get_video_api_incidents__incident_id__video__channel__get",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Incident Id"
+            }
+          },
+          {
+            "name": "channel",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Channel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/navigation": {
+      "get": {
+        "tags": [
+          "navigation"
+        ],
+        "summary": "List Navigation",
+        "operationId": "list_navigation_api_navigation_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/navigation/{plate}": {
+      "get": {
+        "tags": [
+          "navigation"
+        ],
+        "summary": "Get Navigation",
+        "operationId": "get_navigation_api_navigation__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reb/{id}": {
+      "get": {
+        "tags": [
+          "reb"
+        ],
+        "summary": "Get Reb",
+        "description": "Восстановление трека по `id` ТС (госномер или unit_id). 404 если нет данных.\n\n`{id:path}` — госномера навигации содержат `/` (напр. `А 230 КУ/550 RUS`).",
+        "operationId": "get_reb_api_reb__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RebRecovery"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/driver/{plate}": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Driver Report",
+        "description": "Отчёт по водителю/ТС (§7.5 В-1).",
+        "operationId": "driver_report_api_reports_driver__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          },
+          {
+            "name": "period_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 3,
+              "title": "Period Days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DriverReport"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/fleet": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Fleet Report",
+        "description": "Отчёт по парку (§7.5 В-2). `view` — приоритетный разрез UI; оба массива всегда заполнены.",
+        "operationId": "fleet_report_api_reports_fleet_get",
+        "parameters": [
+          {
+            "name": "period_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 3,
+              "title": "Period Days"
+            }
+          },
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "drivers",
+                "vehicles"
+              ],
+              "type": "string",
+              "default": "drivers",
+              "title": "View"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FleetReport"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/vehicle/{plate}": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Vehicle Report",
+        "description": "Отчёт по ТС (§7.5 В-2/ТС, идея #2/#10). `cameras` длины 3 (ADAS/DMS/СНЗ).",
+        "operationId": "vehicle_report_api_reports_vehicle__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          },
+          {
+            "name": "period_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 3,
+              "title": "Period Days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleReport"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/query": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Query Report",
+        "description": "Сырой текст → NLU (b9) → отчёт (§7.4). `query.kind=driver|fleet`.\n\nБез `GROQ_API_KEY` nlu_service детерминированно уходит в regex-fallback.",
+        "operationId": "query_report_api_reports_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/transcribe": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Transcribe",
+        "description": "Голос (wav multipart) → текст (§7.4) через faster-whisper / fallback.",
+        "operationId": "transcribe_api_reports_transcribe_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_transcribe_api_reports_transcribe_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transcription"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sabotage": {
+      "get": {
+        "tags": [
+          "sabotage"
+        ],
+        "summary": "List Sabotage",
+        "description": "Список событий саботажа (§7.4). Пустой `v_sabotage` → `[]` (HTTP 200).",
+        "operationId": "list_sabotage_api_sabotage_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SabotageEvent"
+                  },
+                  "type": "array",
+                  "title": "Response List Sabotage Api Sabotage Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sensors": {
+      "get": {
+        "tags": [
+          "sensors"
+        ],
+        "summary": "List Sensors",
+        "operationId": "list_sensors_api_sensors_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sensors/{plate}": {
+      "get": {
+        "tags": [
+          "sensors"
+        ],
+        "summary": "Get Sensors",
+        "operationId": "get_sensors_api_sensors__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tickets": {
+      "get": {
+        "tags": [
+          "tickets"
+        ],
+        "summary": "List Tickets",
+        "description": "Журнал заявок (§7.5). Нет actions.csv → пустой список.",
+        "operationId": "list_tickets_api_tickets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Ticket"
+                  },
+                  "type": "array",
+                  "title": "Response List Tickets Api Tickets Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trips/{trip_id}": {
+      "get": {
+        "tags": [
+          "trips"
+        ],
+        "summary": "Get Trip",
+        "description": "Видеодосье поездки (§7.5): трек + таймлайн. 404 если данных по id нет.",
+        "operationId": "get_trip_api_trips__trip_id__get",
+        "parameters": [
+          {
+            "name": "trip_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trip Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripDossier"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/vehicles": {
+      "get": {
+        "tags": [
+          "vehicles"
+        ],
+        "summary": "List Vehicles",
+        "description": "Список ТС парка (§3.3), обогащённый driver/model/cameras_ok.",
+        "operationId": "list_vehicles_api_vehicles_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VehicleSummary"
+                  },
+                  "type": "array",
+                  "title": "Response List Vehicles Api Vehicles Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Action": {
+        "properties": {
+          "incident_id": {
+            "type": "string",
+            "title": "Incident Id"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "mark_reviewed",
+              "create_task",
+              "export_report",
+              "request_archive",
+              "call_driver",
+              "notify_hr",
+              "validate",
+              "stop_vehicle"
+            ],
+            "title": "Action"
+          },
+          "comment": {
+            "type": "string",
+            "title": "Comment",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "incident_id",
+          "action"
+        ],
+        "title": "Action",
+        "description": "Тело/ответ POST /api/actions (§3.4)."
+      },
+      "ActionResult": {
+        "properties": {
+          "incident_id": {
+            "type": "string",
+            "title": "Incident Id"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "mark_reviewed",
+              "create_task",
+              "export_report",
+              "request_archive",
+              "call_driver",
+              "notify_hr",
+              "validate",
+              "stop_vehicle"
+            ],
+            "title": "Action"
+          },
+          "comment": {
+            "type": "string",
+            "title": "Comment"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "in_progress",
+              "validated",
+              "closed"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "incident_id",
+          "action",
+          "comment",
+          "status"
+        ],
+        "title": "ActionResult",
+        "description": "Ответ POST /api/actions: записанное действие + новый статус инцидента."
+      },
+      "Body_transcribe_api_reports_transcribe_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          },
+          "lang": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lang"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_transcribe_api_reports_transcribe_post"
+      },
+      "CamExtra": {
+        "properties": {
+          "channel": {
+            "type": "integer",
+            "title": "Channel"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "channel",
+          "url"
+        ],
+        "title": "CamExtra",
+        "description": "Доп. канал (ch2/ch3) для блока «Другие камеры» (§3.1 `cam_extra[]`)."
+      },
+      "Camera": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "online",
+              "offline",
+              "warning"
+            ],
+            "title": "Status"
+          },
+          "hasVideo": {
+            "type": "boolean",
+            "title": "Hasvideo"
+          },
+          "offline_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Offline From"
+          },
+          "offline_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Offline To"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "status",
+          "hasVideo"
+        ],
+        "title": "Camera",
+        "description": "Канонический слот камеры (§2/§3.1). Длина массива всегда 3 (ADAS/DMS/СНЗ)."
+      },
+      "DispatchAlert": {
+        "properties": {
+          "incident": {
+            "$ref": "#/components/schemas/IncidentDetail"
+          },
+          "video_window_sec": {
+            "type": "integer",
+            "title": "Video Window Sec",
+            "default": 15
+          },
+          "requested_at": {
+            "type": "string",
+            "title": "Requested At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "incident",
+          "requested_at"
+        ],
+        "title": "DispatchAlert",
+        "description": "Диспетчерский алерт (§7.5, идея #5): инцидент + видео ±N с."
+      },
+      "DriverRef": {
+        "properties": {
+          "driver_id": {
+            "type": "string",
+            "title": "Driver Id"
+          },
+          "driver_name": {
+            "type": "string",
+            "title": "Driver Name"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "main",
+              "secondary"
+            ],
+            "title": "Role",
+            "default": "main"
+          },
+          "trips": {
+            "type": "integer",
+            "title": "Trips"
+          },
+          "safety_score": {
+            "type": "integer",
+            "title": "Safety Score"
+          },
+          "risk_score": {
+            "type": "integer",
+            "title": "Risk Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "driver_id",
+          "driver_name",
+          "trips",
+          "safety_score",
+          "risk_score"
+        ],
+        "title": "DriverRef",
+        "description": "Ссылка на водителя (§7.5)."
+      },
+      "DriverReport": {
+        "properties": {
+          "driver": {
+            "$ref": "#/components/schemas/DriverRef"
+          },
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "vehicle_model": {
+            "type": "string",
+            "title": "Vehicle Model"
+          },
+          "period": {
+            "$ref": "#/components/schemas/ReportPeriod"
+          },
+          "mileage_km": {
+            "type": "number",
+            "title": "Mileage Km"
+          },
+          "trips": {
+            "type": "integer",
+            "title": "Trips"
+          },
+          "kpi": {
+            "$ref": "#/components/schemas/ReportKPI"
+          },
+          "disciplinary_warning": {
+            "type": "boolean",
+            "title": "Disciplinary Warning"
+          },
+          "violations": {
+            "items": {
+              "$ref": "#/components/schemas/ViolationRow"
+            },
+            "type": "array",
+            "title": "Violations",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "driver",
+          "vehicle_plate",
+          "vehicle_model",
+          "period",
+          "mileage_km",
+          "trips",
+          "kpi",
+          "disciplinary_warning"
+        ],
+        "title": "DriverReport",
+        "description": "GET /api/reports/driver/{plate} (§7.5, идея #2 В-1)."
+      },
+      "FleetByDriver": {
+        "properties": {
+          "driver": {
+            "$ref": "#/components/schemas/DriverRef"
+          },
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "vehicle_model": {
+            "type": "string",
+            "title": "Vehicle Model"
+          },
+          "mileage_km": {
+            "type": "number",
+            "title": "Mileage Km"
+          },
+          "risk_score": {
+            "type": "integer",
+            "title": "Risk Score"
+          },
+          "gross": {
+            "type": "integer",
+            "title": "Gross"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "driver",
+          "vehicle_plate",
+          "vehicle_model",
+          "mileage_km",
+          "risk_score",
+          "gross",
+          "total"
+        ],
+        "title": "FleetByDriver",
+        "description": "Строка агрегата по водителю (§7.5 FleetReport.by_drivers)."
+      },
+      "FleetByVehicle": {
+        "properties": {
+          "plate": {
+            "type": "string",
+            "title": "Plate"
+          },
+          "vehicle_model": {
+            "type": "string",
+            "title": "Vehicle Model"
+          },
+          "main_driver": {
+            "type": "string",
+            "title": "Main Driver"
+          },
+          "mileage_km": {
+            "type": "number",
+            "title": "Mileage Km"
+          },
+          "risk_score": {
+            "type": "integer",
+            "title": "Risk Score"
+          },
+          "gross": {
+            "type": "integer",
+            "title": "Gross"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "cameras_ok": {
+            "type": "string",
+            "title": "Cameras Ok"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plate",
+          "vehicle_model",
+          "main_driver",
+          "mileage_km",
+          "risk_score",
+          "gross",
+          "total",
+          "cameras_ok"
+        ],
+        "title": "FleetByVehicle",
+        "description": "Строка агрегата по ТС (§7.5 FleetReport.by_vehicles)."
+      },
+      "FleetReport": {
+        "properties": {
+          "period": {
+            "$ref": "#/components/schemas/ReportPeriod"
+          },
+          "kpi": {
+            "$ref": "#/components/schemas/ReportKPI"
+          },
+          "vehicles_count": {
+            "type": "integer",
+            "title": "Vehicles Count"
+          },
+          "by_drivers": {
+            "items": {
+              "$ref": "#/components/schemas/FleetByDriver"
+            },
+            "type": "array",
+            "title": "By Drivers",
+            "default": []
+          },
+          "by_vehicles": {
+            "items": {
+              "$ref": "#/components/schemas/FleetByVehicle"
+            },
+            "type": "array",
+            "title": "By Vehicles",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "period",
+          "kpi",
+          "vehicles_count"
+        ],
+        "title": "FleetReport",
+        "description": "GET /api/reports/fleet (§7.5, идея #2 В-2)."
+      },
+      "GapPeriod": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "title": "End"
+          },
+          "duration_sec": {
+            "type": "integer",
+            "title": "Duration Sec"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "duration_sec"
+        ],
+        "title": "GapPeriod",
+        "description": "GPS-разрыв (§7.5 RebRecovery.gap_periods)."
+      },
+      "GpsPoint": {
+        "properties": {
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "ts": {
+            "type": "string",
+            "title": "Ts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lat",
+          "lon",
+          "ts"
+        ],
+        "title": "GpsPoint",
+        "description": "Точка GPS-трека (§7.5 RebRecovery.gps_track)."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "IncidentDetail": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "alarm_type": {
+            "type": "string",
+            "title": "Alarm Type"
+          },
+          "alarm_code": {
+            "type": "string",
+            "title": "Alarm Code"
+          },
+          "alarm_label_ru": {
+            "type": "string",
+            "title": "Alarm Label Ru"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "DMS",
+              "ADAS",
+              "TELEMATICS",
+              "COMBINED",
+              "DIAGNOSTIC"
+            ],
+            "title": "Source"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity"
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Risk Level"
+          },
+          "risk_score": {
+            "type": "integer",
+            "title": "Risk Score"
+          },
+          "ts": {
+            "type": "string",
+            "title": "Ts"
+          },
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "driver": {
+            "type": "string",
+            "title": "Driver"
+          },
+          "vehicle_model": {
+            "type": "string",
+            "title": "Vehicle Model"
+          },
+          "speed_kmh": {
+            "type": "number",
+            "title": "Speed Kmh"
+          },
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lat"
+          },
+          "lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lon"
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          },
+          "video_available": {
+            "type": "boolean",
+            "title": "Video Available"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "in_progress",
+              "validated",
+              "closed"
+            ],
+            "title": "Status"
+          },
+          "ts_end": {
+            "type": "string",
+            "title": "Ts End"
+          },
+          "unit_id": {
+            "type": "string",
+            "title": "Unit Id"
+          },
+          "unit_name": {
+            "type": "string",
+            "title": "Unit Name"
+          },
+          "driver_id": {
+            "type": "string",
+            "title": "Driver Id"
+          },
+          "driver_phone": {
+            "type": "string",
+            "title": "Driver Phone"
+          },
+          "driver_region": {
+            "type": "string",
+            "title": "Driver Region"
+          },
+          "driver_department": {
+            "type": "string",
+            "title": "Driver Department"
+          },
+          "driver_safety_score": {
+            "type": "integer",
+            "title": "Driver Safety Score"
+          },
+          "speed_limit_kmh": {
+            "type": "integer",
+            "title": "Speed Limit Kmh"
+          },
+          "is_night": {
+            "type": "boolean",
+            "title": "Is Night"
+          },
+          "continuous_driving_min": {
+            "type": "integer",
+            "title": "Continuous Driving Min"
+          },
+          "events_last_7d": {
+            "type": "integer",
+            "title": "Events Last 7D"
+          },
+          "confidence": {
+            "type": "integer",
+            "title": "Confidence"
+          },
+          "event_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Version"
+          },
+          "sensor_active_after_sec": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sensor Active After Sec"
+          },
+          "mileage_km": {
+            "type": "number",
+            "title": "Mileage Km"
+          },
+          "movement_duration": {
+            "type": "string",
+            "title": "Movement Duration"
+          },
+          "video_count": {
+            "type": "integer",
+            "title": "Video Count"
+          },
+          "cam_front_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cam Front Url"
+          },
+          "cam_dms_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cam Dms Url"
+          },
+          "cam_extra": {
+            "items": {
+              "$ref": "#/components/schemas/CamExtra"
+            },
+            "type": "array",
+            "title": "Cam Extra",
+            "default": []
+          },
+          "evidence_summary": {
+            "type": "string",
+            "title": "Evidence Summary"
+          },
+          "cameras": {
+            "items": {
+              "$ref": "#/components/schemas/Camera"
+            },
+            "type": "array",
+            "title": "Cameras",
+            "default": []
+          },
+          "telemetry": {
+            "items": {
+              "$ref": "#/components/schemas/TelemetryPoint"
+            },
+            "type": "array",
+            "title": "Telemetry",
+            "default": []
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "alarm_type",
+          "alarm_code",
+          "alarm_label_ru",
+          "source",
+          "severity",
+          "risk_level",
+          "risk_score",
+          "ts",
+          "vehicle_plate",
+          "driver",
+          "vehicle_model",
+          "speed_kmh",
+          "video_available",
+          "status",
+          "ts_end",
+          "unit_id",
+          "unit_name",
+          "driver_id",
+          "driver_phone",
+          "driver_region",
+          "driver_department",
+          "driver_safety_score",
+          "speed_limit_kmh",
+          "is_night",
+          "continuous_driving_min",
+          "events_last_7d",
+          "confidence",
+          "mileage_km",
+          "movement_duration",
+          "video_count",
+          "evidence_summary"
+        ],
+        "title": "IncidentDetail",
+        "description": "Карточка GET /api/incidents/{id} (§3.1). Расширяет Summary."
+      },
+      "IncidentSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "alarm_type": {
+            "type": "string",
+            "title": "Alarm Type"
+          },
+          "alarm_code": {
+            "type": "string",
+            "title": "Alarm Code"
+          },
+          "alarm_label_ru": {
+            "type": "string",
+            "title": "Alarm Label Ru"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "DMS",
+              "ADAS",
+              "TELEMATICS",
+              "COMBINED",
+              "DIAGNOSTIC"
+            ],
+            "title": "Source"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity"
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Risk Level"
+          },
+          "risk_score": {
+            "type": "integer",
+            "title": "Risk Score"
+          },
+          "ts": {
+            "type": "string",
+            "title": "Ts"
+          },
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "driver": {
+            "type": "string",
+            "title": "Driver"
+          },
+          "vehicle_model": {
+            "type": "string",
+            "title": "Vehicle Model"
+          },
+          "speed_kmh": {
+            "type": "number",
+            "title": "Speed Kmh"
+          },
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lat"
+          },
+          "lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lon"
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          },
+          "video_available": {
+            "type": "boolean",
+            "title": "Video Available"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "in_progress",
+              "validated",
+              "closed"
+            ],
+            "title": "Status"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "alarm_type",
+          "alarm_code",
+          "alarm_label_ru",
+          "source",
+          "severity",
+          "risk_level",
+          "risk_score",
+          "ts",
+          "vehicle_plate",
+          "driver",
+          "vehicle_model",
+          "speed_kmh",
+          "video_available",
+          "status"
+        ],
+        "title": "IncidentSummary",
+        "description": "Строка ленты GET /api/incidents (§3.1)."
+      },
+      "QueryRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "period_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "QueryRequest",
+        "description": "Тело `POST /query` (§7.4): сырой текст запроса + опциональный период."
+      },
+      "QueryResult": {
+        "properties": {
+          "query": {
+            "$ref": "#/components/schemas/ReportQuery"
+          },
+          "report": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DriverReport"
+              },
+              {
+                "$ref": "#/components/schemas/FleetReport"
+              }
+            ],
+            "title": "Report"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "report"
+        ],
+        "title": "QueryResult",
+        "description": "Ответ `POST /query` — обёртка `{query, report}` (§7.4)."
+      },
+      "RebRecovery": {
+        "properties": {
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "gps_track": {
+            "items": {
+              "$ref": "#/components/schemas/GpsPoint"
+            },
+            "type": "array",
+            "title": "Gps Track",
+            "default": []
+          },
+          "gap_periods": {
+            "items": {
+              "$ref": "#/components/schemas/GapPeriod"
+            },
+            "type": "array",
+            "title": "Gap Periods",
+            "default": []
+          },
+          "video_frames": {
+            "items": {
+              "$ref": "#/components/schemas/VideoFrame"
+            },
+            "type": "array",
+            "title": "Video Frames",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "vehicle_plate"
+        ],
+        "title": "RebRecovery",
+        "description": "Восстановление при РЭБ (§7.5, идея #8): GPS-разрывы + соседние кадры."
+      },
+      "ReportKPI": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "video_da": {
+            "type": "integer",
+            "title": "Video Da"
+          },
+          "telematics": {
+            "type": "integer",
+            "title": "Telematics"
+          },
+          "gross": {
+            "type": "integer",
+            "title": "Gross"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "video_da",
+          "telematics",
+          "gross"
+        ],
+        "title": "ReportKPI",
+        "description": "Сводка периода (§7.5). total/ВА видео-детекции/телематика/грубых."
+      },
+      "ReportPeriod": {
+        "properties": {
+          "from": {
+            "type": "string",
+            "title": "From"
+          },
+          "to": {
+            "type": "string",
+            "title": "To"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "days"
+        ],
+        "title": "ReportPeriod",
+        "description": "Период отчёта (§7.5). `from` — зарезервированное слово Python → alias."
+      },
+      "ReportQuery": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "driver",
+              "fleet"
+            ],
+            "title": "Kind"
+          },
+          "plate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plate"
+          },
+          "driver_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Driver Name"
+          },
+          "period_days": {
+            "type": "integer",
+            "title": "Period Days",
+            "default": 3
+          },
+          "view": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "drivers",
+                  "vehicles"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "View"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "title": "ReportQuery",
+        "description": "Разобранный NLU-запрос (§7.3/§7.5). Результат `nlu_service.parse`."
+      },
+      "SabotageEvent": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "ts": {
+            "type": "string",
+            "title": "Ts"
+          },
+          "dms_dark": {
+            "type": "boolean",
+            "title": "Dms Dark"
+          },
+          "speed_kmh": {
+            "type": "number",
+            "title": "Speed Kmh"
+          },
+          "driver_name": {
+            "type": "string",
+            "title": "Driver Name"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "vehicle_plate",
+          "ts",
+          "dms_dark",
+          "speed_kmh",
+          "driver_name"
+        ],
+        "title": "SabotageEvent",
+        "description": "Событие саботажа камеры (§7.5). `video_url` nullable — доступного кадра может не быть."
+      },
+      "TelemetryPoint": {
+        "properties": {
+          "ts_offset": {
+            "type": "integer",
+            "title": "Ts Offset"
+          },
+          "speed": {
+            "type": "number",
+            "title": "Speed"
+          },
+          "ax": {
+            "type": "number",
+            "title": "Ax"
+          },
+          "ay": {
+            "type": "number",
+            "title": "Ay"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ts_offset",
+          "speed",
+          "ax",
+          "ay"
+        ],
+        "title": "TelemetryPoint",
+        "description": "Точка телеметрии (§3.1). ax = производная скорости (§2), ay = 0.0 (нет данных)."
+      },
+      "Ticket": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "incident_id": {
+            "type": "string",
+            "title": "Incident Id"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "comment": {
+            "type": "string",
+            "title": "Comment"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "in_progress",
+              "validated",
+              "closed"
+            ],
+            "title": "Status"
+          },
+          "deadline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          },
+          "is_overdue": {
+            "type": "boolean",
+            "title": "Is Overdue",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "incident_id",
+          "action",
+          "comment",
+          "status"
+        ],
+        "title": "Ticket",
+        "description": "Заявка (§7.5). Читается из output/actions.csv (идея #6).\n\nis_overdue = deadline<now И status∉{closed}; «Просрочена» — не статус, а оверлей."
+      },
+      "TimelineEvent": {
+        "properties": {
+          "ts_offset": {
+            "type": "integer",
+            "title": "Ts Offset"
+          },
+          "alarm_code": {
+            "type": "string",
+            "title": "Alarm Code"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "has_video": {
+            "type": "boolean",
+            "title": "Has Video"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ts_offset",
+          "alarm_code",
+          "label",
+          "has_video"
+        ],
+        "title": "TimelineEvent",
+        "description": "Точка таймлайна видеодосье (§7.5 TripDossier.timeline)."
+      },
+      "Transcription": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "lang": {
+            "type": "string",
+            "title": "Lang"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text",
+          "lang",
+          "confidence"
+        ],
+        "title": "Transcription",
+        "description": "Ответ `POST /transcribe` (§7.4) — результат faster-whisper / fallback."
+      },
+      "TripDossier": {
+        "properties": {
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "track": {
+            "items": {
+              "$ref": "#/components/schemas/TelemetryPoint"
+            },
+            "type": "array",
+            "title": "Track",
+            "default": []
+          },
+          "timeline": {
+            "items": {
+              "$ref": "#/components/schemas/TimelineEvent"
+            },
+            "type": "array",
+            "title": "Timeline",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "vehicle_plate"
+        ],
+        "title": "TripDossier",
+        "description": "Видеодосье (§7.5, идея #7): трек + таймлайн событий."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VehicleReport": {
+        "properties": {
+          "plate": {
+            "type": "string",
+            "title": "Plate"
+          },
+          "vehicle_model": {
+            "type": "string",
+            "title": "Vehicle Model"
+          },
+          "risk_score": {
+            "type": "integer",
+            "title": "Risk Score"
+          },
+          "cameras": {
+            "items": {
+              "$ref": "#/components/schemas/Camera"
+            },
+            "type": "array",
+            "title": "Cameras"
+          },
+          "drivers": {
+            "items": {
+              "$ref": "#/components/schemas/DriverRef"
+            },
+            "type": "array",
+            "title": "Drivers",
+            "default": []
+          },
+          "period": {
+            "$ref": "#/components/schemas/ReportPeriod"
+          },
+          "period_alarms": {
+            "items": {
+              "$ref": "#/components/schemas/ViolationRow"
+            },
+            "type": "array",
+            "title": "Period Alarms",
+            "default": []
+          },
+          "mileage_km": {
+            "type": "number",
+            "title": "Mileage Km"
+          },
+          "trips": {
+            "type": "integer",
+            "title": "Trips"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plate",
+          "vehicle_model",
+          "risk_score",
+          "cameras",
+          "period",
+          "mileage_km",
+          "trips"
+        ],
+        "title": "VehicleReport",
+        "description": "GET /api/reports/vehicle/{plate} (§7.5, идея #2 В-2/ТС, #10). len(cameras)=3."
+      },
+      "VehicleSummary": {
+        "properties": {
+          "unit_id": {
+            "type": "string",
+            "title": "Unit Id"
+          },
+          "plate": {
+            "type": "string",
+            "title": "Plate"
+          },
+          "vehicle_model": {
+            "type": "string",
+            "title": "Vehicle Model"
+          },
+          "driver": {
+            "type": "string",
+            "title": "Driver"
+          },
+          "alarm_count": {
+            "type": "integer",
+            "title": "Alarm Count"
+          },
+          "alarm_types": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alarm Types"
+          },
+          "downloaded_video_count": {
+            "type": "integer",
+            "title": "Downloaded Video Count"
+          },
+          "total_track_mileage_km": {
+            "type": "number",
+            "title": "Total Track Mileage Km"
+          },
+          "cameras_ok": {
+            "type": "string",
+            "title": "Cameras Ok"
+          }
+        },
+        "type": "object",
+        "required": [
+          "unit_id",
+          "plate",
+          "vehicle_model",
+          "driver",
+          "alarm_count",
+          "downloaded_video_count",
+          "total_track_mileage_km",
+          "cameras_ok"
+        ],
+        "title": "VehicleSummary",
+        "description": "Строка списка ТС (§3.3). Сырые метрики `video_events__vehicles` + driver/model."
+      },
+      "VideoFrame": {
+        "properties": {
+          "ts": {
+            "type": "string",
+            "title": "Ts"
+          },
+          "channel": {
+            "type": "integer",
+            "title": "Channel"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ts",
+          "channel",
+          "url"
+        ],
+        "title": "VideoFrame",
+        "description": "Соседний видеокадр (§7.5 RebRecovery.video_frames)."
+      },
+      "ViolationRow": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "ts": {
+            "type": "string",
+            "title": "Ts"
+          },
+          "alarm_code": {
+            "type": "string",
+            "title": "Alarm Code"
+          },
+          "alarm_label_ru": {
+            "type": "string",
+            "title": "Alarm Label Ru"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "DMS",
+              "ADAS",
+              "TELEMATICS",
+              "COMBINED",
+              "DIAGNOSTIC"
+            ],
+            "title": "Source"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity"
+          },
+          "is_gross": {
+            "type": "boolean",
+            "title": "Is Gross"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "ts",
+          "alarm_code",
+          "alarm_label_ru",
+          "source",
+          "severity",
+          "is_gross"
+        ],
+        "title": "ViolationRow",
+        "description": "Строка нарушения в отчёте (§7.5). Клик → IncidentDetail (killer-feature)."
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+# Dev / test dependencies — track Tests (t1), против 00-CONTRACT.md §«Makefile/тесты».
+# Runtime-зависимости приложения (fastapi, duckdb, pandas, httpx для TestClient, …)
+# — в api/requirements.txt (`make install`). Здесь только тест-инструментарий,
+# чтобы `pip install -r api/requirements-dev.txt` ставил pytest/pytest-cov без
+# тяжёлого STT/NLU-стека (faster-whisper/groq).
+
+pytest
+pytest-cov
