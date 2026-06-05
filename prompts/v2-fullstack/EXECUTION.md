@@ -36,7 +36,7 @@ Claude Code и дай промпт волны (см. START.md). Окна раб�
 **Один промпт = одна задача Claude Code.** В нужном окне открой панель Claude Code и дай команду:
 
 ```text
-Выполни промпт @prompts/v2-fullstack/track-b-backend/b1-duckdb-etl.md
+Выполни промпт @prompts/v2-fullstack/wave-1-p0/track-b-backend/b1-duckdb-etl.md
 ```
 
 (`@`-ссылка подставит файл; либо просто «выполни b1»). Дождись завершения и проверки, затем следующий
@@ -51,7 +51,7 @@ code /Users/dimausac/projects/skai_7        # основное окно (или 
 ```
 
 Затем в Claude Code этого окна просто дай промпты по одному —
-`@prompts/v2-fullstack/wave-x-integration/x1-remove-streamlit.md` → `x2` → `x3` (→ `x4` на барьере 2).
+`@prompts/v2-fullstack/barrier-1-integration-p0/x1-remove-streamlit.md` → `x2` → `x3` (→ `x4` на барьере 2).
 **Каждый x-промпт самодостаточен:** содержит свою git-склейку веток на `integration`, проверку
 корректности предыдущего шага и (x3/x4) продвижение `main` только при зелёном smoke — так `main`
 всегда остаётся в стабильном состоянии (последний зелёный P0/релиз).
@@ -92,7 +92,7 @@ integration (x1/x2), поэтому в параллельной фазе их н
 
 | # | Промпт | Трек | Источник / детали | Приоритет |
 | --- | --- | --- | --- | --- |
-| W3-1 | [`wave-3-backlog/track-b-backend/w3-1-b13-ticket-sync.md`](wave-3-backlog/track-b-backend/w3-1-b13-ticket-sync.md) — синхронизировать промпт `b13` с contract-change #1: дефолт статуса `Ticket` `"new"` → `"active"` (значение `new` удалено из enum `Status`); добавить в схему `Ticket` поля `deadline` и `is_overdue` (оверлей «⏱ Просрочено», не статус). | b13 / backend | `track-b-backend/b13-tickets-alerts-trips.md:15,17` vs `00-CONTRACT.md` §7.5 | Средний (до реализации `tickets_service`) |
+| W3-1 | [`wave-3-backlog/track-b-backend/w3-1-b13-ticket-sync.md`](wave-3-backlog/track-b-backend/w3-1-b13-ticket-sync.md) — синхронизировать промпт `b13` с contract-change #1: дефолт статуса `Ticket` `"new"` → `"active"` (значение `new` удалено из enum `Status`); добавить в схему `Ticket` поля `deadline` и `is_overdue` (оверлей «⏱ Просрочено», не статус). | b13 / backend | `wave-2-2-applied/track-b-backend/b13-tickets-alerts-trips.md:15,17` vs `00-CONTRACT.md` §7.5 | Средний (до реализации `tickets_service`) |
 | W3-2 | [`wave-3-backlog/track-b-backend/w3-2-diagnostic-source-data.md`](wave-3-backlog/track-b-backend/w3-2-diagnostic-source-data.md) — данные для `Source=DIAGNOSTIC`: значение объявлено в §3.1, но в `data/analysis/alarm_types.json` нет строки с `source:"DIAGNOSTIC"` → бейдж «⚙ Диагностика» (макет 07) ни на чём не срабатывает. | b1 / данные | `00-CONTRACT.md` §3.1 (changelog #1) vs `alarm_type_catalog` (14 строк) | Низкий (демо-опционально) |
 | W3-5 | [`wave-3-backlog/track-b-backend/w3-5-no-video-incident-reachable.md`](wave-3-backlog/track-b-backend/w3-5-no-video-incident-reachable.md) — no-video инцидент достижим в живых данных: `v_incidents.video_available` всегда `1` (источник — только видео-алярмы), поэтому UI-ветка «нет видео» + «Запросить архив» + `sensor_active_after_sec` (§2) мертва. | b3 / данные (+T) | smoke x3 vs `00-CONTRACT.md` §2 | Средний (закрывает мёртвую P0-ветку) |
 | W3-3 | [`wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md`](wave-3-backlog/track-t-tests/w3-3-backend-unit-coverage.md) — backend unit-покрытие **всех** модулей `b1–b13` (дозакрытие t1: b1/b3/b4/b5/b6/b8/b9/b11/b12/b13), гейт `api/` ≥ 85%. | T / tests | по промптам `b1–b13` + `00-CONTRACT.md` §1–§3/§7.5 | Высокий (качество релиза) |
@@ -116,7 +116,7 @@ git merge feat/backend feat/web feat/tests
 ```
 
 ```text
-Выполни @prompts/v2-fullstack/wave-x-integration/x5-wave3-hardening.md
+Выполни @prompts/v2-fullstack/barrier-3-hardening/x5-wave3-hardening.md
 ```
 
 Новый пункт бэклога → добавь файл в папку трека (`wave-3-backlog/track-b-backend/` или `track-t-tests/`) `wN-*.md` + строку в таблицу выше.
@@ -271,7 +271,7 @@ flowchart TD
 | 🏁 2 · Финал P1/P2 | `integration` → `main` | повтор `x2`/`x3` → `x4-e2e-p1p2.md` | smoke на полном наборе P1/P2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage) → продвигает `main` |
 | 🧪 3 · Хардненинг Волны 3 | `integration` → `main` | `x5-wave3-hardening.md` | полный регресс (unit+API+фронт) + гейт покрытия (`api/`≥85%, `web/src`≥80%); проверка W3-1/W3-2 |
 
-> Файлы барьеров: `prompts/v2-fullstack/wave-x-integration/`.
+> Файлы барьеров: `barrier-1-integration-p0/` (x1–x3), `barrier-2-p1p2/` (x4a/x4b/x4), `barrier-3-hardening/` (x5).
 
 ### Окна и владение
 
@@ -297,9 +297,9 @@ Git-склейка и продвижение `main` — **внутри пром�
 вариантом «а», x3 продвигает `main`). Просто подавай по одному в Claude Code, дожидаясь зелёного check:
 
 ```text
-Выполни @prompts/v2-fullstack/wave-x-integration/x1-remove-streamlit.md
-Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
-Выполни @prompts/v2-fullstack/wave-x-integration/x3-e2e-smoke.md
+Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x1-remove-streamlit.md
+Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x2-wiring.md
+Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x3-e2e-smoke.md
 ```
 
 Красный check → **стоп**, дефект соответствующему треку, чиним на `integration`, `main` не трогаем.
@@ -318,8 +318,8 @@ Git-склейка и продвижение `main` — **внутри пром�
 git **внутри промптов** (x2 идемпотентно подтягивает 2.1 в `integration`; x4a — только smoke, `main` не трогает):
 
 ```text
-Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
-Выполни @prompts/v2-fullstack/wave-x-integration/x4a-smoke-reports-voice.md
+Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x2-wiring.md
+Выполни @prompts/v2-fullstack/barrier-2-p1p2/x4a-smoke-reports-voice.md
 ```
 
 Красный check → **стоп**, дефект трека, чиним на `integration`, к 2.2 не переходим.
@@ -334,8 +334,8 @@ git **внутри промптов** (x2 идемпотентно подтяг�
 ### Барьер 2.2 — smoke прикладных (основное окно `skai_7`)
 
 ```text
-Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
-Выполни @prompts/v2-fullstack/wave-x-integration/x4b-smoke-applied-screens.md
+Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x2-wiring.md
+Выполни @prompts/v2-fullstack/barrier-2-p1p2/x4b-smoke-applied-screens.md
 ```
 
 Красный check → **стоп**, дефект трека, чиним на `integration`, к 2.3 не переходим.
@@ -351,9 +351,9 @@ git **внутри промптов** (x2 идемпотентно подтяг�
 git **внутри промптов** (x2 подтягивает тесты в `integration`; x4 продвигает `main`). Подавай по одному, дожидаясь зелёного check:
 
 ```text
-Выполни @prompts/v2-fullstack/wave-x-integration/x2-wiring.md
-Выполни @prompts/v2-fullstack/wave-x-integration/x3-e2e-smoke.md
-Выполни @prompts/v2-fullstack/wave-x-integration/x4-e2e-p1p2.md
+Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x2-wiring.md
+Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x3-e2e-smoke.md
+Выполни @prompts/v2-fullstack/barrier-2-p1p2/x4-e2e-p1p2.md
 ```
 
 Красный check → **стоп**, дефект трека, `main` остаётся на стабильном P0.
@@ -375,7 +375,7 @@ Git **внутри промпта** (x5 в «Перед стартом» сам 
 в финале продвигает `main` ff-only). Один промпт, дожидаясь зелёного check:
 
 ```text
-Выполни @prompts/v2-fullstack/wave-x-integration/x5-wave3-hardening.md
+Выполни @prompts/v2-fullstack/barrier-3-hardening/x5-wave3-hardening.md
 ```
 
 Красный регресс/покрытие → **стоп**, дефект трека, `main` остаётся на стабильном P1/P2.

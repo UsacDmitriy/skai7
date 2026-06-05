@@ -34,7 +34,7 @@ git merge feat/backend feat/web feat/tests   # волна 3: w3-1..w3-4
 
 ## Доработки бэклога (w3-1 / w3-2)
 
-1. `grep -n '"new"' prompts/v2-fullstack/track-b-backend/b13-tickets-alerts-trips.md` → **пусто** (W3-1: enum `Status` без `new`).
+1. `grep -n '"new"' prompts/v2-fullstack/wave-2-2-applied/track-b-backend/b13-tickets-alerts-trips.md` → **пусто** (W3-1: enum `Status` без `new`).
    Если `tickets_service` реализован — `Ticket.status` дефолт `"active"`, есть `deadline`/`is_overdue`.
 2. W3-2: либо `grep -n DIAGNOSTIC data/analysis/alarm_types.json` непуст (есть строка `source:"DIAGNOSTIC"`),
    либо в `00-CONTRACT.md` рядом с changelog #1(a) зафиксировано, что значение зарезервировано без данных.
