@@ -9,4 +9,4 @@
 | `track-d-design/` | 2 · `feat/web` | `d1` → `d2` → `d3` | — |
 | `track-f-frontend/` | 2 · `feat/web` | `f1` → `f2` → `f3` → `f4` | `VITE_USE_FIXTURES=true npm run dev`, `npm run typecheck` |
 
-Дальше → **Барьер 1** (`../barrier-1-integration-p0/`).
+Дальше → **Барьер 1** (`../barrier-1-p0/`).

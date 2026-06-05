@@ -9,4 +9,4 @@
 | `track-d-design/` | 2 · `feat/web` | `d5` (voice-timeline) | — |
 | `track-f-frontend/` | 2 · `feat/web` | `f7` (analytics-voice) | `/report` (🎤) рендерится |
 
-Дальше → **Барьер 2.1** (`../barrier-2-p1p2/x4a-smoke-reports-voice.md`).
+Дальше → **Барьер 2.1** (`../barrier-2-1-reports-voice/x4a-smoke-reports-voice.md`).

@@ -9,4 +9,4 @@
 | `track-d-design/` | 2 · `feat/web` | `d4` (map-primitives) | — |
 | `track-f-frontend/` | 2 · `feat/web` | `f5`, `f6`, `f8`–`f13` (все параллельно) | экраны `/tickets`, `/trip/:id`, `/reb/:id`, монитор-карта |
 
-Дальше → **Барьер 2.2** (`../barrier-2-p1p2/x4b-smoke-applied-screens.md`).
+Дальше → **Барьер 2.2** (`../barrier-2-2-applied/x4b-smoke-applied-screens.md`).

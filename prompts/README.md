@@ -14,9 +14,11 @@ prompts/
 │   ├── wave-2-2-applied/       P1/P2 экраны: track-b (b11–b13) ‖ track-d (d4) ‖ track-f (f5,f6,f8–f13)
 │   ├── wave-2-3-tests/         track-t (t1–t4, worktree feat/tests)
 │   ├── wave-3-backlog/         бэклог доработок + тест-хардненинг (w3-*)
-│   ├── barrier-1-integration-p0/  выпил Streamlit, связка, e2e-smoke (x1–x3)
-│   ├── barrier-2-p1p2/         smoke P1/P2 (x4a, x4b, x4)
-│   └── barrier-3-hardening/    регресс + гейт покрытия (x5)
+│   ├── barrier-1-p0/              ⟵ волна 1: выпил Streamlit, связка, e2e-smoke (x1–x3)
+│   ├── barrier-2-1-reports-voice/ ⟵ волна 2.1: smoke отчёты/voice (x4a)
+│   ├── barrier-2-2-applied/       ⟵ волна 2.2: smoke прикладных (x4b)
+│   ├── barrier-2-3-tests/         ⟵ волна 2.3: финал P1/P2 (x4)
+│   └── barrier-3-hardening/       ⟵ волна 3: регресс + гейт покрытия (x5)
 │
 └── init/                   ← инициализационные промпты (запускаются на старте)
     ├── discovery-prompt.md       дискавери: 12 вопросов системного аналитика → черновик AGENTS.md
@@ -55,7 +57,7 @@ prompts/
 - **Frontend:** `f1-vite-scaffold` → `f2-api-client` (владеет всеми типами/методами §3.1+§7.5) → `f3-mock-fixtures` → `f4-screens` (IncidentCard P0, видео↔телеметрия sync)
   - Фронт работает на `VITE_USE_FIXTURES=true` — бэкенд для разработки не нужен.
 
-### Барьер 1 — интеграция (`barrier-1-integration-p0`, последовательно)
+### Барьер 1 — интеграция (`barrier-1-p0`, последовательно)
 
 `x1-remove-streamlit` → `x2-wiring` (склейка React↔FastAPI, авто-сбор `ALL_ROUTERS`) → `x3-e2e-smoke`.
 

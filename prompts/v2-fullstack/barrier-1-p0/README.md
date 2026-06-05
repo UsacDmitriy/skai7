@@ -4,9 +4,9 @@
 (x1 сам вливает `main`+`feat/backend`+`feat/web`, x3 продвигает `main`). Схема — [`../EXECUTION.md`](../EXECUTION.md).
 
 ```text
-Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x1-remove-streamlit.md
-Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x2-wiring.md
-Выполни @prompts/v2-fullstack/barrier-1-integration-p0/x3-e2e-smoke.md
+Выполни @prompts/v2-fullstack/barrier-1-p0/x1-remove-streamlit.md
+Выполни @prompts/v2-fullstack/barrier-1-p0/x2-wiring.md
+Выполни @prompts/v2-fullstack/barrier-1-p0/x3-e2e-smoke.md
 ```
 
 - `x1` — выпил Streamlit + склейка веток (вариант «а»: `--no-ff main`).
