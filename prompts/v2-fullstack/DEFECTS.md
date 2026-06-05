@@ -108,8 +108,15 @@ __import__("os").path.isfile(rel)      # True   (путь корректен о�
 - **Трек:** B (backend) · `d5` (reports/voice wiring) · `api/routers/reports.py`
 - **Severity:** P0 — killer-feature «голос→NLU→отчёт» (идея #4) и разрез В-2/ТС (идея #2)
   end-to-end сломаны: фронт `f7` готов и тайпчек зелёный, но 3 из 5 эндпоинтов среза не отвечают.
-- **Статус:** 🔴 OPEN — **smoke RED, к Волне 2.2 не переходим.** Фикс — на `integration`,
-  после фикса перезапустить `x4a`.
+- **Статус:** ✅ RESOLVED (2026-06-05) — роутер перевязан на сервис: добавлены
+  `GET /vehicle/{plate}` → `vehicle_report` (`cameras` len=3), `POST /query` принимает
+  `{text, period_days?}` → `reports_service.query` (`{query, report}`), `POST /transcribe`
+  (multipart `file`+`lang`) → `stt_service`. В `requirements.txt` добавлен **`python-multipart`**
+  (обяз. для multipart; раньше отсутствовал — transcribe падал бы на старте) + `faster-whisper`/`groq`.
+  Срез закоммичен в `feat/backend`/`feat/web` и слит в `integration` (был uncommitted — мерж был no-op).
+  Повторный smoke на `integration` зелёный: все 5 эндпоинтов 200 (`query.kind` driver+fleet через
+  regex-fallback без `GROQ_API_KEY`; `transcribe`→`{text,lang,confidence}`); `pytest` 157 passed;
+  `npm run typecheck` зелёный. **К Волне 2.2 можно переходить.**
 
 ### Симптом
 
