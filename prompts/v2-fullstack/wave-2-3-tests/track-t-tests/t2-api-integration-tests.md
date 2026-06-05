@@ -34,3 +34,12 @@
 - `pytest api/tests/integration -q` зелёный после `make db`.
 - Каждая ручка валидируется против Pydantic-модели (response_model или ручная проверка ключей).
 - В `/docs` присутствуют теги всех роутеров (incidents/reports/vehicles/actions/tickets/alerts/trips/sabotage/reb).
+
+## Коммит (обязательно)
+
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**; незакоммиченная
+работа в worktree на барьер не попадёт:
+
+```bash
+git add -A && git commit -m "t2: <что сделано>"
+```

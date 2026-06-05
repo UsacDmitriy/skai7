@@ -45,3 +45,12 @@ Ticket { id, created_at, incident_id, action, comment, status: Status,
 - Схема `Ticket` в промпте содержит `deadline` и `is_overdue` с формулой оверлея.
 - Если сервис реализован: `list_tickets` возвращает `Ticket.status="active"` по умолчанию и корректный `is_overdue`.
 - `grep -n '"new"' prompts/v2-fullstack/wave-2-2-applied/track-b-backend/b13-tickets-alerts-trips.md` — пусто.
+
+## Коммит (обязательно)
+
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**; незакоммиченная
+работа в worktree на барьер не попадёт:
+
+```bash
+git add -A && git commit -m "w3-1: <что сделано>"
+```

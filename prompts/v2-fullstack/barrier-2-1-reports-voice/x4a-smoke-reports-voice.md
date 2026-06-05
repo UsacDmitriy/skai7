@@ -13,6 +13,13 @@
 ```bash
 cd /Users/dimausac/projects/skai_7
 git checkout integration
+
+# GUARD: merge берёт только коммиты — стоп, если в worktree есть незакоммиченные изменения.
+for w in backend web tests; do
+  d=".worktrees/$w"; [ -d "$d" ] || continue
+  test -z "$(git -C "$d" status --porcelain)" || { echo "❌ $w: незакоммичено — закоммить в worktree и повтори барьер"; exit 1; }
+done
+
 git merge feat/backend feat/web   # 2.1: b7,b8,b9,b10 ; d5,f7
 ```
 

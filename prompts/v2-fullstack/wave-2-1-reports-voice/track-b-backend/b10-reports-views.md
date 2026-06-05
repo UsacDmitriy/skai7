@@ -63,3 +63,12 @@
 - **Согласованность сумм KPI:** `total == video_da + telematics`; `gross<=total`; в `FleetReport` сумма `total`/`gross` по `by_drivers` согласована с агрегатной `kpi` (один источник `v_incidents`).
 - **vehicle: 1 ТС = N водителей:** `drivers` берётся из `driver_trips` (не `driver_reference`), ≥1 строка, ровно один `role="main"`; `cameras` всегда длины 3, `cameras_ok` формата `"N/3"`.
 - **Детерминизм по входу:** одинаковый `(plate, period_days)` → идентичный отчёт между вызовами (NLU regex-fallback детерминирован, view стабильны).
+
+## Коммит (обязательно)
+
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**; незакоммиченная
+работа в worktree на барьер не попадёт:
+
+```bash
+git add -A && git commit -m "b10: <что сделано>"
+```

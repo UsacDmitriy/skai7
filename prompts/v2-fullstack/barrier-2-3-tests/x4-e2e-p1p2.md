@@ -15,7 +15,15 @@
 подтяни тесты Волны 2.3:
 
 ```bash
-git checkout integration && git merge feat/tests   # 2.3: t1–t4
+git checkout integration
+
+# GUARD: merge берёт только коммиты — стоп, если в worktree есть незакоммиченные изменения.
+for w in backend web tests; do
+  d=".worktrees/$w"; [ -d "$d" ] || continue
+  test -z "$(git -C "$d" status --porcelain)" || { echo "❌ $w: незакоммичено — закоммить в worktree и повтори барьер"; exit 1; }
+done
+
+git merge feat/tests   # 2.3: t1–t4
 ```
 
 Дальше повторный **x2** (идемпотентно, роутеры b11–b13 авто-обходом), затем этот x4 — финальный smoke и продвижение `main`.

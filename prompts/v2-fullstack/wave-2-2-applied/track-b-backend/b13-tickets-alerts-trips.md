@@ -48,3 +48,12 @@
 - `GET /api/trips/{id}` возвращает `TripDossier`: `track` — массив `TelemetryPoint`, `timeline` — массив событий с `has_video` (bool).
 - Неизвестный `id` в `/alerts`/`/trips` → 404 (сервис вернул `None`).
 - `from api.services.tickets_service import list_tickets, get_alert, get_trip` импортируется.
+
+## Коммит (обязательно)
+
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**; незакоммиченная
+работа в worktree на барьер не попадёт:
+
+```bash
+git add -A && git commit -m "b13: <что сделано>"
+```

@@ -12,6 +12,14 @@ smoke не станет зелёным (продвижение `main` — в x3 
 ```bash
 cd /Users/dimausac/projects/skai_7
 git checkout integration
+
+# GUARD: merge берёт только коммиты — ни один worktree не должен иметь незакоммиченных изменений,
+# иначе работа волны не попадёт на барьер. Стоп, если что-то не закоммичено.
+for w in backend web tests; do
+  d=".worktrees/$w"; [ -d "$d" ] || continue
+  test -z "$(git -C "$d" status --porcelain)" || { echo "❌ $w: незакоммичено — закоммить в worktree и повтори барьер"; exit 1; }
+done
+
 git merge --no-ff main -m "merge main (docs/мокапы/f2) → integration"   # вариант «а»: main разошёлся во время волн
 git merge feat/backend feat/web   # подтянуть готовые треки волны 1 (B и F)
 ```

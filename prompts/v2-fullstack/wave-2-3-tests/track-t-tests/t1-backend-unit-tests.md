@@ -40,3 +40,12 @@
 - `pip install -r api/requirements-dev.txt` ставит `pytest`/`pytest-cov`.
 - После прогона `tu-*`: `pytest api/tests/unit -q` зелёный, покрытие `api/core/enrichment.py` ≥ 90% (`--cov`).
 - Тесты не требуют сети/поднятого uvicorn и проходят после `make db`.
+
+## Коммит (обязательно)
+
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**; незакоммиченная
+работа в worktree на барьер не попадёт:
+
+```bash
+git add -A && git commit -m "t1: <что сделано>"
+```

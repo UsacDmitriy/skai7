@@ -32,3 +32,12 @@
 - `cameras` всегда длины 3, каждый `status ∈ {online, warning, offline}`.
 - `is_night("...T22:00:00Z") is True`, `is_night("...T06:00:00Z") is False` (граница [22,6)).
 - Регрессий по существующим тестам b2/t1 нет (`pytest api/tests/unit/test_enrichment.py`).
+
+## Коммит (обязательно)
+
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**; незакоммиченная
+работа в worktree на барьер не попадёт:
+
+```bash
+git add -A && git commit -m "b14: <что сделано>"
+```

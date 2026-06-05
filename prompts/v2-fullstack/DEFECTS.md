@@ -1,8 +1,8 @@
-# Дефекты барьер-волны (smoke x3)
+# Дефекты барьер-волны (smoke x3 / x4a)
 
-> Журнал заводится smoke-прогоном `x3-e2e-smoke.md`. Smoke ничего не чинит сам —
-> только фиксирует дефект и адресует его соответствующему треку (B/F/T).
-> Чинить — на ветке `integration`, после фикса перезапустить smoke.
+> Журнал заводится smoke-прогонами (`x3-e2e-smoke.md`, `x4a-smoke-reports-voice.md`).
+> Smoke ничего не чинит сам — только фиксирует дефект и адресует его соответствующему
+> треку (B/F/T). Чинить — на ветке `integration`, после фикса перезапустить smoke.
 
 ---
 
@@ -99,3 +99,64 @@ __import__("os").path.isfile(rel)      # True   (путь корректен о�
 - ADAS/фронт → `videoUrl(inc.id, 1)`, DMS/салон → `videoUrl(inc.id, 5)`;
   сохранить «нет видео → пустое состояние»: `src = inc.cam_front_url ? videoUrl(inc.id, 1) : undefined`.
 - То же для `cam_extra[]` (каналы 2/3) и для `Report.tsx`.
+
+---
+
+## DEF-4 · `api/routers/reports.py` не перевязан на сервис b9/b10 — vehicle/transcribe/query(text) недоступны
+
+- **Дата:** 2026-06-05 (smoke x4a · Барьер 2.1)
+- **Трек:** B (backend) · `d5` (reports/voice wiring) · `api/routers/reports.py`
+- **Severity:** P0 — killer-feature «голос→NLU→отчёт» (идея #4) и разрез В-2/ТС (идея #2)
+  end-to-end сломаны: фронт `f7` готов и тайпчек зелёный, но 3 из 5 эндпоинтов среза не отвечают.
+- **Статус:** 🔴 OPEN — **smoke RED, к Волне 2.2 не переходим.** Фикс — на `integration`,
+  после фикса перезапустить `x4a`.
+
+### Симптом
+
+Сервис- и data-слой Волны 2.1 готовы (`make db` зелёный: `driver_reference`=21, `driver_trips`=33,
+view `v_driver_report`/`v_fleet`/`v_vehicle` существуют), но **роутер остался версии b5** — экспонирует
+только `driver/fleet/query(ReportQuery)`. Прогон против живого API (`uvicorn :8011`):
+
+```text
+GET  /api/reports/driver/{plate}        -> 200  ✅ kpi, disciplinary_warning=true, violations[].is_gross=true (§7.5 OK)
+GET  /api/reports/fleet?view=drivers    -> 200  ✅ by_drivers=21, by_vehicles=21 (оба разреза)
+GET  /api/reports/fleet?view=vehicles   -> 200  ✅
+GET  /api/reports/vehicle/{plate}       -> 404  ❌ эндпоинт не зарегистрирован
+POST /api/reports/query  {text:"…"}     -> 422  ❌ {detail: body.kind Field required} — роутер ждёт ReportQuery, не {text}
+POST /api/reports/transcribe (wav)      -> 404  ❌ эндпоинт не зарегистрирован
+```
+
+`GET /openapi.json` → под `/reports` зарегистрированы только `driver/{plate}`, `fleet`, `query`.
+
+### Корень
+
+`api/routers/reports.py` (комментарий в шапке всё ещё «реальный NLU-парс ... придёт в b9») вызывает
+`reports_service.report_for_query(ReportQuery)` напрямую и не подключён к уже готовым функциям сервиса:
+
+- `reports_service.vehicle_report(db, plate, period_days)` — есть (строка ~252), **эндпоинта нет**;
+- `reports_service.query(db, text, period_days)` → возвращает `{"query": ReportQuery, "report": …}`
+  через `nlu_service.parse(text)` — есть (~355), **роутер его не зовёт** (берёт уже разобранный `ReportQuery`);
+- `stt_service` (faster-whisper, `transcribe`) — есть, **эндпоинта `POST /transcribe` нет**.
+
+Фронт `f7` уже бьёт в `client.ts` → `/reports/transcribe` и `/reports/query` (text) — оба контракта
+со стороны фронта правильные; рассинхрон только в роутере бэка.
+
+### Фикс (за треком B — barrier ничего не переписывает)
+
+В `api/routers/reports.py` добавить/перевязать (response-model из `api/domain/reports.py`, всё уже есть):
+
+1. `GET /vehicle/{plate}` → `reports_service.vehicle_report(db, plate, period_days)` (`VehicleReport`, `cameras` длины 3).
+2. `POST /query` → принимать `{text: str, period_days?: int}` и звать `reports_service.query(db, text, period_days)`;
+   вернуть `{query, report}` (`query.kind="driver"|"fleet"`). Без `GROQ_API_KEY` — fallback regex в `nlu_service`.
+3. `POST /transcribe` → `UploadFile` (wav multipart) → `stt_service` → `{text, lang, confidence}`.
+
+После фикса: перезапустить `x2-wiring` (авто-обход роутеров) и `x4a`-smoke; ожидаемый зелёный —
+все 5 эндпоинтов + e2e `f7`.
+
+### Процессная заметка (assembly)
+
+Работа Волны 2.1 на момент барьера **не закоммичена**: `feat/backend`/`feat/web` стоят на коммите
+`integration` (`cd0c113`), изменения висят в worktree как uncommitted/untracked. Поэтому
+`git merge feat/backend feat/web` из шага «склейка» — no-op и **не переносит срез на `integration`**.
+Smoke выполнен по коду в worktree (`.worktrees/backend`, `.worktrees/web`). Перед фиксом DEF-4 треки
+должны закоммитить срез 2.1 в свои ветки, иначе мерж в `integration` ничего не подтянет. `main` не тронут.
