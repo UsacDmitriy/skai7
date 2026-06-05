@@ -1,7 +1,7 @@
 # W3-1 · Синхронизация промпта b13 с contract-change #1 (Ticket)
 
 > Волна 3 · бэклог. Трек **Backend/Data** (владелец `b13`). Против `00-CONTRACT.md`
-> changelog #1 (b) и §7.5. **Владеет:** правкой текста `prompts/v2-fullstack/track-b-backend/b13-tickets-alerts-trips.md`
+> changelog #1 (b) и §7.5. **Владеет:** правкой текста `prompts/v2-fullstack/wave-2-2-applied/track-b-backend/b13-tickets-alerts-trips.md`
 > (и, если `tickets_service.py` уже реализован, — приведением его к новому enum).
 > **Не блокирует** P0/P1/P2. Берётся, как только трек backend свободен; **до** реализации `tickets_service`.
 
@@ -23,7 +23,7 @@ Ticket { id, created_at, incident_id, action, comment, status: Status,
 
 ## Что сделать
 
-В `prompts/v2-fullstack/track-b-backend/b13-tickets-alerts-trips.md`:
+В `prompts/v2-fullstack/wave-2-2-applied/track-b-backend/b13-tickets-alerts-trips.md`:
 
 1. В описании `list_tickets` (сейчас строки ~15–17): дефолт `status` — **`"active"`**, не `"new"`
    (значения `new` в enum `Status` больше нет).
@@ -43,4 +43,4 @@ Ticket { id, created_at, incident_id, action, comment, status: Status,
 - В `b13-tickets-alerts-trips.md` нет упоминаний значения `"new"`; дефолт статуса — `"active"`.
 - Схема `Ticket` в промпте содержит `deadline` и `is_overdue` с формулой оверлея.
 - Если сервис реализован: `list_tickets` возвращает `Ticket.status="active"` по умолчанию и корректный `is_overdue`.
-- `grep -n '"new"' prompts/v2-fullstack/track-b-backend/b13-tickets-alerts-trips.md` — пусто.
+- `grep -n '"new"' prompts/v2-fullstack/wave-2-2-applied/track-b-backend/b13-tickets-alerts-trips.md` — пусто.
