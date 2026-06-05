@@ -8,8 +8,11 @@
 import {
   DRIVER_REPORT,
   FLEET_REPORT,
+  SABOTAGE_EVENTS,
+  TICKETS,
   VEHICLES,
   getFixtureIncident,
+  getFixtureTrip,
   listFixtureIncidents,
 } from './fixtures'
 import type {
@@ -162,16 +165,35 @@ export function getVehicleReport(plate: string): Promise<VehicleReport> {
 }
 
 export function getTickets(): Promise<Ticket[]> {
+  if (USE_FIXTURES) return Promise.resolve(TICKETS)
   return request<Ticket[]>('/tickets')
 }
 
 export function getAlert(id: string): Promise<import('./types').DispatchAlert> {
+  if (USE_FIXTURES) {
+    const inc = getFixtureIncident(id)
+    if (!inc) {
+      return Promise.reject(new ApiError(404, `Alert ${id} not found`))
+    }
+    // Демо-режим: окно ±15 с; момент запроса видео — конец алярма (без Date.now()).
+    return Promise.resolve({
+      incident: inc,
+      video_window_sec: 15,
+      requested_at: inc.ts_end,
+    })
+  }
   return request<import('./types').DispatchAlert>(
     `/alerts/${encodeURIComponent(id)}`,
   )
 }
 
 export function getTrip(id: string): Promise<TripDossier> {
+  if (USE_FIXTURES) {
+    const trip = getFixtureTrip(id)
+    return trip
+      ? Promise.resolve(trip)
+      : Promise.reject(new ApiError(404, `Trip ${id} not found`))
+  }
   return request<TripDossier>(`/trips/${encodeURIComponent(id)}`)
 }
 
@@ -180,5 +202,6 @@ export function getReb(id: string): Promise<RebRecovery> {
 }
 
 export function getSabotage(): Promise<SabotageEvent[]> {
+  if (USE_FIXTURES) return Promise.resolve(SABOTAGE_EVENTS)
   return request<SabotageEvent[]>('/sabotage')
 }

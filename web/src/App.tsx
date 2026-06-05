@@ -3,6 +3,7 @@ import {
   BarChart2,
   Bell,
   CheckCircle,
+  ClipboardList,
   Download,
   FileText,
   Film,
@@ -15,11 +16,12 @@ import {
 } from 'lucide-react'
 import {
   BrowserRouter,
-  Navigate,
+  type Location,
   NavLink,
   Outlet,
   Route,
   Routes,
+  useLocation,
 } from 'react-router-dom'
 import { cn } from '@/components/ui/cn'
 
@@ -50,6 +52,7 @@ const NAV: NavGroup[] = [
       { to: '/downloads', label: 'Загрузки', icon: Download },
       { to: '/validation', label: 'Блок валидации', icon: CheckCircle },
       { to: '/response', label: 'Блок реагирования', icon: Bell },
+      { to: '/tickets', label: 'Заявки', icon: ClipboardList },
     ],
   },
   {
@@ -170,19 +173,37 @@ function Placeholder({ title }: { title: string }) {
 }
 
 // ── Ленивые экраны f4 + витрина d3 ────────────────────────────────────────────
+const EventsFeed = lazy(() => import('@/pages/EventsFeed')) as ComponentType
 const Monitor = lazy(() => import('@/pages/Monitor')) as ComponentType
 const IncidentCard = lazy(() => import('@/pages/IncidentCard')) as ComponentType
 const Report = lazy(() => import('@/pages/Report')) as ComponentType
+const Tickets = lazy(() => import('@/pages/Tickets')) as ComponentType
 const StyleGuide = lazy(() => import('@/pages/_StyleGuide')) as ComponentType
+const DispatchAlert = lazy(() => import('@/pages/DispatchAlert')) as ComponentType
 
-export default function App() {
+/**
+ * Роуты приложения. Маршрут `/alert/:id` (f9) — overlay-модал: рендерится
+ * поверх фонового экрана (background-location pattern). При навигации с
+ * `state.backgroundLocation` основной `<Routes>` продолжает показывать фон
+ * (он не размонтируется), а модал рисуется вторым `<Routes>` сверху.
+ */
+function AppRoutes() {
+  const location = useLocation()
+  const state = location.state as { backgroundLocation?: Location } | null
+  const background = state?.backgroundLocation
+
   return (
-    <BrowserRouter
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-    >
-      <Routes>
+    <>
+      <Routes location={background ?? location}>
         <Route element={<AppShell />}>
-          <Route index element={<Navigate to="/monitor" replace />} />
+          <Route
+            index
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <EventsFeed />
+              </Suspense>
+            }
+          />
           <Route
             path="/monitor"
             element={
@@ -208,6 +229,14 @@ export default function App() {
             }
           />
           <Route
+            path="/tickets"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <Tickets />
+              </Suspense>
+            }
+          />
+          <Route
             path="/_styleguide"
             element={
               <Suspense fallback={<Placeholder title="Загрузка витрины…" />}>
@@ -219,6 +248,29 @@ export default function App() {
           <Route path="*" element={<Placeholder title="Раздел в разработке" />} />
         </Route>
       </Routes>
+
+      {/* Overlay-маршрут f9: модал поверх фона (фон выше не размонтируется). */}
+      <Routes>
+        <Route
+          path="/alert/:id"
+          element={
+            <Suspense fallback={null}>
+              <DispatchAlert />
+            </Suspense>
+          }
+        />
+        <Route path="*" element={null} />
+      </Routes>
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
+      <AppRoutes />
     </BrowserRouter>
   )
 }
