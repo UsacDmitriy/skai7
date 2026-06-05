@@ -428,3 +428,54 @@ leaflet tiles: тёмная тема для /monitor (24/7)
 **РЭБ (`/reb/:id`, идея #8):** GPS-трек с разрывами + соседние видеокадры; данные из `navigation_problem_tracks`.
 **Саботаж (идея #9):** список `v_sabotage` (тёмный DMS + speed>0), кнопки «Заявка»/«HR».
 **Карта по ролям (идея #10):** переключатель роли скрывает/показывает слои; дедупликация ТС.
+
+## 8. AI-слой (Волна 4) — умное событие, прогнозы, копилот (идеи #11–#16)
+
+> Новый слой поверх готового P0/P1/P2. **Офлайн/детерминизм:** VLM и внешние API гоняются батчем
+> **оффлайн один раз** по 54 алярмам, результат — в DuckDB-таблицы + `web/src/api/fixtures.ts`.
+> Рантайм читает **кэш**; нет сети/ключей ⇒ кэш/детерминированный фолбэк (как `nlu_service`).
+> Без `Date.now()`/`random` в логике.
+
+### 8.1 Таблицы (предрасчёт → кэш)
+
+- **`incident_scene`** (1 строка на алярм): `id`, `weather ∈ {clear,rain,snow,fog}`,
+  `day_night ∈ {day,twilight,night}`, `road_surface ∈ {dry,wet,snow,ice,unknown}`,
+  `area ∈ {urban,highway,unknown}`, `visibility ∈ {good,moderate,poor}`, `scene_confidence` (0..1),
+  `source ∈ {vlm,cache}`. Источник — `api/etl/scene_precompute.py` (VLM по кадру ch1/ch5), кэш
+  `data/ai/scene_labels.json`. SQL: `api/sql/30_incident_scene.sql`.
+- **`incident_weather`** (1 строка на алярм): `id`, `ts`, `lat`, `lon`, `api_weather`, `api_precip_mm`,
+  `api_visibility_m`, `is_day` (bool, по solar elevation), `solar_elevation_deg`, `discrepancy` (bool),
+  `discrepancy_kind ∈ {weather,daynight,none}`. Источник — Open-Meteo historical + sunrise-sunset,
+  кэш `data/ai/weather_cache.json`.
+- **`v_risk_zones`** (view, кластеры): `zone_id`, `centroid_lat`, `centroid_lon`, `radius_m`,
+  `alarm_count`, `avg_risk`, `top_alarm_code`, `peak_hour` (0..23), `kind ∈ {incident,reb}`.
+  DBSCAN по `lat/lon` из `v_incidents` + РЭБ-зоны из `navigation__track_periods` (`period_type=3`).
+
+### 8.2 Enrichment-расширение (`api/core/enrichment.py`)
+
+`risk_score` получает погодно-сценовую надбавку: `wet/ice/poor-visibility/night` ⇒ детерминированный
+множитель из `incident_weather`/`incident_scene`. **Обратная совместимость:** без кэша — прежнее поведение.
+
+### 8.3 Эндпоинты
+
+- `GET /api/incidents/{id}/scene` → `SceneContext` + `WeatherCrossCheck`.
+- `GET /api/reports/forecast/{plate}` → `RiskForecast`.
+- `GET /api/zones?kind=&hour=` → `RiskZone[]`.
+- `GET /api/fatigue?plate=` → `FatigueChain[]`.
+- `POST /api/copilot/chat` → `CopilotMessage` (LLM tool-use, Groq + детерминированный фолбэк).
+
+### 8.4 Схемы (Pydantic / TS types, §3.1-стиль)
+
+- `SceneContext { id, weather, day_night, road_surface, area, visibility, scene_confidence }`
+- `WeatherCrossCheck { id, api_weather, is_day, solar_elevation_deg, discrepancy, discrepancy_kind }`
+- `RiskForecast { plate, trend: {date, predicted_events, ci_low, ci_high}[], anomaly: bool, anomaly_reason?, recommendations: string[] }`
+- `RiskZone { zone_id, centroid: [lat,lon], radius_m, alarm_count, avg_risk, top_alarm_code, peak_hour, kind }`
+- `FatigueChain { plate, trip_id?, events: {code, ts}[], window_min, severity }`
+- `CopilotMessage { role: 'user'|'assistant', text, lang: 'ru'|'en', tool_calls?: {name,args}[], data? }`
+
+### 8.5 Владение (без пересечений)
+
+Новые файлы: `api/etl/scene_precompute.py`, `api/sql/30_incident_scene.sql`, `api/services/forecast_service.py`,
+`api/services/zones_service.py`, `api/services/copilot_service.py`, `web/src/components/ai/*`,
+`data/ai/*.json`. Правки `enrichment.py`/`v_sabotage`/`Report.tsx`/`IncidentCard.tsx`/`Monitor.tsx` —
+строго аддитивные, против этого §8.

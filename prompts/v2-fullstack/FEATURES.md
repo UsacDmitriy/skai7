@@ -45,9 +45,17 @@
 | #8 | РЭБ-восстановление (`/reb/:id`) | `navigation__track_periods`, `v_reb`, `RebRecovery` §7.5 | b12 reb | f11 reb-recovery | tu-reb, t2, t3 | 2.2 | x4b |
 | #9 | Детекция саботажа | `v_sabotage` (тёмный DMS + speed>0), `SabotageEvent` §7.5 | b11 sabotage | f12 sabotage | tu-sabotage, t2, t3 | 2.2 | x4b |
 | #10 | Карта по ролям | `v_vehicle` (1 ТС=N водителей), ролевые слои | b10 (v_vehicle) | f6 monitor-map + f13 role-toggle | t3 (роли) | 2.2 | x4b |
+| #11 | Умное событие (сцена+кросс-проверка) | `incident_scene`/`incident_weather` §8.1 | b16 (VLM), b17 (Open-Meteo/sun + risk) | f15 scene-card ; d7 | tu-scene, tu-weather | 4.1 | x6 |
+| #12 | Прогноз риска + рекомендации | `RiskForecast` §8.4 | b18 (ARIMA+IForest), b22 (нарратив) | f16 forecast-report ; d7 | tu-forecast | 4.1/4.2 | x7 |
+| #13 | Fleet Copilot (ассистент) | `CopilotMessage` §8.4 | b21 (tool-use, RU/EN) | f17 copilot-ui | tu-copilot | 4.2 | x7 |
+| #14 | РЭБ-геозоны + тепловая карта | `v_risk_zones` §8.1 (incident+reb) | b19 (DBSCAN+РЭБ) | f18 risk-heatmap ; d7 | tu-zones | 4.1/4.2 | x7 |
+| #15 | Цепочки усталости | `FatigueChain` §8.4 (YAWNING→DROWSY→harsh) | b20 (оконная корреляция) | (в копилоте/мониторе) | tu-fatigue | 4.1 | x6 |
+| #16 | Умный вердикт саботажа | `v_sabotage` + §8 кросс-проверка | b23 (verdict_confidence) | f19 sabotage-verdict | t-wave4-frontend | 4.2 | x7 |
 
 > Бэклог/хардненинг, относящийся к фичам: W3-1 (Ticket §7.5 для #6), W3-2 (DIAGNOSTIC для #9-смежного),
 > W3-5 (мёртвая ветка «нет видео» для #1/#4) — см. `wave-3-backlog/`.
+> **Волна 4 (AI-слой, #11–#16):** офлайн-предрасчёт (VLM/Open-Meteo) → кэш; см. `wave-4-1-smart-context/`,
+> `wave-4-2-assistant/`, барьеры `barrier-4-1-*`/`barrier-4-2-*`.
 
 ## Per-feature Definition of Done
 
@@ -105,3 +113,39 @@
 - **Depth:** `v_vehicle` (1 ТС = N водителей, роль main/secondary из `driver_trips`); переключатель роли скрывает/показывает слои согласованно во всех экранах; дедуп ТС.
 - **Edge:** ТС без вторичного водителя → только main; роль без прав на слой → слой скрыт везде.
 - **Tests:** t3 (ролевая видимость + дедуп).
+
+### #11 · Умное событие — сцена + кросс-проверка (4.1, x6)
+- **Depth:** VLM по кадру → погода/день-ночь/покрытие/видимость; кросс-проверка Open-Meteo+sunrise → флаг расхождения «камера↔погода»; питает `risk_score`.
+- **Edge:** нет кадра → `unknown`/`confidence=0`; нет сети → кэш; без кэша → enrichment обратно совместим.
+- **Реализация:** `b16` (`incident_scene`) + `b17` (`incident_weather`+надбавка) + `f15`/`d7`. Офлайн-предрасчёт.
+- **Tests:** tu-scene (форма/детерминизм), tu-weather (правило расхождения + надбавка + обратная совместимость).
+
+### #12 · Прогноз риска + рекомендации (4.1/4.2, x7)
+- **Depth:** ARIMA-тренд 7д + коридор + IsolationForest-аномалия + предписывающие рекомендации; нарратив (b22).
+- **Edge:** мало точек → baseline; пустая история → нулевой прогноз; неизвестный plate → 404.
+- **Реализация:** `b18` (forecast) + `b22` (нарратив) + `f16`/`d7` (спарклайн+рекомендации).
+- **Tests:** tu-forecast (коридор/детерминизм/аномалия/рекомендации).
+
+### #13 · Fleet Copilot — ассистент (4.2, x7)
+- **Depth:** LLM tool-use по данным SKAI (incidents/reports/forecast/zones/fatigue/sabotage), RU/EN; ответ + данные.
+- **Edge:** нет ключа/сети → детерминированный фолбэк-роутинг; мусор → вежливый дефолт; язык по тексту.
+- **Реализация:** `b21` (copilot_service) + `f17` (чат-панель, a11y/состояния).
+- **Tests:** tu-copilot (фолбэк-роутинг + язык + graceful default).
+
+### #14 · РЭБ-геозоны + тепловая карта (4.1/4.2, x7)
+- **Depth:** DBSCAN-кластеры алярмов (`incident`) + зоны GPS-jamming (`reb`); прогноз по часу; тепловой слой на мониторе.
+- **Edge:** нет точек → `[]`/пустой слой; фильтры kind/hour/роль согласованы; много точек → throttle.
+- **Реализация:** `b19` (`v_risk_zones`+`/zones`) + `f18`/`d7` (`RiskHeatLayer`). Дифференциатор (РЭБ — белое пятно рынка).
+- **Tests:** tu-zones (детерминизм кластеров, оба kind, фильтры).
+
+### #15 · Цепочки усталости (4.1, x6)
+- **Depth:** оконная корреляция `YAWNING→DROWSY→harsh` по водителю/рейсу → раннее предупреждение; `severity` по длине/тяжести.
+- **Edge:** события вне окна/одиночные → не цепочка; нет цепочек → `[]`; без `Date.now()`.
+- **Реализация:** `b20` (`/fatigue`); потребитель — копилот/монитор.
+- **Tests:** tu-fatigue (внутри/вне окна, монотонность severity, фильтр).
+
+### #16 · Умный вердикт саботажа (4.2, x7)
+- **Depth:** тёмный DMS+speed>0 (текущее) усилен кросс-проверкой сцены: «день/ясно» снаружи ⇒ confidence↑; «ночь/туман» ⇒ объяснимо.
+- **Edge:** нет `incident_scene`/`incident_weather` → прежний вердикт `v_sabotage` (обратная совместимость).
+- **Реализация:** `b23` (`verdict_confidence`/`verdict_reason`) + `f19` (UI вердикта).
+- **Tests:** t-wave4-frontend (виджет вердикта) + регресс tu-sabotage.

@@ -31,10 +31,10 @@
 | Модель | Промпты |
 | --- | --- |
 | 🟢 Qwen (7) | `b1`, `b4`, `d1`, `f1`, `f3`, `t4`, `w3-2` |
-| 🔵 Sonnet (28) | **W1:** `b2`,`b5`,`b6`,`d3`,`f2` · **W2.1:** `b7`,`b8`,`b10`,`b14` · **W2.2:** `b11`,`b12`,`d4`,`f5`,`f8`,`f12` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` (6) · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5` |
-| 🔴 Opus (22) | **фичи:** `b3` (спайн), `d2` (синк-примитивы), `f4` (флагман P0+синк), `b9` (двухпутевой NLU), `b13` (3 домена #5/#6/#7), `d5` (voice-UI killer #2), `f6` (дедуп+роли карты), `f7` (killer), `f9` (overlay/focus-trap/очередь), `f10` (таймлайн↔видео синк), `f11` (РЭБ-валидатор), `f13` (кросс-экранные роли), `f14` (анти-регресс #1) · **доработки Волны 1 (поверх готового):** `b15` (v_incidents-спайн поверх b3), `d6` (синк-примитивы поверх d2) · **барьеры:** `x1`,`x2`,`x3`,`x4`,`x4a`,`x4b`,`x5` |
+| 🔵 Sonnet (43) | **W1:** `b2`,`b5`,`b6`,`d3`,`f2` · **W2.1:** `b7`,`b8`,`b10`,`b14` · **W2.2:** `b11`,`b12`,`d4`,`f5`,`f8`,`f12` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` (6) · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5` · **W4.1:** `b17`,`b20`,`d7`,`tu-scene/weather/forecast/zones/fatigue` · **W4.2:** `b22`,`b23`,`f15`,`f16`,`f19`,`tu-copilot`,`t-wave4-frontend` |
+| 🔴 Opus (30) | **фичи:** `b3` (спайн), `d2` (синк-примитивы), `f4` (флагман P0+синк), `b9` (двухпутевой NLU), `b13` (3 домена #5/#6/#7), `d5` (voice-UI killer #2), `f6` (дедуп+роли карты), `f7` (killer), `f9` (overlay/focus-trap/очередь), `f10` (таймлайн↔видео синк), `f11` (РЭБ-валидатор), `f13` (кросс-экранные роли), `f14` (анти-регресс #1) · **доработки Волны 1:** `b15`,`d6` · **AI-слой (Волна 4):** `b16` (VLM-пайплайн), `b18` (прогноз-алгоритм), `b19` (DBSCAN-зоны), `b21` (copilot tool-use), `f17` (чат-UI), `f18` (heatmap-карта) · **барьеры:** `x1`,`x2`,`x3`,`x4`,`x4a`,`x4b`,`x5`,`x6`,`x7` |
 
-> Итог: **🟢 7 · 🔵 28 · 🔴 22**. Прод-приоритет: на сложном не экономим — Opus покрывает спайн/синк/
+> Итог: **🟢 7 · 🔵 43 · 🔴 30** (80 промптов). Прод-приоритет: на сложном не экономим — Opus покрывает спайн/синк/
 > killer/сложный интерактив/кросс-экранное состояние/breadth/анти-регресс + барьеры; Qwen — только
 > тривиально-механическое; Sonnet — оправданный детерминированный «середняк».
 > **Волна 1 заморожена** (`b1`–`f4` выполнены) — её Opus-глубина (по `b3`/`d2`) перенесена в доработки
@@ -112,6 +112,10 @@ integration (x1/x2), поэтому в параллельной фазе их н
 - **Барьер 2 — финал P1/P2** (`skai_7`, `integration`): x4 (полный P1/P2 e2e + повтор x2/x3) → merge в `main`.
 - **Волна 3 — бэклог + тест-хардненинг**: неблокирующие правки из аудитов (W3-1/W3-2) и **дозакрытие unit-покрытия по всему решению** (W3-3 backend, W3-4 frontend). Не блокирует P0/P1/P2; выполняется по мере готовности треков. См. раздел [«Волна 3 · бэклог доработок»](#волна-3--бэклог-доработок).
 - **Барьер 3 — хардненинг** (`skai_7`, `integration`): x5 — полный регресс (unit+API+фронт) + гейт покрытия → merge в `main`.
+- **Волна 4.1 — Умное событие + прогнозы** (backend ∥ web): BACKEND b16→b17, b18∥b19∥b20 ; WEB d7 ; TESTS tu-scene/weather/forecast/zones/fatigue. Внешние API/VLM — оффлайн-предрасчёт → кэш.
+- **Барьер 4.1 — smoke умное событие/прогнозы** (`skai_7`, `integration`): x6 (GUARD+merge → smoke; `main` не трогает).
+- **Волна 4.2 — Ассистент + визуализация** (backend ∥ web): BACKEND b21∥b22∥b23 ; WEB f15→f16, f17∥f18∥f19 ; TESTS tu-copilot, t-wave4-frontend.
+- **Барьер 4.2 — финал AI-слоя** (`skai_7`, `integration`): x7 (GUARD+merge → e2e Волны 4 + регресс) → merge в `main`.
 
 > **Заморозка `main` на время волн.** Все коммиты идут в `feat/*` и `integration`; **в `main` напрямую
 > не коммитим**. `main` продвигается только барьерами через `git merge --ff-only integration` (x3 для P0,
@@ -293,6 +297,52 @@ flowchart TD
         x5["x5 wave3-hardening<br/>merge feat/backend+feat/tests → регресс + гейт покрытия (api≥85% / web≥80%)<br/>→ main (ff) · 🔴"]
     end
     W3 --> BR3
+
+    subgraph W41["ВОЛНА 4.1 · Умное событие + прогнозы — окна 1 и 2"]
+        direction LR
+        subgraph B41["🪟 Окно 1 · backend (feat/backend)"]
+            direction TB
+            b16["b16 scene-context (VLM, предрасчёт) · 🔴"] --> b17["b17 weather-crosscheck + risk · 🔵"]
+            b18["b18 risk-forecast · 🔴"]
+            b19["b19 geozone-risk (DBSCAN+РЭБ) · 🔴"]
+            b20["b20 fatigue-chain · 🔵"]
+        end
+        subgraph F41["🪟 Окно 2 · web (feat/web)"]
+            direction TB
+            d7["d7 ai-primitives · 🔵"]
+        end
+    end
+    BR3 --> W41
+
+    subgraph BR41["🚧 БАРЬЕР 4.1 · smoke умное событие/прогнозы — integration"]
+        direction LR
+        x6["x6 smoke-context-forecast<br/>GUARD+merge · main не трогает · 🔴"]
+    end
+    W41 --> BR41
+
+    subgraph W42["ВОЛНА 4.2 · Ассистент + визуализация — окна 1 и 2"]
+        direction LR
+        subgraph B42["🪟 Окно 1 · backend (feat/backend) — ⚠ роутеры в ALL_ROUTERS"]
+            direction TB
+            b21["b21 copilot (tool-use, RU/EN) · 🔴"]
+            b22["b22 narrative-reports · 🔵"]
+            b23["b23 sabotage-verdict · 🔵"]
+        end
+        subgraph F42["🪟 Окно 2 · web (feat/web)"]
+            direction TB
+            f15["f15 scene-card · 🔵"] --> f16["f16 forecast-report · 🔵"]
+            f17["f17 copilot-ui · 🔴"]
+            f18["f18 risk-heatmap · 🔴"]
+            f19["f19 sabotage-verdict · 🔵"]
+        end
+    end
+    BR41 --> W42
+
+    subgraph BR42["🏁 БАРЬЕР 4.2 · финал AI-слоя — integration → main"]
+        direction LR
+        x7["x7 e2e-wave4<br/>GUARD+merge → e2e + регресс<br/>→ main (ff) · 🔴"]
+    end
+    W42 --> BR42
 ```
 
 ### Барьеры синхронизации — где и какой промпт
@@ -307,8 +357,11 @@ flowchart TD
 | 🚧 2.2 · Smoke прикладных | `integration` | `x2-wiring.md` → `x4b-smoke-applied-screens.md` | rewire (роутеры b11–b13) + smoke заявок/алерта/досье/РЭБ/саботажа/карты/ролей; `main` не трогает |
 | 🏁 2 · Финал P1/P2 | `integration` → `main` | повтор `x2`/`x3` → `x4-e2e-p1p2.md` | smoke на полном наборе P1/P2 (voice/NLU/reports/tickets/alerts/trips/REB/sabotage) → продвигает `main` |
 | 🧪 3 · Хардненинг Волны 3 | `integration` → `main` | `x5-wave3-hardening.md` | полный регресс (unit+API+фронт) + гейт покрытия (`api/`≥85%, `web/src`≥80%); проверка W3-1/W3-2 |
+| 🚧 4.1 · Smoke умное событие/прогнозы | `integration` | `x6-smoke-context-forecast.md` | GUARD+merge → smoke `incident_scene`/`incident_weather`/`/forecast`/`/zones`/`/fatigue`; `main` не трогает |
+| 🏁 4.2 · Финал AI-слоя | `integration` → `main` | `x7-e2e-wave4.md` | GUARD+merge → e2e Волны 4 (#11–#16) + регресс P0/P1/P2 → продвигает `main` |
 
-> Файлы барьеров (по одному на волну): `barrier-1-p0/` (x1–x3) · `barrier-2-1-reports-voice/` (x4a) · `barrier-2-2-applied/` (x4b) · `barrier-2-3-tests/` (x4) · `barrier-3-hardening/` (x5). Общие `x2`/`x3` живут в `barrier-1-p0/` и переиспользуются.
+> Файлы барьеров (по одному на волну): `barrier-1-p0/` (x1–x3) · `barrier-2-1-reports-voice/` (x4a) · `barrier-2-2-applied/` (x4b) · `barrier-2-3-tests/` (x4) · `barrier-3-hardening/` (x5) · `barrier-4-1-smart-context/` (x6) · `barrier-4-2-assistant/` (x7). Общие `x2`/`x3` живут в `barrier-1-p0/` и переиспользуются.
+> **GUARD во всех барьерах, сливающих `feat/*`** (`x1`,`x2`,`x4a`,`x4b`,`x4`,`x5`,`x6`,`x7`): стоп при незакоммиченном worktree.
 > **Все барьеры (`x1`–`x5`) — 🔴 Opus** (судят green/red, продвигают `main`, заводят дефекты); см. легенду моделей выше.
 
 ### Окна и владение
@@ -421,6 +474,42 @@ Git **внутри промпта** (x5 в «Перед стартом» сам 
 ```
 
 Красный регресс/покрытие → **стоп**, дефект трека, `main` остаётся на стабильном P1/P2.
+
+### Волна 4.1 — Умное событие + прогнозы (окна 1 и 2)
+
+Внешние API/VLM — **оффлайн-предрасчёт → кэш** (`data/ai/*.json`); рантайм демо без сети/ключей.
+
+| Окно | Промпты (порядок) | Проверка |
+| --- | --- | --- |
+| 1 Backend | `b16`🔴 → `b17`🔵 ; `b18`🔴 ∥ `b19`🔴 ∥ `b20`🔵 | `make db` (`incident_scene`/`incident_weather`=54, `v_risk_zones`), `/forecast`/`/zones`/`/fatigue` 200 |
+| 2 Web | `d7`🔵 (AI-примитивы) | `tsc --noEmit`; чип/бейдж/спарклайн/heat-слой |
+| 3 Tests | `per-feature/`: `tu-scene` ∥ `tu-weather` ∥ `tu-forecast` ∥ `tu-zones` ∥ `tu-fatigue` 🔵 | `pytest api/tests/unit` зелёный (офлайн) |
+
+### Барьер 4.1 — smoke (основное окно `skai_7`)
+
+git **внутри промпта** (`x6` сам делает GUARD+merge; `main` не трогает):
+
+```text
+Выполни @prompts/v2-fullstack/barrier-4-1-smart-context/x6-smoke-context-forecast.md
+```
+
+### Волна 4.2 — Ассистент + визуализация (окна 1 и 2)
+
+| Окно | Промпты | Примечание |
+| --- | --- | --- |
+| 1 Backend | `b21`🔴 ∥ `b22`🔵 ∥ `b23`🔵 | ⚠ `b20`/`b21`/`b23` регистрируют роутеры в `ALL_ROUTERS` |
+| 2 Web | `f15`🔵 → `f16`🔵 ; `f17`🔴 ∥ `f18`🔴 ∥ `f19`🔵 | аддитивно поверх IncidentCard/Report/Monitor/SabotageWidget |
+| 3 Tests | `per-feature/tu-copilot`🔵 ∥ `t-wave4-frontend`🔵 | фолбэк копилота + vitest AI-компонентов |
+
+### Барьер 4.2 — финал AI-слоя (основное окно `skai_7`)
+
+git **внутри промпта** (`x7` GUARD+merge → e2e + регресс → продвигает `main` ff-only):
+
+```text
+Выполни @prompts/v2-fullstack/barrier-4-2-assistant/x7-e2e-wave4.md
+```
+
+Красный e2e → **стоп**, дефект трека, `main` остаётся на стабильном P1/P2.
 
 ## Слияние
 ```bash
