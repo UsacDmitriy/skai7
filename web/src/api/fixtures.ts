@@ -15,6 +15,9 @@ import type {
   IncidentDetail,
   IncidentFilters,
   IncidentSummary,
+  SabotageEvent,
+  Ticket,
+  TripDossier,
   VehicleSummary,
 } from './types'
 
@@ -541,11 +544,142 @@ export const FLEET_REPORT: FleetReport = {
   ],
 }
 
+// ── Заявки (§7.5 Ticket, идея #6) ─────────────────────────────────────────────
+// Журнал действий (`output/actions.csv`). `is_overdue` — производное поле бэка
+// (`deadline < now И status ∉ {closed}`); «Просрочена» — НЕ статус, а оверлей.
+// Покрыты все статусы (active/in_progress/validated/closed) и оба исхода overdue.
+
+export const TICKETS: Ticket[] = [
+  {
+    id: 'tkt-001',
+    created_at: '2026-04-02T08:14:00',
+    incident_id: 'inc-001',
+    action: 'create_task',
+    comment: 'Назначить разбор засыпания с водителем',
+    status: 'active',
+    deadline: '2026-06-30T18:00:00',
+    is_overdue: false,
+  },
+  {
+    id: 'tkt-002',
+    created_at: '2026-04-02T09:40:00',
+    incident_id: 'inc-002',
+    action: 'request_archive',
+    comment: 'Запросить архив по фронтальной камере',
+    status: 'in_progress',
+    deadline: '2026-04-10T18:00:00',
+    is_overdue: true,
+  },
+  {
+    id: 'tkt-003',
+    created_at: '2026-04-03T11:05:00',
+    incident_id: 'inc-003',
+    action: 'export_report',
+    comment: 'Отчёт по водителю выгружен и передан в ОТ',
+    status: 'closed',
+    deadline: '2026-04-05T18:00:00',
+    is_overdue: false,
+  },
+  {
+    id: 'tkt-004',
+    created_at: '2026-04-03T15:22:00',
+    incident_id: 'inc-004',
+    action: 'mark_reviewed',
+    comment: 'Событие просмотрено, нарушение подтверждено',
+    status: 'validated',
+    deadline: null,
+    is_overdue: false,
+  },
+  {
+    id: 'tkt-005',
+    created_at: '2026-04-04T07:50:00',
+    incident_id: 'inc-005',
+    action: 'call_driver',
+    comment: 'Связаться с водителем по факту резкого торможения',
+    status: 'active',
+    deadline: '2026-04-08T12:00:00',
+    is_overdue: true,
+  },
+  {
+    id: 'tkt-006',
+    created_at: '2026-04-04T16:18:00',
+    incident_id: 'inc-001',
+    action: 'notify_hr',
+    comment: 'Передать в HR для дисциплинарной беседы',
+    status: 'in_progress',
+    deadline: null,
+    is_overdue: false,
+  },
+]
+
+// ── Саботаж камеры (§7.5 SabotageEvent, идея #9) ──────────────────────────────
+// Тёмный DMS-кадр (`dms_dark`) при движении (`speed_kmh > 0`) — корреляция-улика.
+// Бэк (`v_sabotage`, b11) уже фильтрует `dms_dark=false`/`speed_kmh=0`.
+
+export const SABOTAGE_EVENTS: SabotageEvent[] = [
+  {
+    id: 'sab-001',
+    vehicle_plate: 'А777ВВ 77',
+    ts: '2026-04-02T03:14:22',
+    dms_dark: true,
+    speed_kmh: 64,
+    driver_name: 'Иванов Алексей Петрович',
+    video_url: '',
+  },
+  {
+    id: 'sab-002',
+    vehicle_plate: 'В045КК 77',
+    ts: '2026-04-01T22:48:10',
+    dms_dark: true,
+    speed_kmh: 81,
+    driver_name: 'Петров Сергей Николаевич',
+    video_url: '',
+  },
+  {
+    id: 'sab-003',
+    vehicle_plate: 'Н124УУ 199',
+    ts: '2026-03-31T19:05:37',
+    dms_dark: true,
+    speed_kmh: 47,
+    driver_name: 'Козлов Иван Андреевич',
+    video_url: '',
+  },
+]
+
+// ── Trip dossier (§7.5, идея #7) ──────────────────────────────────────────────
+// TelemetryPoint без координат (§7.5) — карта f10 строит синтетику по последовательности.
+
+export const TRIP_DOSSIER: TripDossier = {
+  vehicle_plate: 'А777ВВ 77',
+  track: [
+    { ts_offset: -120, speed: 64, ax: 0.1, ay: -0.1 },
+    { ts_offset: -90, speed: 70, ax: 0.2, ay: 0.0 },
+    { ts_offset: -60, speed: 75, ax: 0.1, ay: -0.2 },
+    { ts_offset: -30, speed: 72, ax: 0.0, ay: 0.1 },
+    { ts_offset: 0, speed: 0, ax: -4.5, ay: 0.6 },
+    { ts_offset: 30, speed: 18, ax: 0.4, ay: -0.1 },
+    { ts_offset: 60, speed: 40, ax: 0.2, ay: 0.0 },
+    { ts_offset: 90, speed: 55, ax: 0.1, ay: 0.1 },
+    { ts_offset: 120, speed: 60, ax: 0.0, ay: -0.1 },
+  ],
+  timeline: [
+    { ts_offset: -90, alarm_code: 'OVERSPEED', label: 'Превышение скорости', has_video: true },
+    { ts_offset: -30, alarm_code: 'HARSH_CORNERING', label: 'Резкий манёвр', has_video: false },
+    { ts_offset: 0, alarm_code: 'CRASH_SENSOR', label: 'Подозрение на ДТП — датчик удара', has_video: true },
+    { ts_offset: 60, alarm_code: 'HARSH_BRAKING', label: 'Резкое торможение', has_video: true },
+  ],
+}
+
 // ── Хелперы (повторяют сигнатуры клиента f2) ──────────────────────────────────
 
 /** Деталь инцидента по id или undefined (как getIncident до сетевой ошибки). */
 export function getFixtureIncident(id: string): IncidentDetail | undefined {
   return INCIDENT_DETAILS[id]
+}
+
+/** Досье рейса по id; `trip-001` — демо-рейс, иначе undefined (→ 404 как на API). */
+export function getFixtureTrip(id: string): TripDossier | undefined {
+  return id === 'trip-001' ? TRIP_DOSSIER : undefined
 }
 
 /** Лента инцидентов с фильтрами (сигнатура listIncidents). */
