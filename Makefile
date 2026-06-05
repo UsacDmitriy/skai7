@@ -3,7 +3,7 @@
 # wave-x-integration/x2-wiring.md, .worktrees/*/START.md, EXECUTION.md.
 
 .PHONY: help install install-py install-web \
-        db seed api web dev \
+        db seed api web dev openapi \
         lint typecheck test test-api test-web check \
         worktrees worktrees-clean merge-integration clean
 
@@ -53,6 +53,9 @@ dev: ## Подсказка: бэк + фронт в двух терминалах
 	@echo "Запусти параллельно в двух терминалах:"
 	@echo "  make api   → http://localhost:$(API_PORT)  (FastAPI)"
 	@echo "  make web   → http://localhost:$(WEB_PORT)  (Vite)"
+
+openapi: ## Выгрузить OpenAPI-схему в docs/openapi.json (t4)
+	$(PY) scripts/export_openapi.py
 
 # ── Качество / тесты (Codex T1–T3) ────────────────────────────
 lint: ## ruff-проверка api/
