@@ -30,10 +30,19 @@
 - `GET /api/sabotage` → `list[SabotageEvent]` (§7.4). Без параметров.
 - Стандартный паттерн роутеров b6: `APIRouter(prefix="/api", tags=["sabotage"])`, DI соединения DuckDB.
 
+## Edge cases / поведение
+
+- Событие саботажа = (тёмный DMS / `CAMERA_TAMPER`) **И** `speed_kmh > 0` — оба условия обязательны.
+- `speed_kmh = 0` (ТС стоит) при тёмном DMS → **НЕ** событие (легитимная парковка/стоянка).
+- DMS-канал `ok` (есть видимый кадр `channel=5`) при движении → **НЕ** событие.
+- Нет ни одной строки-кандидата → `list_sabotage` возвращает пустой список `[]` (не ошибка, не 404).
+- `video_url` nullable: если доступного канала нет → `null` (поле не обязано присутствовать).
+
 ## Check
 
 - После `make db`: `SELECT * FROM "v_sabotage" LIMIT 5` выполняется без ошибок.
-- В `v_sabotage` попадают только строки с признаком саботажа **и** `speed_kmh>0`.
+- В `v_sabotage` попадают только строки с признаком саботажа **и** `speed_kmh>0`; строки со `speed_kmh=0` и со «здоровым» DMS отсутствуют.
 - `GET /api/sabotage` возвращает JSON-массив `SabotageEvent`; поля `dms_dark` (bool), `speed_kmh` (float), `driver_name` заполнены.
+- Пустой `v_sabotage` → `GET /api/sabotage` отдаёт `[]` (HTTP 200), а не ошибку.
 - `driver_name` берётся из `driver_reference`, при отсутствии — синтетика (через enrichment, как §7.1).
 - Повторный `make db` пересоздаёт view без дублей.
