@@ -1,0 +1,27 @@
+# Конфиг линтера/форматтера бэкенда (ruff). Применяется к `api/` —
+# `make lint` (= `ruff check api`) и `scripts/check.sh` читают эти правила.
+# Запуск: `ruff check api` · автоформат: `ruff format api`.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["**/__pycache__"]
+
+[tool.ruff.lint]
+# Базовый набор = дефолт ruff (pycodestyle E4/E7/E9 + pyflakes F).
+# Стилевые правила (E501 длина строки, I сортировка импортов, UP, B) включим
+# отдельным проходом, когда существующий код будет под них вычищен — иначе
+# гейт упадёт на чужих треках.
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+# Baseline предсуществующих нарушений в файлах других треков (b2/b5/x3):
+# t4 не трогает продуктовый код, поэтому глушим точечно, чтобы агрегатный
+# гейт (make lint / scripts/check.sh) был зелёным. Снимает владелец трека.
+"core/enrichment.py" = ["F841"]            # b2 · неиспользуемая локальная `s`
+"services/incidents_service.py" = ["F841"] # b5 · неиспользуемая `video_available`
+"tests/**" = ["E402"]                       # x3 · поздний import в тесте
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
