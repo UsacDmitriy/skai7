@@ -1,6 +1,7 @@
 # f8 · Заявки (`/tickets`)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §3.4 (actions) + §7.4 (`GET /api/tickets`) + §7.5 (`Ticket`) + §7.8 (AC «Tickets»).
+> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > **Владеет:** `web/src/pages/Tickets.tsx`. Использует UI-примитивы d2 (`@/components`) и API-клиент f2.
 > Идея #6 «Заявки». Иконки — `lucide-react`.
 

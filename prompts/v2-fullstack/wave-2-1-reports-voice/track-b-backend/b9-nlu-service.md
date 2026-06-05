@@ -1,6 +1,7 @@
 # b9 · NLU-сервис — nlu_service.py
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §7.3/§7.5. **Владеет:** `api/services/nlu_service.py`.
+> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Кодит против контракта. **Зависит от:** b4 (`groq` в `api/requirements.txt`, конфиг `groq_api_key` в `api/core/config.py`). Использует схему `ReportQuery` из b5 (домен `reports`). Параллелится с b7/b8/b11/b12. Потребитель — `reports_service` (b10) и `POST /api/reports/query` (b6+).
 
 ## Цель

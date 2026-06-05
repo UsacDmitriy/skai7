@@ -28,22 +28,22 @@
 7. **Приёмка** — проходит smoke своего барьера (см. колонку «Приёмка»); типы (`npm run typecheck`) зелёные.
 
 > Per-feature глубина unit-покрытия дозакрывается в Волне 3 (`w3-3`/`w3-4`), но базовый happy+негатив —
-> уже в t1–t3 (Волна 2.3). DoD не считается закрытым без негативных кейсов.
+> уже в `tu-*`/t2/t3 (Волна 2.3; backend-unit вынесен в per-feature `tu-*`). DoD не считается закрытым без негативных кейсов.
 
 ## Мастер-таблица трассировки
 
 | # | Фича | Данные / схема (§) | Backend | Web (+design) | Tests | Волна | Приёмка |
 |---|---|---|---|---|---|---|---|
 | #1 | Синк видео↔маркер телеметрии | `track_points`, `TelemetryPoint` §3.1, §6 | b3, b5 (`get_telemetry`) | f4 IncidentCard **+ f14 (хардненинг)** ; d2/d3 | t3 (sync) | 1 (P0) + 2.1 (f14) | x3 / x4 |
-| #3 | Обогащение / risk-score | `alarm_type_catalog`, enrichment §2 | b1, b2 **+ b14 (хардненинг)** | f4 (badge/score) ; d2 | t1 (enrichment) | 1 (P0) + 2.1 (b14) | x3 / x4 |
-| #2 | Voice/NLU + отчёты В-1/В-2 | `driver_reference` §7.1, `v_driver_report`/`v_fleet`/`v_vehicle`, `DriverReport`/`FleetReport`/`VehicleReport` §7.5 | b7→b10, b8 (stt), b9 (nlu) | d5 voice-timeline → f7 analytics-voice | t1/t2/t3 | 2.1 | x4a |
+| #3 | Обогащение / risk-score | `alarm_type_catalog`, enrichment §2 | b1, b2 **+ b14 (хардненинг)** | f4 (badge/score) ; d2 | tu-enrichment | 1 (P0) + 2.1 (b14) | x3 / x4 |
+| #2 | Voice/NLU + отчёты В-1/В-2 | `driver_reference` §7.1, `v_driver_report`/`v_fleet`/`v_vehicle`, `DriverReport`/`FleetReport`/`VehicleReport` §7.5 | b7→b10, b8 (stt), b9 (nlu) | d5 voice-timeline → f7 analytics-voice | tu-driver/nlu/reports, t2, t3 | 2.1 | x4a |
 | #4 | Лента событий (`/`) | `v_incidents`, `IncidentRow` §3.1 | b3, b6 | f5 events-feed ; d3 | t3 | 2.2 | x4b |
 | #4/#10 | Монитор-карта (`/monitor`) | `v_incidents`, `unit_id`/`lat/lon` | b6 | d4 map-primitives → f6 monitor-map | t3 (дедуп) | 2.2 | x4b |
 | #5 | Dispatch alert (`/alert/:id`) | `DispatchAlert` §7.5 (`auto_request_video`, видео ±15с) | b13 (alerts) | f9 dispatch-alert | t2/t3 | 2.2 | x4b |
 | #6 | Заявки (`/tickets`) | `output/actions.csv`, `Ticket` §7.5 (`deadline`/`is_overdue`) | b13 (tickets) | f8 tickets | t2/t3 | 2.2 | x4b |
 | #7 | Видеодосье (`/trip/:id`) | `track_points`, `TripDossier` §7.5 (track + timeline) | b13 (trips) | f10 trip-dossier | t2/t3 | 2.2 | x4b |
-| #8 | РЭБ-восстановление (`/reb/:id`) | `navigation__track_periods`, `v_reb`, `RebRecovery` §7.5 | b12 reb | f11 reb-recovery | t2/t3 | 2.2 | x4b |
-| #9 | Детекция саботажа | `v_sabotage` (тёмный DMS + speed>0), `SabotageEvent` §7.5 | b11 sabotage | f12 sabotage | t2/t3 | 2.2 | x4b |
+| #8 | РЭБ-восстановление (`/reb/:id`) | `navigation__track_periods`, `v_reb`, `RebRecovery` §7.5 | b12 reb | f11 reb-recovery | tu-reb, t2, t3 | 2.2 | x4b |
+| #9 | Детекция саботажа | `v_sabotage` (тёмный DMS + speed>0), `SabotageEvent` §7.5 | b11 sabotage | f12 sabotage | tu-sabotage, t2, t3 | 2.2 | x4b |
 | #10 | Карта по ролям | `v_vehicle` (1 ТС=N водителей), ролевые слои | b10 (v_vehicle) | f6 monitor-map + f13 role-toggle | t3 (роли) | 2.2 | x4b |
 
 > Бэклог/хардненинг, относящийся к фичам: W3-1 (Ticket §7.5 для #6), W3-2 (DIAGNOSTIC для #9-смежного),
@@ -64,12 +64,12 @@
 - **Depth:** `risk_score∈[0,100]`, монотонность по severity; `is_night`, `ax`, `speed_limit_for`, `confidence` детерминированы.
 - **Edge:** неизвестный `alarm_code` → дефолтный label/severity, без NULL; нет видео → `confidence −10`.
 - **Реализация глубины:** базовый модуль — `b2` (выполнен, Волна 1); клампы/дефолты/детерминизм — `wave-2-1-reports-voice/track-b-backend/b14-enrichment-hardening`.
-- **Tests:** t1 `test_enrichment` (Волна 2.3) + w3-3 углубление (Волна 3).
+- **Tests:** `tu-enrichment` → `test_enrichment` (Волна 2.3) + `w3-3` углубление (Волна 3).
 
 ### #2 · Voice/NLU + отчёты (2.1, x4a)
 - **Depth:** `transcribe` (faster-whisper) → `query` (Groq/regex-fallback) → В-1/В-2 дашборд; gross-правило и `disciplinary_warning` по §7.5.
 - **Edge:** без `GROQ_API_KEY` → regex-fallback; битый/пустой wav → graceful; мусор-запрос → безопасный дефолт `kind`.
-- **Tests:** t1 (reports-rules, nlu-fallback), t2 (`test_reports_api`), t3 (`f7` флоу).
+- **Tests:** `tu-reports`/`tu-nlu`/`tu-driver` (правила/fallback/сиды), t2 (`test_reports_api`), t3 (`f7` флоу).
 
 ### #4 · Лента + Монитор (2.2, x4b)
 - **Depth:** badge источника `[📹/⚡/⚡📹]`, фильтр «Нет видео», поиск по plate/ФИО, ролевой switcher; на карте 1 `unit_id`=1 маркер, цвет по severity, тёмная тема.
@@ -94,12 +94,12 @@
 ### #8 · РЭБ-восстановление (2.2, x4b)
 - **Depth:** `gap_periods[]` из `navigation__track_periods` (`period_type=3`) + соседние видимые периоды/кадры.
 - **Edge:** непрерывный трек → «разрывов нет»; нет данных → 404.
-- **Tests:** t2 (`/api/reb/{id}`), t3 (визуализация разрывов).
+- **Tests:** `tu-reb` (gap_periods / «разрывов нет»), t2 (`/api/reb/{id}`), t3 (визуализация разрывов).
 
 ### #9 · Детекция саботажа (2.2, x4b)
 - **Depth:** `v_sabotage` = тёмный DMS-канал/`CAMERA_TAMPER` + `speed_kmh>0`; кнопки «Заявка»/«HR».
 - **Edge:** граничные `speed=0`/камера ok → не событие; пустой список → empty-state.
-- **Tests:** t2 (`/api/sabotage`), t3 (виджет).
+- **Tests:** `tu-sabotage` (правило тёмный DMS+speed>0), t2 (`/api/sabotage`), t3 (виджет).
 
 ### #10 · Карта по ролям (2.2, x4b)
 - **Depth:** `v_vehicle` (1 ТС = N водителей, роль main/secondary из `driver_trips`); переключатель роли скрывает/показывает слои согласованно во всех экранах; дедуп ТС.

@@ -1,36 +1,42 @@
-# T1 · Backend unit-тесты (pytest)
+# T1 · Backend unit — инфраструктура (pytest)
 
-> Track T (Claude Code, `feat/tests`). Против `00-CONTRACT.md` §2 (enrichment), §7.1 (сиды), §7.5 (gross/disciplinary).
-> **Владеет:** `api/tests/unit/**`, `api/tests/conftest.py`, `api/requirements-dev.txt`.
-> Запускается после b2/b7/b10. НЕ редактирует продуктовый код — при найденном баге заводит дефект треку.
+> Track T (Claude Code, `feat/tests`). Против `00-CONTRACT.md` §2/§7.1/§7.5.
+> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Владеет:** `api/tests/conftest.py`, `api/requirements-dev.txt`, `api/tests/unit/__init__.py`.
+> НЕ авторит сами `test_*.py` модулей — это делает per-feature слой `tu-*` (см. ниже).
+> НЕ редактирует продуктовый код — при найденном баге заводит дефект треку.
 
 ## Цель
-Покрыть детерминированную бизнес-логику unit-тестами (быстрые, без сети, без поднятого API).
+
+Заложить **общую инфраструктуру** backend-unit тестов, на которой стоят per-feature промпты `tu-*`:
+быстрые тесты без сети и без поднятого API. Авторство тестов конкретных модулей вынесено в `tu-*`
+(шифт-влево: каждый тест-промпт гонится сразу, как его backend-фича легла на `integration`).
 
 ## Состав
 
-`api/requirements-dev.txt`: `pytest`, `pytest-cov`.
-`api/tests/conftest.py`: фикстуры (in-memory/temp DuckDB на сэмпле, общие builder'ы строк).
+- `api/requirements-dev.txt`: `pytest`, `pytest-cov`.
+- `api/tests/conftest.py`: общие фикстуры (in-memory/temp DuckDB на сэмпле, builder'ы строк),
+  переиспользуемые всеми `tu-*` и `t2`.
+- `api/tests/unit/__init__.py` + базовая раскладка `api/tests/unit/`.
 
-`api/tests/unit/test_enrichment.py` (модуль b2):
-- `risk_score` ∈ [0,100], монотонность по severity (critical>high>medium>low при прочих равных).
-- `is_night` истинно для часов [22,06) UTC, ложно иначе.
-- `ax` = производная скорости: на росте скорости `ax>0`, на падении `ax<0`, не тождественный ноль.
-- `speed_limit_for(code)` по таблице (DMS/городские → 60, иначе 90).
-- `confidence` детерминирован по `id` (один вход → один выход) и на `requires_video=false`/нет видео ниже на 10.
-- `cameras[]`: статусы online/warning/offline по `download_status`; длина 3 канонических.
-- `evidence_summary`/`event_version` непусты для известных `alarm_code`.
+## Per-feature unit-промпты (папка `per-feature/`)
 
-`api/tests/unit/test_seed_drivers.py` (модуль b7):
-- `seed_drivers` идемпотентен (два запуска → идентичный CSV).
-- `driver_reference`: ровно 1 строка на `vehicle_plate`; `safety_score` ∈ [0,100]; пул ФИО ≥20, регионов ≥5.
-- `driver_trips`: 1–2 водителя на ТС, ровно один `role="main"`.
+Каждый владеет своим `test_*.py` и кодит против своего модуля:
 
-`api/tests/unit/test_reports_rules.py` (модуль b10):
-- `is_gross`: true для `severity=critical` и для `alarm_code ∈ {OVERSPEED, DMS_SMOKING}`, иначе false.
-- `disciplinary_warning`: true при `gross>=3` ИЛИ `safety_score<60`, иначе false.
-- `ReportKPI` суммы согласованы (`total >= video_da`, `total >= telematics`).
+| Промпт | Файл | Модуль | После |
+|---|---|---|---|
+| [`tu-enrichment`](per-feature/tu-enrichment.md) | `test_enrichment.py` | b2/b14 | b2/b14 на `integration` |
+| [`tu-driver`](per-feature/tu-driver.md) | `test_seed_drivers.py` | b7 | b7 |
+| [`tu-nlu`](per-feature/tu-nlu.md) | `test_nlu_fallback.py` | b9 | b9 |
+| [`tu-reports`](per-feature/tu-reports.md) | `test_reports_rules.py` | b10 | b10 |
+| [`tu-sabotage`](per-feature/tu-sabotage.md) | `test_sabotage.py` | b11 | b11 |
+| [`tu-reb`](per-feature/tu-reb.md) | `test_reb.py` | b12 | b12 |
+
+> Дозакрытие покрытия по **всем** модулям `b1–b13` (включая не охваченные `tu-*`) — пасс `w3-3`.
 
 ## Check
-- `pytest api/tests/unit -q` зелёный; покрытие `api/core/enrichment.py` ≥ 90% (`--cov`).
+
+- `api/tests/conftest.py` импортируется; `pytest api/tests/unit -q` собирается (даже на пустом наборе).
+- `pip install -r api/requirements-dev.txt` ставит `pytest`/`pytest-cov`.
+- После прогона `tu-*`: `pytest api/tests/unit -q` зелёный, покрытие `api/core/enrichment.py` ≥ 90% (`--cov`).
 - Тесты не требуют сети/поднятого uvicorn и проходят после `make db`.

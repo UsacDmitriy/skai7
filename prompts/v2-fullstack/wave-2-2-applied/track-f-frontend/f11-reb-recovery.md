@@ -1,6 +1,7 @@
 # f11 · РЭБ-восстановление трека (идея #8)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §7.4 (`GET /api/reb/{id}`), §7.5 (`RebRecovery`),
+> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > §7.8 (AC «РЭБ»). **Владеет:** `web/src/pages/RebRecovery.tsx`. Использует примитивы карты d4
 > (`@/components/map`: `MapView`, `MarkerLayer`), таймлайн d5 (`@/components/ui/Timeline`), UI-примитивы
 > d2 (`Button`, `VideoPlayer`) и API-клиент f2.

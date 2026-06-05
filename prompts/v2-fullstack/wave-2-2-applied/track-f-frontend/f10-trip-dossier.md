@@ -1,6 +1,7 @@
 # f10 · Видеодосье рейса (идея #7)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §7.4 (`GET /api/trips/{id}`), §7.5 (`TripDossier`),
+> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > §7.8 (AC «Видеодосье»). **Владеет:** `web/src/pages/TripDossier.tsx`. Использует примитивы карты d4
 > (`@/components/map`: `MapView`, `MarkerLayer`), таймлайн d5 (`@/components/ui/Timeline`), UI-примитивы
 > d2 (`Button`, `SeverityBadge`, `VideoPlayer`, `TelemetryChart`) и API-клиент f2.

@@ -11,12 +11,20 @@
 
 ## Задачи
 
-| Файл | Что делает | Владеет | Когда |
-|---|---|---|---|
-| `t1-backend-unit-tests.md` | pytest: enrichment, сиды, формулы (gross/risk/confidence/ax) | `api/tests/unit/**`, `api/tests/conftest.py`, `api/requirements-dev.txt` | после b2/b7/b10 |
-| `t2-api-integration-tests.md` | pytest TestClient: все эндпоинты, коды, схемы | `api/tests/integration/**` | после b6 (P0) и b11–b13 (P1/P2) |
-| `t3-frontend-tests.md` | vitest + RTL: UI-примитивы, api-клиент, экраны | `web/**/*.test.tsx`, `web/vitest.config.ts`, `web/src/test/**` | после d2/f2/f4 |
-| `t4-routine-chores.md` | .env.example, OpenAPI-экспорт, lint/format, run-доки, fixtures-sync | мелкие вспом. файлы (см. внутри) | в любой момент |
+> Колонка **Модель** — рекомендуемый исполнитель (см. `EXECUTION.md`): 🔵 Sonnet — рабочая лошадка,
+> 🟢 Qwen — механическая рутина. Правило эскалации (двойной красный Check → Opus) — в `EXECUTION.md`.
+
+| Файл | Что делает | Владеет | Когда | Модель |
+|---|---|---|---|---|
+| `t1-backend-unit-tests.md` | **инфраструктура** unit: `conftest`, `requirements-dev`, раскладка | `api/tests/conftest.py`, `api/requirements-dev.txt`, `api/tests/unit/__init__.py` | до `tu-*` | 🔵 Sonnet |
+| `per-feature/tu-*.md` (6 шт.) | **per-feature unit-авторство**: enrichment/driver/nlu/reports/sabotage/reb — каждый владеет своим `test_*.py` | `api/tests/unit/test_*.py` (по модулю) | каждый — как его фича (b2/b7/b9/b10/b11/b12) легла на `integration` | 🔵 Sonnet |
+| `t2-api-integration-tests.md` | pytest TestClient: все эндпоинты, коды, схемы | `api/tests/integration/**` | после b6 (P0) и b11–b13 (P1/P2) | 🔵 Sonnet |
+| `t3-frontend-tests.md` | vitest + RTL: UI-примитивы, api-клиент, экраны | `web/**/*.test.tsx`, `web/vitest.config.ts`, `web/src/test/**` | после d2/f2/f4 | 🔵 Sonnet |
+| `t4-routine-chores.md` | .env.example, OpenAPI-экспорт, lint/format, run-доки, fixtures-sync | мелкие вспом. файлы (см. внутри) | в любой момент | 🟢 Qwen |
+
+> **Шифт-влево:** монолитный `t1` (раньше — 3 модуля в одном файле «после b2/b7/b10») разнесён на
+> инфраструктуру (`t1`) + per-feature `tu-*`. Каждый `tu-*` гонится сразу за своей backend-фичей,
+> а не батчем в конце. Дозакрытие покрытия по **всем** `b1–b13` — пасс `w3-3` (Волна 3).
 
 ## Как запускать в Claude Code
 

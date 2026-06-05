@@ -1,6 +1,7 @@
 # f9 · Dispatch Alert — алерт критического алярма (идея #5)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §7.4 (`GET /api/alerts/{id}`), §7.5 (`DispatchAlert`),
+> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > §7.8 (AC «Dispatch alert»). **Владеет:** `web/src/pages/DispatchAlert.tsx` (рендерится как модал
 > поверх текущего экрана). Использует UI-примитивы d2 (`@/components`: `Button`, `SeverityBadge`,
 > `VideoPlayer`, `TelemetryChart`) и API-клиент f2.

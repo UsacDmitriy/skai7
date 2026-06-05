@@ -1,6 +1,7 @@
 # f1 · Vite + React + Tailwind — каркас приложения
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §4/§5. **Владеет:**
+> **Модель:** 🟢 Qwen 3.7 max — механическая транскрипция против точной спеки; гейт ловит ошибку.
 > `web/package.json`, `web/vite.config.ts`, `web/tsconfig.json`, `web/index.html`, `web/src/main.tsx`, `web/src/App.tsx`, роутинг.
 > Tailwind-конфиг и tokens.css — у d1 (не редактировать, только импортировать). Параллельно со всеми.
 

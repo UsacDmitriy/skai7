@@ -13,6 +13,26 @@
 > P0-фичи #1/#3 (`b2`/`f4`) уже выполнены в Волне 1, поэтому их доработка вынесена в отдельные
 > промпты **`b14`/`f14` (Волна 2.1)** — правка поверх готового кода, а не переисполнение Волны 1.
 
+## Модель-исполнитель по промптам
+
+> Каждый промпт помечен рекомендуемой моделью (тег продублирован в blockquote-шапке самого промпта).
+> Критерий: **🟢 Qwen 3.7 max** — механическая транскрипция против точной спеки (гейт ловит ошибку);
+> **🔵 Sonnet** — детерминированная логика/вёрстка против контракта (рабочая лошадка, большинство фич);
+> **🔴 Opus** — кросс-файловая интеграция / анти-регресс / killer-feature и **все барьеры**
+> (судят green/red, продвигают `main`, заводят дефекты).
+>
+> **Правило эскалации:** если секция `## Check` 🟢/🔵-промпта дважды подряд красная — этот конкретный
+> прогон переводится на Opus (тег в файле не меняем). Тег — ориентир по умолчанию, а не жёсткий запрет.
+
+| Модель | Промпты |
+| --- | --- |
+| 🟢 Qwen | `b1`, `b4`, `d1`, `f1`, `f3`, `t4`, `w3-2` |
+| 🔵 Sonnet | **W1:** `b2`,`b3`,`b5`,`b6`,`d2`,`d3`,`f2`,`f4` · **W2.1:** `b7`,`b8`,`b9`,`b10`,`b14`,`d5`,`f14` · **W2.2:** `b11`,`b12`,`b13`,`d4`,`f5`,`f6`,`f8`,`f9`,`f10`,`f11`,`f12`,`f13` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5` |
+| 🔴 Opus | `f7` (killer-feature) · барьеры `x1`,`x2`,`x3`,`x4`,`x4a`,`x4b`,`x5` |
+
+> Итог: Opus — только `f7` + 7 барьеров (где цена ошибки максимальна); Qwen — 7 чисто-механических;
+> остальное (~31 + `tu-*`) — Sonnet. Каждый 🟢/🔵-промпт прикрыт детерминированным гейтом из своей `Check`.
+
 ## Структура
 ```
 skai_7/
@@ -135,21 +155,21 @@ flowchart TD
         direction LR
         subgraph B1["🪟 Окно 1 · backend (feat/backend) — api/, data/"]
             direction TB
-            b1["b1 duckdb-etl"] --> b3["b3 v-incidents"]
-            b1 --> b2["b2 enrichment"]
-            b1 --> b4["b4 fastapi-scaffold"]
-            b3 --> b5["b5 schemas-repos-services"]
+            b1["b1 duckdb-etl · 🟢"] --> b3["b3 v-incidents · 🔵"]
+            b1 --> b2["b2 enrichment · 🔵"]
+            b1 --> b4["b4 fastapi-scaffold · 🟢"]
+            b3 --> b5["b5 schemas-repos-services · 🔵"]
             b2 --> b5
             b4 --> b5
-            b5 --> b6["b6 routers"]
+            b5 --> b6["b6 routers · 🔵"]
         end
         subgraph F1["🪟 Окно 2 · web (feat/web) — web/ + дизайн-система"]
             direction TB
             subgraph D1["Дизайн-система (track-d)"]
-                d1["d1 tailwind-theme"] --> d2["d2 ui-primitives"] --> d3["d3 component-lib"]
+                d1["d1 tailwind-theme · 🟢"] --> d2["d2 ui-primitives · 🔵"] --> d3["d3 component-lib · 🔵"]
             end
             subgraph FR1["Фронт (track-f)"]
-                f1["f1 vite-scaffold"] --> f2["f2 api-client"] --> f3["f3 mock-fixtures"] --> f4["f4 screens · IncidentCard"]
+                f1["f1 vite-scaffold · 🟢"] --> f2["f2 api-client · 🔵"] --> f3["f3 mock-fixtures · 🟢"] --> f4["f4 screens · IncidentCard · 🔵"]
             end
             D1 --> FR1
         end
@@ -162,7 +182,7 @@ flowchart TD
 
     subgraph BR1["🚧 БАРЬЕР 1 · интеграция P0 — skai_7 · integration (последовательно)"]
         direction LR
-        x1["x1 remove-streamlit<br/>merge main+feat/backend+feat/web"] --> x2_1["x2 wiring<br/>роутеры/proxy/Makefile"] --> x3_1["x3 e2e-smoke P0<br/>→ main (ff)"]
+        x1["x1 remove-streamlit<br/>merge main+feat/backend+feat/web · 🔴"] --> x2_1["x2 wiring<br/>роутеры/proxy/Makefile · 🔴"] --> x3_1["x3 e2e-smoke P0<br/>→ main (ff) · 🔴"]
     end
     W1 --> BR1
 
@@ -170,15 +190,15 @@ flowchart TD
         direction LR
         subgraph B21["🪟 Окно 1 · backend (feat/backend)"]
             direction TB
-            b7["b7 driver-reference"] --> b10["b10 reports-views"]
-            b8["b8 stt-service"]
-            b9["b9 nlu-service"]
-            b14["b14 enrichment-hardening<br/>(P0-доработка поверх b2)"]
+            b7["b7 driver-reference · 🔵"] --> b10["b10 reports-views · 🔵"]
+            b8["b8 stt-service · 🔵"]
+            b9["b9 nlu-service · 🔵"]
+            b14["b14 enrichment-hardening<br/>(P0-доработка поверх b2) · 🔵"]
         end
         subgraph F21["🪟 Окно 2 · web (feat/web)"]
             direction TB
-            d5["d5 voice-timeline"] --> f7["f7 analytics-voice"]
-            f14["f14 incidentcard-hardening<br/>(P0-доработка поверх f4)"]
+            d5["d5 voice-timeline · 🔵"] --> f7["f7 analytics-voice · 🔴"]
+            f14["f14 incidentcard-hardening<br/>(P0-доработка поверх f4) · 🔵"]
         end
     end
 
@@ -186,7 +206,7 @@ flowchart TD
 
     subgraph BR2a["🚧 БАРЬЕР 2.1 · smoke Reports/Voice — skai_7 · integration (последовательно)"]
         direction LR
-        x2_a["x2 rewire<br/>merge feat/backend+feat/web"] --> x4a["x4a smoke<br/>отчёты/voice · main не трогает"]
+        x2_a["x2 rewire<br/>merge feat/backend+feat/web · 🔴"] --> x4a["x4a smoke<br/>отчёты/voice · main не трогает · 🔴"]
     end
     W21 --> BR2a
 
@@ -194,20 +214,20 @@ flowchart TD
         direction LR
         subgraph B22["🪟 Окно 1 · backend (feat/backend) — ⚠ роутеры в ALL_ROUTERS"]
             direction TB
-            b11["b11 sabotage"]
-            b12["b12 reb"]
-            b13["b13 tickets-alerts-trips"]
+            b11["b11 sabotage · 🔵"]
+            b12["b12 reb · 🔵"]
+            b13["b13 tickets-alerts-trips · 🔵"]
         end
         subgraph F22["🪟 Окно 2 · web (feat/web)"]
             direction TB
-            d4["d4 map-primitives"] --> f6["f6 monitor-map"]
-            f5["f5 events-feed"]
-            f8["f8 tickets"]
-            f9["f9 dispatch-alert"]
-            f10["f10 trip-dossier"]
-            f11["f11 reb-recovery"]
-            f12["f12 sabotage"]
-            f13["f13 role-toggle"]
+            d4["d4 map-primitives · 🔵"] --> f6["f6 monitor-map · 🔵"]
+            f5["f5 events-feed · 🔵"]
+            f8["f8 tickets · 🔵"]
+            f9["f9 dispatch-alert · 🔵"]
+            f10["f10 trip-dossier · 🔵"]
+            f11["f11 reb-recovery · 🔵"]
+            f12["f12 sabotage · 🔵"]
+            f13["f13 role-toggle · 🔵"]
         end
     end
 
@@ -215,7 +235,7 @@ flowchart TD
 
     subgraph BR2b["🚧 БАРЬЕР 2.2 · smoke прикладных — skai_7 · integration (последовательно)"]
         direction LR
-        x2_b["x2 rewire<br/>роутеры b11–b13 (авто-обход)"] --> x4b["x4b smoke<br/>tickets/alerts/trips/reb/sabotage/map/roles · main не трогает"]
+        x2_b["x2 rewire<br/>роутеры b11–b13 (авто-обход) · 🔴"] --> x4b["x4b smoke<br/>tickets/alerts/trips/reb/sabotage/map/roles · main не трогает · 🔴"]
     end
     W22 --> BR2b
 
@@ -223,10 +243,10 @@ flowchart TD
         direction LR
         subgraph T23["🪟 Окно 3 · tests (feat/tests, Claude Code)"]
             direction TB
-            t4["t4 chores — сразу"]
-            t1["t1 unit — после b2/b7/b10"]
-            t2["t2 API — после b6 + b11–b13"]
-            t3["t3 front — после d2/f2/f4"]
+            t4["t4 chores — сразу · 🟢"]
+            t1["t1 unit-инфра · conftest · 🔵"] --> tu["tu-* per-feature unit<br/>enrichment/driver/nlu/reports/sabotage/reb · 🔵"]
+            t2["t2 API — после b6 + b11–b13 · 🔵"]
+            t3["t3 front — после d2/f2/f4 · 🔵"]
         end
     end
 
@@ -234,7 +254,7 @@ flowchart TD
 
     subgraph BR2["🏁 БАРЬЕР 2 · финал P1/P2 — skai_7 · integration → main"]
         direction LR
-        x2_2["x2 rewire<br/>merge feat/tests"] --> x3_2["x3 P0-регресс"] --> x4["x4 e2e P1/P2<br/>→ main (ff)"]
+        x2_2["x2 rewire<br/>merge feat/tests · 🔴"] --> x3_2["x3 P0-регресс · 🔴"] --> x4["x4 e2e P1/P2<br/>→ main (ff) · 🔴"]
     end
     W23 --> BR2
 
@@ -242,14 +262,14 @@ flowchart TD
         direction LR
         subgraph B3["🪟 Окно 1 · backend (feat/backend) — track-b-backend/"]
             direction TB
-            w31["w3-1 b13-ticket-sync"]
-            w32["w3-2 diagnostic-source-data"]
-            w35["w3-5 no-video-incident-reachable"]
+            w31["w3-1 b13-ticket-sync · 🔵"]
+            w32["w3-2 diagnostic-source-data · 🟢"]
+            w35["w3-5 no-video-incident-reachable · 🔵"]
         end
         subgraph T3["🪟 Окно 3 · tests (feat/tests, Claude Code) — track-t-tests/"]
             direction TB
-            w33["w3-3 backend-unit-coverage"]
-            w34["w3-4 frontend-unit-coverage"]
+            w33["w3-3 backend-unit-coverage · 🔵"]
+            w34["w3-4 frontend-unit-coverage · 🔵"]
         end
     end
 
@@ -257,7 +277,7 @@ flowchart TD
 
     subgraph BR3["🧪 БАРЬЕР 3 · хардненинг — skai_7 · integration → main (последовательно)"]
         direction LR
-        x5["x5 wave3-hardening<br/>merge feat/backend+feat/tests → регресс + гейт покрытия (api≥85% / web≥80%)<br/>→ main (ff)"]
+        x5["x5 wave3-hardening<br/>merge feat/backend+feat/tests → регресс + гейт покрытия (api≥85% / web≥80%)<br/>→ main (ff) · 🔴"]
     end
     W3 --> BR3
 ```
@@ -276,6 +296,7 @@ flowchart TD
 | 🧪 3 · Хардненинг Волны 3 | `integration` → `main` | `x5-wave3-hardening.md` | полный регресс (unit+API+фронт) + гейт покрытия (`api/`≥85%, `web/src`≥80%); проверка W3-1/W3-2 |
 
 > Файлы барьеров: `barrier-1-integration-p0/` (x1–x3), `barrier-2-p1p2/` (x4a/x4b/x4), `barrier-3-hardening/` (x5).
+> **Все барьеры (`x1`–`x5`) — 🔴 Opus** (судят green/red, продвигают `main`, заводят дефекты); см. легенду моделей выше.
 
 ### Окна и владение
 
@@ -290,8 +311,8 @@ flowchart TD
 
 | Окно | Промпты (порядок) | Проверка |
 | --- | --- | --- |
-| 1 Backend | `b1` → (`b2` ∥ `b4`) + `b3` → `b5` → `b6` | `make db` (54 аларма / 14 типов + `v_incidents`), `make api`, `GET /api/incidents` |
-| 2 Web | `d1` → `d2` → `d3` → `f1` → `f2` → `f3` → `f4` | `VITE_USE_FIXTURES=true`, `npm run dev`, `npm run typecheck` |
+| 1 Backend | `b1`🟢 → (`b2`🔵 ∥ `b4`🟢) + `b3`🔵 → `b5`🔵 → `b6`🔵 | `make db` (54 аларма / 14 типов + `v_incidents`), `make api`, `GET /api/incidents` |
+| 2 Web | `d1`🟢 → `d2`🔵 → `d3`🔵 → `f1`🟢 → `f2`🔵 → `f3`🟢 → `f4`🔵 | `VITE_USE_FIXTURES=true`, `npm run dev`, `npm run typecheck` |
 
 > Коммит после волны: `git add -A && git commit -m "feat(backend): wave 1"` (аналогично для web).
 
@@ -314,8 +335,8 @@ Git-склейка и продвижение `main` — **внутри пром�
 
 | Окно | Промпты (порядок) | Проверка |
 | --- | --- | --- |
-| 1 Backend | `b7` → `b10` ; `b8` ∥ `b9` ; `b14` (P0-доработка enrichment поверх b2) | `make db` (`driver_reference`>0, `v_driver_report`/`v_fleet`/`v_vehicle`), `GET /api/reports/driver/{plate}` ; enrichment-clamp/дефолты |
-| 2 Web | `d5` → `f7` ; `f14` (P0-доработка IncidentCard поверх f4) | экран «Аналитика/Voice»: 🎤→`transcribe`→`query`→дашборд В-1/В-2 ; карточка: состояния/sync/a11y |
+| 1 Backend | `b7`🔵 → `b10`🔵 ; `b8`🔵 ∥ `b9`🔵 ; `b14`🔵 (P0-доработка enrichment поверх b2) | `make db` (`driver_reference`>0, `v_driver_report`/`v_fleet`/`v_vehicle`), `GET /api/reports/driver/{plate}` ; enrichment-clamp/дефолты |
+| 2 Web | `d5`🔵 → `f7`🔴 ; `f14`🔵 (P0-доработка IncidentCard поверх f4) | экран «Аналитика/Voice»: 🎤→`transcribe`→`query`→дашборд В-1/В-2 ; карточка: состояния/sync/a11y |
 
 > `b14`/`f14` — доработка **уже выполненной** Волны 1 (DoD-глубина идей #3/#1): правят `enrichment.py`/`IncidentCard.tsx` поверх готового кода, не переисполняя b2/f4. Папки: `wave-2-1-reports-voice/track-{b,f}/`.
 
@@ -334,8 +355,8 @@ git **внутри промптов** (x2 идемпотентно подтяг�
 
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 1 Backend | `b11` ∥ `b12` ∥ `b13` | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
-| 2 Web | `d4` → `f6` ; `f5` ∥ `f8` ∥ `f9` ∥ `f10` ∥ `f11` ∥ `f12` ∥ `f13` | все экраны кодят против контракта/фикстур |
+| 1 Backend | `b11`🔵 ∥ `b12`🔵 ∥ `b13`🔵 | ⚠ `b11`/`b13` добавляют свои роутеры в `api/routers/__init__.py` (`ALL_ROUTERS`), иначе `x2` отдаёт 404 |
+| 2 Web | `d4`🔵 → `f6`🔵 ; `f5`🔵 ∥ `f8`🔵 ∥ `f9`🔵 ∥ `f10`🔵 ∥ `f11`🔵 ∥ `f12`🔵 ∥ `f13`🔵 | все экраны кодят против контракта/фикстур |
 
 ### Барьер 2.2 — smoke прикладных (основное окно `skai_7`)
 
@@ -350,7 +371,7 @@ git **внутри промптов** (x2 идемпотентно подтяг�
 
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 3 Tests | `t4` сразу · `t1` после `b2/b7/b10` · `t2` после `b6`+`b11–b13` · `t3` после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся |
+| 3 Tests | `t4`🟢 сразу · `t1`🔵 инфра (conftest) → per-feature `tu-*`🔵 (каждый за своей фичей: `tu-enrichment` после `b2/b14`, `tu-driver` `b7`, `tu-nlu` `b9`, `tu-reports` `b10`, `tu-sabotage` `b11`, `tu-reb` `b12`) · `t2`🔵 после `b6`+`b11–b13` · `t3`🔵 после `d2/f2/f4` | перед прогоном `git fetch && git merge integration`; баги эскалируются, в тестах не правятся. Полное покрытие `b1–b13` — пасс `w3-3` |
 
 ### Барьер 2 — финальный e2e (основное окно `skai_7`)
 
@@ -368,8 +389,8 @@ git **внутри промптов** (x2 подтягивает тесты в `
 
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 1 Backend | `track-b-backend/`: `w3-1` (b13/Ticket) ∥ `w3-2` (данные `source=DIAGNOSTIC`) ∥ `w3-5` (no-video ветка) | неблокирующие доработки из аудита; до реализации `tickets_service` |
-| 3 Tests | `track-t-tests/`: `w3-3` (backend unit `b1–b13`) ∥ `w3-4` (frontend unit `d3–d5`/`f5–f13`) | дозакрытие покрытия t1/t3; перед прогоном `git fetch && git merge integration`; баги эскалируются |
+| 1 Backend | `track-b-backend/`: `w3-1`🔵 (b13/Ticket) ∥ `w3-2`🟢 (данные `source=DIAGNOSTIC`) ∥ `w3-5`🔵 (no-video ветка) | неблокирующие доработки из аудита; до реализации `tickets_service` |
+| 3 Tests | `track-t-tests/`: `w3-3`🔵 (backend unit `b1–b13`) ∥ `w3-4`🔵 (frontend unit `d3–d5`/`f5–f13`) | дозакрытие покрытия `tu-*`/t3; перед прогоном `git fetch && git merge integration`; баги эскалируются |
 
 > Окно 2 (web) в Волне 3 не участвует. Файлы — по трекам в `prompts/v2-fullstack/wave-3-backlog/`
 > (структура и граф — в README папки). Запуск в окне:

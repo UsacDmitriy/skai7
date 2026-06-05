@@ -1,6 +1,7 @@
 # b7 · Справочник водителей — driver_reference
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §7.1 (база — §2 enrichment). **Владеет:** `data/seed/driver_reference.csv`, `api/etl/seed_drivers.py`; правка `enrichment.driver_for` (по согласованию с b2).
+> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Кодит против контракта. **Зависит от:** b1 (таблица `video_events__selected_video_alarms` в DuckDB), §2 enrichment (формула `risk_score`). Параллелится с b8/b9/b11/b12 (не пересекаются по файлам).
 
 ## Цель

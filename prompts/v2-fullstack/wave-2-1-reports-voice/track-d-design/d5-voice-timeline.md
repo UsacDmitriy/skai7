@@ -1,6 +1,7 @@
 # d5 · Voice-кнопка, окно подтверждения, Timeline
 
 > Трек **Design**. Против `00-CONTRACT.md` §4 (токены) + §7.6 (добавки voice/timeline) + §7.7 (владение d5).
+> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > **Владеет:** `web/src/components/ui/VoiceButton.tsx`, `web/src/components/ui/ConfirmationModal.tsx`,
 > `web/src/components/ui/Timeline.tsx`. Зависит от d1 (токены) и d2 (Button/SeverityBadge).
 > Иконки — `lucide-react`.
