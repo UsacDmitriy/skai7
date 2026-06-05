@@ -2,7 +2,13 @@
 DuckDB connection management.
 
 Opens settings.db_path read-only. One cached connection per process; the
-FastAPI dependency `get_db` yields that connection to routers.
+FastAPI dependency `get_db` yields a per-request thread-local cursor of it.
+
+DuckDB-коннект НЕ потокобезопасен: FastAPI исполняет sync-эндпоинты в
+threadpool, поэтому конкурентные запросы, делящие один объект коннекта,
+перемешивают курсоры (KeyError на колонках, пустые ответы). Канонический
+фикс DuckDB — каждый поток работает через `connection.cursor()`
+(thread-local курсор того же инстанса БД). См. docs/clients/python.
 """
 from __future__ import annotations
 
@@ -37,9 +43,17 @@ def get_connection() -> duckdb.DuckDBPyConnection:
 
 
 def get_db() -> Iterator[duckdb.DuckDBPyConnection]:
-    """FastAPI yield-dependency: provides the shared read-only connection."""
-    conn = get_connection()
-    yield conn
+    """FastAPI yield-dependency: per-request thread-local cursor.
+
+    `cursor()` создаёт изолированный курсор поверх общего инстанса БД —
+    конкурентные запросы из threadpool больше не делят один объект коннекта
+    и не гонятся за результатами. Курсор закрывается по завершении запроса.
+    """
+    cursor = get_connection().cursor()
+    try:
+        yield cursor
+    finally:
+        cursor.close()
 
 
 def close_connection() -> None:
