@@ -23,7 +23,7 @@ for w in backend web tests; do
   test -z "$(git -C "$d" status --porcelain)" || { echo "❌ $w: незакоммичено — закоммить в worktree и повтори барьер"; exit 1; }
 done
 
-git merge feat/backend feat/web feat/tests   # волна 3: w3-1..w3-15 (бэклог + §9 тёмные данные + кросс-врезки)
+git merge feat/backend feat/web feat/tests   # волна 3: w3-1..w3-19 (бэклог + §9 тёмные данные + кросс-врезки + §8 prep Волны 4)
 ```
 
 Конфликты разруливаем на `integration`.
@@ -78,7 +78,32 @@ grep -q "/incidents/" web/src/pages/TripDossier.tsx           # бэк-ссыл�
 поездки» (`/trip/:id`) → «К карточке инцидента» → «Здоровье парка» → fuel-карточка; «Навигация (РЭБ)»
 список → `/reb/:id`; мёртвый пункт меню → `ComingSoon` с описанием (не пустой 404).
 
+## Готовность подготовки Волны 4 (W3-16…W3-19, §8) — блокеры AI-слоя сняты
+
+```bash
+# w3-16 · ML-deps + data/ai кэш + ai_metric_events
+python -c "import sklearn, statsmodels"                          # ML-стек ставится (b18/b19)
+test -d data/ai && ls data/ai/scene_labels.json data/ai/weather_cache.json   # кэш-каркас есть
+python -c "import json,sys; [sys.exit(0 if len(json.load(open('data/ai/'+f)))==54 else 1) for f in ['scene_labels.json','weather_cache.json']]"  # 54 строки
+test -f api/sql/33_ai_metric_events.sql                          # DDL событий метрик
+make db && python -c "import duckdb;print(duckdb.connect('data/skai.duckdb').execute('select count(*) from ai_metric_events').fetchone())"  # таблица есть (пустая)
+# w3-17 · AI-типы/клиент/фикстуры
+grep -Eq "AiMetrics|DataQuality|RiskBreakdown|SceneContext" web/src/api/types.ts   # типы §8.4/8.7/8.8
+grep -Eq "getAiMetrics|getRiskBreakdown|getScene|copilotChat" web/src/api/client.ts
+# w3-18 · маршруты/меню под f17/f21
+grep -Eq "/copilot|/metrics" web/src/App.tsx                     # маршруты заведены (каркас сирот нет)
+# w3-19 · CI/статус-каркас под t5/t6
+test -f .github/workflows/ci.yml && test -f scripts/gen_status.py
+```
+
+Любой пункт красный → **дефект треку-владельцу prep-промпта**, Волну 4 не стартуем до зелёного
+(иначе AI-слой упрётся в отсутствующий каркас). **Данные §8.0:** проверить, что `b18` помечен fallback-only.
+
 ## Регресс + гейт покрытия
+
+> Сначала **универсальный гейт** [`../barrier-CHECKLIST.md`](../barrier-CHECKLIST.md): `bash scripts/check.sh`
+> (ruff+pytest+typecheck+vitest целиком), `make db` дважды идемпотентно, негативы (404/[]/422), паритет
+> live↔fixtures, пост-условие git. Ниже — добавочный гейт **покрытия** Волны 3.
 
 **Backend (w3-3 + t1):**
 
@@ -105,6 +130,9 @@ npm run typecheck                         # без ошибок (типы §3.1+
 - **Целостность (§9):** liveness fuel/sensors/navigation/fleet-health зелёный (стабы 501 сняты, негатив 404,
   sensors без graph_points); граф-навигация зелёный (роуты fleet-health, ComingSoon вместо пустого 404,
   incident↔trip↔tickets связаны). Провал любого — дефект треку-владельцу, `main` остаётся на P1/P2.
+- **Готовность prep Волны 4 (§8, W3-16…19):** ML-deps ставятся; `data/ai/` + `ai_metric_events` есть;
+  AI-типы/клиент (§8.4/8.7/8.8) и маршруты `/copilot`+`/metrics` заведены; CI-каркас (`ci.yml`+`gen_status.py`)
+  на месте. Без этого AI-слой Волны 4 не стартует.
 
 ## Финализация — продвинуть main (Волна 3 стабильна)
 

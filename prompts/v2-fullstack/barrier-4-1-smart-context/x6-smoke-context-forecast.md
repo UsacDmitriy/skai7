@@ -47,11 +47,35 @@ git merge feat/backend feat/web   # 4.1: b16–b20, d7
 ### Фронт
 5. `cd web && npm run typecheck` — без ошибок (типы §8.4 совпадают); d7-примитивы импортируются.
 
+## Универсальный гейт + AI-негативы (обязательно)
+
+Прогнать **полный** [`../barrier-CHECKLIST.md`](../barrier-CHECKLIST.md): `bash scripts/check.sh` целиком
+(весь регресс P0/P1/P2/Волна 3 — не только `tu-*`), `make db` **дважды** идентично, пост-условие git (`main` не тронут).
+
+AI-специфичные негативы/детерминизм/офлайн (доп.):
+```bash
+code(){ curl -s -o /dev/null -w '%{http_code}' "localhost:8000$1"; }
+test "$(code /api/incidents/__nope__/scene)" = 404                          # неизвестный инцидент
+test "$(code /api/reports/forecast/__nope__)" = 404                         # неизвестный водитель
+curl -s 'localhost:8000/api/zones?hour=99' | jq -e 'type=="array"'          # битый фильтр → [] (не 500)
+# офлайн-устойчивость: без сети/ключей — кэш/фолбэк, не 5xx
+unset GROQ_API_KEY; diff <(curl -s localhost:8000/api/incidents/<id>/scene) <(curl -s localhost:8000/api/incidents/<id>/scene)  # детерминизм
+# data-reality §8.0: b18 — детерминированный fallback (НЕ ARIMA), b20 — пустой набор валиден
+curl -s localhost:8000/api/reports/forecast/<plate> | jq -e '.trend|length>=1 and (.anomaly==false)'   # наивный коридор
+curl -s localhost:8000/api/fatigue | jq -e 'type=="array"'                  # пустые цепочки → [] (не падение)
+# governance §8.6: мета и флаг
+curl -s localhost:8000/api/incidents/<id>/scene | jq -e 'has("source") or has("state")'   # source/AiFeatureState
+AI_FORECAST_ENABLED=disabled curl -s -o /dev/null -w '%{http_code}' localhost:8000/api/reports/forecast/<plate>  # → 200 «disabled», не 5xx
+```
+- Без кэша (`rm -f data/ai/*.json` во временной копии) → `risk_score` прежний (bonus=0), эндпоинты не падают.
+- Паритет: d7-экраны на живом API **и** `VITE_USE_FIXTURES=true`; типы §8.4 совпадают; консоль чистая.
+
 ## Критерии приёмки
 
-- Предрасчёт детерминирован и работает офлайн (нет сети → кэш, без падений).
-- Все 4 эндпоинта §8.3 отвечают валидной схемой; флаг расхождения и рекомендации присутствуют.
-- `risk_score` обратно совместим (без кэша — прежний); регресс t1/`tu-enrichment` зелёный.
+- Предрасчёт детерминирован и работает офлайн (нет сети → кэш, без 5xx); повтор `make db`/эндпоинта идентичен.
+- Все 4 эндпоинта §8.3 отвечают валидной схемой (happy) **и** негативом (404/[]); флаг расхождения и рекомендации присутствуют.
+- `risk_score` обратно совместим (без кэша — прежний); **полный** `scripts/check.sh` зелёный (регресс не сломан).
+- `b18` — fallback-only (§8.0); `b20` пустой набор валиден; governance-мета/флаг работают.
 - `main` НЕ тронут. Красный smoke → дефект треку, чиним на `integration`, к Волне 4.2 не переходим.
 
 ## Коммит (обязательно)
