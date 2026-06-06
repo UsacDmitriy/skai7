@@ -361,13 +361,15 @@ DriverReport  {                                  # GET /reports/driver/{plate} (
   driver: DriverRef, vehicle_plate: str, vehicle_model: str,
   period: ReportPeriod, mileage_km: float, trips: int,
   kpi: ReportKPI, disciplinary_warning: bool,    # порог: gross>=3 ИЛИ safety_score<60
-  violations: ViolationRow[]                      # клик по строке → IncidentDetail (killer-feature)
+  violations: ViolationRow[],                     # клик по строке → IncidentDetail (killer-feature)
+  narrative: str|null                             # b22 (Волна 4.2): связный текст-нарратив; null до Волны 4
 }
 
 FleetReport   {                                  # GET /reports/fleet (идея #2 В-2)
   period: ReportPeriod, kpi: ReportKPI, vehicles_count: int,
   by_drivers: { driver: DriverRef, vehicle_plate, vehicle_model, mileage_km, risk_score: int, gross: int, total: int }[],
-  by_vehicles: { plate, vehicle_model, main_driver: str, mileage_km, risk_score: int, gross: int, total: int, cameras_ok: str }[]  # cameras_ok="2/3"
+  by_vehicles: { plate, vehicle_model, main_driver: str, mileage_km, risk_score: int, gross: int, total: int, cameras_ok: str }[],  # cameras_ok="2/3"
+  narrative: str|null                             # b22 (Волна 4.2): связный текст-нарратив; null до Волны 4
 }
 
 VehicleReport { plate, vehicle_model, risk_score: int, cameras: Camera[],  # GET /reports/vehicle/{plate}, len(cameras)=3
@@ -441,6 +443,21 @@ leaflet tiles: тёмная тема для /monitor (24/7)
 > Рантайм читает **кэш**; нет сети/ключей ⇒ кэш/детерминированный фолбэк (как `nlu_service`).
 > Без `Date.now()`/`random` в логике.
 
+### 8.0 Реальность данных (определяет фолбэки — проверено по `selected_video_alarms`)
+
+54 алярма распределены всего по **2 различным дням** (2026-05-14: 32, 2026-05-18: 22), и лишь **2 из 21 ТС**
+имеют события более чем в один день. Прямое следствие для AI-слоя:
+
+- **`b18` (прогноз риска) — детерминированный fallback ОБЯЗАТЕЛЕН, без ARIMA/IsolationForest**: временного
+  ряда на водителя нет. `RiskForecast` строится наивным базлайном (по `events_last_7d`) + статический
+  коридор `ci_low/ci_high`; `anomaly=false`, `anomaly_reason="недостаточно истории"`. Тег b18 остаётся 🔴
+  (детерминизм/коридор), но ML-ветка — мёртвая на этих данных (включается только при доливке данных).
+- **`b20` (цепочки усталости) — честный empty/sparse-state**: Drowsiness=15, Yawning=3, но почти всегда
+  разные ТС/дни → цепочек `YAWNING→DROWSY→harsh` в окне почти нет. Возвращать `[]`/одиночный «ранний
+  признак», не выдумывать связи. Тест проверяет, что пустой набор — валиден (не падение).
+- **`b16`/`b17` (сцена/погода)** — оффлайн-предрасчёт; при отсутствии кэша → детерминированный фолбэк
+  (`day_night` из часа `ts`, `weather="unknown"`, `bonus=0`); кэш-каркас готовится в Волне 3 (`w3-16`).
+
 ### 8.1 Таблицы (предрасчёт → кэш)
 
 - **`incident_scene`** (1 строка на алярм): `id`, `weather ∈ {clear,rain,snow,fog}`,
@@ -468,12 +485,17 @@ leaflet tiles: тёмная тема для /monitor (24/7)
 - `GET /api/zones?kind=&hour=` → `RiskZone[]`.
 - `GET /api/fatigue?plate=` → `FatigueChain[]`.
 - `POST /api/copilot/chat` → `CopilotMessage` (LLM tool-use, Groq + детерминированный фолбэк).
+- `GET /api/incidents/{id}/risk-breakdown` → `RiskBreakdown` (§8.8, explainability; детерм. из enrichment) — Волна 4.3.
+- `GET /api/metrics/ai` → `AiMetrics`; `GET /api/metrics/data-quality` → `DataQuality` (§8.7) — Волна 4.3.
+
+> Полный список AI-эндпоинтов: scene/forecast/zones/fatigue/copilot (4.1/4.2) + risk-breakdown/metrics (4.3).
+> Роутеры `forecast`/`zones`/`fatigue`/`copilot`/`metrics` регистрируются в `ALL_ROUTERS` (или авто-discovery).
 
 ### 8.4 Схемы (Pydantic / TS types, §3.1-стиль)
 
 - `SceneContext { id, weather, day_night, road_surface, area, visibility, scene_confidence }`
 - `WeatherCrossCheck { id, api_weather, is_day, solar_elevation_deg, discrepancy, discrepancy_kind }`
-- `RiskForecast { plate, trend: {date, predicted_events, ci_low, ci_high}[], anomaly: bool, anomaly_reason?, recommendations: string[] }`
+- `RiskForecast { plate, trend: {date, predicted_events, ci_low, ci_high}[], anomaly: bool, anomaly_reason?, recommendations: string[], narrative?: str }`  # narrative — b22 (Волна 4.2)
 - `RiskZone { zone_id, centroid: [lat,lon], radius_m, alarm_count, avg_risk, top_alarm_code, peak_hour, kind }`
 - `FatigueChain { plate, trip_id?, events: {code, ts}[], window_min, severity }`
 - `CopilotMessage { role: 'user'|'assistant', text, lang: 'ru'|'en', tool_calls?: {name,args}[], data? }`
@@ -484,6 +506,23 @@ leaflet tiles: тёмная тема для /monitor (24/7)
 `api/services/zones_service.py`, `api/services/copilot_service.py`, `web/src/components/ai/*`,
 `data/ai/*.json`. Правки `enrichment.py`/`v_sabotage`/`Report.tsx`/`IncidentCard.tsx`/`Monitor.tsx` —
 строго аддитивные, против этого §8.
+
+**Владение Ops & Trust (Волна 4.3) + governance (4.1):**
+
+| Промпт | Владеет | Волна |
+|---|---|---|
+| b24 | `api/core/ai_flags.py`, `api/core/ai_runtime.py`; мета `AiFeatureState` в AI-ответах | 4.1 |
+| b25 | `api/services/metrics_service.py`, роутер `api/routers/metrics.py`; пишет в `ai_metric_events` | 4.3 |
+| b26 | `api/core/security.py`, `api/core/audit.py`, `docs/SLO.md`; middleware-регистрация в `api/main.py` | 4.3 |
+| f20 | `web/src/components/ai/RiskWaterfall.tsx`; аддит. правки `IncidentCard.tsx`/`Report.tsx` | 4.3 |
+| f21 | `web/src/pages/Metrics.tsx`, `web/src/components/ai/DataQualityPanel.tsx`; маршрут `/metrics` | 4.3 |
+| t5 | `CURRENT_STATUS.md`, `scripts/gen_status.py` | 4.3 |
+| t6 | `.github/workflows/ci.yml`, `.github/workflows/nightly-smoke.yml` | 4.3 |
+
+> **Каркас под эти файлы готовит Волна 3** (`wave-3-backlog/` w3-16…w3-19): `data/ai/` + кэш-схема +
+> placeholder, `api/sql/33_ai_metric_events.sql` (пустой DDL), AI-типы/клиент/фикстуры (§8.4/§8.7/§8.8),
+> маршруты `/copilot`+`/metrics` + пункты меню, каркас `.github/workflows/` + `scripts/gen_status.py`.
+> Промпты Волны 4 **дополняют** этот каркас логикой, не пересоздают его (избегаем кросс-трек конфликта).
 
 ### 8.6 Runtime-governance AI (по второму research-отчёту)
 
