@@ -1,0 +1,57 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // ── Модели по умолчанию ────────────────────────────────────────────────────
+  // Основная: DeepSeek V3 — лучший баланс цены/качества для кода.
+  // Малая: Qwen3-30B-A3B — дешёвые короткие задачи (title, summary, compaction).
+  // Синтаксис: "<provider-key>/<model-key>" из ~/.config/opencode/opencode.jsonc.
+
+  "model": "deepseek/deepseek-chat",
+  "small_model": "qwen/qwen3-30b-a3b",
+
+  // ── Назначение моделей агентам ─────────────────────────────────────────────
+  // plan     — анализирует задачу, строит план. Нужно рассуждение → DeepSeek R1.
+  // build    — пишет и правит код. Основной агент → DeepSeek V3.
+  // explore  — читает файлы, ищет контекст. Достаточно быстрой модели → Qwen3 72B.
+  // general  — общий чат / короткие вопросы → Qwen3 32B.
+  // title    — генерирует заголовок сессии → малая модель (Qwen3-30B-A3B).
+  // summary  — сжатие контекста → малая модель.
+  // compaction — компактизация истории → малая модель.
+
+  "agent": {
+    "plan": {
+      "model": "deepseek/deepseek-reasoner",
+      "temperature": 0.6,
+      "prompt": "Ты архитектор SKAI (DuckDB + FastAPI + React). Читай AGENTS.md и 00-CONTRACT.md перед планированием. Стройте конкретный пошаговый план с именами файлов."
+    },
+    "build": {
+      "model": "deepseek/deepseek-chat",
+      "temperature": 0.2,
+      "prompt": "Ты инженер SKAI. Стек: Python 3.12 / FastAPI / DuckDB / React+Vite+Tailwind. Данные — datasets/ready/. Пиши рабочий, чистый код. Не вызывай прод-сервисы SKAI."
+    },
+    "explore": {
+      "model": "qwen/qwen3-72b",
+      "temperature": 0.0
+    },
+    "general": {
+      "model": "qwen/qwen3-32b",
+      "temperature": 0.3
+    },
+    "title": {
+      "model": "qwen/qwen3-30b-a3b"
+    },
+    "summary": {
+      "model": "qwen/qwen3-30b-a3b"
+    },
+    "compaction": {
+      "model": "qwen/qwen3-30b-a3b"
+    }
+  },
+
+  // ── Скилы ─────────────────────────────────────────────────────────────────
+  // Если хочешь подключить локальные скилы — укажи папку:
+  // "skills": { "paths": ["./skills"] }
+
+  // ── Инструкции (дополняют AGENTS.md) ──────────────────────────────────────
+  "instructions": "Следуй AGENTS.md. Стек: DuckDB + FastAPI (Python 3.12) + React/Vite/Tailwind. Источник данных: datasets/ready/. Не вызывай прод-сервисы SKAI. Комментарии в коде только если WHY неочевиден."
+}

@@ -80,10 +80,25 @@ full-scope). Каждый агент кодит против контракта,
 
 ## AI Tooling & Model Policy
 
-Ограничений на модели нет — используйте наиболее способные доступные модели
-(например, Claude Opus). Параллельный запуск нескольких агентов разрешён.
+Поддерживаемые провайдеры (настроены в `~/.config/opencode/opencode.jsonc` и `opencode.jsonc`):
 
-Контекстная гигиена (по-прежнему полезна):
+| Задача | Рекомендованная модель | OpenCode ID |
+|--------|------------------------|-------------|
+| Код (основная работа) | DeepSeek V3 | `deepseek/deepseek-chat` |
+| Архитектура, анализ требований | Qwen3 72B | `qwen/qwen3-72b` |
+| Цепочки рассуждений, дебаг | DeepSeek R1 | `deepseek/deepseek-reasoner` |
+| Быстрые правки, boilerplate | Qwen3 30B-A3B | `qwen/qwen3-30b-a3b` |
+| Требования и документация | Claude Sonnet | `anthropic/claude-sonnet-4-5` |
+
+Смена модели в OpenCode: `/` → набрать `model` или выбрать из списка.
+
+API-ключи задаются в `.env` (или в `~/.zshrc`):
+- `DEEPSEEK_API_KEY` — [platform.deepseek.com/api_keys](https://platform.deepseek.com/api_keys)
+- `DASHSCOPE_API_KEY` — [dashscope.aliyun.com](https://dashscope.aliyun.com) → API Keys
+
+Параллельный запуск нескольких агентов разрешён.
+
+**Контекстная гигиена:**
 
 - Не вставляйте в контекст целые репозитории, большие CSV, сырые медиа или сгенерированный вывод без нужды.
 - Читайте только файлы, нужные для текущего шага; резюмируйте перед открытием нового контекста.
