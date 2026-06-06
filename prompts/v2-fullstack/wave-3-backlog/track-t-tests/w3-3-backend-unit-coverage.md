@@ -54,11 +54,21 @@
 - `get_alert` → `DispatchAlert{video_window_sec=15}`; неизвестный id → None.
 - `get_trip` → `TripDossier{track,timeline}`; `has_video:bool` в timeline.
 
+`api/tests/integration/test_api_contract.py` (TestClient — негативы и регистрация; перенесено из аудита барьеров):
+- **Негативная матрица** по всем доменам P0/P1/P2: неизвестный `id`/`plate` → **404**
+  (`/incidents/{id}`, `/reports/driver/{plate}`, `/reports/vehicle/{plate}`, `/alerts/{id}`, `/trips/{id}`, `/reb/{id}`);
+  битое/неполное тело `POST /reports/query` и `/actions` → **422**; пустой фильтр/набор → `[]` (не `500`).
+- **Канал без файла** `/incidents/{id}/video/2` → **404** (не 500); стабы `/fuel`,`/sensors`,`/navigation` → как в контракте.
+- **Анти-404 регистрации роутеров:** все ожидаемые теги присутствуют в OpenAPI
+  (`app.openapi()["tags"]` ⊇ incidents/reports/vehicles/actions/tickets/alerts/trips/sabotage/reb) — ловит «забыли include_router».
+- **Офлайн-детерминизм:** без `GROQ_API_KEY` `/reports/query` даёт regex-fallback, повтор → идентично.
+
 ## Check
 
-- `pytest api/tests/unit -q` зелёный; suite детерминирован (повторный прогон — тот же результат).
-- Покрытие пакета `api/` ≥ **85%** (`pytest --cov=api api/tests/unit`), `api/core/enrichment.py` ≥ 90% (держим из t1).
-- Ни один тест не требует сети/поднятого API; всё работает после `make db`.
+- `pytest api/tests -q` зелёный целиком — **полный регресс** (unit + integration), не только новые файлы.
+- Покрытие пакета `api/` ≥ **85%** (`pytest --cov=api api/tests`), `api/core/enrichment.py` ≥ 90% (держим из t1).
+- Негативы есть на **каждый** эндпоинт (404/422/`[]`); тест регистрации роутеров зелёный (анти-404).
+- Ни один тест не требует сети/поднятого uvicorn (TestClient); всё работает после `make db`.
 
 ## Коммит (обязательно)
 

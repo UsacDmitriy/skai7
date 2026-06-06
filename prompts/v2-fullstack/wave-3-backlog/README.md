@@ -22,17 +22,25 @@ wave-3-backlog/
 │   ├── w3-7 sensors-domain            /api/sensors — CAN−GPS разрыв (снять 501) §9
 │   ├── w3-8 navigation-list           /api/navigation — список проблем → вход в РЭБ §9
 │   └── w3-9 fleet-health-view 🔴      v_fleet_health (объединение 17 ТС) + /api/fleet-health §9
+│   └── w3-16 ai-foundation 🆅4        ML-deps + data/ai кэш + ai_metric_events DDL (подготовка В.4)
 ├── track-f-frontend/  🪟 Окно 2 · feat/web — web/src
 │   ├── w3-10 api-layer                types/client/fixtures fleet-health (+fix getReb фикстуры)
 │   ├── w3-11 fleet-health-hub         FleetHealth + FuelCard/SensorCard/NavProblemList
 │   ├── w3-12 cross-wiring             incident↔trip↔tickets, report→incident, feed→trip
-│   └── w3-13 nav-signposting          роуты + ComingSoon (Волна 4) вместо пустого 404
+│   ├── w3-13 nav-signposting          роуты + ComingSoon (Волна 4) вместо пустого 404
+│   ├── w3-17 ai-api-scaffold 🆅4      AI types/client/fixtures §8.4/8.7/8.8 (подготовка В.4)
+│   └── w3-18 ai-routes-nav 🆅4        маршруты /copilot,/metrics + меню (каркас f17/f21)
 └── track-t-tests/     🪟 Окно 3 · feat/tests — api/tests, vitest
     ├── w3-3 backend-unit-coverage     unit b1–b13 (дозакрытие t1), гейт api≥85%
     ├── w3-4 frontend-unit-coverage    unit d3–d5/f5–f13 (дозакрытие t3), гейт web≥80%
     ├── w3-14 darkdata-api-tests       API fuel/sensors/navigation/fleet-health (happy+негатив)
-    └── w3-15 fleet-health-frontend    vitest хаб + кросс-врезки + ComingSoon
+    ├── w3-15 fleet-health-frontend    vitest хаб + кросс-врезки + ComingSoon
+    └── w3-19 ci-status-scaffold 🆅4   .github/workflows ci.yml скелет + gen_status.py (каркас t5/t6)
 ```
+
+> **🆅4 = подготовка Волны 4** (`w3-16…w3-19`): снимают блокеры до старта AI-слоя — ML-зависимости,
+> `data/ai/`-кэш, `ai_metric_events`, AI-типы/клиент/фикстуры, маршруты `/copilot`+`/metrics`, CI/статус-каркас.
+> Реструктуризация Волны 4 → **4.1 smart-context · 4.2 assistant · 4.3 ops & trust** (барьеры x6/x7/**x8**).
 
 ## Граф выполнения (как Волна 1)
 
@@ -61,9 +69,12 @@ wave-3-backlog/
 
 | 🪟 Окно | Промпты (∥) | Команда запуска |
 | --- | --- | --- |
-| 1 · backend | `w3-1` ∥ `w3-2` ∥ `w3-5` ∥ `w3-6` ∥ `w3-7` ∥ `w3-8`; **`w3-9` после `w3-6/7/8`** | `Выполни @prompts/v2-fullstack/wave-3-backlog/track-b-backend/w3-6-fuel-domain.md` |
-| 2 · web | **`w3-10` (база) → `w3-11` ∥ `w3-12` ∥ `w3-13`** | `Выполни @prompts/v2-fullstack/wave-3-backlog/track-f-frontend/w3-10-api-layer.md` |
-| 3 · tests | `w3-3` ∥ `w3-4`; **`w3-14` после доменов, `w3-15` после фронта** | `Выполни @prompts/v2-fullstack/wave-3-backlog/track-t-tests/w3-14-darkdata-api-tests.md` |
+| 1 · backend | `w3-1` ∥ `w3-2` ∥ `w3-5` ∥ `w3-6` ∥ `w3-7` ∥ `w3-8` ∥ **`w3-16`** (🆅4); **`w3-9` после `w3-6/7/8`** | `Выполни @prompts/v2-fullstack/wave-3-backlog/track-b-backend/w3-6-fuel-domain.md` |
+| 2 · web | **`w3-10` (база) → `w3-11` ∥ `w3-12` ∥ `w3-13`**; **`w3-17` (🆅4) → `w3-18` (🆅4, после `w3-13`)** | `Выполни @prompts/v2-fullstack/wave-3-backlog/track-f-frontend/w3-10-api-layer.md` |
+| 3 · tests | `w3-3` ∥ `w3-4` ∥ **`w3-19`** (🆅4); **`w3-14` после доменов, `w3-15` после фронта** | `Выполни @prompts/v2-fullstack/wave-3-backlog/track-t-tests/w3-14-darkdata-api-tests.md` |
+
+> **🆅4 = подготовка Волны 4** (`w3-16…w3-19`) — независимы от блока §9, идут параллельно в своих окнах.
+> `w3-18` зависит от `w3-13` (общий `ComingSoon`/`App.tsx`), `w3-17` — от никого (только типы/фикстуры).
 
 **Барьер 3** — в основном окне `skai_7` на ветке `integration`, после завершения пунктов:
 
@@ -90,10 +101,19 @@ wave-3-backlog/
 | W3-13 | [`track-f-frontend/w3-13-nav-signposting.md`](track-f-frontend/w3-13-nav-signposting.md) — роуты fleet-health/navigation + `ComingSoon` (Волна 4) вместо пустого 404 · §9.4 | f1 | Средний |
 | W3-14 | [`track-t-tests/w3-14-darkdata-api-tests.md`](track-t-tests/w3-14-darkdata-api-tests.md) — API-тесты fuel/sensors/navigation/fleet-health (happy+негатив) | T / tests | Высокий |
 | W3-15 | [`track-t-tests/w3-15-fleet-health-frontend-tests.md`](track-t-tests/w3-15-fleet-health-frontend-tests.md) — vitest хаб + кросс-врезки + `ComingSoon` | T / tests | Высокий |
+| W3-16 | [`track-b-backend/w3-16-ai-foundation.md`](track-b-backend/w3-16-ai-foundation.md) — 🆅4 ML-deps (sklearn/statsmodels) + `data/ai/` кэш-placeholder + `ai_metric_events` DDL · §8.0/8.1/8.7 | b / данные | Высокий |
+| W3-17 | [`track-f-frontend/w3-17-ai-api-scaffold.md`](track-f-frontend/w3-17-ai-api-scaffold.md) — 🆅4 AI types/client/fixtures §8.4/8.7/8.8 (+`narrative`) | f2/f3 | Высокий |
+| W3-18 | [`track-f-frontend/w3-18-ai-routes-nav.md`](track-f-frontend/w3-18-ai-routes-nav.md) — 🆅4 маршруты `/copilot`+`/metrics` + меню (каркас f17/f21) · §8.3 | f1 | Средний |
+| W3-19 | [`track-t-tests/w3-19-ci-status-scaffold.md`](track-t-tests/w3-19-ci-status-scaffold.md) — 🆅4 `.github/workflows/ci.yml` скелет + `scripts/gen_status.py` (каркас t5/t6) · §8.9 | T / CI | Высокий |
 
 > **Контракт §9** (раскрытие тёмных данных) — аддендум в `../00-CONTRACT.md`, авторская правка
 > оркестратора (не FROZEN, contract-change #2). На него ссылаются W3-6…W3-15. Отменяет строку §7.4
 > «fuel/sensors/navigation остаются стабами 501» в части этих доменов.
+>
+> **🆅4 — подготовка Волны 4** (`W3-16…W3-19`, contract-change #2 §8). Снимают блокеры до старта AI-слоя:
+> ML-зависимости, `data/ai/`-кэш + `ai_metric_events`, AI-типы/клиент/фикстуры, маршруты `/copilot`+`/metrics`,
+> CI/статус-каркас. **data-reality §8.0:** алярмы за 2 дня → `b18` fallback-only (без ARIMA), `b20` sparse.
+> Волна 4 реорганизована: **4.1 smart-context · 4.2 assistant · 4.3 ops & trust** (барьеры x6 · x7 · **x8**).
 
 ## Куда складывать новые пункты
 
