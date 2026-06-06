@@ -9,6 +9,8 @@
 | 2 Web | `f15` scene-card → `f16` forecast-report ; `f17` copilot-ui ∥ `f18` risk-heatmap ∥ `f19` sabotage-verdict | f17/f18 🔴 · f15/f16/f19 🔵 |
 | 3 Tests | `per-feature/tu-copilot` (фолбэк) ∥ `t-wave4-frontend` (vitest AI-компоненты) | 🔵 Sonnet |
 
-Дальше → **Барьер 4.2** (`../barrier-4-2-assistant/x7-e2e-wave4.md`) → продвигает `main`.
+Дальше → **Барьер 4.2** (`../barrier-4-2-assistant/x7-e2e-wave4.md`) — e2e ассистента + регресс 4.1.
+Слой измеримости/безопасности/explainability вынесен в **Волну 4.3** (`../wave-4-3-ops-trust/`); `main`
+продвигает её барьер **x8** (`../barrier-4-3-ops-trust/x8-ops-trust.md`).
 
-> Каждый промпт заканчивается секцией `## Коммит`. ⚠ `b20`/`b21`/`b23` регистрируют свои роутеры в `ALL_ROUTERS`.
+> Каждый промпт заканчивается секцией `## Коммит`. ⚠ `b21`/`b23` регистрируют свои роутеры в `ALL_ROUTERS`.

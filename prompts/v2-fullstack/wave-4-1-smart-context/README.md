@@ -6,9 +6,13 @@
 
 | Окно | Промпты (порядок) | Модель |
 |---|---|---|
-| 1 Backend | `b16` scene-context (предрасчёт VLM) → `b17` weather-crosscheck → enrichment ; `b18` risk-forecast ∥ `b19` geozone-risk ∥ `b20` fatigue-chain | b16/b18/b19 🔴 · b17/b20 🔵 |
+| 1 Backend | `b24` ai-governance (флаги/latency/кэш — **runtime-основа** для всех AI-фич, §8.6) → `b16` scene-context (предрасчёт VLM) → `b17` weather-crosscheck → enrichment ; `b18` risk-forecast ∥ `b19` geozone-risk ∥ `b20` fatigue-chain | b24/b17/b20 🔵 · b16/b18/b19 🔴 |
 | 2 Web | `d7` ai-primitives (`SceneContextChip`/`DiscrepancyBadge`/`ForecastSparkline`/`RiskHeatLayer`) | 🔵 Sonnet |
 | 3 Tests | `per-feature/`: `tu-scene` ∥ `tu-weather` ∥ `tu-forecast` ∥ `tu-zones` ∥ `tu-fatigue` | 🔵 Sonnet |
+
+> **Подготовка Волны 3 (обязательна перед стартом):** ML-зависимости + `data/ai/`-кэш + типы/фикстуры +
+> CI-каркас уже влиты (`wave-3-backlog/` w3-16…w3-19). **Данные:** алярмы только за 2 дня → `b18` —
+> детерминированный fallback (без ARIMA), `b20` — честный empty-state на разреженных цепочках (§8.0).
 
 Дальше → **Барьер 4.1** (`../barrier-4-1-smart-context/x6-smoke-context-forecast.md`).
 
