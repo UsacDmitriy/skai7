@@ -134,9 +134,10 @@ class TestSabotage:
 
 
 class TestStubs501:
+    # sensors/* повышены из стаба (§9.1, w3-7); fuel/* — домен w3-6.
     @pytest.mark.parametrize(
         "path",
-        ["/api/fuel", "/api/fuel/A123BC77", "/api/sensors", "/api/sensors/A123BC77"],
+        ["/api/fuel", "/api/fuel/A123BC77"],
     )
     def test_stub_returns_501(self, client: TestClient, path: str):
         assert client.get(path).status_code == 501
