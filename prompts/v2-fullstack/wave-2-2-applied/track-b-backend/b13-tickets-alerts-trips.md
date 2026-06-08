@@ -16,7 +16,8 @@
 - `list_tickets(db) -> list[Ticket]` (схема §7.5 `Ticket{id,created_at,incident_id,action,comment,status,deadline,is_overdue}`):
   читать `output/actions.csv` (колонки `created_at,incident_id,action,comment` от `actions_service` b5/b6),
   маппить в `Ticket`; `id` — детерминированно (индекс/`crc32` строки), `status` — дефолт `"active"`
-  (единый enum `Status` §3.1, **НЕ** `"new"`; если в CSV нет колонки статуса). `is_overdue = deadline<now И status∉{closed}`;
+  (единый enum `Status` §3.1; если в CSV нет колонки статуса). `deadline` — срок ISO-8601 UTC либо `null`;
+  `is_overdue = deadline<now() И status∉{closed}` — оверлей «⏱ Просрочено» в UI, **не** значение статуса;
   `deadline=null` → `is_overdue=false`. Файла нет → пустой список (не ошибка).
 - `get_alert(db, id) -> DispatchAlert | None` (схема §7.5): берёт `IncidentDetail` (через incidents-сервис b5),
   оборачивает в `DispatchAlert{incident, video_window_sec=15, requested_at}`; видео ±15с вокруг `ts` —
@@ -35,7 +36,7 @@
 ## Edge cases / поведение
 
 - Нет `output/actions.csv` (или пустой/только заголовок) → `list_tickets` возвращает `[]` (не ошибка).
-- `Ticket.status` дефолт `"active"` (единый enum §3.1), **не** `"new"`; `is_overdue = deadline<now И status∉{closed}`; `deadline=null` → `is_overdue=false`; `status="closed"` → `is_overdue=false` даже при просроченном `deadline`.
+- `Ticket.status` дефолт `"active"` (единый enum §3.1); `is_overdue = deadline<now И status∉{closed}`; `deadline=null` → `is_overdue=false`; `status="closed"` → `is_overdue=false` даже при просроченном `deadline`.
 - `DispatchAlert.video_window_sec` всегда `15` (фиксировано контрактом §7.5).
 - `get_alert`/`get_trip` по неизвестному `id` → `None` (роутер → 404), не пустой объект.
 - `TripDossier.timeline[*].has_video: bool` — `true` только если у алярма есть скачанный видеоканал; пустая поездка → `track=[]`/`timeline=[]` (валидный ответ, не 404, если ТС/поездка существует).

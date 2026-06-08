@@ -59,6 +59,25 @@ class TestTickets:
         assert by_incident["INC-1"].is_overdue is True
         assert by_incident["INC-2"].is_overdue is False  # closed не просрочена
 
+    def test_tickets_default_status_active(
+        self, client: TestClient, tmp_path, monkeypatch
+    ):
+        # CSV без колонок status/deadline → дефолт «active» (НЕ «new»), is_overdue False.
+        monkeypatch.setattr(settings, "output_dir", tmp_path)
+        csv_path = tmp_path / "actions.csv"
+        with csv_path.open("w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(["created_at", "incident_id", "action", "comment"])
+            w.writerow(["2026-01-01T00:00:00+00:00", "INC-3", "create_task", "c"])
+
+        r = client.get("/api/tickets")
+        assert r.status_code == 200, r.text
+        tickets = [Ticket(**t) for t in r.json()]  # строгий контракт §7.5
+        assert len(tickets) == 1
+        assert tickets[0].status == "active"
+        assert tickets[0].deadline is None
+        assert tickets[0].is_overdue is False
+
 
 # ---------------------------------------------------------------------------
 # GET /api/alerts/{id} → DispatchAlert (§7.5, идея #5)
