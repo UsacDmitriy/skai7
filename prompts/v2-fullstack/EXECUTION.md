@@ -193,7 +193,7 @@ integration (x1/x2), поэтому в параллельной фазе их н
 flowchart TD
     DONE["✅ ВОЛНЫ 1–2 ЗАВЕРШЕНЫ<br/>P0+P1/P2 в main (88ed8cf)<br/>барьеры x1–x4 отработали"]
 
-    subgraph W3["ВОЛНА 3 · бэклог + хардненинг + целостность MVP (§9) — окна 1, 2, 3 параллельно"]
+    subgraph W3["ВОЛНА 3 · бэклог + хардненинг + целостность MVP (§9) — backend ∥ web; тесты следом за кодом"]
         direction LR
         subgraph B3["🪟 Окно 1 · backend (feat/backend) — track-b-backend/"]
             direction TB
@@ -216,14 +216,17 @@ flowchart TD
             w313 --> w318["w3-18 ai-routes-nav 🆅4 · 🔵"]
             w317["w3-17 ai-api-scaffold 🆅4 · 🔵"]
         end
-        subgraph T3["🪟 Окно 3 · tests (feat/tests, Claude Code) — track-t-tests/"]
+        subgraph T3["🪟 Окно 3 · tests — следом за кодом (track-t-tests/)"]
             direction TB
-            w33["w3-3 backend-unit-coverage · 🔵"]
-            w34["w3-4 frontend-unit-coverage · 🔵"]
+            w33["w3-3 backend-unit-coverage · 🔵 (раннее: код В.1–2 в main)"]
+            w34["w3-4 frontend-unit-coverage · 🔵 (раннее)"]
+            w319["w3-19 ci-status-scaffold 🆅4 · 🔵 (раннее)"]
             w314["w3-14 darkdata-api-tests · 🔵"]
             w315["w3-15 fleet-health-frontend · 🔵"]
-            w319["w3-19 ci-status-scaffold 🆅4 · 🔵"]
         end
+        %% тесты идут ПОСЛЕ своего кода (w3-3/4/19 — независимы, можно раньше)
+        w39 --> w314
+        w313 --> w315
     end
 
     DONE --> W3
@@ -234,7 +237,7 @@ flowchart TD
     end
     W3 --> BR3
 
-    subgraph W41["ВОЛНА 4.1 · Умное событие + прогнозы — окна 1 и 2"]
+    subgraph W41["ВОЛНА 4.1 · Умное событие + прогнозы — backend ∥ web → tests"]
         direction LR
         subgraph B41["🪟 Окно 1 · backend (feat/backend)"]
             direction TB
@@ -248,10 +251,12 @@ flowchart TD
             direction TB
             d7["d7 ai-primitives · 🔵"]
         end
-        subgraph T41["🪟 Окно 3 · tests (feat/tests)"]
+        subgraph T41["🪟 Окно 3 · tests — после готовности модулей"]
             direction TB
             tu4["tu-scene/weather/forecast/zones/fatigue · 🔵"]
         end
+        %% per-feature тесты идут за своими модулями
+        b20 --> tu4
     end
     BR3 --> W41
 
@@ -285,7 +290,7 @@ flowchart TD
     end
     W42 --> BR42
 
-    subgraph W43["ВОЛНА 4.3 · AI Ops & Trust — окна 1, 2, 3"]
+    subgraph W43["ВОЛНА 4.3 · AI Ops & Trust — backend ∥ web → tests/CI"]
         direction LR
         subgraph B43["🪟 Окно 1 · backend — ⚠ metrics в ALL_ROUTERS"]
             direction TB
@@ -297,11 +302,13 @@ flowchart TD
             f20["f20 risk-waterfall (explainability) · 🔵"]
             f21["f21 metrics/data-quality (/metrics) · 🔵"]
         end
-        subgraph T43["🪟 Окно 3 · tests/CI"]
+        subgraph T43["🪟 Окно 3 · tests/CI — после кода"]
             direction TB
             t5["t5 CURRENT_STATUS · 🟢"]
             t6["t6 remote-CI + nightly live-smoke · 🔵"]
         end
+        %% статус/CI генерятся по готовому коду
+        b25 --> t5
     end
     BR42 --> W43
 
