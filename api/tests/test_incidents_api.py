@@ -131,7 +131,7 @@ class TestIncidentVideo:
 
 
 class TestStubsReturn501:
-    @pytest.mark.parametrize("path", ["/api/fuel/summary", "/api/sensors", "/api/navigation"])
+    @pytest.mark.parametrize("path", ["/api/fuel/summary", "/api/sensors"])  # navigation повышен из стаба (§9.1, w3-8)
     def test_stub_501(self, client: TestClient, path: str):
         r = client.get(path)
         assert r.status_code == 501

@@ -287,14 +287,6 @@ class TestReportsService:
 
 
 # ---------------------------------------------------------------------------
-# stub services (§3.4)
+# (бывший TestStubServices удалён) — домены fuel/sensors/navigation повышены из
+# 501-стабов в Волне 3 (§9.1), `NotImplementedError` больше не бросают.
 # ---------------------------------------------------------------------------
-
-
-class TestStubServices:
-    def test_stubs_raise_not_implemented(self):
-        from api.services import fuel_service, sensors_service, navigation_service
-
-        for svc in (fuel_service.list_fuel, sensors_service.list_sensors, navigation_service.list_navigation):
-            with pytest.raises(NotImplementedError):
-                svc()
