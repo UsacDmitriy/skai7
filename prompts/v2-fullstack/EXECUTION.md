@@ -31,10 +31,10 @@
 | Модель | Промпты |
 | --- | --- |
 | 🟢 Qwen (8) | `b1`, `b4`, `d1`, `f1`, `f3`, `t4`, `w3-2`, `t5` (CURRENT_STATUS · W4.3) |
-| 🔵 Sonnet (65) | **W1:** `b2`,`b5`,`b6`,`d3`,`f2` · **W2.1:** `b7`,`b8`,`b10`,`b14` · **W2.2:** `b11`,`b12`,`d4`,`f5`,`f8`,`f12` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` (6) · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5`,`w3-6`,`w3-7`,`w3-8`,`w3-10`,`w3-11`,`w3-12`,`w3-13`,`w3-14`,`w3-15`,`w3-16`,`w3-17`,`w3-18`,`w3-19` (w3-16…19 = prep В.4) · **W4.1:** `b17`,`b20`,`b24`,`d7`,`tu-scene/weather/forecast/zones/fatigue` · **W4.2:** `b22`,`b23`,`f15`,`f16`,`f19`,`tu-copilot`,`t-wave4-frontend` · **W4.3:** `b25`,`b27`,`f20`,`f21`,`t6`,`tu-metrics/security/riskbreakdown` |
+| 🔵 Sonnet (65) | **W1:** `b2`,`b5`,`b6`,`d3`,`f2` · **W2.1:** `b7`,`b8`,`b10`,`b14` · **W2.2:** `b11`,`b12`,`d4`,`f5`,`f8`,`f12` · **W2.3:** `t1`,`t2`,`t3`,`tu-*` (6) · **W3:** `w3-1`,`w3-3`,`w3-4`,`w3-5`,`w3-6`,`w3-7`,`w3-8`,`w3-10`,`w3-11`,`w3-12`,`w3-13`,`w3-14`,`w3-15`,`w3-16`,`w3-17`,`w3-18`,`w3-19` (w3-16…19 = prep В.4) · **W4.1:** `b17`,`b20`,`b24`,`d7`,`tu-scene/weather/forecast/zones/fatigue` · **W4.2:** `b22`,`b23`,`f15`,`f16`,`f19`,`tu-copilot`,`t-wave4-frontend` · **W4.3:** `b25`,`b27`,`f20`,`f21`,`f22`,`f23`,`f24`,`t6`,`tu-metrics/security/riskbreakdown` (f22/f23/f24 = целостность экранов) |
 | 🔴 Opus (33) | **фичи:** `b3` (спайн), `d2` (синк-примитивы), `f4` (флагман P0+синк), `b9` (двухпутевой NLU), `b13` (3 домена #5/#6/#7), `d5` (voice-UI killer #2), `f6` (дедуп+роли карты), `f7` (killer), `f9` (overlay/focus-trap/очередь), `f10` (таймлайн↔видео синк), `f11` (РЭБ-валидатор), `f13` (кросс-экранные роли), `f14` (анти-регресс #1) · **доработки Волны 1:** `b15`,`d6` · **W3:** `w3-9` (кросс-доменный join fleet-health) · **AI-слой (Волна 4):** `b16` (VLM-пайплайн), `b18` (прогноз-алгоритм), `b19` (DBSCAN-зоны), `b21` (copilot tool-use), `f17` (чат-UI), `f18` (heatmap-карта), `b26` (security-baseline · W4.3) · **барьеры:** `x1`,`x2`,`x3`,`x4`,`x4a`,`x4b`,`x5`,`x6`,`x7`,`x8` |
 
-> Итог: **🟢 8 · 🔵 65 · 🔴 33** (106 промптов; +4 prep-промпта В.4 `w3-16…19`, +барьер `x8`; +полнота 4.3: `b27` + `tu-metrics/security/riskbreakdown`). Прод-приоритет: на сложном не экономим — Opus покрывает спайн/синк/
+> Итог: **🟢 8 · 🔵 68 · 🔴 33** (109 промптов; +4 prep-промпта В.4 `w3-16…19`, +барьер `x8`; +полнота 4.3: `b27` + `tu-metrics/security/riskbreakdown`; +целостность экранов 4.3: `f22`/`f23`/`f24`). Прод-приоритет: на сложном не экономим — Opus покрывает спайн/синк/
 > killer/сложный интерактив/кросс-экранное состояние/breadth/анти-регресс + барьеры; Qwen — только
 > тривиально-механическое; Sonnet — оправданный детерминированный «середняк».
 > **Волна 1 заморожена** (`b1`–`f4` выполнены) — её Opus-глубина (по `b3`/`d2`) перенесена в доработки
@@ -116,7 +116,7 @@ integration (x1/x2), поэтому в параллельной фазе их н
 - **Барьер 4.1 — smoke умное событие/прогнозы** (`skai_7`, `integration`): x6 (GUARD+merge → smoke; `main` не трогает).
 - **Волна 4.2 — Ассистент + визуализация** (backend ∥ web): BACKEND b21∥b22∥b23 ; WEB f15→f16, f17∥f18∥f19 ; TESTS tu-copilot, t-wave4-frontend.
 - **Барьер 4.2 — e2e ассистент** (`skai_7`, `integration`): x7 (GUARD+merge → e2e 4.2 + регресс; **`main` не трогает**).
-- **Волна 4.3 — AI Ops & Trust** (backend ∥ web ∥ tests): BACKEND b25∥b26∥b27 ; WEB f20∥f21 ; TESTS/CI t5∥t6 + per-feature tu-metrics/security/riskbreakdown. Измеримость (#18) + explainability (#19, владелец `b27`) + hardening (#20).
+- **Волна 4.3 — AI Ops & Trust** (backend ∥ web ∥ tests): BACKEND b25∥b26∥b27 ; WEB f20∥f21 + **целостность экранов** f22∥f23∥f24 ; TESTS/CI t5∥t6 + per-feature tu-metrics/security/riskbreakdown. Измеримость (#18) + explainability (#19, владелец `b27`) + hardening (#20) + целостность экранов (нав-сироты/триггер #5/роль-нав).
 - **Барьер 4.3 — финал AI-слоя** (`skai_7`, `integration`): x8 (GUARD+merge → e2e ops/trust + полный регресс Волны 4 + **nightly live-smoke**) → merge в `main`.
 
 > **Заморозка `main` на время волн.** Все коммиты идут в `feat/*` и `integration`; **в `main` напрямую
@@ -302,6 +302,9 @@ flowchart TD
             direction TB
             f20["f20 risk-waterfall (explainability) · 🔵"] -.->|/risk-breakdown| b27
             f21["f21 metrics/data-quality (/metrics) · 🔵"]
+            f22["f22 нав-интегритет (редиректы+бейджи) · 🔵"]
+            f23["f23 триггер DispatchAlert /alert/:id (#5) · 🔵"]
+            f24["f24 роль-согласованный NAV · 🔵"]
         end
         subgraph T43["🪟 Окно 3 · tests/CI — после кода"]
             direction TB
@@ -500,7 +503,7 @@ git **внутри промпта** (`x7` GUARD+merge → e2e 4.2 + регрес
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
 | 1 Backend | `b25`🔵 (метрики/data-quality) ∥ `b26`🔴 (security/audit/throttle/SLO) ∥ `b27`🔵 (`/risk-breakdown`, владелец #19) | `b25`/`b27` регистрируют роутеры `metrics`/`risk_breakdown` в `ALL_ROUTERS`; `b26` — middleware в `main.py` (dev: off) |
-| 2 Web | `f20`🔵 (risk-waterfall ← b27) ∥ `f21`🔵 (`/metrics` панель) | аддит. к IncidentCard/Report; `/metrics` — маршрут из prep `w3-18` |
+| 2 Web | `f20`🔵 (risk-waterfall ← b27) ∥ `f21`🔵 (`/metrics` панель) ; **целостность экранов:** `f22`🔵 (нав-интегритет) ∥ `f23`🔵 (триггер DispatchAlert #5) ∥ `f24`🔵 (роль-NAV) | аддит. к IncidentCard/Report/App.tsx; `/metrics` — из prep `w3-18`; f22/f23/f24 чинят сироты-нав/достижимость #5/роль-нав |
 | 3 Tests/CI | `t5`🟢 (CURRENT_STATUS) ∥ `t6`🔵 (remote CI + nightly live-smoke) ; per-feature `tu-metrics`∥`tu-security`∥`tu-riskbreakdown`🔵 | расширяют каркас `gen_status.py`/`.github/workflows` из prep `w3-19`; unit-паритет с 4.1/4.2 |
 
 ### Барьер 4.3 — финал AI-слоя (основное окно `skai_7`)
