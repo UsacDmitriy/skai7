@@ -191,3 +191,51 @@ class NavProblemVehicle(BaseModel):
     total_gap_duration_sec: int
     reb_link_id: str | None = None  # = public_unit_id; null у unmatched
     in_video_fleet: bool  # plate (норм.) ∈ v_incidents.vehicle_plate
+
+
+# ─────────────────────── fleet-health hub (w3-9, §9.0/§9.6) ─────────────────
+# Объединение disjoint-популяций по нормализованному госномеру: fuel ∪ sensors ∪
+# navigation (view `v_fleet_health`). 17 ТС, 2 из них в видеопарке. Отсутствующий
+# у ТС домен → KPI = null (фронт рендерит «—», не ошибка, §9.5). Клик по строке →
+# самый «богатый» доступный домен (fuel → sensors → REB по `reb_link_id`).
+
+
+class FleetHealthRow(BaseModel):
+    """Строка ростера «Здоровье парка» (§9.6) — одно ТС объединения.
+
+    Флаги `has_*` говорят, в каких доменах ТС присутствует; KPI-поля `null`
+    у отсутствующего домена (рендер «—»). `plate` — чистый госномер (у fuel =
+    собственный `vehicle_id`), `reb_link_id` — UUID для входа в `/api/reb/{id}`.
+    """
+
+    plate: str  # дисплей-госномер (чистый); ключ для /fuel/{plate}, /sensors/{plate}
+    plate_norm: str  # нормализованный ключ объединения (upper, без пробелов)
+    has_fuel: bool
+    has_sensors: bool
+    has_nav: bool
+    fuel_delta_l: float | None = None  # топливо Δ ЗИС−карта (null → нет домена)
+    sensors_gap_can_gps_km: float | None = None  # пробег CAN−GPS (null → нет данных)
+    sensors_online_status: OnlineStatus | None = None  # online/stale/offline
+    nav_gap_count: int | None = None  # число разрывов GPS (null → нет домена)
+    reb_link_id: str | None = None  # = public_unit_id (UUID); вход в /api/reb/{id}
+    in_video_fleet: bool  # plate (норм.) ∈ v_incidents.vehicle_plate
+
+
+class FleetCoverage(BaseModel):
+    """Баннер покрытия (§9.0): размеры популяций по доменам + пересечение с видеопарком.
+
+    Это размеры ИСТОЧНИКОВ (v_fuel/v_sensors/matched-nav), а не строк ростера:
+    напр. `sensors=7`, хотя в объединении 6 (одно ТС без резолва госномера выпало).
+    """
+
+    fuel: int
+    sensors: int
+    navigation: int
+    in_video_fleet: int
+
+
+class FleetHealthResponse(BaseModel):
+    """Ответ `GET /api/fleet-health` (§9.6): баннер покрытия + ростер ТС объединения."""
+
+    coverage: FleetCoverage
+    rows: list[FleetHealthRow] = []
