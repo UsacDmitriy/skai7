@@ -1,7 +1,8 @@
 # b19 · Geozone risk — кластеры + РЭБ-зоны (идея #14)
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.1/§8.3/§8.4. **Владеет:** `api/services/zones_service.py`,
-> `api/sql/32_v_risk_zones.sql`, роутер `api/routers/zones.py` (в `ALL_ROUTERS`).
+> `api/sql/32_v_risk_zones.sql`, роутер `api/routers/zones.py` (автодискавери `api/main.py:_discover_routers` —
+> объяви `router = APIRouter(...)` в своём файле; **НЕ** редактируй общий `api/routers/__init__.py`, иначе гонка с b18/b20).
 > **Модель:** 🔴 Opus — пространственная кластеризация + агрегация двух источников.
 > **Волна 4.1**, окно 1 (backend). Зависит от: b3 (`v_incidents` lat/lon/risk), навигация (`period_type=3`).
 
@@ -33,8 +34,11 @@
 
 ## Коммит (обязательно)
 
-Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**.
+⚠️ **Параллельно с b18/b20 в одном worktree — НЕ `git add -A`**: стейджи только свои файлы
+(иначе коммит подхватит недописанные файлы соседей, как в w3-17/w3-18). Доп. свои файлы — добавь явно.
 
 ```bash
-git add -A && git commit -m "b19: <что сделано>"
+git add api/services/zones_service.py api/sql/32_v_risk_zones.sql api/routers/zones.py
+git commit -m "b19: <что сделано>"
 ```

@@ -1,7 +1,8 @@
 # b20 · Fatigue chain — цепочки усталости (идея #15)
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/fatigue_service.py`,
-> роутер `api/routers/fatigue.py` (в `ALL_ROUTERS`).
+> роутер `api/routers/fatigue.py` (автодискавери `api/main.py:_discover_routers` — объяви `router = APIRouter(...)`
+> в своём файле; **НЕ** редактируй общий `api/routers/__init__.py`, иначе гонка с b18/b19).
 > **Модель:** 🔵 Sonnet — детерминированная темпоральная корреляция; гейт = тесты.
 > **Волна 4.1**, окно 1 (backend). Зависит от: каталог алярмов (`DMS_YAWNING`/`DMS_DROWSY`/harsh-коды), `ts`/plate.
 
@@ -33,8 +34,11 @@
 
 ## Коммит (обязательно)
 
-Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**.
+⚠️ **Параллельно с b18/b19 в одном worktree — НЕ `git add -A`**: стейджи только свои файлы
+(иначе коммит подхватит недописанные файлы соседей, как в w3-17/w3-18). Доп. свои файлы — добавь явно.
 
 ```bash
-git add -A && git commit -m "b20: <что сделано>"
+git add api/services/fatigue_service.py api/routers/fatigue.py
+git commit -m "b20: <что сделано>"
 ```

@@ -32,8 +32,11 @@
 
 ## Коммит (обязательно)
 
-Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**.
+⚠️ Стейджи только свои файлы (**не `git add -A`** — в backend-worktree параллельно идут другие промпты
+Волны 4.1); правка `enrichment.py` — аддитивная, включена сознательно. Доп. свои файлы — добавь явно.
 
 ```bash
-git add -A && git commit -m "b17: <что сделано>"
+git add api/etl/weather_precompute.py api/sql/31_incident_weather.sql data/ai/weather_cache.json api/core/enrichment.py
+git commit -m "b17: <что сделано>"
 ```

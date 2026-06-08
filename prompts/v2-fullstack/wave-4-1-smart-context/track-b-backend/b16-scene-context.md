@@ -36,8 +36,10 @@ VLM-зависимость — **только в `scene_precompute.py`** (лен
 ## Коммит (обязательно)
 
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**; незакоммиченная
-работа в worktree на барьер не попадёт:
+работа в worktree на барьер не попадёт. ⚠️ Стейджи только свои файлы (**не `git add -A`** — в backend-worktree
+параллельно идут другие промпты Волны 4.1); доп. свои файлы — добавь явно.
 
 ```bash
-git add -A && git commit -m "b16: <что сделано>"
+git add api/etl/scene_precompute.py api/sql/30_incident_scene.sql data/ai/scene_labels.json
+git commit -m "b16: <что сделано>"
 ```

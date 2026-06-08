@@ -1,7 +1,8 @@
 # b18 · Risk forecast + рекомендации (идея #12)
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/forecast_service.py`,
-> роутер `api/routers/forecast.py` (в `ALL_ROUTERS`).
+> роутер `api/routers/forecast.py` (автодискавери `api/main.py:_discover_routers` — объяви `router = APIRouter(...)`
+> в своём файле; **НЕ** редактируй общий `api/routers/__init__.py`, иначе гонка с b19/b20).
 > **Модель:** 🔴 Opus — алгоритм прогноза/аномалий + генерация рекомендаций.
 > **Волна 4.1**, окно 1 (backend). Зависит от: enrichment (`events_last_7d`), история алярмов по plate.
 
@@ -37,8 +38,11 @@
 
 ## Коммит (обязательно)
 
-Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
+Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**.
+⚠️ **Параллельно с b19/b20 в одном worktree — НЕ `git add -A`**: стейджи только свои файлы
+(иначе коммит подхватит недописанные файлы соседей, как в w3-17/w3-18). Доп. свои файлы — добавь явно.
 
 ```bash
-git add -A && git commit -m "b18: <что сделано>"
+git add api/services/forecast_service.py api/routers/forecast.py
+git commit -m "b18: <что сделано>"
 ```
