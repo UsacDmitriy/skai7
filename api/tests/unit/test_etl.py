@@ -115,9 +115,9 @@ class TestTablesLoaded:
 
 
 class TestKeyTablesNonEmpty:
-    def test_alarm_catalog_has_14_rows(self, built_db: Path) -> None:
-        # §1: каталог типов аларм — ровно 14 кодов.
-        assert _count(built_db, "alarm_type_catalog") == 14
+    def test_alarm_catalog_has_15_rows(self, built_db: Path) -> None:
+        # §1: каталог типов аларм — 15 кодов (14 + DIAGNOSTIC/CameraOffline, w3-2).
+        assert _count(built_db, "alarm_type_catalog") == 15
 
     def test_alarms_and_videofiles_non_empty(self, built_db: Path) -> None:
         # alarms>0 (54 алярма §1.3); видеофайлы смаплены в таблицу.
@@ -125,8 +125,8 @@ class TestKeyTablesNonEmpty:
         assert _count(built_db, "video_events__video_files") > 0
 
     def test_v_incidents_view_materialized(self, built_db: Path) -> None:
-        # SQL-вью применились в правильном порядке → лента ровно 54 (§1.3).
-        assert _count(built_db, "v_incidents") == 54
+        # SQL-вью применились в правильном порядке → лента 55 (54 видео + 1 no-video seed, §1.3/w3-5).
+        assert _count(built_db, "v_incidents") == 55
 
 
 class TestIdempotency:
@@ -151,5 +151,5 @@ class TestIdempotency:
 
         assert tables_2 == tables_1, "схема изменилась после пересборки"
         # CREATE OR REPLACE / DROP+CREATE → без удвоения строк.
-        assert _count(db_path, "alarm_type_catalog") == catalog_1 == 14
+        assert _count(db_path, "alarm_type_catalog") == catalog_1 == 15
         assert _count(db_path, "video_events__selected_video_alarms") == alarms_1

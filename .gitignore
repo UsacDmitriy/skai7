@@ -21,7 +21,15 @@ __pycache__/
 *.pyo
 .venv/
 .mypy_cache/
+.pytest_cache/
 **/.ipynb_checkpoints/
+
+# Тест-покрытие (артефакты pytest-cov / vitest — не в VCS, гейт x5)
+.coverage
+.coverage.*
+htmlcov/
+coverage/
+web/coverage/
 
 # Tooling / worktrees
 .kilo/

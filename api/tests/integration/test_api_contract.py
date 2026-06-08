@@ -109,19 +109,20 @@ class TestEmptyAndMissingNot500:
         # Реальный инцидент, канал 2: есть файл → 200, нет → 404; никогда 500.
         assert client.get(f"/api/incidents/{first_incident_id}/video/2").status_code in (200, 404)
 
+    @pytest.mark.parametrize("path", ["/api/fuel", "/api/sensors", "/api/navigation"])
+    def test_dark_data_lists_return_200(self, client: TestClient, path: str) -> None:
+        # §9 (w3-6/7/8): домены раскрыты из стаба 501 → список 200, непустой.
+        r = client.get(path)
+        assert r.status_code == 200, r.text
+        assert isinstance(r.json(), list) and r.json()
+
     @pytest.mark.parametrize(
         "path",
-        [
-            "/api/fuel",
-            "/api/fuel/A123BC77",
-            "/api/sensors",
-            "/api/sensors/A123BC77",
-            "/api/navigation",
-            "/api/navigation/A123BC77",
-        ],
+        ["/api/fuel/A123BC77", "/api/sensors/A123BC77", "/api/navigation/A123BC77"],
     )
-    def test_stub_domains_return_501(self, client: TestClient, path: str) -> None:
-        assert client.get(path).status_code == 501
+    def test_dark_data_unknown_plate_404(self, client: TestClient, path: str) -> None:
+        # Неизвестный госномер → детерминированный 404 (НЕ 501/5xx).
+        assert client.get(path).status_code == 404
 
 
 # ---------------------------------------------------------------------------

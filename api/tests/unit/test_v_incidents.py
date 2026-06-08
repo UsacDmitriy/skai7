@@ -1,7 +1,8 @@
 """Unit-покрытие view `v_incidents` (b3) — против `00-CONTRACT.md` §1.3/§3.1.
 
 Читает собранную `data/skai.duckdb` (read-only, `skip` без `make db`). Проверяет
-инвариант 54 инцидента, наличие обязательных полей контракта §3.1 и сохранность
+инвариант 55 инцидентов (54 видео-алярма + 1 seeded no-video, w3-5), наличие
+обязательных полей контракта §3.1 и сохранность
 джойна с `alarm_type_catalog` (нет потери строк / NULL в source/severity для
 известных кодов). Сетка/uvicorn не требуются.
 """
@@ -29,10 +30,11 @@ def _columns(real_db) -> set[str]:
     return {d[0] for d in result.description}
 
 
-def test_v_incidents_has_54_rows(real_db) -> None:
-    # §1.3: ровно 54 инцидента — один на алярм, LEFT JOIN не теряет строк.
+def test_v_incidents_has_55_rows(real_db) -> None:
+    # §1.3: 55 инцидентов = 54 видео-алярма + 1 seeded no-video (CAMERA_TAMPER, w3-5);
+    # один на алярм, LEFT JOIN не теряет строк.
     count = real_db.execute('SELECT count(*) FROM "v_incidents"').fetchone()[0]
-    assert count == 54
+    assert count == 55
 
 
 def test_v_incidents_carries_required_contract_fields(real_db) -> None:
@@ -65,4 +67,4 @@ def test_ids_are_unique(real_db) -> None:
     total, distinct = real_db.execute(
         'SELECT count("id"), count(DISTINCT "id") FROM "v_incidents"'
     ).fetchone()
-    assert total == distinct == 54
+    assert total == distinct == 55
