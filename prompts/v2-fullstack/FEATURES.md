@@ -52,9 +52,9 @@
 | #15 | Цепочки усталости | `FatigueChain` §8.4 (YAWNING→DROWSY→harsh) | b20 (оконная корреляция) | (в копилоте/мониторе) | tu-fatigue | 4.1 | x6 |
 | #16 | Умный вердикт саботажа | `v_sabotage` + §8 кросс-проверка | b23 (verdict_confidence) | f19 sabotage-verdict | t-wave4-frontend | 4.2 | x7 |
 | #17 | AI runtime-governance | флаги/latency/cache §8.6 (`AiFeatureState`) | b24 (флаги/бюджеты/кэш) | (мета во всех AI-блоках) | tu-* (флаг off) | 4.1 | x6 |
-| #18 | Измеримость: метрики + data-quality | `AiMetrics`/`DataQuality` §8.7 (`ai_metric_events`) | b25 (агрегация/события) | f21 metrics/data-quality | t-wave4-frontend | 4.3 | x8 |
-| #19 | Explainability: risk-waterfall | `RiskBreakdown` §8.8 (декомпозиция risk_score) | (детерм. из enrichment) | f20 risk-waterfall | t-wave4-frontend | 4.3 | x8 |
-| #20 | Hardening (foundation) | §8.9: status/CI/security | b26 (auth/audit/throttle) | (—) | t5 (CURRENT_STATUS), t6 (CI+live-smoke) | 4.3 | x8 |
+| #18 | Измеримость: метрики + data-quality | `AiMetrics`/`DataQuality` §8.7 (`ai_metric_events`) | b25 (агрегация/события; продьюсеры f16/f17/f18) | f21 metrics/data-quality | tu-metrics, t-wave4-frontend | 4.3 | x8 |
+| #19 | Explainability: risk-waterfall | `RiskBreakdown` §8.8 (декомпозиция risk_score) | **b27** (`/risk-breakdown` из enrichment) | f20 risk-waterfall | tu-riskbreakdown | 4.3 | x8 |
+| #20 | Hardening (foundation) | §8.9: status/CI/security | b26 (auth/audit/throttle) | (—) | t5 (CURRENT_STATUS), t6 (CI+live-smoke), tu-security | 4.3 | x8 |
 
 > Бэклог/хардненинг, относящийся к фичам: W3-1 (Ticket §7.5 для #6), W3-2 (DIAGNOSTIC для #9-смежного),
 > W3-5 (мёртвая ветка «нет видео» для #1/#4) — см. `wave-3-backlog/`.
@@ -174,7 +174,7 @@
 ### #19 · Explainability: risk-waterfall (4.3, x8)
 - **Depth:** `RiskBreakdown` — вклад severity/speed/night/weather/freq, сумма = `risk_score`; waterfall на карточке/в отчёте.
 - **Edge:** нет `weather_bonus` (без кэша) → вклад 0, не ломается; сумма всегда сходится с API.
-- **Реализация:** `GET /api/incidents/{id}/risk-breakdown` (детерм. из enrichment) + `f20` (`RiskWaterfall`).
+- **Реализация:** `b27` (`GET /api/incidents/{id}/risk-breakdown`, детерм. из enrichment) + `f20` (`RiskWaterfall`).
 - **Tests:** сумма вкладов = risk_score; t-wave4-frontend.
 
 ### #20 · Hardening — foundation (4.3, x8)

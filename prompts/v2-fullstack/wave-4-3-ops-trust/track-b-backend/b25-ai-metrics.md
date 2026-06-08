@@ -19,6 +19,18 @@
   `weather_mismatch_rate`, `zone_hit_rate`, `avg_time_to_triage`, `forecast_coverage`. Детерминированная агрегация.
 - `GET /api/metrics/data-quality` → `DataQuality` (§8.7): `camera_offline_ratio`, `missing_gps_ratio`,
   `missing_media_ratio`, `weather_mismatch_rate`, `incidents_with_video_ratio` — из `v_incidents`/`incident_*`.
+- **Эмиттер событий** `POST /api/metrics/event` (или тонкий `track_event(name, payload)`), которым пишут продьюсеры.
+
+## Продьюсеры событий `ai_metric_events` (трассировка — иначе метрики пустые)
+
+| Событие | Кто эмитит | KPI |
+|---|---|---|
+| `recommendation_shown` / `recommendation_accepted` | `f16` (рекомендации в отчёте) | `recommendation_acceptance` |
+| `copilot_tool_called` / `copilot_tool_success` | `b21`/`f17` (копилот) | `copilot_tool_success` |
+| `zone_opened` | `f18` (heatmap/зоны) | `zone_hit_rate` |
+| `weather_mismatch` | `b17` (кросс-проверка) | `weather_mismatch_rate` |
+
+> Каждый продьюсер вызывает эмиттер b25 (в своём `## Check` добавлена строка про emit). Без сети — no-op (флаг).
 
 ## Check
 

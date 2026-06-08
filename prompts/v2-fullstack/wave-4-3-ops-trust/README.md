@@ -10,9 +10,9 @@
 
 | Окно | Промпты | Модель |
 |---|---|---|
-| 1 Backend | `b25` ai-metrics + data-quality (`/metrics/*`, `ai_metric_events`) ∥ `b26` security-baseline (auth/audit/throttle, SLO) | b25 🔵 · b26 🔴 |
-| 2 Web | `f20` risk-waterfall (explainability, `/risk-breakdown`) ∥ `f21` metrics + data-quality панель (`/metrics`) | 🔵 Sonnet |
-| 3 Tests/CI | `t5` CURRENT_STATUS (анти-дрейф) ∥ `t6` remote CI + nightly live-smoke | t5 🟢 · t6 🔵 |
+| 1 Backend | `b25` ai-metrics + data-quality (`/metrics/*`, `ai_metric_events`) ∥ `b26` security-baseline (auth/audit/throttle, SLO) ∥ `b27` risk-breakdown (`/risk-breakdown`, владелец #19) | b25/b27 🔵 · b26 🔴 |
+| 2 Web | `f20` risk-waterfall (explainability, `/risk-breakdown` ← b27) ∥ `f21` metrics + data-quality панель (`/metrics`) | 🔵 Sonnet |
+| 3 Tests/CI | `t5` CURRENT_STATUS ∥ `t6` remote CI + nightly live-smoke ; **per-feature:** `tu-metrics` (b25) ∥ `tu-security` (b26) ∥ `tu-riskbreakdown` (b27) | t5 🟢 · остальные 🔵 |
 
 > **Зависит от подготовки Волны 3** (`wave-3-backlog/` w3-16…w3-19): `ai_metric_events` DDL, типы/клиент/
 > фикстуры (§8.7/§8.8), маршрут `/metrics`, каркас `.github/workflows/` + `scripts/gen_status.py`.
