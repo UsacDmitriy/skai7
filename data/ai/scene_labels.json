@@ -1,0 +1,548 @@
+{
+  "_comment": "placeholder Волны 3 (w3-16); b16 перезаписывает реальными VLM-метками сцены.",
+  "schema_ref": "00-CONTRACT.md §8.1 incident_scene",
+  "source": "placeholder",
+  "count": 54,
+  "records": [
+    {
+      "id": "03012ab5-5dcd-4f30-bbfa-5ce12499e4ea",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "05977363-5b3f-4bd0-8a62-401d7a84be17",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "0605028d-a8f9-4237-a9dd-c5d0b70d10cd",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "106c40d5-ee6a-4691-a97a-9762c7f34c02",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "11118a13-d10a-4428-8cdd-f8d7f6ce0698",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "122f8e75-9edf-4db8-839e-5de6b29bd45b",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "155a16a0-ca5e-4313-9369-56288624ccb5",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "15ffa66e-56c3-46fe-a527-618ea12c2396",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "16d48e1f-1d6f-41c7-9ed5-0a87713f329c",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "1c4e15ff-ff19-4531-b8a4-5c71ec49fe5c",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "283481ec-2f86-482d-a2fc-ee0914996e48",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "2b23bea5-0647-4428-b64e-4a99f8304f3f",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "2da126f5-3f48-43ba-b2cd-9307ea09d400",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "3059d92e-c668-4c58-b3dd-3326e1cd6a45",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "395a269d-0a57-4a4a-857c-14a7d759b99b",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "439e3dfb-d41c-476f-a05d-5f062783d2f9",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "46b542d1-1ba3-4997-9496-9f0859a9bc30",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "4e86f67f-340f-4db7-9972-b8e5646a9668",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "511a8d67-242b-4b5f-9d21-e059645a2413",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "5546a06a-ab16-459d-82ba-70425646833d",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "56afc372-b79a-45b5-9207-1b8dd08e5b81",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "661adc32-0b32-490b-836e-6b1f0da537cf",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "69050c45-57a5-4b8c-be5a-54454372e1e3",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "6e0414ee-ac4c-4278-a129-afbc076aa99a",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "6f4471aa-fd1b-4329-874b-461f03900242",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "6f7ba1fa-dbe7-4096-bb1d-1b01bf7b5eb0",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "725866bd-9c81-45ec-a06f-bdf08df3a79d",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "7b8f3a75-9fe0-4b2b-a374-bc74e30f50c3",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "7dc1110a-8f27-4cac-9d68-b6b602f346ca",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "812df409-161d-4c62-a07b-109361709897",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "9cf96b29-9309-4bf4-9c4f-fdf847e196f6",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "9fe2f146-bc90-4ebf-a7e2-e61ebb951caa",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "a9e4a086-c515-4a63-8722-55f6f04fcf81",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "b569370b-2c25-410b-b6df-b1f13d81bf84",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "b855d68a-fb90-4b80-b7ed-16616fee9b9f",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "ba9fb320-7c41-4927-bd38-5b13becd6132",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "bde0d4a2-7c10-423d-84de-60004aa50424",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "bf9206f7-2c08-463c-98b4-53063acd50bd",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "c9d7216b-0959-495b-ba1e-8ee32d6d4cc7",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "c9d92123-62f0-4237-9150-a57624b10b93",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "cf91b784-1798-4008-8acd-760eb8d365e7",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "cfc131e6-dc1f-4809-9b97-60b5b972b1ce",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "d2379587-3189-4903-916e-8352459c03f1",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "d7765ece-003f-438d-b049-85351219180a",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "dc1f8142-055c-4e4f-84e9-56020c16a753",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "e51a3984-2706-4972-b850-d424435dcd11",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "e61bb6ff-ea0b-49ae-a11d-27b58519b9e9",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "e7652db8-5f43-41de-a26b-6f4ad25fc476",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "ea559499-85da-46f3-8990-f9bd43ee96ac",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "ee809241-e908-4c1a-ac5d-58f6b1da36be",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "f0d04637-7cb1-43f4-a861-9096b78f9a5a",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "f7e5afe2-5257-4edf-86cc-2c5648c84e5b",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "fa338699-3b21-4a41-a384-4b0fdf7f23d0",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    },
+    {
+      "id": "faa082b1-d234-4c17-b12f-95e16335b1cf",
+      "weather": "unknown",
+      "day_night": "night",
+      "road_surface": "unknown",
+      "area": "unknown",
+      "visibility": "unknown",
+      "scene_confidence": 0.0,
+      "source": "placeholder"
+    }
+  ]
+}

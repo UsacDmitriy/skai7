@@ -7,5 +7,7 @@ pandas
 python-multipart        # multipart/form-data для POST /reports/transcribe (b8)
 faster-whisper          # STT-движок (lazy import + fallback в stt_service, b8)
 groq                    # NLU-движок (lazy import + regex-fallback в nlu_service, b9)
+scikit-learn            # lazy: DBSCAN зон (b19) / IsolationForest (b18) — используется при наличии данных, иначе fallback
+statsmodels             # lazy: ARIMA-ветка прогноза (b18) — мёртвая на этих данных, импорт не должен падать (иначе fallback)
 pytest
 httpx        # для тестов TestClient
