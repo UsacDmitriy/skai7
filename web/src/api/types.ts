@@ -350,3 +350,200 @@ export interface IncidentFilters {
 
 /** Каналы видео для `GET /incidents/{id}/video/{channel}`. */
 export type VideoChannel = 1 | 2 | 3 | 5
+
+// ── Волна 3 · тёмные данные fuel / sensors / navigation / fleet-health (§9.2) ──
+// Аддитивно. Поля/типы 1:1 со схемами контракта §9.2 (провенанс колонок — там же).
+// Эти типы использует только w3-10 (api-слой); экраны w3-11/w3-13 импортируют отсюда.
+
+/** Худший статус топливной сверки по ТС (§9.2 fuel). */
+export type FuelReconStatus = 'matched' | 'review' | 'missing_sensor_event'
+
+/** Состояние сенсорной телеметрии (§9.2 sensors). NULL last_valid_nav → `stale`, не падение. */
+export type SensorOnlineStatus = 'online' | 'stale' | 'offline'
+
+/** Сматчен ли навигационный ТС со справочником (§9.2 navigation). */
+export type NavMatchStatus = 'matched' | 'unmatched'
+
+// fuel (из fuel__fuel_vehicles / fuel_summary / fuel_reconciliation / fuel_events)
+
+/** Ответ `GET /api/fuel` (10 ТС). */
+export interface FuelVehicleSummary {
+  vehicle_id: string
+  model: string
+  vin: string
+  /** headline KPI: объём по ЗИС-датчику. */
+  fuel_volume_zis_l: number
+  /** headline KPI: объём по топливным картам. */
+  fuel_volume_card_l: number
+  /** headline KPI: Δ ЗИС−карта (л). */
+  volume_delta_zis_minus_card_l: number
+  refuel_count_zis: number
+  transaction_count_card: number
+  period_start: string
+  period_end: string
+  recon_status: FuelReconStatus
+}
+
+/** Строка сверки транзакция-карта ↔ событие-датчик (`reconciliation`). */
+export interface FuelReconRow {
+  row_id: string
+  transaction_ts: string | null
+  event_ts: string | null
+  transaction_volume_l: number | null
+  sensor_volume_l: number | null
+  volume_delta_l: number | null
+  time_delta_min: number | null
+  amount_rub: number | null
+  status: string
+  reason: string | null
+}
+
+/** Событие топливного датчика (заправка/слив). */
+export interface FuelEvent {
+  event_id: string
+  event_ts: string
+  event_name: string
+  volume_l: number
+  before_l: number | null
+  after_l: number | null
+  lat: number | null
+  lon: number | null
+  address: string | null
+}
+
+/** Сводка карточки топлива (`fuel__fuel_summary`). */
+export interface FuelCardSummary {
+  fuel_spent_l: number
+  total_mileage_km: number
+  average_consumption_l_per_100km: number
+  average_speed_kmh: number
+  fuelings_count: number
+  defuelings_count: number
+}
+
+/** Ответ `GET /api/fuel/{plate}` (404 при неизв. ТС). */
+export interface FuelVehicleCard extends FuelVehicleSummary {
+  summary: FuelCardSummary
+  reconciliation: FuelReconRow[]
+  events: FuelEvent[]
+}
+
+// sensors (из sensors__mileage_and_speed / online_snapshot / daily_mileage / engine_statistics / fuel_level_summary / sensor_catalog)
+
+/** Ответ `GET /api/sensors` (7 ТС). */
+export interface SensorVehicleSummary {
+  public_unit_id: string
+  vehicle_label: string
+  plate: string | null
+  gps_total_distance_km: number
+  distance_odometer_km: number
+  /** CAN−GPS KPI; null → «нет данных» (не 0). */
+  distance_gap_odometer_minus_gps_km: number | null
+  max_speed_kmh: number
+  average_speed_kmh: number
+  satellite_amount: number
+  online_status: SensorOnlineStatus
+  sensor_count: number
+}
+
+/** Точка дневного пробега → спарклайн (ровно 7/ТС, НЕ сырые graph_points). */
+export interface SensorDailyPoint {
+  date: string
+  distance_km: number
+}
+
+/** Статистика двигателя (`engine_statistics`). */
+export interface SensorEngineStats {
+  first_ignition_on: string
+  last_ignition_off: string
+  ignition_duration: string
+  idle_duration: string
+}
+
+/** Сводка уровня топлива (`fuel_level_summary`). */
+export interface SensorFuelLevel {
+  first_fuel_level: number
+  last_fuel_level: number
+  delta_fuel_level: number
+}
+
+/** Снимок последнего online-состояния (`online_snapshot`). */
+export interface SensorSnapshot {
+  speed_kmh: number
+  fuel_volume: number
+  satellite_amount: number
+  timestamp_utc: string
+  last_valid_navigation_timestamp: string | null
+  odometer_mileage: number
+  longitude: number
+  latitude: number
+}
+
+/** Ответ `GET /api/sensors/{plate}` (404). */
+export interface SensorVehicleCard extends SensorVehicleSummary {
+  daily_mileage: SensorDailyPoint[]
+  engine: SensorEngineStats
+  fuel_level: SensorFuelLevel
+  snapshot: SensorSnapshot
+}
+
+// navigation (из navigation__navigation_problem_vehicles / track_periods)
+
+/** Элемент `GET /api/navigation` (5–6) и ответ `GET /api/navigation/{plate}` (404). */
+export interface NavProblemVehicle {
+  public_unit_id: string | null
+  plate: string | null
+  vehicle_label: string | null
+  brand: string | null
+  /** Человеческая «история» проблемы (free text). */
+  problem_description: string
+  match_status: NavMatchStatus
+  /** gap = period_type=3. */
+  gap_count: number
+  total_periods: number
+  total_gap_duration_sec: number
+  /** = public_unit_id; null у unmatched → строка не кликабельна в РЭБ. */
+  reb_link_id: string | null
+  /** plate ∈ v_incidents.vehicle_plate (норм.). */
+  in_video_fleet: boolean
+}
+
+// fleet-health (объединение ТС по нормализованному госномеру, §9.3 28_v_fleet_health)
+
+/** Баннер покрытия (disjoint-популяции, §9.0). */
+export interface FleetHealthCoverage {
+  fuel: number
+  sensors: number
+  navigation: number
+  in_video_fleet: number
+}
+
+/** Строка хаба «Здоровье парка» = одно ТС объединения; отсутствующий домен → `null` («—»). */
+export interface FleetHealthRow {
+  /** Нормализованный госномер — ключ объединения и навигации (fuel/sensor по plate). */
+  plate: string
+  /** Человекочитаемое имя/модель ТС для колонки «ТС». */
+  vehicle_label: string | null
+  /** plate ∈ видеопарк (ровно 2 строки). */
+  in_video_fleet: boolean
+  /** Флаги наличия домена — выбор «самого богатого» при клике (fuel→sensor→reb). */
+  has_fuel: boolean
+  has_sensors: boolean
+  has_nav: boolean
+  /** Топливо: Δ ЗИС−карта (л); null → нет домена. */
+  volume_delta_zis_minus_card_l: number | null
+  recon_status: FuelReconStatus | null
+  /** Сенсоры: CAN−GPS разрыв (км); null → нет домена/нет данных. */
+  distance_gap_odometer_minus_gps_km: number | null
+  online_status: SensorOnlineStatus | null
+  /** Навигация: число gap-периодов; null → нет домена. */
+  gap_count: number | null
+  /** Навигация: id для `/reb/:id`; null → нет домена/unmatched. */
+  reb_link_id: string | null
+}
+
+/** Ответ `GET /api/fleet-health`. */
+export interface FleetHealthResponse {
+  coverage: FleetHealthCoverage
+  rows: FleetHealthRow[]
+}

@@ -7,24 +7,39 @@
  */
 import {
   DRIVER_REPORT,
+  FLEET_HEALTH,
   FLEET_REPORT,
+  FUEL_VEHICLES,
+  NAV_PROBLEMS,
   SABOTAGE_EVENTS,
+  SENSOR_VEHICLES,
   TICKETS,
   VEHICLES,
+  VEHICLE_REPORT,
+  getFixtureFuel,
   getFixtureIncident,
+  getFixtureNavProblem,
+  getFixtureReb,
+  getFixtureSensor,
   getFixtureTrip,
   listFixtureIncidents,
 } from './fixtures'
 import type {
   Action,
   DriverReport,
+  FleetHealthResponse,
   FleetReport,
+  FuelVehicleCard,
+  FuelVehicleSummary,
   IncidentDetail,
   IncidentFilters,
   IncidentSummary,
+  NavProblemVehicle,
   QueryResult,
   RebRecovery,
   SabotageEvent,
+  SensorVehicleCard,
+  SensorVehicleSummary,
   TelemetryPoint,
   Ticket,
   Transcription,
@@ -161,6 +176,8 @@ export function fleetReport(view?: 'drivers' | 'vehicles'): Promise<FleetReport>
 }
 
 export function getVehicleReport(plate: string): Promise<VehicleReport> {
+  // Fix (w3-10): раньше в фикстур-режиме уходил в сеть → демо-сирота.
+  if (USE_FIXTURES) return Promise.resolve(VEHICLE_REPORT)
   return request<VehicleReport>(`/reports/vehicle/${encodeURIComponent(plate)}`)
 }
 
@@ -198,10 +215,69 @@ export function getTrip(id: string): Promise<TripDossier> {
 }
 
 export function getReb(id: string): Promise<RebRecovery> {
+  // Fix (w3-10): раньше в фикстур-режиме уходил в сеть → демо-сирота.
+  if (USE_FIXTURES) {
+    const reb = getFixtureReb(id)
+    return reb
+      ? Promise.resolve(reb)
+      : Promise.reject(new ApiError(404, `REB ${id} not found`))
+  }
   return request<RebRecovery>(`/reb/${encodeURIComponent(id)}`)
 }
 
 export function getSabotage(): Promise<SabotageEvent[]> {
   if (USE_FIXTURES) return Promise.resolve(SABOTAGE_EVENTS)
   return request<SabotageEvent[]>('/sabotage')
+}
+
+// ── Волна 3 · тёмные данные fuel / sensors / navigation / fleet-health (§9.1) ──
+
+export function listFuel(): Promise<FuelVehicleSummary[]> {
+  if (USE_FIXTURES) return Promise.resolve(FUEL_VEHICLES)
+  return request<FuelVehicleSummary[]>('/fuel')
+}
+
+export function getFuel(plate: string): Promise<FuelVehicleCard> {
+  if (USE_FIXTURES) {
+    const card = getFixtureFuel(plate)
+    return card
+      ? Promise.resolve(card)
+      : Promise.reject(new ApiError(404, `Vehicle ${plate} not found`))
+  }
+  return request<FuelVehicleCard>(`/fuel/${encodeURIComponent(plate)}`)
+}
+
+export function listSensors(): Promise<SensorVehicleSummary[]> {
+  if (USE_FIXTURES) return Promise.resolve(SENSOR_VEHICLES)
+  return request<SensorVehicleSummary[]>('/sensors')
+}
+
+export function getSensors(plate: string): Promise<SensorVehicleCard> {
+  if (USE_FIXTURES) {
+    const card = getFixtureSensor(plate)
+    return card
+      ? Promise.resolve(card)
+      : Promise.reject(new ApiError(404, `Vehicle ${plate} not found`))
+  }
+  return request<SensorVehicleCard>(`/sensors/${encodeURIComponent(plate)}`)
+}
+
+export function listNavProblems(): Promise<NavProblemVehicle[]> {
+  if (USE_FIXTURES) return Promise.resolve(NAV_PROBLEMS)
+  return request<NavProblemVehicle[]>('/navigation')
+}
+
+export function getNavProblem(plate: string): Promise<NavProblemVehicle> {
+  if (USE_FIXTURES) {
+    const row = getFixtureNavProblem(plate)
+    return row
+      ? Promise.resolve(row)
+      : Promise.reject(new ApiError(404, `Vehicle ${plate} not found`))
+  }
+  return request<NavProblemVehicle>(`/navigation/${encodeURIComponent(plate)}`)
+}
+
+export function getFleetHealth(): Promise<FleetHealthResponse> {
+  if (USE_FIXTURES) return Promise.resolve(FLEET_HEALTH)
+  return request<FleetHealthResponse>('/fleet-health')
 }

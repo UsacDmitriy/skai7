@@ -11,13 +11,21 @@
  */
 import type {
   DriverReport,
+  FleetHealthResponse,
   FleetReport,
+  FuelVehicleCard,
+  FuelVehicleSummary,
   IncidentDetail,
   IncidentFilters,
   IncidentSummary,
+  NavProblemVehicle,
+  RebRecovery,
   SabotageEvent,
+  SensorVehicleCard,
+  SensorVehicleSummary,
   Ticket,
   TripDossier,
+  VehicleReport,
   VehicleSummary,
 } from './types'
 
@@ -695,4 +703,509 @@ export function listFixtureIncidents(
   const offset = filters?.offset ?? 0
   const limit = filters?.limit ?? 100
   return rows.slice(offset, offset + limit)
+}
+
+// ── Отчёт по ТС (§7.5 VehicleReport, идея #2 В-3) ──────────────────────────────
+// Закрывает дыру: getVehicleReport раньше шёл в сеть и в фикстур-режиме (демо-сирота).
+
+/** GET /reports/vehicle/{plate} — карточка ТС А777ВВ 77 (len(cameras)=3, §7.5). */
+export const VEHICLE_REPORT: VehicleReport = {
+  plate: 'А777ВВ 77',
+  vehicle_model: 'ГАЗон NEXT',
+  risk_score: 97,
+  cameras: [
+    { id: 'CAM-01', label: 'ADAS · Передняя', status: 'online', hasVideo: true, offline_from: null, offline_to: null },
+    { id: 'CAM-02', label: 'DMS · Салон', status: 'online', hasVideo: true, offline_from: null, offline_to: null },
+    { id: 'CAM-03', label: 'CH3 · Правая', status: 'offline', hasVideo: false, offline_from: '2026-04-01T19:10:00', offline_to: null },
+  ],
+  drivers: [
+    { driver_id: 'DRV-2841', driver_name: 'Иванов Алексей Петрович', role: 'main', trips: 14, safety_score: 41, risk_score: 97 },
+    { driver_id: 'DRV-2902', driver_name: 'Морозов Сергей Иванович', role: 'secondary', trips: 3, safety_score: 71, risk_score: 38 },
+  ],
+  period: DEMO_PERIOD,
+  period_alarms: [
+    { id: 'inc-001', ts: '2026-04-02T00:36:43', alarm_code: 'DMS_DROWSY', alarm_label_ru: 'Засыпание за рулём (микросон)', source: 'DMS', severity: 'critical', is_gross: true },
+    { id: 'inc-006', ts: '2026-04-01T22:10:00', alarm_code: 'OVERSPEED', alarm_label_ru: 'Превышение скорости', source: 'TELEMATICS', severity: 'high', is_gross: true },
+  ],
+  mileage_km: 4520.5,
+  trips: 14,
+}
+
+// ── Волна 3 · тёмные данные (fuel / sensors / navigation / fleet-health, §9) ───
+// Реалистичные значения (числа сходятся), без Date.now(). 2–3 реальных госномера
+// на домен. Госномера резолвятся с нормализацией (strip пробелов + upper, §9.1).
+
+/** Нормализация госномера для lookup (strip пробелов + upper, как в §9.1). */
+function normPlate(plate: string): string {
+  return plate.replace(/\s+/g, '').toUpperCase()
+}
+
+// fuel (10 ТС в покрытии; здесь 2 реальных). Карточки — источник, summary — проекция.
+const FUEL_CARD_LIST: FuelVehicleCard[] = [
+  {
+    // А144ЕВ193 — пример из w3-10: ЗИС > карта на 22.5 л (>4 л → severity), статус review.
+    vehicle_id: 'А144ЕВ193',
+    model: 'КамАЗ-65115',
+    vin: 'XTC651150P1234567',
+    fuel_volume_zis_l: 820.5,
+    fuel_volume_card_l: 798.0,
+    volume_delta_zis_minus_card_l: 22.5,
+    refuel_count_zis: 12,
+    transaction_count_card: 11,
+    period_start: '2026-03-01',
+    period_end: '2026-03-31',
+    recon_status: 'review',
+    summary: {
+      fuel_spent_l: 796.0,
+      total_mileage_km: 2840.0,
+      average_consumption_l_per_100km: 28.0, // 796 / 2840 * 100
+      average_speed_kmh: 42.5,
+      fuelings_count: 12,
+      defuelings_count: 2,
+    },
+    reconciliation: [
+      {
+        row_id: 'fr-144-01',
+        transaction_ts: '2026-03-04T08:12:00',
+        event_ts: '2026-03-04T08:15:00',
+        transaction_volume_l: 60.0,
+        sensor_volume_l: 60.0,
+        volume_delta_l: 0.0,
+        time_delta_min: 3.0,
+        amount_rub: 4200.0,
+        status: 'matched',
+        reason: null,
+      },
+      {
+        row_id: 'fr-144-02',
+        transaction_ts: '2026-03-12T19:40:00',
+        event_ts: '2026-03-12T20:08:00',
+        transaction_volume_l: 70.0,
+        sensor_volume_l: 47.5,
+        volume_delta_l: 22.5,
+        time_delta_min: 28.0,
+        amount_rub: 4900.0,
+        status: 'review',
+        reason: 'Расхождение объёма >20 л и времени >25 мин',
+      },
+      {
+        row_id: 'fr-144-03',
+        transaction_ts: '2026-03-20T07:05:00',
+        event_ts: null,
+        transaction_volume_l: 55.0,
+        sensor_volume_l: null,
+        volume_delta_l: null,
+        time_delta_min: null,
+        amount_rub: 3850.0,
+        status: 'missing_sensor_event',
+        reason: 'Транзакция по карте без события датчика',
+      },
+    ],
+    events: [
+      {
+        event_id: 'fe-144-01',
+        event_ts: '2026-03-04T08:15:00',
+        event_name: 'Заправка',
+        volume_l: 60.0,
+        before_l: 18.0,
+        after_l: 78.0,
+        lat: 45.0355,
+        lon: 38.975,
+        address: 'Краснодар, ул. Новороссийская, 2',
+      },
+      {
+        event_id: 'fe-144-02',
+        event_ts: '2026-03-18T02:40:00',
+        event_name: 'Слив',
+        volume_l: -45.0,
+        before_l: 70.0,
+        after_l: 25.0,
+        lat: 45.12,
+        lon: 39.02,
+        address: null,
+      },
+    ],
+  },
+  {
+    // Т218НА123 — сверка чистая (Δ 1.1 л), статус matched.
+    vehicle_id: 'Т218НА123',
+    model: 'ГАЗ-3309',
+    vin: 'X9633090P0456712',
+    fuel_volume_zis_l: 540.0,
+    fuel_volume_card_l: 538.9,
+    volume_delta_zis_minus_card_l: 1.1,
+    refuel_count_zis: 8,
+    transaction_count_card: 8,
+    period_start: '2026-03-01',
+    period_end: '2026-03-31',
+    recon_status: 'matched',
+    summary: {
+      fuel_spent_l: 539.0,
+      total_mileage_km: 2160.0,
+      average_consumption_l_per_100km: 25.0, // 539 / 2160 * 100 ≈ 24.95
+      average_speed_kmh: 38.0,
+      fuelings_count: 8,
+      defuelings_count: 0,
+    },
+    reconciliation: [
+      {
+        row_id: 'fr-218-01',
+        transaction_ts: '2026-03-06T09:20:00',
+        event_ts: '2026-03-06T09:22:00',
+        transaction_volume_l: 65.0,
+        sensor_volume_l: 64.5,
+        volume_delta_l: 0.5,
+        time_delta_min: 2.0,
+        amount_rub: 4550.0,
+        status: 'matched',
+        reason: null,
+      },
+    ],
+    events: [
+      {
+        event_id: 'fe-218-01',
+        event_ts: '2026-03-06T09:22:00',
+        event_name: 'Заправка',
+        volume_l: 65.0,
+        before_l: 12.0,
+        after_l: 77.0,
+        lat: 51.66,
+        lon: 39.2,
+        address: 'Воронеж, Московский пр-т, 144',
+      },
+    ],
+  },
+]
+
+/** Карточки топлива по нормализованному госномеру (GET /api/fuel/{plate}). */
+export const FUEL_CARDS: Record<string, FuelVehicleCard> = Object.fromEntries(
+  FUEL_CARD_LIST.map((c) => [normPlate(c.vehicle_id), c]),
+)
+
+/** Проекция FuelVehicleCard → FuelVehicleSummary (поля ленты §9.2). */
+function toFuelSummary(c: FuelVehicleCard): FuelVehicleSummary {
+  return {
+    vehicle_id: c.vehicle_id,
+    model: c.model,
+    vin: c.vin,
+    fuel_volume_zis_l: c.fuel_volume_zis_l,
+    fuel_volume_card_l: c.fuel_volume_card_l,
+    volume_delta_zis_minus_card_l: c.volume_delta_zis_minus_card_l,
+    refuel_count_zis: c.refuel_count_zis,
+    transaction_count_card: c.transaction_count_card,
+    period_start: c.period_start,
+    period_end: c.period_end,
+    recon_status: c.recon_status,
+  }
+}
+
+/** Список топлива (GET /api/fuel). */
+export const FUEL_VEHICLES: FuelVehicleSummary[] = FUEL_CARD_LIST.map(toFuelSummary)
+
+/** Карточка топлива по госномеру или undefined (→ 404). */
+export function getFixtureFuel(plate: string): FuelVehicleCard | undefined {
+  return FUEL_CARDS[normPlate(plate)]
+}
+
+// sensors (7 ТС в покрытии; здесь 2 реальных: online с разрывом + stale без данных).
+const SENSOR_CARD_LIST: SensorVehicleCard[] = [
+  {
+    // Т671КР31 — пример из w3-10: CAN−GPS разрыв 540 км (1840 − 1300).
+    public_unit_id: 'd3b07384-d9a0-4c9b-8f21-2a7c0e9f5a10',
+    vehicle_label: 'КамАЗ-43118 · Т671КР31',
+    plate: 'Т671КР31',
+    gps_total_distance_km: 1300.0,
+    distance_odometer_km: 1840.0,
+    distance_gap_odometer_minus_gps_km: 540.0,
+    max_speed_kmh: 92.0,
+    average_speed_kmh: 38.0,
+    satellite_amount: 14,
+    online_status: 'online',
+    sensor_count: 6,
+    daily_mileage: [
+      { date: '2026-03-25', distance_km: 240.0 },
+      { date: '2026-03-26', distance_km: 310.0 },
+      { date: '2026-03-27', distance_km: 180.0 },
+      { date: '2026-03-28', distance_km: 0.0 },
+      { date: '2026-03-29', distance_km: 270.0 },
+      { date: '2026-03-30', distance_km: 195.0 },
+      { date: '2026-03-31', distance_km: 105.0 },
+    ],
+    engine: {
+      first_ignition_on: '2026-03-31T05:12:00',
+      last_ignition_off: '2026-03-31T19:48:00',
+      ignition_duration: '14:36:00',
+      idle_duration: '02:10:00',
+    },
+    fuel_level: { first_fuel_level: 210.0, last_fuel_level: 160.0, delta_fuel_level: -50.0 },
+    snapshot: {
+      speed_kmh: 0.0,
+      fuel_volume: 160.0,
+      satellite_amount: 12,
+      timestamp_utc: '2026-03-31T19:48:30',
+      last_valid_navigation_timestamp: '2026-03-31T19:30:00',
+      odometer_mileage: 1840.0,
+      longitude: 39.72,
+      latitude: 47.22,
+    },
+  },
+  {
+    // Х905ОР37 — stale (last_valid_nav = null), CAN−GPS разрыв отсутствует («нет данных»).
+    public_unit_id: 'a47f1c20-6b8e-4d3a-9e15-3c0d8b2f6e44',
+    vehicle_label: 'ГАЗ-3309 · Х905ОР37',
+    plate: 'Х905ОР37',
+    gps_total_distance_km: 410.0,
+    distance_odometer_km: 425.0,
+    distance_gap_odometer_minus_gps_km: null, // нет CAN−GPS данных → «нет данных», не 0
+    max_speed_kmh: 78.0,
+    average_speed_kmh: 31.5,
+    satellite_amount: 9,
+    online_status: 'stale',
+    sensor_count: 4,
+    daily_mileage: [
+      { date: '2026-03-25', distance_km: 70.0 },
+      { date: '2026-03-26', distance_km: 55.0 },
+      { date: '2026-03-27', distance_km: 90.0 },
+      { date: '2026-03-28', distance_km: 60.0 },
+      { date: '2026-03-29', distance_km: 45.0 },
+      { date: '2026-03-30', distance_km: 50.0 },
+      { date: '2026-03-31', distance_km: 40.0 },
+    ],
+    engine: {
+      first_ignition_on: '2026-03-31T06:40:00',
+      last_ignition_off: '2026-03-31T15:20:00',
+      ignition_duration: '08:40:00',
+      idle_duration: '01:05:00',
+    },
+    fuel_level: { first_fuel_level: 95.0, last_fuel_level: 80.0, delta_fuel_level: -15.0 },
+    snapshot: {
+      speed_kmh: 0.0,
+      fuel_volume: 80.0,
+      satellite_amount: 6,
+      timestamp_utc: '2026-03-31T15:20:10',
+      last_valid_navigation_timestamp: null, // → online_status = stale (§9.3/§9.5)
+      odometer_mileage: 425.0,
+      longitude: 44.52,
+      latitude: 48.71,
+    },
+  },
+]
+
+/** Карточки сенсоров по нормализованному госномеру (GET /api/sensors/{plate}). */
+export const SENSOR_CARDS: Record<string, SensorVehicleCard> = Object.fromEntries(
+  SENSOR_CARD_LIST.filter((c) => c.plate).map((c) => [normPlate(c.plate as string), c]),
+)
+
+/** Проекция SensorVehicleCard → SensorVehicleSummary (поля ленты §9.2). */
+function toSensorSummary(c: SensorVehicleCard): SensorVehicleSummary {
+  return {
+    public_unit_id: c.public_unit_id,
+    vehicle_label: c.vehicle_label,
+    plate: c.plate,
+    gps_total_distance_km: c.gps_total_distance_km,
+    distance_odometer_km: c.distance_odometer_km,
+    distance_gap_odometer_minus_gps_km: c.distance_gap_odometer_minus_gps_km,
+    max_speed_kmh: c.max_speed_kmh,
+    average_speed_kmh: c.average_speed_kmh,
+    satellite_amount: c.satellite_amount,
+    online_status: c.online_status,
+    sensor_count: c.sensor_count,
+  }
+}
+
+/** Список сенсоров (GET /api/sensors). */
+export const SENSOR_VEHICLES: SensorVehicleSummary[] = SENSOR_CARD_LIST.map(toSensorSummary)
+
+/** Карточка сенсоров по госномеру или undefined (→ 404). */
+export function getFixtureSensor(plate: string): SensorVehicleCard | undefined {
+  return SENSOR_CARDS[normPlate(plate)]
+}
+
+// navigation (5 ТС в покрытии; здесь 2 matched в видеопарке + 1 unmatched).
+// reb_link_id = public_unit_id; unmatched → reb_link_id = null (не кликабельно).
+const NAV_REB_O802 = 'a1f0c2d4-7b3e-4e21-9c8a-0d5e6f701234'
+const NAV_REB_S725 = 'b2e1d3c5-8c4f-4f32-ad9b-1e6f70812345'
+
+/** Список проблемных треков (GET /api/navigation). */
+export const NAV_PROBLEMS: NavProblemVehicle[] = [
+  {
+    public_unit_id: NAV_REB_O802,
+    plate: 'О802УЕ198',
+    vehicle_label: 'МАЗ-6312 · О802УЕ198',
+    brand: 'МАЗ',
+    problem_description:
+      'Систематическая потеря GPS на участке трассы М-4: 4 разрыва за смену, суммарно ~1.5 ч без сигнала.',
+    match_status: 'matched',
+    gap_count: 4,
+    total_periods: 11,
+    total_gap_duration_sec: 5400,
+    reb_link_id: NAV_REB_O802,
+    in_video_fleet: true,
+  },
+  {
+    public_unit_id: NAV_REB_S725,
+    plate: 'С725АТ159',
+    vehicle_label: 'КамАЗ-65207 · С725АТ159',
+    brand: 'КамАЗ',
+    problem_description:
+      'Кратковременные пропадания спутников в городской застройке: 2 разрыва, ~31 мин суммарно.',
+    match_status: 'matched',
+    gap_count: 2,
+    total_periods: 7,
+    total_gap_duration_sec: 1860,
+    reb_link_id: NAV_REB_S725,
+    in_video_fleet: true,
+  },
+  {
+    // unmatched: public_unit_id=null → reb_link_id=null (строка не кликабельна в РЭБ, §9.5).
+    public_unit_id: null,
+    plate: null,
+    vehicle_label: 'Газель(ТМ)',
+    brand: null,
+    problem_description:
+      'ТС не сматчено со справочником: трек содержит 1 длинный разрыв, привязка к РЭБ недоступна.',
+    match_status: 'unmatched',
+    gap_count: 1,
+    total_periods: 3,
+    total_gap_duration_sec: 600,
+    reb_link_id: null,
+    in_video_fleet: false,
+  },
+]
+
+/** Сводка навигации по госномеру или undefined (→ 404). */
+export function getFixtureNavProblem(plate: string): NavProblemVehicle | undefined {
+  const key = normPlate(plate)
+  return NAV_PROBLEMS.find((n) => n.plate && normPlate(n.plate) === key)
+}
+
+// reb (закрывает дыру п.2: getReb в фикстур-режиме раньше шёл в сеть).
+// Ключ = reb_link_id (= public_unit_id) matched-навигационных ТС.
+export const REB_RECOVERY: Record<string, RebRecovery> = {
+  [NAV_REB_O802]: {
+    vehicle_plate: 'О802УЕ198',
+    gps_track: [
+      { lat: 47.21, lon: 39.7, ts: '2026-03-31T09:00:00' },
+      { lat: 47.25, lon: 39.78, ts: '2026-03-31T09:05:00' },
+      // разрыв 09:06–09:24 (GPS потерян)
+      { lat: 47.34, lon: 39.95, ts: '2026-03-31T09:24:00' },
+      { lat: 47.38, lon: 40.02, ts: '2026-03-31T09:29:00' },
+    ],
+    gap_periods: [
+      { start: '2026-03-31T09:05:00', end: '2026-03-31T09:24:00', duration_sec: 1140 },
+    ],
+    video_frames: [
+      { ts: '2026-03-31T09:10:00', channel: 1, url: '' },
+      { ts: '2026-03-31T09:16:00', channel: 2, url: '' },
+    ],
+  },
+  [NAV_REB_S725]: {
+    vehicle_plate: 'С725АТ159',
+    gps_track: [
+      { lat: 58.0, lon: 56.24, ts: '2026-03-30T14:00:00' },
+      { lat: 58.02, lon: 56.3, ts: '2026-03-30T14:04:00' },
+      // разрыв 14:05–14:15
+      { lat: 58.05, lon: 56.39, ts: '2026-03-30T14:15:00' },
+    ],
+    gap_periods: [
+      { start: '2026-03-30T14:04:00', end: '2026-03-30T14:15:00', duration_sec: 660 },
+    ],
+    video_frames: [{ ts: '2026-03-30T14:09:00', channel: 1, url: '' }],
+  },
+}
+
+/** РЭБ-восстановление по id (= reb_link_id) или undefined (→ 404). */
+export function getFixtureReb(id: string): RebRecovery | undefined {
+  return REB_RECOVERY[id]
+}
+
+// fleet-health (объединение disjoint-доменов; «—» = null; покрытие 10/7/5/2, §9.0).
+export const FLEET_HEALTH: FleetHealthResponse = {
+  coverage: { fuel: 10, sensors: 7, navigation: 5, in_video_fleet: 2 },
+  rows: [
+    {
+      plate: 'А144ЕВ193',
+      vehicle_label: 'КамАЗ-65115',
+      in_video_fleet: false,
+      has_fuel: true,
+      has_sensors: false,
+      has_nav: false,
+      volume_delta_zis_minus_card_l: 22.5,
+      recon_status: 'review',
+      distance_gap_odometer_minus_gps_km: null,
+      online_status: null,
+      gap_count: null,
+      reb_link_id: null,
+    },
+    {
+      plate: 'Т218НА123',
+      vehicle_label: 'ГАЗ-3309',
+      in_video_fleet: false,
+      has_fuel: true,
+      has_sensors: false,
+      has_nav: false,
+      volume_delta_zis_minus_card_l: 1.1,
+      recon_status: 'matched',
+      distance_gap_odometer_minus_gps_km: null,
+      online_status: null,
+      gap_count: null,
+      reb_link_id: null,
+    },
+    {
+      plate: 'Т671КР31',
+      vehicle_label: 'КамАЗ-43118 · Т671КР31',
+      in_video_fleet: false,
+      has_fuel: false,
+      has_sensors: true,
+      has_nav: false,
+      volume_delta_zis_minus_card_l: null,
+      recon_status: null,
+      distance_gap_odometer_minus_gps_km: 540.0,
+      online_status: 'online',
+      gap_count: null,
+      reb_link_id: null,
+    },
+    {
+      plate: 'Х905ОР37',
+      vehicle_label: 'ГАЗ-3309 · Х905ОР37',
+      in_video_fleet: false,
+      has_fuel: false,
+      has_sensors: true,
+      has_nav: false,
+      volume_delta_zis_minus_card_l: null,
+      recon_status: null,
+      distance_gap_odometer_minus_gps_km: null, // нет CAN−GPS данных → «нет данных»
+      online_status: 'stale',
+      gap_count: null,
+      reb_link_id: null,
+    },
+    {
+      plate: 'О802УЕ198',
+      vehicle_label: 'МАЗ-6312 · О802УЕ198',
+      in_video_fleet: true,
+      has_fuel: false,
+      has_sensors: false,
+      has_nav: true,
+      volume_delta_zis_minus_card_l: null,
+      recon_status: null,
+      distance_gap_odometer_minus_gps_km: null,
+      online_status: null,
+      gap_count: 4,
+      reb_link_id: NAV_REB_O802,
+    },
+    {
+      plate: 'С725АТ159',
+      vehicle_label: 'КамАЗ-65207 · С725АТ159',
+      in_video_fleet: true,
+      has_fuel: false,
+      has_sensors: false,
+      has_nav: true,
+      volume_delta_zis_minus_card_l: null,
+      recon_status: null,
+      distance_gap_odometer_minus_gps_km: null,
+      online_status: null,
+      gap_count: 2,
+      reb_link_id: NAV_REB_S725,
+    },
+  ],
 }
