@@ -13,6 +13,8 @@
 > - **2026-06-04 · #1 (синхронизация с макетами 07 Заявки):**
 >   (a) В `Source` (§3.1) добавлено значение `"DIAGNOSTIC"` — для алярмов сенсорной диагностики
 >   («Камера офлайн» и т.п., источник `sensor_diagnostics` / `alarm_type_catalog.source`), бейдж «⚙ Диагностика».
+>       DIAGNOSTIC присутствует в `alarm_type_catalog` (тип `CameraOffline`/`CAMERA_OFFLINE`, w3-2), но в демо-датасете
+>       нет живого алярма этого типа (`v_incidents` остаётся ровно 54) — бейдж проводной, но в демо неактивный, это не баг.
 >   (b) `Ticket.status` (§7.5) приведён к единому enum `Status` (§3.1) `active|in_progress|validated|closed`
 >   вместо прежнего `new|in_progress|closed`; «Просрочена» больше **не статус** — добавлены производные
 >   поля `deadline` и `is_overdue`. Синхронно поправлен промпт `prompts/claude-design/07-tickets-screen`.

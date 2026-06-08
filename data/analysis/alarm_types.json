@@ -20,6 +20,7 @@
     {"raw": "Sabotage",            "code": "CAMERA_TAMPER",       "label_ru": "Саботаж камеры",                "source": "DMS",        "severity": "high",     "requires_video": true,  "auto_request_video": true,  "count": 1},
     {"raw": "PedestrianWarning",   "code": "ADAS_PCW",            "label_ru": "Предупреждение о пешеходе",      "source": "ADAS",       "severity": "high",     "requires_video": true,  "auto_request_video": true,  "count": 1},
     {"raw": "SpeedLimitViolation", "code": "OVERSPEED",           "label_ru": "Превышение скорости",           "source": "COMBINED",   "severity": "high",     "requires_video": false, "auto_request_video": false, "count": 1},
-    {"raw": "SharpLeftTurn",       "code": "HARSH_CORNERING",     "label_ru": "Резкий поворот",               "source": "TELEMATICS", "severity": "medium",   "requires_video": true,  "auto_request_video": false, "count": 1}
+    {"raw": "SharpLeftTurn",       "code": "HARSH_CORNERING",     "label_ru": "Резкий поворот",               "source": "TELEMATICS", "severity": "medium",   "requires_video": true,  "auto_request_video": false, "count": 1},
+    {"raw": "CameraOffline",       "code": "CAMERA_OFFLINE",      "label_ru": "Камера офлайн",                "source": "DIAGNOSTIC", "severity": "medium",   "requires_video": false, "auto_request_video": false, "count": 0}
   ]
 }
