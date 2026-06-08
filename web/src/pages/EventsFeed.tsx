@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, RotateCw, Search, Video, VideoOff } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { AlertTriangle, Route, RotateCw, Search, Video, VideoOff } from 'lucide-react'
 import * as client from '@/api/client'
 import type { IncidentSummary, Severity, Source } from '@/api/types'
 import { Card, ScoreBar, SeverityBadge } from '@/components'
@@ -320,12 +320,13 @@ function EventsTable({
           <Th>Время</Th>
           <Th>Адрес</Th>
           <Th align="center">Видео</Th>
+          <Th align="center">Маршрут</Th>
         </tr>
       </thead>
       <tbody>
         {noMatch ? (
           <tr>
-            <td colSpan={9} className="px-3 py-12 text-center text-sm text-muted">
+            <td colSpan={10} className="px-3 py-12 text-center text-sm text-muted">
               Ничего не найдено
             </td>
           </tr>
@@ -386,6 +387,20 @@ function EventRow({ row, onClick }: { row: IncidentSummary; onClick: () => void 
         ) : (
           <VideoOff className="mx-auto h-4 w-4 text-muted" aria-label="Видео недоступно" />
         )}
+      </td>
+      <td className="px-3 py-2 text-center">
+        {/* w3-12 · кросс-врезка: лента → видеодосье рейса. stopPropagation не даёт
+            сработать навигации строки в карточку инцидента. */}
+        <Link
+          to={`/trip/${row.id}`}
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+          aria-label="Открыть маршрут поездки"
+          title="Маршрут поездки"
+          className="inline-grid h-7 w-7 place-items-center rounded text-muted transition-colors hover:bg-bg hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          <Route className="h-4 w-4" aria-hidden />
+        </Link>
       </td>
     </tr>
   )

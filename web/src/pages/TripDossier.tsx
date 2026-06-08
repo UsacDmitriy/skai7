@@ -321,6 +321,15 @@ export default function TripDossier() {
     <div className="mx-auto max-w-6xl space-y-4">
       {/* ── Шапка рейса ──────────────────────────────────────────────────────── */}
       <Card>
+        {/* w3-12 · кросс-врезка: рейс → карточка инцидента (id маршрута == incident_id). */}
+        <Button
+          variant="secondary"
+          icon={ArrowLeft}
+          onClick={() => navigate('/incidents/' + id)}
+          className="mb-3"
+        >
+          К карточке инцидента
+        </Button>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-baseline gap-3">
             <h1 className="text-xl font-semibold tracking-tight text-ink">
