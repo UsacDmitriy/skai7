@@ -2,11 +2,13 @@ import { type ComponentType, lazy, Suspense } from 'react'
 import {
   BarChart2,
   Bell,
+  Bot,
   CheckCircle,
   ClipboardList,
   Download,
   FileText,
   Film,
+  Gauge,
   Heart,
   type LucideIcon,
   Map as MapIcon,
@@ -75,6 +77,15 @@ const NAV: NavGroup[] = [
     items: [
       { to: '/fleet-health', label: 'Здоровье парка', icon: Heart },
       { to: '/navigation', label: 'Навигация (РЭБ)', icon: Navigation },
+    ],
+  },
+  {
+    // Каркас под Волну 4: маршруты/пункты заведены заранее (против экранов-сирот).
+    // Бейдж `W4` снимут промпты f17/f21, когда экраны будут влиты.
+    title: 'AI',
+    items: [
+      { to: '/copilot', label: 'Копилот', icon: Bot, badge: 'W4' },
+      { to: '/metrics', label: 'Метрики', icon: Gauge, badge: 'W4' },
     ],
   },
 ]
@@ -253,6 +264,10 @@ const SensorCard = lazy(() => import('@/pages/SensorCard')) as ComponentType
 const NavProblemList = lazy(
   () => import('@/pages/NavProblemList'),
 ) as ComponentType
+// Каркас Волны 4 (w3-18): сейчас таргеты рендерят ComingSoon; f17/f21 заменят
+// содержимое страниц без правок роутинга (точка расширения готова).
+const Copilot = lazy(() => import('@/pages/Copilot')) as ComponentType
+const Metrics = lazy(() => import('@/pages/Metrics')) as ComponentType
 const StyleGuide = lazy(() => import('@/pages/_StyleGuide')) as ComponentType
 const DispatchAlert = lazy(() => import('@/pages/DispatchAlert')) as ComponentType
 
@@ -364,6 +379,24 @@ function AppRoutes() {
             element={
               <Suspense fallback={<Placeholder title="Загрузка…" />}>
                 <NavProblemList />
+              </Suspense>
+            }
+          />
+          {/* Каркас Волны 4 (w3-18): /copilot (f17) и /metrics (f21). До влития —
+              ComingSoon; f17/f21 заменят страницы без правок этих маршрутов. */}
+          <Route
+            path="/copilot"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <Copilot />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/metrics"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <Metrics />
               </Suspense>
             }
           />

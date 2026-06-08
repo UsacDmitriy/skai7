@@ -205,6 +205,8 @@ export interface DriverReport {
   /** Порог: gross>=3 ИЛИ safety_score<60. */
   disciplinary_warning: boolean
   violations: ViolationRow[]
+  /** Текстовое резюме отчёта (b22, Волна 4.2); опционально — генерится AI-слоем. */
+  narrative?: string
 }
 
 export interface FleetByDriverRow {
@@ -236,6 +238,8 @@ export interface FleetReport {
   vehicles_count: number
   by_drivers: FleetByDriverRow[]
   by_vehicles: FleetByVehicleRow[]
+  /** Текстовое резюме по парку (b22, Волна 4.2); опционально — генерится AI-слоем. */
+  narrative?: string
 }
 
 /** `GET /reports/vehicle/{plate}` — len(cameras)=3. */
@@ -546,4 +550,196 @@ export interface FleetHealthRow {
 export interface FleetHealthResponse {
   coverage: FleetHealthCoverage
   rows: FleetHealthRow[]
+}
+
+// ── Волна 4 · AI-слой (§8) — сцена/погода/прогноз/зоны/усталость/копилот/метрики ─
+// Аддитивно. Поля/типы 1:1 со схемами контракта §8.4/§8.6/§8.7/§8.8.
+// Эти типы готовят каркас под Волну 4 (f15–f21): они только импортируют отсюда и
+// используют клиент/фикстуры, не пересоздавая их (§8.5). Без `Date.now()`/`random`.
+
+// scene / weather (§8.1, §8.4)
+
+/** Погодные условия сцены (§8.1). `unknown` — детерминированный фолбэк без VLM/API (§8.0). */
+export type SceneWeather = 'clear' | 'rain' | 'snow' | 'fog' | 'unknown'
+
+/** Время суток сцены (§8.1). Фолбэк — из часа `ts` (§8.0 b16/b17). */
+export type DayNight = 'day' | 'twilight' | 'night'
+
+/** Состояние дорожного покрытия (§8.1). */
+export type RoadSurface = 'dry' | 'wet' | 'snow' | 'ice' | 'unknown'
+
+/** Тип местности (§8.1). */
+export type SceneArea = 'urban' | 'highway' | 'unknown'
+
+/** Видимость (§8.1). */
+export type Visibility = 'good' | 'moderate' | 'poor'
+
+/** Тип расхождения «факт ↔ внешний API» (§8.1 incident_weather). */
+export type DiscrepancyKind = 'weather' | 'daynight' | 'none'
+
+/** `GET /api/incidents/{id}/scene` — сценовый контекст (часть ответа, §8.4). */
+export interface SceneContext {
+  id: string
+  weather: SceneWeather
+  day_night: DayNight
+  road_surface: RoadSurface
+  area: SceneArea
+  visibility: Visibility
+  /** Уверенность разметки сцены, 0..1 (фолбэк → низкая/0). */
+  scene_confidence: number
+}
+
+/** `GET /api/incidents/{id}/scene` — сверка с внешней погодой (часть ответа, §8.4). */
+export interface WeatherCrossCheck {
+  id: string
+  api_weather: string
+  is_day: boolean
+  solar_elevation_deg: number
+  /** Есть ли расхождение факта со внешним API. */
+  discrepancy: boolean
+  discrepancy_kind: DiscrepancyKind
+}
+
+/** Объединённый ответ `GET /api/incidents/{id}/scene` (§8.3): сцена + погодная сверка. */
+export interface SceneResponse {
+  scene: SceneContext
+  weather: WeatherCrossCheck
+}
+
+// forecast (§8.4) — наивный коридор, ML-ветка мёртвая на этих данных (§8.0 b18)
+
+/** Точка прогнозного тренда (наивный базлайн + статический коридор, §8.0). */
+export interface RiskForecastPoint {
+  date: string
+  predicted_events: number
+  ci_low: number
+  ci_high: number
+}
+
+/** `GET /api/reports/forecast/{plate}` (§8.4). */
+export interface RiskForecast {
+  plate: string
+  trend: RiskForecastPoint[]
+  /** На этих данных всегда `false` (нет временного ряда, §8.0 b18). */
+  anomaly: boolean
+  /** Причина отсутствия аномалии/прогноза, напр. «недостаточно истории». */
+  anomaly_reason?: string
+  recommendations: string[]
+  /** Текстовое резюме прогноза (b22, Волна 4.2). */
+  narrative?: string
+}
+
+// zones (§8.1, §8.4)
+
+/** Источник кластера риск-зоны (§8.1 v_risk_zones). */
+export type RiskZoneKind = 'incident' | 'reb'
+
+/** Элемент `GET /api/zones?kind=&hour=` (§8.4). */
+export interface RiskZone {
+  zone_id: string
+  /** [lat, lon] центроида кластера. */
+  centroid: [number, number]
+  radius_m: number
+  alarm_count: number
+  avg_risk: number
+  top_alarm_code: string
+  /** Час пика, 0..23. */
+  peak_hour: number
+  kind: RiskZoneKind
+}
+
+// fatigue (§8.4) — честный empty/sparse-state (§8.0 b20)
+
+/** Событие в цепочке усталости (§8.4). */
+export interface FatigueEvent {
+  code: string
+  ts: string
+}
+
+/** Элемент `GET /api/fatigue?plate=` (§8.4). Пустой набор валиден (§8.0 b20). */
+export interface FatigueChain {
+  plate: string
+  trip_id?: string
+  events: FatigueEvent[]
+  window_min: number
+  severity: Severity
+}
+
+// copilot (§8.4)
+
+export type CopilotRole = 'user' | 'assistant'
+export type CopilotLang = 'ru' | 'en'
+
+/** Вызов инструмента копилотом (LLM tool-use, §8.4). */
+export interface CopilotToolCall {
+  name: string
+  args: Record<string, unknown>
+}
+
+/** `POST /api/copilot/chat` (§8.4). `data` — произвольный полезный груз ответа (отчёт/зоны/…). */
+export interface CopilotMessage {
+  role: CopilotRole
+  text: string
+  lang: CopilotLang
+  tool_calls?: CopilotToolCall[]
+  data?: unknown
+}
+
+// governance (§8.6)
+
+/** AI-фича с управляемостью (§8.6). */
+export type AiFeatureName =
+  | 'scene'
+  | 'forecast'
+  | 'zones'
+  | 'fatigue'
+  | 'copilot'
+  | 'verdict'
+
+/** Источник ответа AI-фичи: живой вызов / кэш / детерминированный фолбэк (§8.6). */
+export type AiSource = 'live' | 'cache' | 'fallback'
+
+/** Мета-состояние AI-фичи в ответах AI-слоя (§8.6). */
+export interface AiFeatureState {
+  name: AiFeatureName
+  enabled: boolean
+  source: AiSource
+  latency_ms: number
+}
+
+// metrics / data-quality (§8.7)
+
+/** `GET /api/metrics/ai` — KPI AI-слоя (§8.7). */
+export interface AiMetrics {
+  recommendation_acceptance: number
+  copilot_tool_success: number
+  weather_mismatch_rate: number
+  zone_hit_rate: number
+  /** Среднее время до триажа, сек. */
+  avg_time_to_triage: number
+  forecast_coverage: number
+}
+
+/** `GET /api/metrics/data-quality` — качество данных (§8.7). Все `*_ratio` ∈ [0,1]. */
+export interface DataQuality {
+  camera_offline_ratio: number
+  missing_gps_ratio: number
+  missing_media_ratio: number
+  weather_mismatch_rate: number
+  incidents_with_video_ratio: number
+}
+
+// explainability (§8.8) — вклады слагаемых формулы risk_score (§2), для waterfall
+
+/** `GET /api/incidents/{id}/risk-breakdown` — декомпозиция риска (§8.8). */
+export interface RiskBreakdown {
+  id: string
+  /** Вклады в очках score (уже умножены на веса §2); сумма = `total_risk_score`. */
+  severity_w: number
+  speed_ratio: number
+  night: number
+  freq_w: number
+  /** Погодно-сценовая надбавка (§8.2); 0 без кэша. */
+  weather_bonus: number
+  total_risk_score: number
 }

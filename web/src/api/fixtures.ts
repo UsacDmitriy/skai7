@@ -10,7 +10,12 @@
  * Формы СТРОГО соответствуют типам f2 (= §3.1). Любое расхождение ломает экраны.
  */
 import type {
+  AiMetrics,
+  CopilotLang,
+  CopilotMessage,
+  DataQuality,
   DriverReport,
+  FatigueChain,
   FleetHealthResponse,
   FleetReport,
   FuelVehicleCard,
@@ -20,13 +25,19 @@ import type {
   IncidentSummary,
   NavProblemVehicle,
   RebRecovery,
+  RiskBreakdown,
+  RiskForecast,
+  RiskZone,
   SabotageEvent,
+  SceneContext,
+  SceneResponse,
   SensorVehicleCard,
   SensorVehicleSummary,
   Ticket,
   TripDossier,
   VehicleReport,
   VehicleSummary,
+  WeatherCrossCheck,
 } from './types'
 
 // ── Детали инцидентов (полная форма IncidentDetail) ───────────────────────────
@@ -509,6 +520,9 @@ export const DRIVER_REPORT: DriverReport = {
       is_gross: false,
     },
   ],
+  narrative:
+    'За период — 12 нарушений (4 грубых), безопасность 41/100. Доминирует засыпание ' +
+    'за рулём на ночных рейсах; рекомендовано дисциплинарное предупреждение и контроль режима труда.',
 }
 
 /** GET /reports/fleet — агрегаты по парку (В-1/В-2). */
@@ -550,6 +564,9 @@ export const FLEET_REPORT: FleetReport = {
     { plate: 'В345КМ 97', vehicle_model: 'КамАЗ-5490', main_driver: 'Петров Дмитрий Сергеевич', mileage_km: 8750.2, risk_score: 84, gross: 2, total: 8, cameras_ok: '2/3' },
     { plate: 'Н124УУ 199', vehicle_model: 'МАЗ-5440', main_driver: 'Козлов Иван Андреевич', mileage_km: 12100.0, risk_score: 68, gross: 5, total: 21, cameras_ok: '1/2' },
   ],
+  narrative:
+    'По парку — 61 нарушение (14 грубых) на 5 ТС за период. Лидер риска — Иванов (А777ВВ 77, 97/100); ' +
+    'ключевые факторы — ночные рейсы и превышения скорости. Фокус контроля: топ-3 водителя по риску.',
 }
 
 // ── Заявки (§7.5 Ticket, идея #6) ─────────────────────────────────────────────
@@ -1208,4 +1225,160 @@ export const FLEET_HEALTH: FleetHealthResponse = {
       reb_link_id: NAV_REB_S725,
     },
   ],
+}
+
+// ── Волна 4 · AI-слой (§8) — детерминированные фикстуры под f15–f21 ────────────
+// Все значения статичны (§8.0): без `Date.now()`/`random`. Привязка к демо-инциденту
+// inc-001 (А777ВВ 77, risk_score=97, ночь, засыпание) для сквозной согласованности.
+
+/** Сценовый контекст inc-001 — детерминированный фолбэк без VLM (§8.0 b16/b17). */
+export const SCENE: SceneContext = {
+  id: 'inc-001',
+  weather: 'unknown', // нет кэша/VLM → фолбэк
+  day_night: 'night', // из часа ts (00:36) → night
+  road_surface: 'unknown',
+  area: 'unknown',
+  visibility: 'moderate',
+  scene_confidence: 0.0, // фолбэк → нет уверенности
+}
+
+/** Погодная сверка inc-001 — без внешнего API в фикстурах (§8.1). */
+export const WEATHER: WeatherCrossCheck = {
+  id: 'inc-001',
+  api_weather: 'unknown', // нет Open-Meteo в офлайне
+  is_day: false, // ночь (см. SCENE.day_night)
+  solar_elevation_deg: -28.4, // солнце под горизонтом
+  discrepancy: false,
+  discrepancy_kind: 'none',
+}
+
+/** Прогноз риска по А777ВВ 77 — наивный коридор, ML-ветка мёртвая (§8.0 b18). */
+export const FORECAST: RiskForecast = {
+  plate: 'А777ВВ 77',
+  // Базлайн ≈ events_last_7d/7; статический коридор ci_low/ci_high.
+  trend: [
+    { date: '2026-04-03', predicted_events: 1, ci_low: 0, ci_high: 3 },
+    { date: '2026-04-04', predicted_events: 1, ci_low: 0, ci_high: 3 },
+    { date: '2026-04-05', predicted_events: 1, ci_low: 0, ci_high: 3 },
+  ],
+  anomaly: false, // нет временного ряда → аномалий не выявить
+  anomaly_reason: 'недостаточно истории',
+  recommendations: [
+    'Контроль режима труда и отдыха (ночные рейсы).',
+    'Внеплановый инструктаж по усталости водителя.',
+  ],
+  narrative:
+    'Наивный прогноз по ограниченной истории: ~1 событие/сутки в коридоре 0–3. ' +
+    'Аномалий не выявлено — данных для тренда недостаточно (события за 2 дня).',
+}
+
+/** Риск-зоны: 1 incident-кластер + 1 РЭБ-кластер (§8.1 v_risk_zones). */
+export const ZONES: RiskZone[] = [
+  {
+    zone_id: 'zone-inc-01',
+    centroid: [55.7558, 37.6173],
+    radius_m: 850,
+    alarm_count: 4,
+    avg_risk: 78,
+    top_alarm_code: 'DMS_DROWSY',
+    peak_hour: 1, // ночной пик
+    kind: 'incident',
+  },
+  {
+    zone_id: 'zone-reb-01',
+    centroid: [55.5012, 37.9123],
+    radius_m: 1200,
+    alarm_count: 2,
+    avg_risk: 0, // РЭБ-зона: gap-периоды без risk_score
+    top_alarm_code: 'REB_GAP', // navigation__track_periods period_type=3
+    peak_hour: 14,
+    kind: 'reb',
+  },
+]
+
+/** Цепочки усталости по А777ВВ 77 — одиночный «ранний признак» (§8.0 b20). */
+export const FATIGUE: FatigueChain[] = [
+  {
+    plate: 'А777ВВ 77',
+    trip_id: 'trip-001',
+    events: [{ code: 'DMS_YAWNING', ts: '2026-04-02T00:30:00' }],
+    window_min: 30,
+    severity: 'low', // одиночный признак, не цепочка YAWNING→DROWSY→harsh
+  },
+]
+
+/** Примеры диалога копилота (RU/EN), §8.4. assistant-сообщения возвращает copilotChat. */
+export const COPILOT: CopilotMessage[] = [
+  { role: 'user', text: 'Покажи топ-3 водителей по риску', lang: 'ru' },
+  {
+    role: 'assistant',
+    text: 'Топ-3 по риску: Иванов (97), Сидоров (76), Козлов (68). Лидер — Иванов, А777ВВ 77.',
+    lang: 'ru',
+    tool_calls: [{ name: 'get_fleet_report', args: { view: 'drivers' } }],
+    data: { top: ['Иванов', 'Сидоров', 'Козлов'] },
+  },
+  { role: 'user', text: 'Show high-risk zones tonight', lang: 'en' },
+  {
+    role: 'assistant',
+    text: 'One night-time incident cluster near Tverskaya (avg risk 78, peak 01:00). REB gap zone south of the city.',
+    lang: 'en',
+    tool_calls: [{ name: 'get_zones', args: { kind: 'incident', hour: 1 } }],
+    data: { zones: ['zone-inc-01'] },
+  },
+]
+
+/** KPI AI-слоя (§8.7). Статичные демо-доли. */
+export const AI_METRICS: AiMetrics = {
+  recommendation_acceptance: 0.62,
+  copilot_tool_success: 0.85,
+  weather_mismatch_rate: 0.0, // weather=unknown в офлайне → нет рассогласований
+  zone_hit_rate: 0.5,
+  avg_time_to_triage: 240, // сек
+  forecast_coverage: 0.1, // мало истории (§8.0)
+}
+
+/** Качество данных (§8.7). Реальные доли по датасету; все `*_ratio` ∈ [0,1]. */
+export const DATA_QUALITY: DataQuality = {
+  camera_offline_ratio: 0.0, // ≈0 (§8.7)
+  missing_gps_ratio: 0.06,
+  missing_media_ratio: 0.0,
+  weather_mismatch_rate: 0.0,
+  incidents_with_video_ratio: 1.0,
+}
+
+/**
+ * Декомпозиция риска inc-001 (§8.8): вклады в очках score (уже умножены на веса §2).
+ * Сумма вкладов = total_risk_score = risk_score инцидента (97).
+ * База §2: sev_w=1.0→45 · speed_ratio((72/90)/1.5)→13 · night→15 · freq_w(3/7)→6; погодная надбавка §8.2→18.
+ */
+export const RISK_BREAKDOWN: RiskBreakdown = {
+  id: 'inc-001',
+  severity_w: 45,
+  speed_ratio: 13,
+  night: 15,
+  freq_w: 6,
+  weather_bonus: 18,
+  total_risk_score: 97, // 45+13+15+6+18
+}
+
+// ── AI-хелперы (повторяют сигнатуры клиента) ───────────────────────────────────
+
+/** Сцена + погодная сверка по id (GET /api/incidents/{id}/scene). Демо — всегда inc-001. */
+export function getFixtureScene(_id: string): SceneResponse {
+  return { scene: SCENE, weather: WEATHER }
+}
+
+/** Цепочки усталости по госномеру: демо-ТС → одиночный признак, иначе [] (валидно, §8.0 b20). */
+export function getFixtureFatigue(plate: string): FatigueChain[] {
+  return normPlate(plate) === normPlate('А777ВВ 77') ? FATIGUE : []
+}
+
+/** RU/EN-кириллица в тексте. */
+const CYRILLIC = /[А-Яа-яЁё]/
+
+/** Ответ копилота по языку запроса (детерминированно, без сети). */
+export function getFixtureCopilot(text: string): CopilotMessage {
+  const lang: CopilotLang = CYRILLIC.test(text) ? 'ru' : 'en'
+  const reply = COPILOT.find((m) => m.role === 'assistant' && m.lang === lang)
+  return reply ?? COPILOT[1]
 }
