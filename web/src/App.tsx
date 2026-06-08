@@ -10,6 +10,7 @@ import {
   Heart,
   type LucideIcon,
   Map as MapIcon,
+  Navigation,
   Radio,
   Shield,
   Zap,
@@ -23,6 +24,7 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom'
+import { ComingSoon, type ComingSoonProps } from '@/components/ComingSoon'
 import { cn } from '@/components/ui/cn'
 import { RoleProvider } from '@/state/role'
 
@@ -38,37 +40,42 @@ import { RoleProvider } from '@/state/role'
 type NavItem = { to: string; label: string; icon: LucideIcon; badge?: string }
 type NavGroup = { title: string; items: NavItem[] }
 
+// Бейдж `W4` — честная подпись «мёртвых» пунктов: экран приедет в Волне 4.
+// Рабочие пункты (Волна ≤3) бейджа не несут.
 const NAV: NavGroup[] = [
   {
     title: 'Мониторинг',
     items: [
       { to: '/monitor', label: 'Карта', icon: MapIcon },
-      { to: '/safety', label: 'Мониторинг безопасности', icon: Shield },
+      { to: '/safety', label: 'Мониторинг безопасности', icon: Shield, badge: 'W4' },
     ],
   },
   {
     title: 'Видеоаналитика',
     items: [
       { to: '/events', label: 'События', icon: FileText },
-      { to: '/live', label: 'Прямая трансляция', icon: Radio },
-      { to: '/archive', label: 'Видеоархив', icon: Film },
-      { to: '/downloads', label: 'Загрузки', icon: Download },
-      { to: '/validation', label: 'Блок валидации', icon: CheckCircle },
-      { to: '/response', label: 'Блок реагирования', icon: Bell },
+      { to: '/live', label: 'Прямая трансляция', icon: Radio, badge: 'W4' },
+      { to: '/archive', label: 'Видеоархив', icon: Film, badge: 'W4' },
+      { to: '/downloads', label: 'Загрузки', icon: Download, badge: 'W4' },
+      { to: '/validation', label: 'Блок валидации', icon: CheckCircle, badge: 'W4' },
+      { to: '/response', label: 'Блок реагирования', icon: Bell, badge: 'W4' },
       { to: '/tickets', label: 'Заявки', icon: ClipboardList },
     ],
   },
   {
     title: 'Дашборды и отчёты',
     items: [
-      { to: '/dashboards', label: 'Дашборды', icon: BarChart2 },
+      { to: '/dashboards', label: 'Дашборды', icon: BarChart2, badge: 'W4' },
       { to: '/report', label: 'Отчёты', icon: FileText },
-      { to: '/quick-report', label: 'Быстрый отчёт', icon: Zap, badge: 'NEW' },
+      { to: '/quick-report', label: 'Быстрый отчёт', icon: Zap, badge: 'W4' },
     ],
   },
   {
     title: 'Парк',
-    items: [{ to: '/fleet-health', label: 'Здоровье парка', icon: Heart }],
+    items: [
+      { to: '/fleet-health', label: 'Здоровье парка', icon: Heart },
+      { to: '/navigation', label: 'Навигация (РЭБ)', icon: Navigation },
+    ],
   },
 ]
 
@@ -122,7 +129,7 @@ function SidebarLink({ item }: { item: NavItem }) {
         {label}
       </span>
       {badge ? (
-        <span className="rounded bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-white opacity-0 transition-opacity duration-200 group-hover/sb:opacity-100">
+        <span className="rounded border border-border bg-bg px-1.5 py-0.5 text-[10px] font-semibold text-muted opacity-0 transition-opacity duration-200 group-hover/sb:opacity-100">
           {badge}
         </span>
       ) : null}
@@ -163,7 +170,7 @@ function AppShell() {
   )
 }
 
-// ── Плейсхолдер для ещё не реализованных экранов (f4+) ─────────────────────────
+// ── Суспенс-фолбэк «Загрузка…» (единственное назначение Placeholder) ───────────
 function Placeholder({ title }: { title: string }) {
   return (
     <div className="grid h-full place-items-center">
@@ -175,6 +182,63 @@ function Placeholder({ title }: { title: string }) {
   )
 }
 
+// ── Сигнпостинг «мёртвых» пунктов меню (w3-13, §9.4) ──────────────────────────
+// Карта `path → ComingSoon`: честная подпись «скоро / Волна 4» вместо пустого 404.
+// Разделы Волны 4 (видеостриминг, workflow, BI-копилот) ещё не реализованы.
+const COMING_SOON: Record<string, ComingSoonProps> = {
+  '/safety': {
+    title: 'Мониторинг безопасности',
+    description: 'Агрегированные KPI безопасности по парку.',
+    wave: 4,
+  },
+  '/live': {
+    title: 'Прямая трансляция',
+    description: 'Видеопоток с бортовых камер — стриминг.',
+    wave: 4,
+  },
+  '/archive': {
+    title: 'Видеоархив',
+    description: 'Архив записей по событиям — стриминг.',
+    wave: 4,
+  },
+  '/downloads': {
+    title: 'Загрузки',
+    description: 'Выгрузка фрагментов и отчётов — стриминг.',
+    wave: 4,
+  },
+  '/validation': {
+    title: 'Блок валидации',
+    description: 'Очередь валидации алармов — workflow.',
+    wave: 4,
+  },
+  '/response': {
+    title: 'Блок реагирования',
+    description: 'Маршрутизация и эскалация реагирования — workflow.',
+    wave: 4,
+  },
+  '/dashboards': {
+    title: 'Дашборды',
+    description: 'Расширенная BI-аналитика — AI-копилот (§8).',
+    wave: 4,
+  },
+  '/quick-report': {
+    title: 'Быстрый отчёт',
+    description: 'Генерация отчёта по запросу — AI-копилот (§8).',
+    wave: 4,
+  },
+}
+
+// Catch-all: по текущему пути берём карточку из карты, иначе — общий «скоро».
+function ComingSoonRoute() {
+  const { pathname } = useLocation()
+  const meta = COMING_SOON[pathname] ?? {
+    title: 'Раздел в разработке',
+    description: 'Этот экран появится в одной из следующих волн.',
+    wave: 4,
+  }
+  return <ComingSoon {...meta} />
+}
+
 // ── Ленивые экраны f4 + витрина d3 ────────────────────────────────────────────
 const EventsFeed = lazy(() => import('@/pages/EventsFeed')) as ComponentType
 const Monitor = lazy(() => import('@/pages/Monitor')) as ComponentType
@@ -183,6 +247,12 @@ const Report = lazy(() => import('@/pages/Report')) as ComponentType
 const Tickets = lazy(() => import('@/pages/Tickets')) as ComponentType
 const TripDossier = lazy(() => import('@/pages/TripDossier')) as ComponentType
 const RebRecovery = lazy(() => import('@/pages/RebRecovery')) as ComponentType
+const FleetHealth = lazy(() => import('@/pages/FleetHealth')) as ComponentType
+const FuelCard = lazy(() => import('@/pages/FuelCard')) as ComponentType
+const SensorCard = lazy(() => import('@/pages/SensorCard')) as ComponentType
+const NavProblemList = lazy(
+  () => import('@/pages/NavProblemList'),
+) as ComponentType
 const StyleGuide = lazy(() => import('@/pages/_StyleGuide')) as ComponentType
 const DispatchAlert = lazy(() => import('@/pages/DispatchAlert')) as ComponentType
 
@@ -203,6 +273,14 @@ function AppRoutes() {
         <Route element={<AppShell />}>
           <Route
             index
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <EventsFeed />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/events"
             element={
               <Suspense fallback={<Placeholder title="Загрузка…" />}>
                 <EventsFeed />
@@ -258,6 +336,38 @@ function AppRoutes() {
             }
           />
           <Route
+            path="/fleet-health"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <FleetHealth />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/fleet-health/fuel/:plate"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <FuelCard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/fleet-health/sensors/:plate"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <SensorCard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/navigation"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <NavProblemList />
+              </Suspense>
+            }
+          />
+          <Route
             path="/_styleguide"
             element={
               <Suspense fallback={<Placeholder title="Загрузка витрины…" />}>
@@ -265,8 +375,8 @@ function AppRoutes() {
               </Suspense>
             }
           />
-          {/* Будущие экраны из меню DESIGN.md — пока единый плейсхолдер. */}
-          <Route path="*" element={<Placeholder title="Раздел в разработке" />} />
+          {/* Экраны Волны 4 из меню — честный ComingSoon вместо пустого 404. */}
+          <Route path="*" element={<ComingSoonRoute />} />
         </Route>
       </Routes>
 
