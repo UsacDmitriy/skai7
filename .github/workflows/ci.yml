@@ -1,0 +1,57 @@
+# CI-скелет (w3-19 · подготовка Волны 4 · 00-CONTRACT §8.9).
+# Remote-гейт ЗЕРКАЛИТ единый локальный `scripts/check.sh`
+# (ruff → pytest → web typecheck → vitest) — анти-дрейф local↔remote.
+# Минимально-зелёный на чистом checkout. Один job, без матрицы.
+#
+# Расширяется t6 (Волна 4.3): матрица версий python/node, кэш `make db`,
+# и отдельный `.github/workflows/nightly-smoke.yml` — smoke на ЖИВОМ API.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check.sh (ruff · pytest · typecheck · vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      # `make install-py` + ruff (ruff не в requirements; check.sh ждёт его на PATH/в python).
+      # t6 может вынести тяжёлый STT/NLU-стек (faster-whisper/groq) в отдельный кэш-слой.
+      - name: Install Python deps (+ ruff)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r api/requirements.txt ruff
+
+      # `make install-web` строгим `npm ci` (из package-lock.json) — детерминированно.
+      - name: Install web deps
+        working-directory: web
+        run: npm ci
+
+      # Единый гейт: тот же скрипт, что и локально перед коммитом.
+      - name: Run scripts/check.sh
+        run: bash scripts/check.sh

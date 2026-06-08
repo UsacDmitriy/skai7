@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   AlertTriangle,
   Archive,
@@ -9,6 +9,7 @@ import {
   MapPin,
   OctagonX,
   Phone,
+  Route,
   ShieldCheck,
   VideoOff,
 } from 'lucide-react'
@@ -22,6 +23,7 @@ import type {
   Severity,
   Source,
   Status,
+  Ticket,
   VideoChannel,
 } from '@/api/types'
 import {
@@ -170,7 +172,12 @@ export default function IncidentCard() {
 
   const [statusOverride, setStatusOverride] = useState<Status | null>(null)
   const [pending, setPending] = useState<ActionType | null>(null)
-  const [actionFeedback, setActionFeedback] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
+  const [actionFeedback, setActionFeedback] = useState<
+    { kind: 'ok' | 'err'; text: string; toTickets?: boolean } | null
+  >(null)
+
+  // w3-12 · кросс-врезка: заявки по инциденту (trip_id == incident_id == id).
+  const [relatedTickets, setRelatedTickets] = useState<Ticket[]>([])
 
   // Роль пользователя (локальный переключатель — до реализации f13/глобального контекста).
   const [role, setRole] = useState<AppRole>('dispatcher')
@@ -199,6 +206,22 @@ export default function IncidentCard() {
       })
       .finally(() => {
         if (alive) setLoading(false)
+      })
+    return () => {
+      alive = false
+    }
+  }, [id])
+
+  // w3-12 · подтянуть заявки по инциденту (мягко: ошибка не ломает карточку).
+  useEffect(() => {
+    let alive = true
+    client
+      .getTickets()
+      .then((all) => {
+        if (alive) setRelatedTickets(all.filter((t) => t.incident_id === id))
+      })
+      .catch(() => {
+        if (alive) setRelatedTickets([])
       })
     return () => {
       alive = false
@@ -243,6 +266,7 @@ export default function IncidentCard() {
         setActionFeedback({
           kind: 'ok',
           text: `Действие «${label}» выполнено${res.status ? ` · статус: ${STATUS_LABEL[res.status]}` : ''}`,
+          toTickets: action === 'create_task',
         })
       } catch (e: unknown) {
         const msg = e instanceof ApiError ? e.message : e instanceof Error ? e.message : 'Ошибка'
@@ -363,6 +387,15 @@ export default function IncidentCard() {
           <div className="w-48 shrink-0">
             <div className="text-[11px] uppercase tracking-wide text-muted">Риск-скор</div>
             <ScoreBar score={inc.risk_score} className="mt-1" />
+            {/* w3-12 · кросс-врезка: инцидент → видеодосье рейса (trip_id == incident_id). */}
+            <Button
+              variant="secondary"
+              icon={Route}
+              onClick={() => navigate('/trip/' + inc.id)}
+              className="mt-3 w-full justify-center"
+            >
+              Показать маршрут поездки
+            </Button>
           </div>
         </div>
 
@@ -606,7 +639,7 @@ export default function IncidentCard() {
             </div>
 
             {actionFeedback && (
-              <p
+              <div
                 role="status"
                 aria-live="polite"
                 className={cn(
@@ -617,7 +650,42 @@ export default function IncidentCard() {
                 )}
               >
                 {actionFeedback.text}
-              </p>
+                {/* w3-12 · после «Создать заявку» — прямой переход в раздел «Заявки». */}
+                {actionFeedback.toTickets && (
+                  <Link
+                    to="/tickets"
+                    className="ml-2 font-medium underline underline-offset-2 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    Открыть в Заявках
+                  </Link>
+                )}
+              </div>
+            )}
+          </Card>
+
+          {/* w3-12 · кросс-врезка: заявки, созданные по этому инциденту. */}
+          <Card>
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">
+              Связанные заявки
+            </h2>
+            {relatedTickets.length === 0 ? (
+              <p className="text-sm text-muted">Заявок по инциденту нет</p>
+            ) : (
+              <ul role="list" className="flex flex-col gap-1">
+                {relatedTickets.map((t) => (
+                  <li key={t.id}>
+                    <Link
+                      to="/tickets"
+                      className="flex items-center justify-between gap-2 rounded-md border border-border px-3 py-2 text-sm transition-colors hover:border-primary hover:bg-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    >
+                      <span className="min-w-0 truncate text-ink">{t.comment || t.action}</span>
+                      <span className="shrink-0 rounded bg-bg px-1.5 py-0.5 text-xs text-muted">
+                        {STATUS_LABEL[t.status]}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             )}
           </Card>
         </div>

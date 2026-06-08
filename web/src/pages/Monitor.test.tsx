@@ -110,3 +110,28 @@ describe('Monitor · дедупликация ТС', () => {
     expect(screen.getByTestId('marker-layer')).toHaveAttribute('data-count', '3')
   })
 })
+
+describe('Monitor · роль «Логист» скрывает DMS-слой', () => {
+  beforeEach(() => {
+    localStorage.setItem('skai.role', 'logist')
+  })
+  afterEach(() => {
+    localStorage.clear()
+    listIncidents.mockReset()
+  })
+
+  it('DMS-алармы не попадают на карту и в ленту под ролью Логист', async () => {
+    listIncidents.mockResolvedValue([
+      mk({ id: 'dms', vehicle_plate: 'D111АА 77', source: 'DMS', severity: 'critical' }),
+      mk({ id: 'tel', vehicle_plate: 'T222ВВ 97', source: 'TELEMATICS', severity: 'high' }),
+      mk({ id: 'adas', vehicle_plate: 'E333СС 99', source: 'ADAS', severity: 'medium' }),
+    ])
+    renderMonitor()
+
+    await screen.findByTestId('marker-layer')
+    const units = screen.getAllByTestId('marker').map((m) => m.getAttribute('data-unit'))
+    expect(units).not.toContain('D111АА 77') // DMS-слой скрыт для логиста
+    expect(units).toEqual(expect.arrayContaining(['T222ВВ 97', 'E333СС 99']))
+    expect(screen.getByText('(2)')).toBeInTheDocument()
+  })
+})

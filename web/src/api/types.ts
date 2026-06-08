@@ -205,6 +205,8 @@ export interface DriverReport {
   /** Порог: gross>=3 ИЛИ safety_score<60. */
   disciplinary_warning: boolean
   violations: ViolationRow[]
+  /** Текстовое резюме отчёта (b22, Волна 4.2); опционально — генерится AI-слоем. */
+  narrative?: string
 }
 
 export interface FleetByDriverRow {
@@ -236,6 +238,8 @@ export interface FleetReport {
   vehicles_count: number
   by_drivers: FleetByDriverRow[]
   by_vehicles: FleetByVehicleRow[]
+  /** Текстовое резюме по парку (b22, Волна 4.2); опционально — генерится AI-слоем. */
+  narrative?: string
 }
 
 /** `GET /reports/vehicle/{plate}` — len(cameras)=3. */
@@ -350,3 +354,392 @@ export interface IncidentFilters {
 
 /** Каналы видео для `GET /incidents/{id}/video/{channel}`. */
 export type VideoChannel = 1 | 2 | 3 | 5
+
+// ── Волна 3 · тёмные данные fuel / sensors / navigation / fleet-health (§9.2) ──
+// Аддитивно. Поля/типы 1:1 со схемами контракта §9.2 (провенанс колонок — там же).
+// Эти типы использует только w3-10 (api-слой); экраны w3-11/w3-13 импортируют отсюда.
+
+/** Худший статус топливной сверки по ТС (§9.2 fuel). */
+export type FuelReconStatus = 'matched' | 'review' | 'missing_sensor_event'
+
+/** Состояние сенсорной телеметрии (§9.2 sensors). NULL last_valid_nav → `stale`, не падение. */
+export type SensorOnlineStatus = 'online' | 'stale' | 'offline'
+
+/** Сматчен ли навигационный ТС со справочником (§9.2 navigation). */
+export type NavMatchStatus = 'matched' | 'unmatched'
+
+// fuel (из fuel__fuel_vehicles / fuel_summary / fuel_reconciliation / fuel_events)
+
+/** Ответ `GET /api/fuel` (10 ТС). */
+export interface FuelVehicleSummary {
+  vehicle_id: string
+  model: string
+  vin: string
+  /** headline KPI: объём по ЗИС-датчику. */
+  fuel_volume_zis_l: number
+  /** headline KPI: объём по топливным картам. */
+  fuel_volume_card_l: number
+  /** headline KPI: Δ ЗИС−карта (л). */
+  volume_delta_zis_minus_card_l: number
+  refuel_count_zis: number
+  transaction_count_card: number
+  period_start: string
+  period_end: string
+  recon_status: FuelReconStatus
+}
+
+/** Строка сверки транзакция-карта ↔ событие-датчик (`reconciliation`). */
+export interface FuelReconRow {
+  row_id: string
+  transaction_ts: string | null
+  event_ts: string | null
+  transaction_volume_l: number | null
+  sensor_volume_l: number | null
+  volume_delta_l: number | null
+  time_delta_min: number | null
+  amount_rub: number | null
+  status: string
+  reason: string | null
+}
+
+/** Событие топливного датчика (заправка/слив). */
+export interface FuelEvent {
+  event_id: string
+  event_ts: string
+  event_name: string
+  volume_l: number
+  before_l: number | null
+  after_l: number | null
+  lat: number | null
+  lon: number | null
+  address: string | null
+}
+
+/** Сводка карточки топлива (`fuel__fuel_summary`). */
+export interface FuelCardSummary {
+  fuel_spent_l: number
+  total_mileage_km: number
+  average_consumption_l_per_100km: number
+  average_speed_kmh: number
+  fuelings_count: number
+  defuelings_count: number
+}
+
+/** Ответ `GET /api/fuel/{plate}` (404 при неизв. ТС). */
+export interface FuelVehicleCard extends FuelVehicleSummary {
+  summary: FuelCardSummary
+  reconciliation: FuelReconRow[]
+  events: FuelEvent[]
+}
+
+// sensors (из sensors__mileage_and_speed / online_snapshot / daily_mileage / engine_statistics / fuel_level_summary / sensor_catalog)
+
+/** Ответ `GET /api/sensors` (7 ТС). */
+export interface SensorVehicleSummary {
+  public_unit_id: string
+  vehicle_label: string
+  plate: string | null
+  gps_total_distance_km: number
+  distance_odometer_km: number
+  /** CAN−GPS KPI; null → «нет данных» (не 0). */
+  distance_gap_odometer_minus_gps_km: number | null
+  max_speed_kmh: number
+  average_speed_kmh: number
+  satellite_amount: number
+  online_status: SensorOnlineStatus
+  sensor_count: number
+}
+
+/** Точка дневного пробега → спарклайн (ровно 7/ТС, НЕ сырые graph_points). */
+export interface SensorDailyPoint {
+  date: string
+  distance_km: number
+}
+
+/** Статистика двигателя (`engine_statistics`). */
+export interface SensorEngineStats {
+  first_ignition_on: string
+  last_ignition_off: string
+  ignition_duration: string
+  idle_duration: string
+}
+
+/** Сводка уровня топлива (`fuel_level_summary`). */
+export interface SensorFuelLevel {
+  first_fuel_level: number
+  last_fuel_level: number
+  delta_fuel_level: number
+}
+
+/** Снимок последнего online-состояния (`online_snapshot`). */
+export interface SensorSnapshot {
+  speed_kmh: number
+  fuel_volume: number
+  satellite_amount: number
+  timestamp_utc: string
+  last_valid_navigation_timestamp: string | null
+  odometer_mileage: number
+  longitude: number
+  latitude: number
+}
+
+/** Ответ `GET /api/sensors/{plate}` (404). */
+export interface SensorVehicleCard extends SensorVehicleSummary {
+  daily_mileage: SensorDailyPoint[]
+  engine: SensorEngineStats
+  fuel_level: SensorFuelLevel
+  snapshot: SensorSnapshot
+}
+
+// navigation (из navigation__navigation_problem_vehicles / track_periods)
+
+/** Элемент `GET /api/navigation` (5–6) и ответ `GET /api/navigation/{plate}` (404). */
+export interface NavProblemVehicle {
+  public_unit_id: string | null
+  plate: string | null
+  vehicle_label: string | null
+  brand: string | null
+  /** Человеческая «история» проблемы (free text). */
+  problem_description: string
+  match_status: NavMatchStatus
+  /** gap = period_type=3. */
+  gap_count: number
+  total_periods: number
+  total_gap_duration_sec: number
+  /** = public_unit_id; null у unmatched → строка не кликабельна в РЭБ. */
+  reb_link_id: string | null
+  /** plate ∈ v_incidents.vehicle_plate (норм.). */
+  in_video_fleet: boolean
+}
+
+// fleet-health (объединение ТС по нормализованному госномеру, §9.3 28_v_fleet_health)
+
+/** Баннер покрытия (disjoint-популяции, §9.0). */
+export interface FleetHealthCoverage {
+  fuel: number
+  sensors: number
+  navigation: number
+  in_video_fleet: number
+}
+
+/** Строка хаба «Здоровье парка» = одно ТС объединения; отсутствующий домен → `null` («—»). */
+export interface FleetHealthRow {
+  /** Нормализованный госномер — ключ объединения и навигации (fuel/sensor по plate). */
+  plate: string
+  /** Человекочитаемое имя/модель ТС для колонки «ТС». */
+  vehicle_label: string | null
+  /** plate ∈ видеопарк (ровно 2 строки). */
+  in_video_fleet: boolean
+  /** Флаги наличия домена — выбор «самого богатого» при клике (fuel→sensor→reb). */
+  has_fuel: boolean
+  has_sensors: boolean
+  has_nav: boolean
+  /** Топливо: Δ ЗИС−карта (л); null → нет домена. */
+  volume_delta_zis_minus_card_l: number | null
+  recon_status: FuelReconStatus | null
+  /** Сенсоры: CAN−GPS разрыв (км); null → нет домена/нет данных. */
+  distance_gap_odometer_minus_gps_km: number | null
+  online_status: SensorOnlineStatus | null
+  /** Навигация: число gap-периодов; null → нет домена. */
+  gap_count: number | null
+  /** Навигация: id для `/reb/:id`; null → нет домена/unmatched. */
+  reb_link_id: string | null
+}
+
+/** Ответ `GET /api/fleet-health`. */
+export interface FleetHealthResponse {
+  coverage: FleetHealthCoverage
+  rows: FleetHealthRow[]
+}
+
+// ── Волна 4 · AI-слой (§8) — сцена/погода/прогноз/зоны/усталость/копилот/метрики ─
+// Аддитивно. Поля/типы 1:1 со схемами контракта §8.4/§8.6/§8.7/§8.8.
+// Эти типы готовят каркас под Волну 4 (f15–f21): они только импортируют отсюда и
+// используют клиент/фикстуры, не пересоздавая их (§8.5). Без `Date.now()`/`random`.
+
+// scene / weather (§8.1, §8.4)
+
+/** Погодные условия сцены (§8.1). `unknown` — детерминированный фолбэк без VLM/API (§8.0). */
+export type SceneWeather = 'clear' | 'rain' | 'snow' | 'fog' | 'unknown'
+
+/** Время суток сцены (§8.1). Фолбэк — из часа `ts` (§8.0 b16/b17). */
+export type DayNight = 'day' | 'twilight' | 'night'
+
+/** Состояние дорожного покрытия (§8.1). */
+export type RoadSurface = 'dry' | 'wet' | 'snow' | 'ice' | 'unknown'
+
+/** Тип местности (§8.1). */
+export type SceneArea = 'urban' | 'highway' | 'unknown'
+
+/** Видимость (§8.1). */
+export type Visibility = 'good' | 'moderate' | 'poor'
+
+/** Тип расхождения «факт ↔ внешний API» (§8.1 incident_weather). */
+export type DiscrepancyKind = 'weather' | 'daynight' | 'none'
+
+/** `GET /api/incidents/{id}/scene` — сценовый контекст (часть ответа, §8.4). */
+export interface SceneContext {
+  id: string
+  weather: SceneWeather
+  day_night: DayNight
+  road_surface: RoadSurface
+  area: SceneArea
+  visibility: Visibility
+  /** Уверенность разметки сцены, 0..1 (фолбэк → низкая/0). */
+  scene_confidence: number
+}
+
+/** `GET /api/incidents/{id}/scene` — сверка с внешней погодой (часть ответа, §8.4). */
+export interface WeatherCrossCheck {
+  id: string
+  api_weather: string
+  is_day: boolean
+  solar_elevation_deg: number
+  /** Есть ли расхождение факта со внешним API. */
+  discrepancy: boolean
+  discrepancy_kind: DiscrepancyKind
+}
+
+/** Объединённый ответ `GET /api/incidents/{id}/scene` (§8.3): сцена + погодная сверка. */
+export interface SceneResponse {
+  scene: SceneContext
+  weather: WeatherCrossCheck
+}
+
+// forecast (§8.4) — наивный коридор, ML-ветка мёртвая на этих данных (§8.0 b18)
+
+/** Точка прогнозного тренда (наивный базлайн + статический коридор, §8.0). */
+export interface RiskForecastPoint {
+  date: string
+  predicted_events: number
+  ci_low: number
+  ci_high: number
+}
+
+/** `GET /api/reports/forecast/{plate}` (§8.4). */
+export interface RiskForecast {
+  plate: string
+  trend: RiskForecastPoint[]
+  /** На этих данных всегда `false` (нет временного ряда, §8.0 b18). */
+  anomaly: boolean
+  /** Причина отсутствия аномалии/прогноза, напр. «недостаточно истории». */
+  anomaly_reason?: string
+  recommendations: string[]
+  /** Текстовое резюме прогноза (b22, Волна 4.2). */
+  narrative?: string
+}
+
+// zones (§8.1, §8.4)
+
+/** Источник кластера риск-зоны (§8.1 v_risk_zones). */
+export type RiskZoneKind = 'incident' | 'reb'
+
+/** Элемент `GET /api/zones?kind=&hour=` (§8.4). */
+export interface RiskZone {
+  zone_id: string
+  /** [lat, lon] центроида кластера. */
+  centroid: [number, number]
+  radius_m: number
+  alarm_count: number
+  avg_risk: number
+  top_alarm_code: string
+  /** Час пика, 0..23. */
+  peak_hour: number
+  kind: RiskZoneKind
+}
+
+// fatigue (§8.4) — честный empty/sparse-state (§8.0 b20)
+
+/** Событие в цепочке усталости (§8.4). */
+export interface FatigueEvent {
+  code: string
+  ts: string
+}
+
+/** Элемент `GET /api/fatigue?plate=` (§8.4). Пустой набор валиден (§8.0 b20). */
+export interface FatigueChain {
+  plate: string
+  trip_id?: string
+  events: FatigueEvent[]
+  window_min: number
+  severity: Severity
+}
+
+// copilot (§8.4)
+
+export type CopilotRole = 'user' | 'assistant'
+export type CopilotLang = 'ru' | 'en'
+
+/** Вызов инструмента копилотом (LLM tool-use, §8.4). */
+export interface CopilotToolCall {
+  name: string
+  args: Record<string, unknown>
+}
+
+/** `POST /api/copilot/chat` (§8.4). `data` — произвольный полезный груз ответа (отчёт/зоны/…). */
+export interface CopilotMessage {
+  role: CopilotRole
+  text: string
+  lang: CopilotLang
+  tool_calls?: CopilotToolCall[]
+  data?: unknown
+}
+
+// governance (§8.6)
+
+/** AI-фича с управляемостью (§8.6). */
+export type AiFeatureName =
+  | 'scene'
+  | 'forecast'
+  | 'zones'
+  | 'fatigue'
+  | 'copilot'
+  | 'verdict'
+
+/** Источник ответа AI-фичи: живой вызов / кэш / детерминированный фолбэк (§8.6). */
+export type AiSource = 'live' | 'cache' | 'fallback'
+
+/** Мета-состояние AI-фичи в ответах AI-слоя (§8.6). */
+export interface AiFeatureState {
+  name: AiFeatureName
+  enabled: boolean
+  source: AiSource
+  latency_ms: number
+}
+
+// metrics / data-quality (§8.7)
+
+/** `GET /api/metrics/ai` — KPI AI-слоя (§8.7). */
+export interface AiMetrics {
+  recommendation_acceptance: number
+  copilot_tool_success: number
+  weather_mismatch_rate: number
+  zone_hit_rate: number
+  /** Среднее время до триажа, сек. */
+  avg_time_to_triage: number
+  forecast_coverage: number
+}
+
+/** `GET /api/metrics/data-quality` — качество данных (§8.7). Все `*_ratio` ∈ [0,1]. */
+export interface DataQuality {
+  camera_offline_ratio: number
+  missing_gps_ratio: number
+  missing_media_ratio: number
+  weather_mismatch_rate: number
+  incidents_with_video_ratio: number
+}
+
+// explainability (§8.8) — вклады слагаемых формулы risk_score (§2), для waterfall
+
+/** `GET /api/incidents/{id}/risk-breakdown` — декомпозиция риска (§8.8). */
+export interface RiskBreakdown {
+  id: string
+  /** Вклады в очках score (уже умножены на веса §2); сумма = `total_risk_score`. */
+  severity_w: number
+  speed_ratio: number
+  night: number
+  freq_w: number
+  /** Погодно-сценовая надбавка (§8.2); 0 без кэша. */
+  weather_bonus: number
+  total_risk_score: number
+}

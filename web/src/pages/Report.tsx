@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   Archive,
   ChevronLeft,
   ChevronRight,
+  ExternalLink,
   Inbox,
   Info,
   RotateCcw,
@@ -188,6 +189,24 @@ const VIOLATION_COLUMNS: Column<ViolationRow>[] = [
   { id: 'severity', header: 'Severity', cell: (r) => <SeverityBadge severity={r.severity} label={SEVERITY_LABEL[r.severity]} /> },
   { id: 'gross', header: 'Грубое', align: 'center', cell: (r) => (r.is_gross ? <span className="text-critical-text" title="Грубое нарушение">●</span> : <span className="text-muted">—</span>), sortable: true, sortValue: (r) => (r.is_gross ? 1 : 0) },
   { id: 'video', header: '', align: 'center', cell: () => <Video className="inline h-4 w-4 text-muted" aria-hidden /> },
+  // w3-12 · кросс-врезка: нарушение → карточка инцидента. stopPropagation сохраняет
+  // killer-feature (клик по строке открывает инлайн-видео, ссылка — аддитивна).
+  {
+    id: 'open',
+    header: '',
+    align: 'center',
+    cell: (r) => (
+      <Link
+        to={`/incidents/${r.id}`}
+        onClick={(e) => e.stopPropagation()}
+        aria-label="Открыть карточку инцидента"
+        title="Открыть карточку инцидента"
+        className="inline-grid h-7 w-7 place-items-center rounded text-muted transition-colors hover:bg-bg hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        <ExternalLink className="h-4 w-4" aria-hidden />
+      </Link>
+    ),
+  },
 ]
 
 const FLEET_DRIVER_COLUMNS: Column<FleetByDriverRow>[] = [
@@ -481,10 +500,13 @@ function FleetDashboard({
   report,
   view,
   onView,
+  onDrill,
 }: {
   report: FleetReport
   view: 'drivers' | 'vehicles'
   onView: (v: 'drivers' | 'vehicles') => void
+  // w3-12 · drill строки парка → отчёт по водителю (re-query через runQuery).
+  onDrill: (driverName: string) => void
 }) {
   const empty = view === 'drivers' ? report.by_drivers.length === 0 : report.by_vehicles.length === 0
   return (
@@ -525,6 +547,7 @@ function FleetDashboard({
       <Card className="p-0">
         <div className="border-b border-border px-4 py-3 text-sm font-semibold text-ink">
           {view === 'drivers' ? 'Рейтинг водителей' : 'Рейтинг ТС'}
+          <span className="font-normal text-muted"> — клик по строке открывает отчёт водителя</span>
         </div>
         {empty ? (
           <div className="flex flex-col items-center gap-2 py-12 text-center text-muted">
@@ -532,9 +555,19 @@ function FleetDashboard({
             <p className="text-sm">Данных за период нет</p>
           </div>
         ) : view === 'drivers' ? (
-          <DataTable columns={FLEET_DRIVER_COLUMNS} rows={report.by_drivers} rowKey={(r) => r.driver.driver_id} />
+          <DataTable
+            columns={FLEET_DRIVER_COLUMNS}
+            rows={report.by_drivers}
+            rowKey={(r) => r.driver.driver_id}
+            onRowClick={(r) => onDrill(r.driver.driver_name)}
+          />
         ) : (
-          <DataTable columns={FLEET_VEHICLE_COLUMNS} rows={report.by_vehicles} rowKey={(r) => r.plate} />
+          <DataTable
+            columns={FLEET_VEHICLE_COLUMNS}
+            rows={report.by_vehicles}
+            rowKey={(r) => r.plate}
+            onRowClick={(r) => onDrill(r.main_driver)}
+          />
         )}
       </Card>
     </div>
@@ -668,6 +701,16 @@ export default function Report() {
     inputRef.current?.focus()
   }, [])
 
+  // w3-12 · drill строки парка → отчёт по водителю (re-query через существующий runQuery).
+  const drillFleet = useCallback(
+    (driverName: string) => {
+      if (!driverName) return
+      setText(driverName)
+      void runQuery(driverName, { auto: true })
+    },
+    [runQuery],
+  )
+
   // ── Голос → текст ────────────────────────────────────────────────────────────
   const onRecorded = useCallback(async (blob: Blob) => {
     setVoiceState('processing')
@@ -779,7 +822,7 @@ export default function Report() {
             onCursor={(id) => setVideoSel({ id, source: report.violations.find((v) => v.id === id)?.source ?? null })}
           />
         ) : (
-          <FleetDashboard report={report} view={fleetView} onView={setFleetView} />
+          <FleetDashboard report={report} view={fleetView} onView={setFleetView} onDrill={drillFleet} />
         )
       )}
 
