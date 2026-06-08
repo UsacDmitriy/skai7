@@ -54,17 +54,24 @@ CSV без `.csv`, lowercase. Колонки — заголовки CSV **дос
 Коллизии разруливаются префиксом: `video_events__track_points` ≠ `navigation__track_points`.
 
 Ключевые таблицы домена incidents:
-`video_events__selected_video_alarms` (54), `video_events__video_files` (94, есть `channel` 1/2/3/5 и `media_relative_path`), `video_events__track_points` (6635), `video_events__track_summary` (54), `video_events__max_speed_points` (80), `video_events__vehicles` (21).
+`video_events__selected_video_alarms` (55 = 54 видео-алярма + 1 seeded no-video, w3-5), `video_events__video_files` (94, есть `channel` 1/2/3/5 и `media_relative_path`), `video_events__track_points` (6635), `video_events__track_summary` (54), `video_events__max_speed_points` (80), `video_events__vehicles` (21).
 
 ### 1.2 Справочник `alarm_type_catalog`
 
 Из `data/analysis/alarm_types.json` (массив `alarm_types`). Колонки:
 `raw, code, label_ru, source, severity, requires_video, auto_request_video`. 14 строк.
 
-### 1.3 View `v_incidents` — контракт колонок (одна строка на алярм, ровно 54)
+### 1.3 View `v_incidents` — контракт колонок (одна строка на алярм, 55)
 
 База: `"video_events__selected_video_alarms"`. JOIN'ы не размножают строки (для `lat/lon`,
 `cam_*_url` — подзапрос с выбором одной строки).
+
+> **No-video инцидент (w3-5).** P0-набор содержит **≥1 строку с `video_available=0`** (`SELECT
+> video_available, count(*) FROM v_incidents GROUP BY 1` → есть `(0, ≥1)`). Это детерминированный
+> seed-алярм `CAMERA_TAMPER` (`Type=Sabotage`, `VideoCount=0`, без `video_files`): саботаж DMS-камеры —
+> естественный кейс «видео нет». Делает достижимой ветку empty-state + «Запросить архив» и поля §2,
+> действующие только для no-video (`sensor_active_after_sec`, `cam_*_url=null`, 3 камеры → `offline`).
+> В Волне 2 к ним добавятся no-video инциденты из невидеосорсов (саботаж/РЭБ/диагностика) через UNION.
 
 | Колонка | Тип | Источник |
 |---|---|---|

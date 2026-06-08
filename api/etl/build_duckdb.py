@@ -183,7 +183,7 @@ def _print_summary(conn: duckdb.DuckDBPyConnection, tables_total: int) -> None:
 
     # Key row counts
     checks = [
-        ("video_events__selected_video_alarms", 54),
+        ("video_events__selected_video_alarms", 55),  # w3-5: 54 видео + 1 seeded no-video
         ("alarm_type_catalog", 15),
         ("video_events__track_points", None),
         ("navigation__track_points", None),

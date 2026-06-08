@@ -164,7 +164,7 @@ class TestIncidentsService:
         from api.domain.incidents import IncidentSummary
 
         summaries = list_summaries(db, {})
-        assert len(summaries) == 54
+        assert len(summaries) == 55  # w3-5: 54 видео-алярма + 1 seeded no-video
         assert all(isinstance(s, IncidentSummary) for s in summaries)
 
     def test_get_detail_has_all_enrichment_fields(self, db):
@@ -266,7 +266,7 @@ class TestReportsService:
         rep = reports_service.fleet_report(db)
         assert isinstance(rep, FleetReport)
         assert rep.vehicles_count == len(rep.by_vehicles) == len(rep.by_drivers)
-        assert rep.kpi.total == 54
+        assert rep.kpi.total == 55  # w3-5: 54 видео-алярма + 1 seeded no-video
 
     def test_query_routes_fleet_and_driver(self, db):
         # §7.4: query теперь возвращает обёртку {"query": ReportQuery, "report": ...}.
