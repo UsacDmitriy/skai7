@@ -165,15 +165,3 @@ class TestNoVideoIncident:
         iid = _no_video_incident_id(client)
         # Видео нет ни на одном канале → легитимный 404 (не 5xx).
         assert client.get(f"/api/incidents/{iid}/video/5").status_code == 404
-
-
-# ---------------------------------------------------------------------------
-# Заглушки — 501 (§3.4)
-# ---------------------------------------------------------------------------
-
-
-class TestStubsReturn501:
-    @pytest.mark.parametrize("path", ["/api/fuel/summary"])  # navigation (w3-8)/sensors (w3-7) повышены из стаба (§9.1)
-    def test_stub_501(self, client: TestClient, path: str):
-        r = client.get(path)
-        assert r.status_code == 501

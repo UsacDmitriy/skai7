@@ -1,14 +1,13 @@
 """Интеграционные тесты P1/P2-ручек + стабов + OpenAPI (CONTRACT §7.4 / §7.5 / §3.4).
 
 tickets / alerts / trips / reb / sabotage → 200 + схемы §7.5;
-fuel/* и sensors/* → 501; в `/openapi.json` присутствуют теги всех роутеров.
+fuel/sensors/navigation → рабочие домены (§9, w3-6/7/8); в `/openapi.json` присутствуют теги всех роутеров.
 """
 
 from __future__ import annotations
 
 import csv
 
-import pytest
 from fastapi.testclient import TestClient
 
 from api.core.config import settings
@@ -148,18 +147,23 @@ class TestSabotage:
 
 
 # ---------------------------------------------------------------------------
-# Стаб-домены → 501 (§3.4): fuel/* и sensors/*
+# Домен fuel (§9.2) — повышен из стаба (w3-6): list → 200, неизвестный ТС → 404
 # ---------------------------------------------------------------------------
 
 
-class TestStubs501:
-    # sensors/* повышены из стаба (§9.1, w3-7); fuel/* — домен w3-6.
-    @pytest.mark.parametrize(
-        "path",
-        ["/api/fuel", "/api/fuel/A123BC77"],
-    )
-    def test_stub_returns_501(self, client: TestClient, path: str):
-        assert client.get(path).status_code == 501
+class TestFuelDomain:
+    def test_fuel_list_ok(self, client: TestClient):
+        r = client.get("/api/fuel")
+        assert r.status_code == 200, r.text
+        data = r.json()
+        assert isinstance(data, list) and data, "v_fuel — 10 ТС, список не пуст"
+        # Заголовочный KPI домена + статус сверки (§9.2).
+        assert "volume_delta_zis_minus_card_l" in data[0]
+        assert "recon_status" in data[0]
+
+    def test_fuel_unknown_plate_404(self, client: TestClient):
+        # Неизвестный госномер → 404 (детерминированно), не 501/5xx.
+        assert client.get("/api/fuel/A123BC77").status_code == 404
 
 
 # ---------------------------------------------------------------------------
