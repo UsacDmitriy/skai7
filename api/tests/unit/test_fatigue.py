@@ -5,6 +5,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta
+
 import pytest
 
 from api.services.fatigue_service import _build_chains
@@ -13,6 +15,13 @@ from api.services.fatigue_service import _build_chains
 # ---------------------------------------------------------------------------
 # Вспомогательные функции
 # ---------------------------------------------------------------------------
+
+_BASE_TS = datetime(2024, 1, 1, 8, 0, 0)
+
+
+def _ts_at(minutes: int) -> str:
+    return (_BASE_TS + timedelta(minutes=minutes)).strftime("%Y-%m-%d %H:%M:%S.%f")
+
 
 def _row(plate: str, code: str, ts: str) -> dict:
     return {"vehicle_plate": plate, "alarm_code": code, "ts": ts}
@@ -77,8 +86,7 @@ def test_plate_filter_two_plates():
 def test_severity_monotonically_increasing():
     """Severity растёт с длиной цепочки и с наличием DMS_DROWSY."""
     def chain_severity(codes: list[str]) -> str:
-        ts_base = "2024-01-01 08:{:02d}:00.000000"
-        rows = [_row("X", code, ts_base.format(i * 10)) for i, code in enumerate(codes)]
+        rows = [_row("X", code, _ts_at(i * 10)) for i, code in enumerate(codes)]
         result = _build_chains(rows)
         assert len(result) == 1, f"Ожидали 1 цепочку, получили {len(result)}"
         return result[0].severity
@@ -135,3 +143,31 @@ def test_chain_window_and_trip_id_none():
     assert len(result) == 1
     assert result[0].window_min == 90
     assert result[0].trip_id is None
+
+
+def test_non_overlapping_chains():
+    """4 события A,B,C,D — все в окне 90 мин от первого → одна цепочка."""
+    rows = [
+        _row("P1", "DMS_YAWNING",   "2024-01-01 08:00:00.000000"),
+        _row("P1", "DMS_DROWSY",    "2024-01-01 08:30:00.000000"),
+        _row("P1", "HARSH_BRAKING", "2024-01-01 09:00:00.000000"),
+        _row("P1", "HARSH_ACCEL",   "2024-01-01 09:15:00.000000"),  # 75 мин от первого
+    ]
+    chains = _build_chains(rows)
+    assert len(chains) == 1
+    assert len(chains[0].events) == 4
+
+
+def test_two_separate_chains():
+    """Два кластера событий с 4-часовым разрывом → 2 цепочки."""
+    rows = [
+        _row("P1", "DMS_YAWNING",   "2024-01-01 08:00:00.000000"),
+        _row("P1", "HARSH_BRAKING", "2024-01-01 08:30:00.000000"),
+        # разрыв 4 часа
+        _row("P1", "DMS_DROWSY",    "2024-01-01 12:00:00.000000"),
+        _row("P1", "HARSH_ACCEL",   "2024-01-01 12:20:00.000000"),
+    ]
+    chains = _build_chains(rows)
+    assert len(chains) == 2
+    assert chains[0].severity == "medium"   # 2 события, нет DMS_DROWSY
+    assert chains[1].severity == "high"     # 2 события, есть DMS_DROWSY

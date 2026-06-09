@@ -23,6 +23,6 @@ DbDep = Annotated[duckdb.DuckDBPyConnection, Depends(get_db)]
 
 
 @router.get("", response_model=list[FatigueChain])
-def list_fatigue(plate: str | None = None, db: DbDep = Depends(get_db)) -> list[FatigueChain]:
+def list_fatigue(db: DbDep, plate: str | None = None) -> list[FatigueChain]:
     """Цепочки усталости (скользящее окно 90 мин). Опционально `?plate=`."""
     return fatigue_service.chains(db, plate=plate)

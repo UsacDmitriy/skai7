@@ -10,7 +10,7 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-from api.domain.common import Status
+from api.domain.common import Severity, Status
 from api.domain.incidents import IncidentDetail, TelemetryPoint
 
 # Допустимые действия журнала (§3.4).
@@ -123,8 +123,6 @@ class SabotageEvent(BaseModel):
 # ---------------------------------------------------------------------------
 # Fatigue Chain (b20)
 # ---------------------------------------------------------------------------
-
-from api.domain.common import Severity  # noqa: E402  (local import to avoid circular)
 
 
 class FatigueEvent(BaseModel):

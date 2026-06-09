@@ -104,25 +104,26 @@ def chains(
     window_min: int = _WINDOW_MIN,
 ) -> list[FatigueChain]:
     """Возвращает цепочки усталости. Опционально фильтрует по госномеру."""
-    in_list = ", ".join(f"'{c}'" for c in sorted(FATIGUE_CODES))
+    codes = sorted(FATIGUE_CODES)
+    placeholders = ", ".join("?" * len(codes))
 
     if plate is not None:
-        sql = (
-            f'SELECT "alarm_code", "ts", "vehicle_plate" '
-            f'FROM "v_incidents" '
-            f'WHERE "alarm_code" IN ({in_list}) '
-            f'  AND "vehicle_plate" = ? '
-            f'ORDER BY "vehicle_plate", "ts"'
-        )
-        result = db.execute(sql, [plate])
+        sql = f"""
+            SELECT "alarm_code", "ts", "vehicle_plate"
+            FROM "v_incidents"
+            WHERE "alarm_code" IN ({placeholders})
+              AND "vehicle_plate" = ?
+            ORDER BY "vehicle_plate", "ts"
+        """
+        result = db.execute(sql, codes + [plate])
     else:
-        sql = (
-            f'SELECT "alarm_code", "ts", "vehicle_plate" '
-            f'FROM "v_incidents" '
-            f'WHERE "alarm_code" IN ({in_list}) '
-            f'ORDER BY "vehicle_plate", "ts"'
-        )
-        result = db.execute(sql)
+        sql = f"""
+            SELECT "alarm_code", "ts", "vehicle_plate"
+            FROM "v_incidents"
+            WHERE "alarm_code" IN ({placeholders})
+            ORDER BY "vehicle_plate", "ts"
+        """
+        result = db.execute(sql, codes)
 
     rows = rows_to_dicts(result)
     return _build_chains(rows, window_min=window_min)
