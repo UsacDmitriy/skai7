@@ -20,6 +20,7 @@ import type {
   Camera,
   CameraStatus,
   IncidentDetail,
+  SceneResponse,
   Severity,
   Source,
   Status,
@@ -34,6 +35,8 @@ import {
   TelemetryChart,
   VideoPlayer,
 } from '@/components'
+import { SceneContextChip } from '@/components/ai/SceneContextChip'
+import { DiscrepancyBadge } from '@/components/ai/DiscrepancyBadge'
 import { cn } from '@/components/ui/cn'
 
 /**
@@ -179,6 +182,10 @@ export default function IncidentCard() {
   // w3-12 · кросс-врезка: заявки по инциденту (trip_id == incident_id == id).
   const [relatedTickets, setRelatedTickets] = useState<Ticket[]>([])
 
+  // f15 · контекст сцены (погода/день-ночь/покрытие + флаг расхождения, идея #11).
+  const [scene, setScene] = useState<SceneResponse | null>(null)
+  const [sceneLoading, setSceneLoading] = useState(true)
+
   // Роль пользователя (локальный переключатель — до реализации f13/глобального контекста).
   const [role, setRole] = useState<AppRole>('dispatcher')
 
@@ -222,6 +229,27 @@ export default function IncidentCard() {
       })
       .catch(() => {
         if (alive) setRelatedTickets([])
+      })
+    return () => {
+      alive = false
+    }
+  }, [id])
+
+  // f15 · подтянуть сцену (мягко: нет данных / 404 → блок скрыт, карточка не падает).
+  useEffect(() => {
+    let alive = true
+    setScene(null)
+    setSceneLoading(true)
+    client
+      .getScene(id)
+      .then((data) => {
+        if (alive) setScene(data)
+      })
+      .catch(() => {
+        if (alive) setScene(null)
+      })
+      .finally(() => {
+        if (alive) setSceneLoading(false)
       })
     return () => {
       alive = false
@@ -439,6 +467,35 @@ export default function IncidentCard() {
           </div>
         )}
       </Card>
+
+      {/* ── f15 · Контекст сцены (идея #11) ─────────────────────────────────────
+          Погода/день-ночь/покрытие + флаг расхождения «камера ↔ погода».
+          Нет данных сцены / 404 → блок скрыт (не рендерится), карточка не падает. */}
+      {(sceneLoading || scene) && (
+        <Card>
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
+              Контекст
+            </h2>
+            {sceneLoading ? (
+              <SkeletonBox className="h-6 w-44" />
+            ) : (
+              scene && (
+                <>
+                  <SceneContextChip scene={scene.scene} />
+                  <DiscrepancyBadge weather={scene.weather} />
+                  {/* governance-индикатор (§8.6): кэш/фолбэк — когда не живой вызов. */}
+                  {scene.state && scene.state.source !== 'live' && (
+                    <span className="text-xs text-muted">
+                      {scene.state.source === 'cache' ? '· из кэша' : '· фолбэк (без VLM)'}
+                    </span>
+                  )}
+                </>
+              )
+            )}
+          </div>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* ── Видео + телеметрия ────────────────────────────────────────────── */}

@@ -1252,6 +1252,30 @@ export const WEATHER: WeatherCrossCheck = {
   discrepancy_kind: 'none',
 }
 
+/**
+ * f15 · Сценовый контекст inc-002 — демо-кейс расхождения «камера ↔ погода» (§8.2).
+ * Камера видит «ясно» при мокром покрытии, внешний API сообщает дождь → discrepancy.
+ */
+export const SCENE_INC_002: SceneContext = {
+  id: 'inc-002',
+  weather: 'clear', // факт по камере — ясно
+  day_night: 'night',
+  road_surface: 'wet', // мокрое покрытие → рисковый чип
+  area: 'unknown',
+  visibility: 'moderate',
+  scene_confidence: 0.74,
+}
+
+/** f15 · Погодная сверка inc-002 — внешний API расходится с фактом камеры (§8.2). */
+export const WEATHER_INC_002: WeatherCrossCheck = {
+  id: 'inc-002',
+  api_weather: 'rain', // внешний API: дождь vs «ясно» по камере
+  is_day: false,
+  solar_elevation_deg: -22.0,
+  discrepancy: true,
+  discrepancy_kind: 'weather',
+}
+
 /** Прогноз риска по А777ВВ 77 — наивный коридор, ML-ветка мёртвая (§8.0 b18). */
 export const FORECAST: RiskForecast = {
   plate: 'А777ВВ 77',
@@ -1363,9 +1387,19 @@ export const RISK_BREAKDOWN: RiskBreakdown = {
 
 // ── AI-хелперы (повторяют сигнатуры клиента) ───────────────────────────────────
 
-/** Сцена + погодная сверка по id (GET /api/incidents/{id}/scene). Демо — всегда inc-001. */
-export function getFixtureScene(_id: string): SceneResponse {
-  return { scene: SCENE, weather: WEATHER }
+/**
+ * f15 · Сцены по id инцидента (демо): inc-001 — фолбэк без расхождения,
+ * inc-002 — кейс расхождения «камера ↔ погода» (бейдж). Прочие id → inc-001,
+ * чтобы чип сцены был виден на любой карточке в фикстур-режиме.
+ */
+const SCENE_BY_ID: Record<string, SceneResponse> = {
+  'inc-001': { scene: SCENE, weather: WEATHER },
+  'inc-002': { scene: SCENE_INC_002, weather: WEATHER_INC_002 },
+}
+
+/** Сцена + погодная сверка по id (GET /api/incidents/{id}/scene), id-aware. */
+export function getFixtureScene(id: string): SceneResponse {
+  return SCENE_BY_ID[id] ?? SCENE_BY_ID['inc-001']
 }
 
 /** Цепочки усталости по госномеру: демо-ТС → одиночный признак, иначе [] (валидно, §8.0 b20). */
