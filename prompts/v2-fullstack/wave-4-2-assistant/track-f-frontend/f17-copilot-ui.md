@@ -32,5 +32,7 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "f17: <что сделано>"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add web/src/pages/Copilot.tsx web/src/api/copilot.ts
+git commit -m "f17: <что сделано>"
 ```

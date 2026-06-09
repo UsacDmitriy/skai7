@@ -32,5 +32,7 @@ audit-trail действий, rate-limit на тяжёлые эндпоинты,
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "b26: <что сделано>"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add api/core/security.py api/core/audit.py docs/SLO.md api/main.py
+git commit -m "b26: <что сделано>"
 ```

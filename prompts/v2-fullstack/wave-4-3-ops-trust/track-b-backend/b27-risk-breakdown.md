@@ -1,7 +1,7 @@
 # b27 · Risk-breakdown endpoint (идея #19, владелец §8.8)
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.8 (+ §2 формула risk_score). **Владеет:**
-> `api/services/risk_breakdown_service.py`, роутер `api/routers/risk_breakdown.py` (в `ALL_ROUTERS`).
+> `api/services/risk_breakdown_service.py`, роутер `api/routers/risk_breakdown.py` (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`).
 > **Модель:** 🔵 Sonnet — детерминированная декомпозиция формулы; гейт = тесты.
 > **Волна 4.3**, окно 1 (backend). Зависит от: `enrichment.py` (risk_score, §2), b17 (`weather_bonus`, §8.2).
 > Потребитель — `f20` risk-waterfall. **Закрывает «висящий» эндпоинт #19** (раньше владельца не было).
@@ -32,5 +32,7 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "b27: <что сделано>"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add api/services/risk_breakdown_service.py api/routers/risk_breakdown.py
+git commit -m "b27: <что сделано>"
 ```

@@ -82,5 +82,7 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "f23: точка входа в /alert/:id из ленты (overlay-триггер идеи #5)"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add web/src/pages/EventsFeed.tsx web/src/pages/Monitor.tsx
+git commit -m "f23: точка входа в /alert/:id из ленты (overlay-триггер идеи #5)"
 ```

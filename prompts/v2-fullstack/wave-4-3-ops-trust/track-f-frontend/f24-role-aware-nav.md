@@ -74,5 +74,7 @@ issue #4: NAV в `App.tsx` показывает **одно и то же меню
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "f24: роль-зависимый NAV — селектор navForRole + roles? у пунктов, согласовано с контент-фильтром (issue #4)"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add web/src/App.tsx web/src/state/role.ts
+git commit -m "f24: роль-зависимый NAV — селектор navForRole + roles? у пунктов, согласовано с контент-фильтром (issue #4)"
 ```

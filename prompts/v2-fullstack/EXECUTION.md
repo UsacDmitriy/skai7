@@ -122,7 +122,7 @@ integration (x1/x2), поэтому в параллельной фазе их н
 - **Барьер 4.1 — smoke умное событие/прогнозы** (`skai_7`, `integration`): x6 (GUARD+merge → smoke; `main` не трогает).
 - **Волна 4.2 — Ассистент + визуализация** (backend ∥ web): BACKEND b21∥b22∥b23 ; WEB f15→f16, f17∥f18∥f19 ; TESTS tu-copilot, t-wave4-frontend.
 - **Барьер 4.2 — e2e ассистент** (`skai_7`, `integration`): x7 (GUARD+merge → e2e 4.2 + регресс; **`main` не трогает**).
-- **Волна 4.3 — AI Ops & Trust** (backend ∥ web ∥ tests): BACKEND b25∥b26∥b27 ; WEB f20∥f21 + **целостность экранов** f22∥f23∥f24 ; TESTS/CI t5∥t6 + per-feature tu-metrics/security/riskbreakdown. Измеримость (#18) + explainability (#19, владелец `b27`) + hardening (#20) + целостность экранов (нав-сироты/триггер #5/роль-нав).
+- **Волна 4.3 — AI Ops & Trust** (backend ∥ web ∥ tests): BACKEND b25∥b26∥b27 ; WEB f20∥f21 + **целостность экранов** f23 ∥ (**f22→f24** — общий `App.tsx`, последовательно) ; TESTS/CI t5∥t6 + per-feature tu-metrics/security/riskbreakdown. Измеримость (#18) + explainability (#19, владелец `b27`) + hardening (#20) + целостность экранов (нав-сироты/триггер #5/роль-нав).
 - **Барьер 4.3 — финал AI-слоя** (`skai_7`, `integration`): x8 (GUARD+merge → e2e ops/trust + полный регресс Волны 4 + **nightly live-smoke**) → merge в `main`.
 
 > **Заморозка `main` на время волн.** Все коммиты идут в `feat/*` и `integration`; **в `main` напрямую
@@ -308,9 +308,8 @@ flowchart TD
             direction TB
             f20["f20 risk-waterfall (explainability) · 🔵"] -.->|/risk-breakdown| b27
             f21["f21 metrics/data-quality (/metrics) · 🔵"]
-            f22["f22 нав-интегритет (редиректы+бейджи) · 🔵"]
+            f22["f22 нав-интегритет (редиректы+бейджи) · 🔵"] -->|общий App.tsx| f24["f24 роль-согласованный NAV · 🔵"]
             f23["f23 триггер DispatchAlert /alert/:id (#5) · 🔵"]
-            f24["f24 роль-согласованный NAV · 🔵"]
         end
         subgraph T43["🪟 Окно 3 · tests/CI — после кода"]
             direction TB
@@ -513,7 +512,7 @@ git **внутри промпта** (`x7` GUARD+merge → e2e 4.2 + регрес
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
 | 1 Backend | `b25`🔵 (метрики/data-quality) ∥ `b26`🔴 (security/audit/throttle/SLO) ∥ `b27`🔵 (`/risk-breakdown`, владелец #19) | `b25`/`b27` регистрируют роутеры `metrics`/`risk_breakdown` в `ALL_ROUTERS`; `b26` — middleware в `main.py` (dev: off) |
-| 2 Web | `f20`🔵 (risk-waterfall ← b27) ∥ `f21`🔵 (`/metrics` панель) ; **целостность экранов:** `f22`🔵 (нав-интегритет) ∥ `f23`🔵 (триггер DispatchAlert #5) ∥ `f24`🔵 (роль-NAV) | аддит. к IncidentCard/Report/App.tsx; `/metrics` — из prep `w3-18`; f22/f23/f24 чинят сироты-нав/достижимость #5/роль-нав |
+| 2 Web | `f20`🔵 (risk-waterfall ← b27) ∥ `f21`🔵 (`/metrics` панель) ; **целостность экранов:** `f23`🔵 (триггер DispatchAlert #5, `EventsFeed.tsx`) ∥ **`f22`🔵 → `f24`🔵** (оба правят `App.tsx` NAV — последовательно) | аддит. к IncidentCard/Report; `/metrics` — из prep `w3-18`; **f22/f24 делят `App.tsx` → не параллелить** |
 | 3 Tests/CI | `t5`🟢 (CURRENT_STATUS) ∥ `t6`🔵 (remote CI + nightly live-smoke) ; per-feature `tu-metrics`∥`tu-security`∥`tu-riskbreakdown`🔵 | расширяют каркас `gen_status.py`/`.github/workflows` из prep `w3-19`; unit-паритет с 4.1/4.2 |
 
 ### Барьер 4.3 — финал AI-слоя (основное окно `skai_7`)

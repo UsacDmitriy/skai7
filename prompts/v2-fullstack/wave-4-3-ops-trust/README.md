@@ -12,7 +12,7 @@
 | Окно | Промпты | Модель |
 |---|---|---|
 | 1 Backend | `b25` ai-metrics + data-quality (`/metrics/*`, `ai_metric_events`) ∥ `b26` security-baseline (auth/audit/throttle, SLO) ∥ `b27` risk-breakdown (`/risk-breakdown`, владелец #19) | b25/b27 🔵 · b26 🔴 |
-| 2 Web | `f20` risk-waterfall (`/risk-breakdown` ← b27) ∥ `f21` metrics + data-quality (`/metrics`) ; **целостность экранов:** `f22` нав-интегритет (редиректы дублей + бейджи Скоро/Будущее) ∥ `f23` триггер DispatchAlert `/alert/:id` (идея #5) ∥ `f24` роль-согласованный NAV | 🔵 Sonnet |
+| 2 Web | `f20` risk-waterfall (`/risk-breakdown` ← b27) ∥ `f21` metrics + data-quality (`/metrics`) ; **целостность экранов:** `f23` триггер DispatchAlert `/alert/:id` (идея #5, `EventsFeed.tsx`) ∥ **`f22` → `f24`** (оба правят `App.tsx` NAV — **последовательно**, не параллельно: f24 поверх f22) | 🔵 Sonnet |
 | 3 Tests/CI | `t5` CURRENT_STATUS ∥ `t6` remote CI + nightly live-smoke ; **per-feature:** `tu-metrics` (b25) ∥ `tu-security` (b26) ∥ `tu-riskbreakdown` (b27) | t5 🟢 · остальные 🔵 |
 
 > **Зависит от подготовки Волны 3** (`wave-3-backlog/` w3-16…w3-19): `ai_metric_events` DDL, типы/клиент/
@@ -23,4 +23,9 @@
 Волны 4 + nightly live-smoke → продвигает `main` (финал Волны 4).
 
 > Каждый промпт заканчивается секцией `## Коммит` — merge на барьере берёт только коммиты.
-> ⚠ `b25` регистрирует роутер `metrics` в `ALL_ROUTERS`.
+>
+> ⚠️ **Параллельный коммит без `git add -A`.** `b25∥b26∥b27`, `f20∥f21`, `f23∥(f22→f24)`, `t5∥t6`,
+> `tu-*` идут одновременно в одной ветке — `## Коммит` каждого стейджит **только свои файлы**.
+> Роутеры `metrics`/`risk_breakdown` **автодискаверятся** (`api/main.py:_discover_routers`) —
+> общий `api/routers/__init__.py` не трогаем. `b26` — единственный правит `api/main.py` (middleware).
+> **`f22` и `f24` правят один `App.tsx` → последовательно (`f22`→`f24`), не параллельно.**

@@ -29,5 +29,7 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "b23: <что сделано>"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add api/sql/23_v_sabotage.sql api/services/sabotage_service.py
+git commit -m "b23: <что сделано>"
 ```

@@ -1,7 +1,7 @@
 # b21 · Fleet Copilot — разговорный ассистент (идея #13)
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/copilot_service.py`,
-> роутер `api/routers/copilot.py` (в `ALL_ROUTERS`). Расширяет паттерн `nlu_service`.
+> роутер `api/routers/copilot.py` (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`). Расширяет паттерн `nlu_service`.
 > **Модель:** 🔴 Opus — оркестрация LLM tool-use, надёжный фолбэк, двуязычность.
 > **Волна 4.2**, окно 1 (backend). Зависит от: существующие сервисы (incidents/reports/forecast/zones/fatigue/sabotage).
 
@@ -40,5 +40,7 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "b21: <что сделано>"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add api/services/copilot_service.py api/routers/copilot.py
+git commit -m "b21: <что сделано>"
 ```

@@ -29,5 +29,7 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "t5: <что сделано>"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add CURRENT_STATUS.md scripts/gen_status.py
+git commit -m "t5: <что сделано>"
 ```

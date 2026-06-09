@@ -1,7 +1,7 @@
 # b25 · AI-метрики + data-quality (по research-отчёту)
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.7. **Владеет:** `api/services/metrics_service.py`,
-> роутер `api/routers/metrics.py` (в `ALL_ROUTERS`), таблица `ai_metric_events`.
+> роутер `api/routers/metrics.py` (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`), таблица `ai_metric_events`.
 > **Модель:** 🔵 Sonnet — детерминированная агрегация/событийная запись; гейт = тесты.
 > **Волна 4.3** (AI Ops & Trust), окно 1 (backend). Зависит от: AI-эндпоинты 4.1/4.2 (источники событий),
 > enrichment; **таблица `ai_metric_events` создаётся пустой в prep `w3-16`** (этот промпт пишет/агрегирует).
@@ -43,5 +43,7 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "b25: <что сделано>"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add api/services/metrics_service.py api/routers/metrics.py
+git commit -m "b25: <что сделано>"
 ```

@@ -27,5 +27,7 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-git add -A && git commit -m "t-wave4-frontend: <что сделано>"
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
+git add web/src/components/ai
+git commit -m "t-wave4-frontend: <что сделано>"
 ```
