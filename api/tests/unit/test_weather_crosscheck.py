@@ -66,12 +66,18 @@ def test_weather_cache_is_day_bool(weather_cache: list[dict]) -> None:
         assert isinstance(r["is_day"], bool), f"id={r['id']}: is_day={r['is_day']!r} не bool"
 
 
-def test_weather_cache_discrepancy_kind_enum(weather_cache: list[dict]) -> None:
-    """discrepancy_kind ∈ {weather,daynight,none} (§8.1)."""
-    for r in weather_cache:
-        assert r["discrepancy_kind"] in _DISCREPANCY_KIND_VALID, (
-            f"id={r['id']}: discrepancy_kind={r['discrepancy_kind']!r}"
-        )
+def test_incident_weather_discrepancy_kind_enum(real_db) -> None:
+    """discrepancy_kind ∈ {weather,daynight,none} (§8.1).
+
+    `discrepancy`/`discrepancy_kind` — производные поля: считаются в SQL
+    (`31_incident_weather.sql` JOIN с `incident_scene`), а не в сыром кэше
+    Open-Meteo. Поэтому проверяем таблицу `incident_weather`, а не cache JSON.
+    """
+    kinds = {row[0] for row in real_db.execute(
+        'SELECT DISTINCT "discrepancy_kind" FROM "incident_weather"'
+    ).fetchall()}
+    assert kinds, "incident_weather пуст — выполни make db"
+    assert kinds <= _DISCREPANCY_KIND_VALID, f"недопустимые kind: {kinds - _DISCREPANCY_KIND_VALID}"
 
 
 def test_weather_cache_api_weather_enum(weather_cache: list[dict]) -> None:
@@ -83,11 +89,20 @@ def test_weather_cache_api_weather_enum(weather_cache: list[dict]) -> None:
 
 
 def test_weather_cache_required_fields(weather_cache: list[dict]) -> None:
-    """Каждая запись содержит обязательные поля §8.1."""
-    required = {"id", "ts", "lat", "lon", "api_weather", "is_day", "discrepancy", "discrepancy_kind"}
+    """Каждая запись кэша содержит сырые поля Open-Meteo (§8.1).
+
+    `discrepancy`/`discrepancy_kind` — производные (SQL JOIN со сценой), их в
+    сыром кэше нет; они проверяются на таблице (см. test_incident_weather_*)."""
+    required = {"id", "ts", "lat", "lon", "api_weather", "is_day"}
     for r in weather_cache:
         missing = required - set(r)
         assert not missing, f"id={r.get('id')}: missing {missing}"
+
+
+def test_incident_weather_table_has_discrepancy_fields(real_db) -> None:
+    """Таблица `incident_weather` несёт производные `discrepancy`/`discrepancy_kind` (§8.1)."""
+    cols = {row[1] for row in real_db.execute('PRAGMA table_info("incident_weather")').fetchall()}
+    assert {"discrepancy", "discrepancy_kind"} <= cols, f"нет полей расхождения: {cols}"
 
 
 # ── Логика расхождения ─────────────────────────────────────────────────────────

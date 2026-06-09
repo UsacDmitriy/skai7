@@ -66,7 +66,7 @@ def _load_records(path: Path = _SCENE_JSON) -> list[dict]:
 
 @pytest.mark.skipif(
     not _SCENE_JSON.exists(),
-    reason=f"data/ai/scene_labels.json не найден — запусти `make db` / ai_cache_seed.",
+    reason="data/ai/scene_labels.json не найден — запусти `make db` / ai_cache_seed.",
 )
 class TestSceneCacheShape:
     """Проверяет структуру уже собранного data/ai/scene_labels.json."""

@@ -13,6 +13,7 @@ from typing import Annotated
 import duckdb
 from fastapi import APIRouter, Depends, HTTPException
 
+from api.core.ai_flags import FeatureDisabledResponse, flags
 from api.core.duckdb_conn import get_db
 from api.services import forecast_service
 from api.services.forecast_service import RiskForecast
@@ -22,13 +23,15 @@ router = APIRouter(prefix="/api/reports", tags=["forecast"])
 DbDep = Annotated[duckdb.DuckDBPyConnection, Depends(get_db)]
 
 
-@router.get("/forecast/{plate}", response_model=RiskForecast)
-def risk_forecast(plate: str, db: DbDep) -> RiskForecast:
+@router.get("/forecast/{plate}", response_model=None)
+def risk_forecast(plate: str, db: DbDep) -> RiskForecast | FeatureDisabledResponse:
     """Прогноз нарушений на 7 дней + аномалия + рекомендации (§8.4).
 
-    Неизвестный `plate` → 404. Известный ТС с пустой историей → валидный нулевой
-    прогноз (не падать).
+    Флаг `forecast` выкл → 200 «feature disabled» (§8.6, не 5xx). Неизвестный
+    `plate` → 404. Известный ТС с пустой историей → валидный нулевой прогноз.
     """
+    if not flags.is_enabled("forecast"):
+        return FeatureDisabledResponse(detail="forecast feature disabled")
     if not forecast_service.plate_exists(db, plate):
         raise HTTPException(status_code=404, detail=f"ТС не найдено: {plate}")
     return forecast_service.forecast(db, plate)

@@ -13,6 +13,7 @@ from typing import Annotated
 import duckdb
 from fastapi import APIRouter, Depends
 
+from api.core.ai_flags import FeatureDisabledResponse, flags
 from api.core.duckdb_conn import get_db
 from api.domain.entities import FatigueChain
 from api.services import fatigue_service
@@ -22,7 +23,13 @@ router = APIRouter(prefix="/api/fatigue", tags=["fatigue"])
 DbDep = Annotated[duckdb.DuckDBPyConnection, Depends(get_db)]
 
 
-@router.get("", response_model=list[FatigueChain])
-def list_fatigue(db: DbDep, plate: str | None = None) -> list[FatigueChain]:
-    """Цепочки усталости (скользящее окно 90 мин). Опционально `?plate=`."""
+@router.get("", response_model=None)
+def list_fatigue(
+    db: DbDep, plate: str | None = None
+) -> list[FatigueChain] | FeatureDisabledResponse:
+    """Цепочки усталости (скользящее окно 90 мин). Опционально `?plate=`.
+
+    Флаг `fatigue` выкл → 200 «feature disabled» (§8.6, не 5xx)."""
+    if not flags.is_enabled("fatigue"):
+        return FeatureDisabledResponse(detail="fatigue feature disabled")
     return fatigue_service.chains(db, plate=plate)

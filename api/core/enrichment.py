@@ -265,10 +265,12 @@ def weather_risk_bonus(scene: dict | None, weather: dict | None) -> float:
     +0.1 если road_surface ∈ {wet, ice} (скользкое покрытие).
     +0.1 если visibility = 'poor' (плохая видимость).
     Ночь уже учтена в risk_score → не дублируем.
-    Без сцены/погоды (нет кэша) → 0.0 (обратная совместимость).
+    Надбавка считается из полей СЦЕНЫ (road_surface/visibility); `weather` —
+    зарезервированный кросс-чек-контекст и на величину надбавки не влияет (§8.2).
+    Без сцены (нет кэша / фолбэк `unknown`) → 0.0 (обратная совместимость).
     Результат ∈ {0.0, 0.1, 0.2} — добавляется к сырому коэффициенту ДО *100.
     """
-    if not scene or not weather:
+    if not scene:
         return 0.0
     bonus = 0.0
     if scene.get("road_surface") in ("wet", "ice"):
