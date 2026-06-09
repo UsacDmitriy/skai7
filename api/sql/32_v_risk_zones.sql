@@ -1,0 +1,19 @@
+-- b19 · v_risk_zones — контракт 00-CONTRACT.md §8.1/§8.3/§8.4
+-- Кластеры зон риска: incident-кластеры (DBSCAN по v_incidents) + РЭБ-зоны
+-- (DBSCAN по navigation__track_periods period_type=3 + navigation__track_points).
+--
+-- Кластеризация выполняется в Python (zones_service.py, sklearn DBSCAN,
+-- haversine-метрика) и кэшируется в памяти на старте. SQL-вью здесь служит
+-- документальным якорем схемы; фактически сервис читает v_incidents и
+-- navigation__track_points напрямую.
+--
+-- Схема результирующего набора (§8.4 RiskZone):
+--   zone_id        TEXT       -- 'incident_0', 'reb_0', ...
+--   centroid_lat   DOUBLE
+--   centroid_lon   DOUBLE
+--   radius_m       DOUBLE     -- >0
+--   alarm_count    INTEGER
+--   avg_risk       DOUBLE     -- 0..100
+--   top_alarm_code TEXT
+--   peak_hour      INTEGER    -- 0..23
+--   kind           TEXT       -- incident | reb
