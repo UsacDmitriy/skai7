@@ -1303,6 +1303,35 @@ export const FORECAST: RiskForecast = {
     'Аномалий не выявлено — данных для тренда недостаточно (события за 2 дня).',
 }
 
+/**
+ * Прогноз с восходящим трендом и выраженной аномалией — для демо warning-кейса (f16).
+ * Привязан к высокорисковому ТС Н124УУ 199 (Козлов, gross=5 в парке).
+ */
+export const FORECAST_ANOMALY: RiskForecast = {
+  plate: 'Н124УУ 199',
+  trend: [
+    { date: '2026-04-01', predicted_events: 2, ci_low: 1, ci_high: 4 },
+    { date: '2026-04-02', predicted_events: 3, ci_low: 1, ci_high: 5 },
+    { date: '2026-04-03', predicted_events: 3, ci_low: 2, ci_high: 5 },
+    { date: '2026-04-04', predicted_events: 4, ci_low: 2, ci_high: 6 },
+    { date: '2026-04-05', predicted_events: 7, ci_low: 3, ci_high: 9 }, // выброс
+  ],
+  anomaly: true,
+  recommendations: [
+    'Срочный разбор пика 5 апреля с водителем (7 событий против базлайна ~3).',
+    'Внеплановая проверка режима труда и отдыха (ночные рейсы).',
+    'Дополнительный контроль ADAS/DMS до стабилизации тренда.',
+  ],
+  narrative:
+    'Тренд риска растёт; 5 апреля — выраженный выброс (7 событий, выше верхней границы коридора). ' +
+    'Рекомендуется немедленная интервенция.',
+}
+
+/** Прогноз по ТС с нормализацией госномера; дефолт — ровный кейс (§9.1). */
+export function getFixtureForecast(plate: string): RiskForecast {
+  return normPlate(plate) === normPlate(FORECAST_ANOMALY.plate) ? FORECAST_ANOMALY : FORECAST
+}
+
 /** Риск-зоны: 1 incident-кластер + 1 РЭБ-кластер (§8.1 v_risk_zones). */
 export const ZONES: RiskZone[] = [
   {

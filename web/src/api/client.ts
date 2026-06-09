@@ -11,7 +11,6 @@ import {
   DRIVER_REPORT,
   FLEET_HEALTH,
   FLEET_REPORT,
-  FORECAST,
   FUEL_VEHICLES,
   NAV_PROBLEMS,
   RISK_BREAKDOWN,
@@ -23,6 +22,7 @@ import {
   ZONES,
   getFixtureCopilot,
   getFixtureFatigue,
+  getFixtureForecast,
   getFixtureFuel,
   getFixtureIncident,
   getFixtureNavProblem,
@@ -309,7 +309,7 @@ export function getScene(id: string): Promise<SceneResponse> {
 
 /** Прогноз риска по ТС (§8.3 `GET /api/reports/forecast/{plate}`). */
 export function getForecast(plate: string): Promise<RiskForecast> {
-  if (USE_FIXTURES) return Promise.resolve(FORECAST)
+  if (USE_FIXTURES) return Promise.resolve(getFixtureForecast(plate))
   return request<RiskForecast>(`/reports/forecast/${encodeURIComponent(plate)}`)
 }
 
