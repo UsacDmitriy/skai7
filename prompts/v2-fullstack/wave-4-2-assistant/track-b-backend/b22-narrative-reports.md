@@ -1,7 +1,8 @@
 # b22 · Narrative reports — нарратив + коучинг (идеи #12/#13)
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/narrative_service.py`;
-> **аддитивно** дополняет `reports_service`/`forecast_service` полем нарратива.
+> **аддитивно** дополняет `reports_service`/`forecast_service` (логика) **и** `api/domain/reports.py`
+> (поле `narrative` в Pydantic-схемах `DriverReport`/`FleetReport` — иначе FastAPI отбросит его из ответа).
 > **Модель:** 🔵 Sonnet — генерация текста по шаблону + опц. LLM; гейт = тесты.
 > **Волна 4.2**, окно 1 (backend). Зависит от: b18 (`RiskForecast`), reports (`DriverReport`/`FleetReport`).
 
@@ -16,7 +17,9 @@
   - **Шаблон-ветка** (всегда доступна, без сети): структурированные правила → связный текст RU/EN.
   - **LLM-ветка** (опц., Groq): тот же контент «дороже»; ошибка/нет ключа → шаблон.
   - Без выдумок: только факты из данных (no hallucination — числа из payload).
-- Поле `narrative: str` добавляется в ответы `/reports/*` и `/forecast` (аддитивно, не ломает схему).
+- Поле `narrative: str | None = None` объявляется в Pydantic-схемах `DriverReport`/`FleetReport`
+  (`api/domain/reports.py`) и `RiskForecast` (`forecast_service.py` — поле уже есть), затем наполняется
+  в сервисах. Аддитивно (default `None`) — не ломает схему/обратную совместимость.
 
 ## Check
 
@@ -30,6 +33,6 @@
 
 ```bash
 # параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
-git add api/services/narrative_service.py api/services/reports_service.py api/services/forecast_service.py
+git add api/services/narrative_service.py api/services/reports_service.py api/services/forecast_service.py api/domain/reports.py
 git commit -m "b22: <что сделано>"
 ```

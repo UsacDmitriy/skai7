@@ -59,6 +59,10 @@ post '{"text":"asdkjhqwe"}'                  | jq -e '.text|length>0'           
 curl -s -X POST localhost:8000/api/copilot/chat -d '{}' -H 'content-type: application/json' -o /dev/null -w '%{http_code}'  # 422
 diff <(post '{"text":"сравни Иванова и Петрова"}') <(post '{"text":"сравни Иванова и Петрова"}')  # детерминизм fallback
 curl -s localhost:8000/api/reports/driver/<plate> | jq -e 'has("narrative")'                  # b22: поле narrative (§7.5)
+# governance §8.6 — реальная конвенция флага: SKAI_AI_<NAME> (0/false/off → выкл), НЕ AI_*_ENABLED.
+# Флаги читаются на старте процесса → задаём env при запуске сервера для проверки:
+#   SKAI_AI_COPILOT=0 make api  →  POST /copilot/chat = 200 {"enabled":false} (не 5xx)
+curl -s localhost:8000/api/incidents/<id>/scene | jq -e '.state.source|test("live|cache|fallback")'  # мета AiFeatureState
 ```
 - Паритет: карточка(сцена)/отчёт(прогноз+нарратив)/монитор(heatmap)/копилот/виджет — на живом API **и**
   `VITE_USE_FIXTURES=true`; состояния loading/empty/error копилота; консоль чистая; a11y чата (роль/клавиатура).

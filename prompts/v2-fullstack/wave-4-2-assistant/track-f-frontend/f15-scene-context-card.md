@@ -1,7 +1,9 @@
 # f15 · Scene context на карточке (идея #11)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** **аддитивная** правка
-> `web/src/pages/IncidentCard.tsx`; использует d7 (`SceneContextChip`/`DiscrepancyBadge`), f2-клиент.
+> `web/src/pages/IncidentCard.tsx` + **аддитивная** правка фикстур `web/src/api/fixtures.ts`
+> (id-aware `getFixtureScene` + 1 кейс расхождения — иначе бейдж не на чем показать). Использует
+> готовые d7 (`SceneContextChip`/`DiscrepancyBadge`) и **существующий** клиент `getScene`.
 > **Модель:** 🔵 Sonnet — вёрстка/состояния против контракта; гейт = typecheck.
 > **Волна 4.2**, окно 2 (web). Зависит от: d7, `GET /api/incidents/{id}/scene`, фикстуры.
 
@@ -12,10 +14,13 @@
 
 ## Состав
 
-- f2-клиент: метод `getScene(id) → SceneContext & WeatherCrossCheck` (тип в `types.ts` по §8.4).
+- Клиент `getScene(id)` **уже существует** (`client.ts`) и возвращает `SceneResponse =
+  { scene: SceneContext, weather: WeatherCrossCheck, state?: AiFeatureState }` (§8.4). Потребляй
+  `scene`+`weather`; опц. `state.source` (live/cache/fallback) — для governance-индикатора (§8.6).
 - В `IncidentCard.tsx` (аддитивно): блок «Контекст» с `SceneContextChip` + `DiscrepancyBadge`;
-  состояния loading/empty/error (нет данных сцены → скрыть блок, не падать).
-- Фикстуры `fixtures.ts`: scene/weather для inc-001…inc-005 (включая 1 кейс расхождения).
+  состояния loading/empty/error (нет данных сцены / `404` → скрыть блок, не падать).
+- Фикстуры `fixtures.ts` (аддитивно): `getFixtureScene` делаем id-aware и добавляем ≥1 запись с
+  `weather.discrepancy=true` (демо бейджа на `VITE_USE_FIXTURES`; сейчас всегда `false`).
 
 ## Check
 
@@ -28,7 +33,8 @@
 Заверши промпт коммитом в свою ветку — **merge на барьере берёт только коммиты**:
 
 ```bash
-# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
-git add web/src/pages/IncidentCard.tsx
+# параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A).
+# f15→f16 идут последовательно, обе правят fixtures.ts аддитивно — гонки нет.
+git add web/src/pages/IncidentCard.tsx web/src/api/fixtures.ts
 git commit -m "f15: <что сделано>"
 ```

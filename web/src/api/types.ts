@@ -604,6 +604,9 @@ export interface WeatherCrossCheck {
 export interface SceneResponse {
   scene: SceneContext
   weather: WeatherCrossCheck
+  /** Governance-мета AI-фичи (§8.6): source live/cache/fallback. Опционально —
+   *  фикстуры могут не отдавать; живой API проставляет всегда. */
+  state?: AiFeatureState
 }
 
 // forecast (§8.4) — наивный коридор, ML-ветка мёртвая на этих данных (§8.0 b18)
