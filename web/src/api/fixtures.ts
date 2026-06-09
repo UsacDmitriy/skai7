@@ -643,6 +643,7 @@ export const TICKETS: Ticket[] = [
 
 export const SABOTAGE_EVENTS: SabotageEvent[] = [
   {
+    // Старое событие без полей вердикта (b23 ещё не обогатил) → прежний вид карточки (f19 backward-compat).
     id: 'sab-001',
     vehicle_plate: 'А777ВВ 77',
     ts: '2026-04-02T03:14:22',
@@ -652,6 +653,7 @@ export const SABOTAGE_EVENTS: SabotageEvent[] = [
     video_url: '',
   },
   {
+    // Ночь/туман снаружи — тёмный кадр объясним внешними условиями ⇒ уверенность ниже (f19 #16).
     id: 'sab-002',
     vehicle_plate: 'В045КК 77',
     ts: '2026-04-01T22:48:10',
@@ -659,8 +661,11 @@ export const SABOTAGE_EVENTS: SabotageEvent[] = [
     speed_kmh: 81,
     driver_name: 'Петров Сергей Николаевич',
     video_url: '',
+    verdict_confidence: 0.38,
+    verdict_reason: 'Ночь, туман снаружи — тёмный кадр объясним внешними условиями',
   },
   {
+    // День/ясно снаружи — камера должна была «видеть» ⇒ высокая уверенность подмены (f19 #16).
     id: 'sab-003',
     vehicle_plate: 'Н124УУ 199',
     ts: '2026-03-31T19:05:37',
@@ -668,6 +673,8 @@ export const SABOTAGE_EVENTS: SabotageEvent[] = [
     speed_kmh: 47,
     driver_name: 'Козлов Иван Андреевич',
     video_url: '',
+    verdict_confidence: 0.86,
+    verdict_reason: 'День, ясно снаружи — камера должна была видеть, тёмный кадр указывает на перекрытие',
   },
 ]
 
