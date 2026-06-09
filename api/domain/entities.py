@@ -118,3 +118,27 @@ class SabotageEvent(BaseModel):
     speed_kmh: float
     driver_name: str
     video_url: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# Fatigue Chain (b20)
+# ---------------------------------------------------------------------------
+
+from api.domain.common import Severity  # noqa: E402  (local import to avoid circular)
+
+
+class FatigueEvent(BaseModel):
+    """Отдельное событие усталости внутри цепочки."""
+
+    code: str   # alarm_code
+    ts: str     # ISO timestamp string
+
+
+class FatigueChain(BaseModel):
+    """Цепочка событий усталости в скользящем окне 90 минут (b20)."""
+
+    plate: str
+    trip_id: str | None = None
+    events: list[FatigueEvent]
+    window_min: int
+    severity: Severity
