@@ -259,6 +259,25 @@ def risk_score(
     return max(0, min(100, round(raw)))
 
 
+def weather_risk_bonus(scene: dict | None, weather: dict | None) -> float:
+    """Детерминированная надбавка к risk_score из контекста сцены/погоды (§8.2/§8.4).
+
+    +0.1 если road_surface ∈ {wet, ice} (скользкое покрытие).
+    +0.1 если visibility = 'poor' (плохая видимость).
+    Ночь уже учтена в risk_score → не дублируем.
+    Без сцены/погоды (нет кэша) → 0.0 (обратная совместимость).
+    Результат ∈ {0.0, 0.1, 0.2} — добавляется к сырому коэффициенту ДО *100.
+    """
+    if not scene or not weather:
+        return 0.0
+    bonus = 0.0
+    if scene.get("road_surface") in ("wet", "ice"):
+        bonus += 0.1
+    if scene.get("visibility") == "poor":
+        bonus += 0.1
+    return round(bonus, 3)
+
+
 def evidence_summary(alarm_code: str, speed_kmh: float, severity: str) -> str:
     """Текстовое описание тревоги по шаблону."""
     template = _EVIDENCE_TEMPLATES.get(alarm_code, _DEFAULT_EVIDENCE_TEMPLATE)
