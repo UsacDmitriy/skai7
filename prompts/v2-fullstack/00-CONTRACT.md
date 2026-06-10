@@ -903,3 +903,70 @@ NavProblemVehicle { public_unit_id: str|null, plate: str|null, vehicle_label: st
 | b32 | `api/services/coaching_service.py`, роутер `api/routers/coaching.py`, `api/domain/coaching.py` | b31 (таблица), §12.2–12.3 |
 | f27 | аддитивная правка `web/src/pages/Report.tsx`; `web/src/api/{types,client,fixtures}.ts` | b32 (схемы) |
 | tu-coaching | `api/tests/unit/test_coaching.py` | b31/b32 |
+
+---
+
+## 13. Волна 5.3 — Driver Value (позитивный скоринг + единый рейтинг) · аддендум
+
+> Добавлено 2026-06-10. Обоснование: Оздоев — KPI «зелёная зона» и позитивная мотивация;
+> паттерн лидера — Netradyne DriverStar/GreenZone (признание хорошего вождения, не только нарушений).
+> Полная геймификация (баллы/команды/призы/чат-бот) — НЕ здесь (остаток W5-4 в `WAVE-5-BACKLOG.md`):
+> без мобильного канала водителя это макет. Здесь — скоринг + лидерборд. После x11, барьер — x12.
+
+### 13.0 Принцип и честность данных
+
+- Всё детерминировано из существующих алармов/треков; без AI/сети.
+- **Дисклеймер периода обязателен** (§8.0-честность): датасет покрывает мало дней — UI показывает
+  «за период N дн.» везде, где есть positive/unified score.
+- **Формулы зафиксированы здесь** — исполнитель НЕ изобретает веса. Компоненты — float без
+  промежуточных округлений; итог — `clamp(round(сумма), 0, 100)` (урок b27: сумма сходится точно).
+
+### 13.1 Позитивный скоринг (b33)
+
+- `GET /api/positive-score/{plate}` → `PositiveScore`; `plate` не из `driver_reference` → 404.
+- `PositiveScore { vehicle_plate, period_days: int, total_days: int, clean_days: int, compliant_events_ratio, harsh_free_ratio, positive_score: int, green_zone: bool }`
+  - `total_days` = COUNT(DISTINCT date(`Begin`)) по ВСЕМ алармам датасета (не хардкод);
+    `period_days` = то же значение (поле для UI-дисклеймера);
+  - `clean_days` = `total_days` − дни, в которые у этого ТС были алармы;
+  - `compliant_events_ratio` = доля алармов ТС, где `Speed ≤ speed_limit_for(Type)`
+    (**импорт `api/core/enrichment.speed_limit_for`** — не копировать таблицу лимитов);
+    алармы с пустой `Speed` исключаются из знаменателя; пустой знаменатель → `1.0`;
+  - `harsh_free_ratio` = 1 − (число `HARSH_*`-алармов ТС / все алармы ТС); 0 алармов → `1.0`;
+  - `positive_score` = `round(100·(0.5·compliant_events_ratio + 0.3·clean_days/total_days + 0.2·harsh_free_ratio))`;
+  - `green_zone` = `compliant_events_ratio ≥ 0.95` И нет critical-алармов у ТС за период.
+
+### 13.2 Единый рейтинг водителя (b34)
+
+- `GET /api/driver-score` → `DriverScore[]` — лидерборд: ВСЕ ТС из `driver_reference`
+  (включая ТС без алармов), сортировка `unified_score` desc, при равенстве — по `vehicle_plate` asc.
+- `GET /api/driver-score/{plate}` → `DriverScore`; неизвестный plate → 404.
+- `DriverScore { vehicle_plate, driver_id, driver_name, unified_score: int, risk_component: number, positive_component: number, avg_risk_score: number, positive_score: int, green_zone: bool }`
+  - `avg_risk_score` = средний `risk_score` алармов ТС **из готовых данных инцидентов**
+    (incidents_service/`v_incidents` + enrichment — НЕ пересчёт формулы §2 заново); нет алармов → `0.0`;
+  - `risk_component` = `0.6·(100 − avg_risk_score)` (float, не округлять);
+  - `positive_component` = `0.4·positive_score` (float; `positive_score` — вызов b33-сервиса,
+    НЕ дублирование расчёта);
+  - `unified_score` = `clamp(round(risk_component + positive_component), 0, 100)`.
+
+### 13.3 Frontend
+
+- `web/src/pages/Leaderboard.tsx` — новый маршрут `/leaderboard`, NAV-пункт «Рейтинг водителей»
+  в группе «Дашборды и отчёты» (аддитивно): таблица лидерборда (место, водитель, ТС, unified_score,
+  🟢 green_zone), дисклеймер «за период N дн.», клик → отчёт водителя.
+- Блок «Позитивное вождение» в driver-ветке `Report.tsx` — ПОСЛЕ секции обучения f27 (волны
+  последовательны, конфликта нет): positive_score, green_zone-бейдж, 3 составляющие, дисклеймер периода.
+
+### 13.4 Негативы
+
+- ТС из `driver_reference` без алармов → `clean_days=total_days`, ratios `1.0`, высокий positive,
+  `avg_risk_score=0.0` (200, не 5xx, не NaN). Деление на ноль исключено по правилам §13.1.
+- Повторные вызовы → идентичные ответы; лидерборд стабилен (tie-break по plate).
+
+### 13.5 Владение (без пересечений)
+
+| Промпт | Владеет | Зависит от |
+|---|---|---|
+| b33 | `api/services/positive_score_service.py`, роутер `api/routers/positive_score.py`, `api/domain/positive.py` | alarms, driver_reference, `enrichment.speed_limit_for` |
+| b34 | `api/services/driver_score_service.py`, роутер `api/routers/driver_score.py`, `api/domain/driver_score.py` | b33 (вызов сервиса), incidents_service (avg risk) |
+| f28 | `web/src/pages/Leaderboard.tsx`; аддитивные правки `App.tsx` (роут/NAV), `Report.tsx` (блок после f27), `web/src/api/{types,client,fixtures}.ts` | b33/b34 (схемы) |
+| tu-score | `api/tests/unit/test_positive_score.py`, `api/tests/unit/test_driver_score.py` | b33/b34 |
