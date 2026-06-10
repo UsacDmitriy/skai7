@@ -836,3 +836,70 @@ NavProblemVehicle { public_unit_id: str|null, plate: str|null, vehicle_label: st
 | b30 | `api/services/review_service.py`, роутер `api/routers/review.py`, `api/domain/review.py`; журнал `output/review_queue.csv` | v_incidents (b3), §10 evidence_rate (b28), эмиттер b25 |
 | f26 | `web/src/pages/ReviewQueue.tsx`; аддитивные правки `web/src/App.tsx` (роут/NAV/COMING_SOON), `web/src/api/{types,client,fixtures}.ts` | b30 (схемы §11.2), f22 (снимает его «Будущее» с `/validation`) |
 | tu-review | `api/tests/unit/test_review.py` | b30 |
+
+---
+
+## 12. Волна 5.2 — Coaching Loop (цикл обучения водителя) · аддендум
+
+> Добавлено 2026-06-10. Обоснование: Оздоев (Газпромнефть, дословный запрос) — инцидент →
+> уведомление водителя → курс → тест (порог 18/20) → уведомление руководителя → эскалация при
+> повторе за 30 дней. Паттерн лидеров: Samsara coaching effectiveness, Lytx coaching workflow.
+> **Данные — СИНТЕТИЧЕСКИЕ** (датасета обучения не существует): честный демо-режим, UI обязан
+> это показывать. Выполняется ПОСЛЕ x10, барьер — x11.
+
+### 12.0 Принцип
+
+- Датасет генерируется **детерминированно** из реальных алармов: `crc32(AlarmId)` — никакого
+  `random`/`Date.now()` (паттерн `driver_reference`). Повторная генерация → байт-идентичный CSV.
+- `repeat_within_30d` — **реальный** расчёт по алармам (та же `UnitStateNumber` + тот же `Type`
+  в окне ±30 дней), не синтетика.
+- Всё демо-режим: схема несёт литерал `synthetic: true`; UI показывает бейдж «синтетические данные».
+
+### 12.1 Датасет `data/seed/training_assignments.csv` (генератор `api/etl/seed_coaching.py`)
+
+- Загружается автоматически (`build_duckdb._load_seed_csvs`, glob `data/seed/*.csv`) как таблица
+  `training_assignments` — ETL-загрузчик НЕ редактируется; в `Makefile` цель `seed` дополняется
+  строкой генератора (аддитивно).
+- Колонки: `assignment_id, incident_id, vehicle_plate, driver_id, course_id, course_title_ru,
+  assigned_at, due_at, test_score, passed, completed_at, repeat_within_30d`.
+- Правила генерации (фиксированы):
+  - курс по `Type` аларма: `DMS_DROWSY|DMS_YAWNING → C-FATIGUE «Контроль усталости»` ·
+    `DMS_PHONE|DMS_DISTRACTION → C-FOCUS «Концентрация и отвлечения»` · `HARSH_* → C-SMOOTH
+    «Плавное вождение»` · `OVERSPEED|SpeedLimitViolation → C-SPEED «Скоростной режим»` ·
+    `CAMERA_TAMPER|DRIVER_SUBSTITUTION → C-RULES «Регламент и оборудование»` · иначе `C-BASE
+    «Базовый курс безопасности»`;
+  - `assigned_at` = `Begin` аларма; `due_at` = `assigned_at + 72h`;
+  - `test_score` = `crc32(str(AlarmId)) % 21` (0..20); `passed` = `test_score >= 18` (порог Оздоева);
+  - `completed_at` = `assigned_at + (crc32(str(AlarmId)) % 48 + 1)h` если `test_score >= 10`, иначе пусто;
+  - `driver_id` — из `driver_reference` по `vehicle_plate`.
+
+### 12.2 Эндпоинты
+
+- `GET /api/coaching` → `CoachingSummary[]` (по водителям, сортировка по `repeat_violation_rate` desc).
+- `GET /api/coaching/{plate}` → `CoachingCard`; `plate` не из `driver_reference` → 404.
+
+### 12.3 Схемы (Pydantic / TS)
+
+- `CoachingAssignment { assignment_id, incident_id, course_id, course_title_ru, assigned_at, due_at, test_score, status: 'passed'|'failed'|'incomplete', completed_at: string|null, repeat_within_30d: bool }`
+  - `status`: `passed` (passed=true) · `failed` (completed_at есть, passed=false) · `incomplete` (completed_at пуст).
+- `CoachingKpi { completion_rate, pass_rate, repeat_violation_rate }` — completion = c `completed_at`/всего;
+  pass = passed/завершивших (0 завершивших → 0.0); repeat = с `repeat_within_30d`/всего; все ∈ [0,1].
+- `CoachingSummary { vehicle_plate, driver_id, driver_name, total: int, kpi: CoachingKpi }`
+- `CoachingCard { vehicle_plate, driver_id, driver_name, assignments: CoachingAssignment[], kpi: CoachingKpi, synthetic: true }`
+
+### 12.4 Frontend и негативы
+
+- Секция «Обучение водителя» в driver-ветке отчёта (`Report.tsx`), после существующих KPI-блоков
+  (ориентир — блок дисциплинарного предупреждения): KPI-чипы + таблица назначений + **обязательный
+  бейдж «синтетические данные (демо)»**.
+- Негативы: водитель из `driver_reference` без назначений → пустой список + нулевые KPI (200, не 404);
+  повторная генерация CSV → байт-идентичный файл; все ratio ∈ [0,1].
+
+### 12.5 Владение (без пересечений)
+
+| Промпт | Владеет | Зависит от |
+|---|---|---|
+| b31 | `api/etl/seed_coaching.py`, `data/seed/training_assignments.csv` (коммитится, как driver_reference), строка в `Makefile` цели `seed` | alarms, driver_reference |
+| b32 | `api/services/coaching_service.py`, роутер `api/routers/coaching.py`, `api/domain/coaching.py` | b31 (таблица), §12.2–12.3 |
+| f27 | аддитивная правка `web/src/pages/Report.tsx`; `web/src/api/{types,client,fixtures}.ts` | b32 (схемы) |
+| tu-coaching | `api/tests/unit/test_coaching.py` | b31/b32 |
