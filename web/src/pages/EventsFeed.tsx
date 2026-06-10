@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { AlertTriangle, Route, RotateCw, Search, Video, VideoOff } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { AlertTriangle, Route, RotateCw, Search, Siren, Video, VideoOff } from 'lucide-react'
 import * as client from '@/api/client'
 import type { IncidentSummary, Severity, Source } from '@/api/types'
 import { Card, ScoreBar, SeverityBadge } from '@/components'
@@ -30,6 +30,15 @@ const RISK_ZONE_THRESHOLD = 70
 /** Дебаунс ввода поиска, мс. */
 const SEARCH_DEBOUNCE_MS = 250
 
+/**
+ * f23 · п.4 — авто-открытие верхнего push-кандидата при загрузке ленты.
+ * По умолчанию **OFF**: минимальная приёмка идеи #5 (§7.8 AC) — видимая
+ * кнопка-аффорданс (п.3), а не навязчивый авто-показ модала. Включённое
+ * срабатывает детерминированно и ровно раз за загрузку (см. effect ниже).
+ * Тип `boolean` (не литерал) — чтобы ветка не схлопывалась в «мёртвый» код.
+ */
+const AUTO_OPEN_PUSH: boolean = false
+
 // ── Маппинги (контракт §3.1) ──────────────────────────────────────────────────
 
 const SEVERITY_LABEL: Record<Severity, string> = {
@@ -55,6 +64,25 @@ const SOURCE_BADGE: Record<Source, { emoji: string; text: string }> = {
   TELEMATICS: { emoji: '⚡', text: 'Тел' },
   DIAGNOSTIC: { emoji: '⚙', text: 'Диагностика' },
 }
+
+// ── Push-кандидат идеи #5 (Dispatch Alert, f23) ───────────────────────────────
+
+// `auto_request_video=true` из alarm_type_catalog (data/analysis/alarm_types.json, §3.1).
+// Поле НЕ приходит в IncidentSummary (types.ts: есть alarm_code/severity/video_available,
+// но не auto_request_video) — резолвим по `alarm_code` локальной картой, тем же приёмом,
+// что `SEVERITY_BY_CODE` в TripDossier. 7 кодов = ровно строки `auto_request_video:true`
+// из alarm_types.json (источник истины; при расхождении синхронизировать по нему).
+const AUTO_VIDEO_CODES = new Set([
+  'DMS_DROWSY', 'DMS_PHONE', 'DRIVER_SUBSTITUTION',
+  'HARSH_BRAKING', 'ADAS_FCW', 'CAMERA_TAMPER', 'ADAS_PCW',
+])
+
+/**
+ * Кандидат на push-алерт: критический + auto_request_video. Связка
+ * `severity==='critical'` оставлена, чтобы набор совпал с идеей #5.
+ */
+const isPushCandidate = (r: IncidentSummary) =>
+  r.severity === 'critical' && AUTO_VIDEO_CODES.has(r.alarm_code)
 
 // ── Форматтеры ────────────────────────────────────────────────────────────────
 
@@ -149,6 +177,7 @@ function NoVideoToggle({
 
 export default function EventsFeed() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [incidents, setIncidents] = useState<IncidentSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -213,6 +242,32 @@ export default function EventsFeed() {
 
   const isEmpty = !loading && !error && filtered.length === 0
   const isNoMatch = !loading && !error && filtered.length > 0 && visible.length === 0
+
+  // f23 · открыть Dispatch Alert (/alert/:id) ПОВЕРХ ленты — строго через
+  // background-location pattern (App.tsx AppRoutes рисует фон по `backgroundLocation`,
+  // модал — вторым <Routes>). Без `state.backgroundLocation` модал откроется без фона,
+  // и `DispatchAlert.goBackground` уйдёт в navigate('/') вместо navigate(-1). Это must.
+  const openAlert = (id: string) =>
+    navigate(`/alert/${id}`, { state: { backgroundLocation: location } })
+
+  // f23 · п.4 — авто-открытие верхнего push-кандидата (за флагом AUTO_OPEN_PUSH, default off):
+  // ровно раз за загрузку (ref-флаг, не повторяется при ре-рендере/смене роли),
+  // детерминированно (первый по уже готовому порядку `visible`, без Date.now/random),
+  // и не открывать, если модал уже на экране (проверка `state.backgroundLocation`).
+  const autoOpenedRef = useRef(false)
+  useEffect(() => {
+    if (!AUTO_OPEN_PUSH || autoOpenedRef.current || loading || error) return
+    const modalOpen = Boolean(
+      (location.state as { backgroundLocation?: unknown } | null)?.backgroundLocation,
+    )
+    if (modalOpen) return
+    const top = visible.find(isPushCandidate)
+    if (!top) return
+    autoOpenedRef.current = true
+    openAlert(top.id)
+    // openAlert/navigate стабильны по смыслу; деп-лист — наблюдаемые входы.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, error, visible, location])
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-4">
@@ -289,6 +344,7 @@ export default function EventsFeed() {
             rows={visible}
             noMatch={isNoMatch}
             onRowClick={(id) => navigate(`/incidents/${id}`)}
+            onAlert={openAlert}
           />
         )}
       </Card>
@@ -302,10 +358,12 @@ function EventsTable({
   rows,
   noMatch,
   onRowClick,
+  onAlert,
 }: {
   rows: IncidentSummary[]
   noMatch: boolean
   onRowClick: (id: string) => void
+  onAlert: (id: string) => void
 }) {
   return (
     <table className="w-full border-collapse text-sm">
@@ -331,14 +389,24 @@ function EventsTable({
             </td>
           </tr>
         ) : (
-          rows.map((r) => <EventRow key={r.id} row={r} onClick={() => onRowClick(r.id)} />)
+          rows.map((r) => (
+            <EventRow key={r.id} row={r} onClick={() => onRowClick(r.id)} onAlert={onAlert} />
+          ))
         )}
       </tbody>
     </table>
   )
 }
 
-function EventRow({ row, onClick }: { row: IncidentSummary; onClick: () => void }) {
+function EventRow({
+  row,
+  onClick,
+  onAlert,
+}: {
+  row: IncidentSummary
+  onClick: () => void
+  onAlert: (id: string) => void
+}) {
   return (
     <tr
       role="button"
@@ -359,7 +427,28 @@ function EventRow({ row, onClick }: { row: IncidentSummary; onClick: () => void 
           SEVERITY_BORDER[row.severity],
         )}
       >
-        {row.alarm_label_ru}
+        <div className="flex items-center gap-2">
+          <span>{row.alarm_label_ru}</span>
+          {/* f23 · аффорданс идеи #5: открыть /alert/:id поверх ленты (overlay).
+              Только для push-кандидата (критич. + auto_request_video). stopPropagation
+              на onClick/onKeyDown — как у врезки /trip, чтобы не сработала навигация строки. */}
+          {isPushCandidate(row) && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onAlert(row.id)
+              }}
+              onKeyDown={(e) => e.stopPropagation()}
+              aria-label="Открыть алерт"
+              title="Открыть алерт"
+              className="inline-flex shrink-0 items-center gap-1 rounded bg-critical/10 px-1.5 py-0.5 text-xs font-semibold text-critical-text transition-colors hover:bg-critical/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-critical"
+            >
+              <Siren className="h-3.5 w-3.5" aria-hidden />
+              Алерт
+            </button>
+          )}
+        </div>
       </td>
       <td className="px-3 py-2">
         <SourceBadge source={row.source} />
