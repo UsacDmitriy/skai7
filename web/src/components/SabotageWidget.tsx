@@ -139,6 +139,64 @@ function SpeedProof({ speed }: { speed: number }) {
   )
 }
 
+// ── Умный вердикт саботажа (идея #16, §8 кросс-проверка) ──────────────────────
+//
+// b23 кладёт в `SabotageEvent` опциональные `verdict_confidence` (0..1) и
+// `verdict_reason`. Высокий confidence — «день/ясно снаружи, камера должна была
+// видеть» ⇒ подмена; ниже — «ночь/туман» ⇒ тёмный кадр объясним внешними условиями.
+// Backward-compat: нет полей вердикта (старые данные) → блок не рендерится вовсе.
+
+/** Палитра шкалы по уровню уверенности: выше уверенность саботажа → насыщеннее критичный тон. */
+function verdictTone(confidence: number): { label: string; bar: string; text: string } {
+  if (confidence >= 0.7) {
+    return { label: 'высокая', bar: 'bg-critical', text: 'text-critical-text' }
+  }
+  if (confidence >= 0.4) {
+    return { label: 'средняя', bar: 'bg-high-text', text: 'text-high-text' }
+  }
+  return { label: 'низкая', bar: 'bg-muted', text: 'text-muted' }
+}
+
+function VerdictBadge({ event }: { event: SabotageEvent }) {
+  // Поля опциональны (b23). Нет уверенности → прежний вид карточки (обратная совместимость).
+  if (event.verdict_confidence == null) return null
+
+  // Клампим в [0..1] на случай «грязных» данных, проценты — для читаемости оператору.
+  const confidence = Math.min(1, Math.max(0, event.verdict_confidence))
+  const percent = Math.round(confidence * 100)
+  const tone = verdictTone(confidence)
+
+  return (
+    <div className="rounded-md border border-border bg-surface px-3 py-2.5">
+      <div className="flex items-center justify-between gap-2">
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ink">
+          <Gauge className={`h-3.5 w-3.5 ${tone.text}`} aria-hidden />
+          Вердикт саботажа
+        </span>
+        <span className={`text-sm font-semibold tabular-nums ${tone.text}`}>
+          {/* a11y: смысл словами, не только цветом/числом. */}
+          <span className="sr-only">уверенность {tone.label}, </span>
+          {percent}%
+        </span>
+      </div>
+      {/* Шкала уверенности 0..1: ширина = confidence, цвет = тон уровня. */}
+      <div
+        className="mt-2 h-1.5 overflow-hidden rounded-full bg-border/60"
+        role="meter"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+        aria-label={`Уверенность вердикта саботажа: ${percent}%`}
+      >
+        <div className={`h-full rounded-full ${tone.bar}`} style={{ width: `${percent}%` }} />
+      </div>
+      {event.verdict_reason && (
+        <p className="mt-2 text-xs leading-snug text-muted">{event.verdict_reason}</p>
+      )}
+    </div>
+  )
+}
+
 // ── Кнопки действий (postAction) с состоянием in-flight + откатом ──────────────
 
 type ActionKind = 'create_task' | 'notify_hr'
@@ -211,6 +269,7 @@ function SabotageCard({ event }: { event: SabotageEvent }) {
         <DarkFrame event={event} />
         <SpeedProof speed={event.speed_kmh} />
       </div>
+      <VerdictBadge event={event} />
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="min-w-0">
           <div className="truncate text-sm font-medium text-ink">{event.driver_name}</div>

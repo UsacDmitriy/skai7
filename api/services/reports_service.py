@@ -28,7 +28,7 @@ from api.domain.reports import (
     ViolationRow,
 )
 from api.repositories import rows_to_dicts, vehicles_repo
-from api.services import incidents_service, nlu_service
+from api.services import incidents_service, narrative_service, nlu_service
 
 # «Грубые» нарушения (§7.5): critical ИЛИ курение/превышение.
 _GROSS_CODES = {"OVERSPEED", "DMS_SMOKING"}
@@ -154,7 +154,7 @@ def driver_report(
         risk_score=risk,
     )
 
-    return DriverReport(
+    report = DriverReport(
         driver=driver_ref,
         vehicle_plate=plate,
         vehicle_model=model,
@@ -165,6 +165,8 @@ def driver_report(
         disciplinary_warning=(gross >= 3 or safety_score < 60),
         violations=[_violation_row(s) for s in summaries],
     )
+    report.narrative = narrative_service.narrate(report)  # b22: нарратив + коучинг.
+    return report
 
 
 def fleet_report(
@@ -225,13 +227,15 @@ def fleet_report(
             )
         )
 
-    return FleetReport(
+    report = FleetReport(
         period=_period(summaries, period_days),
         kpi=_kpi(summaries),
         vehicles_count=len(by_plate),
         by_drivers=by_drivers,
         by_vehicles=by_vehicles,
     )
+    report.narrative = narrative_service.narrate(report)  # b22: нарратив + коучинг.
+    return report
 
 
 def _driver_trips(db: duckdb.DuckDBPyConnection, plate: str) -> list[dict[str, Any]]:
@@ -315,7 +319,7 @@ def vehicle_report(
 
 def _empty_driver_report(driver_name: str, period_days: int) -> DriverReport:
     """Пустой driver-отчёт для нерезолвенного ФИО (§61/§62): нулевые KPI, не падать."""
-    return DriverReport(
+    report = DriverReport(
         driver=DriverRef(
             driver_id="—",
             driver_name=driver_name,
@@ -333,6 +337,8 @@ def _empty_driver_report(driver_name: str, period_days: int) -> DriverReport:
         disciplinary_warning=False,  # safety_score=100 → дисциплина не назначается.
         violations=[],
     )
+    report.narrative = narrative_service.narrate(report)  # b22: «нет нарушений за период».
+    return report
 
 
 def report_for_query(

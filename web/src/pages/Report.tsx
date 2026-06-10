@@ -2,14 +2,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   Archive,
+  Check,
   ChevronLeft,
   ChevronRight,
   ExternalLink,
   Inbox,
   Info,
+  Lightbulb,
+  LineChart,
   RotateCcw,
   Search,
   Sparkles,
+  TrendingUp,
   TriangleAlert,
   Truck,
   Users,
@@ -18,6 +22,7 @@ import {
 } from 'lucide-react'
 import * as client from '@/api/client'
 import { ApiError } from '@/api/client'
+import { trackEvent } from '@/api/metrics'
 import * as voice from '@/api/voice'
 import type {
   DriverReport,
@@ -27,10 +32,12 @@ import type {
   IncidentDetail,
   QueryResult,
   ReportKPI,
+  RiskForecast,
   Severity,
   Source,
   ViolationRow,
 } from '@/api/types'
+import { ForecastSparkline } from '@/components/ai/ForecastSparkline'
 import {
   Button,
   Card,
@@ -442,6 +449,179 @@ function VideoPanel({
   )
 }
 
+// ── Прогноз риска + рекомендации (f16, идея #12, §8.4) ────────────────────────
+// Аддитивный блок: спарклайн тренда (d7) + коридор + аномалия + список рекомендаций.
+// Метрики b25: показ → recommendation_shown, принятие → recommendation_accepted
+// (эмиттер b25; без сети — no-op). Питает recommendation_acceptance (§8.7).
+
+function ForecastCard({
+  plate,
+  title = 'Прогноз риска',
+  subtitle,
+}: {
+  plate: string
+  title?: string
+  subtitle?: string
+}) {
+  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [forecast, setForecast] = useState<RiskForecast | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [accepted, setAccepted] = useState<Set<number>>(new Set())
+
+  const load = useCallback(() => {
+    setState('loading')
+    setError(null)
+    setForecast(null)
+    setAccepted(new Set())
+    client
+      .getForecast(plate)
+      .then((f) => {
+        setForecast(f)
+        setState('ready')
+      })
+      .catch((e: unknown) => {
+        setError(humanError(e))
+        setState('error')
+      })
+  }, [plate])
+
+  useEffect(() => {
+    load()
+  }, [load])
+
+  // b25 · показ рекомендаций → recommendation_shown (один раз на загрузку прогноза).
+  useEffect(() => {
+    if (state === 'ready' && forecast && forecast.recommendations.length > 0) {
+      trackEvent('recommendation_shown', { plate, count: forecast.recommendations.length })
+    }
+  }, [state, forecast, plate])
+
+  const acceptRec = useCallback(
+    (idx: number, text: string) => {
+      setAccepted((prev) => {
+        if (prev.has(idx)) return prev
+        const next = new Set(prev)
+        next.add(idx)
+        // b25 · принятие рекомендации → recommendation_accepted.
+        trackEvent('recommendation_accepted', { plate, recommendation: text })
+        return next
+      })
+    },
+    [plate],
+  )
+
+  const isEmpty =
+    state === 'ready' &&
+    forecast != null &&
+    forecast.trend.length === 0 &&
+    forecast.recommendations.length === 0
+
+  return (
+    <Card className="p-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
+        <div className="flex items-center gap-2 text-sm font-semibold text-ink">
+          <TrendingUp className="h-4 w-4 text-primary" aria-hidden />
+          {title}
+          {subtitle && <span className="font-normal text-muted">— {subtitle}</span>}
+        </div>
+        {state === 'ready' && forecast?.anomaly && (
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-critical-bg px-2.5 py-1 text-xs font-semibold text-critical-text">
+            <TriangleAlert className="h-3.5 w-3.5" aria-hidden />
+            Аномалия в тренде
+          </span>
+        )}
+      </div>
+
+      <div className="p-4">
+        {state === 'loading' && (
+          <div aria-hidden className="space-y-3">
+            <Bar className="h-14 w-full" />
+            <Bar className="h-4 w-3/4" />
+            <Bar className="h-4 w-2/3" />
+          </div>
+        )}
+
+        {state === 'error' && (
+          <div className="flex flex-col items-center gap-3 py-6 text-center">
+            <TriangleAlert className="h-7 w-7 text-high-text" aria-hidden />
+            <p className="text-sm text-muted">{error ?? 'Не удалось загрузить прогноз.'}</p>
+            <Button variant="secondary" icon={RotateCcw} onClick={load}>
+              Повторить
+            </Button>
+          </div>
+        )}
+
+        {isEmpty && (
+          <div className="flex flex-col items-center gap-2 py-8 text-center text-muted">
+            <LineChart className="h-8 w-8" aria-hidden />
+            <p className="text-sm">
+              Прогноз недоступен{forecast?.anomaly_reason ? ` — ${forecast.anomaly_reason}` : '.'}
+            </p>
+          </div>
+        )}
+
+        {state === 'ready' && forecast && !isEmpty && (
+          <div className="space-y-4">
+            {forecast.trend.length > 0 ? (
+              <div>
+                <div className="mb-1 text-[11px] uppercase tracking-wide text-muted">
+                  Тренд событий + доверительный коридор
+                </div>
+                <ForecastSparkline trend={forecast.trend} anomaly={forecast.anomaly} />
+              </div>
+            ) : (
+              forecast.anomaly_reason && (
+                <p className="inline-flex items-center gap-1.5 text-xs text-muted">
+                  <Info className="h-3.5 w-3.5" aria-hidden />
+                  {forecast.anomaly_reason}
+                </p>
+              )
+            )}
+
+            {forecast.narrative && <p className="text-sm text-muted">{forecast.narrative}</p>}
+
+            {forecast.recommendations.length > 0 && (
+              <div>
+                <div className="mb-2 flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted">
+                  <Lightbulb className="h-3.5 w-3.5" aria-hidden />
+                  Рекомендации
+                </div>
+                <ul className="space-y-1.5">
+                  {forecast.recommendations.map((rec, i) => {
+                    const isAccepted = accepted.has(i)
+                    return (
+                      <li
+                        key={i}
+                        className="flex items-start justify-between gap-3 rounded-md border border-border bg-surface px-3 py-2 text-sm text-ink"
+                      >
+                        <span className="flex-1">{rec}</span>
+                        <button
+                          type="button"
+                          onClick={() => acceptRec(i, rec)}
+                          disabled={isAccepted}
+                          aria-label={isAccepted ? 'Рекомендация принята' : 'Принять рекомендацию'}
+                          className={`inline-flex shrink-0 items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                            isAccepted
+                              ? 'cursor-default text-ok-text'
+                              : 'text-primary hover:bg-primary-50'
+                          }`}
+                        >
+                          <Check className="h-3.5 w-3.5" aria-hidden />
+                          {isAccepted ? 'Принято' : 'Принять'}
+                        </button>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </Card>
+  )
+}
+
 // ── Дашборды ──────────────────────────────────────────────────────────────────
 
 function DriverDashboard({
@@ -479,6 +659,9 @@ function DriverDashboard({
         </div>
       </Card>
 
+      {/* f16 · прогноз риска + рекомендации (идея #12) */}
+      <ForecastCard plate={report.vehicle_plate} />
+
       <Card className="p-0">
         <div className="border-b border-border px-4 py-3 text-sm font-semibold text-ink">
           Нарушения <span className="font-normal text-muted">— клик/Enter по строке открывает видео</span>
@@ -509,6 +692,11 @@ function FleetDashboard({
   onDrill: (driverName: string) => void
 }) {
   const empty = view === 'drivers' ? report.by_drivers.length === 0 : report.by_vehicles.length === 0
+  // f16 · сводный прогноз/интервенции — фокус на ТС с наибольшим риском по парку.
+  const topVehicle = useMemo(() => {
+    if (report.by_vehicles.length === 0) return null
+    return report.by_vehicles.reduce((max, r) => (r.risk_score > max.risk_score ? r : max))
+  }, [report.by_vehicles])
   return (
     <div className="space-y-4">
       <Card>
@@ -543,6 +731,15 @@ function FleetDashboard({
           <KpiRow kpi={report.kpi} />
         </div>
       </Card>
+
+      {/* f16 · сводный прогноз/интервенции по самому рискованному ТС парка */}
+      {topVehicle && (
+        <ForecastCard
+          plate={topVehicle.plate}
+          title="Сводный прогноз парка"
+          subtitle={`фокус: ${topVehicle.vehicle_model} · ${topVehicle.plate} (риск ${topVehicle.risk_score})`}
+        />
+      )}
 
       <Card className="p-0">
         <div className="border-b border-border px-4 py-3 text-sm font-semibold text-ink">

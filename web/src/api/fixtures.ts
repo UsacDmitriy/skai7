@@ -643,6 +643,7 @@ export const TICKETS: Ticket[] = [
 
 export const SABOTAGE_EVENTS: SabotageEvent[] = [
   {
+    // Старое событие без полей вердикта (b23 ещё не обогатил) → прежний вид карточки (f19 backward-compat).
     id: 'sab-001',
     vehicle_plate: 'А777ВВ 77',
     ts: '2026-04-02T03:14:22',
@@ -652,6 +653,7 @@ export const SABOTAGE_EVENTS: SabotageEvent[] = [
     video_url: '',
   },
   {
+    // Ночь/туман снаружи — тёмный кадр объясним внешними условиями ⇒ уверенность ниже (f19 #16).
     id: 'sab-002',
     vehicle_plate: 'В045КК 77',
     ts: '2026-04-01T22:48:10',
@@ -659,8 +661,11 @@ export const SABOTAGE_EVENTS: SabotageEvent[] = [
     speed_kmh: 81,
     driver_name: 'Петров Сергей Николаевич',
     video_url: '',
+    verdict_confidence: 0.38,
+    verdict_reason: 'Ночь, туман снаружи — тёмный кадр объясним внешними условиями',
   },
   {
+    // День/ясно снаружи — камера должна была «видеть» ⇒ высокая уверенность подмены (f19 #16).
     id: 'sab-003',
     vehicle_plate: 'Н124УУ 199',
     ts: '2026-03-31T19:05:37',
@@ -668,6 +673,8 @@ export const SABOTAGE_EVENTS: SabotageEvent[] = [
     speed_kmh: 47,
     driver_name: 'Козлов Иван Андреевич',
     video_url: '',
+    verdict_confidence: 0.86,
+    verdict_reason: 'День, ясно снаружи — камера должна была видеть, тёмный кадр указывает на перекрытие',
   },
 ]
 
@@ -1252,6 +1259,30 @@ export const WEATHER: WeatherCrossCheck = {
   discrepancy_kind: 'none',
 }
 
+/**
+ * f15 · Сценовый контекст inc-002 — демо-кейс расхождения «камера ↔ погода» (§8.2).
+ * Камера видит «ясно» при мокром покрытии, внешний API сообщает дождь → discrepancy.
+ */
+export const SCENE_INC_002: SceneContext = {
+  id: 'inc-002',
+  weather: 'clear', // факт по камере — ясно
+  day_night: 'night',
+  road_surface: 'wet', // мокрое покрытие → рисковый чип
+  area: 'unknown',
+  visibility: 'moderate',
+  scene_confidence: 0.74,
+}
+
+/** f15 · Погодная сверка inc-002 — внешний API расходится с фактом камеры (§8.2). */
+export const WEATHER_INC_002: WeatherCrossCheck = {
+  id: 'inc-002',
+  api_weather: 'rain', // внешний API: дождь vs «ясно» по камере
+  is_day: false,
+  solar_elevation_deg: -22.0,
+  discrepancy: true,
+  discrepancy_kind: 'weather',
+}
+
 /** Прогноз риска по А777ВВ 77 — наивный коридор, ML-ветка мёртвая (§8.0 b18). */
 export const FORECAST: RiskForecast = {
   plate: 'А777ВВ 77',
@@ -1270,6 +1301,35 @@ export const FORECAST: RiskForecast = {
   narrative:
     'Наивный прогноз по ограниченной истории: ~1 событие/сутки в коридоре 0–3. ' +
     'Аномалий не выявлено — данных для тренда недостаточно (события за 2 дня).',
+}
+
+/**
+ * Прогноз с восходящим трендом и выраженной аномалией — для демо warning-кейса (f16).
+ * Привязан к высокорисковому ТС Н124УУ 199 (Козлов, gross=5 в парке).
+ */
+export const FORECAST_ANOMALY: RiskForecast = {
+  plate: 'Н124УУ 199',
+  trend: [
+    { date: '2026-04-01', predicted_events: 2, ci_low: 1, ci_high: 4 },
+    { date: '2026-04-02', predicted_events: 3, ci_low: 1, ci_high: 5 },
+    { date: '2026-04-03', predicted_events: 3, ci_low: 2, ci_high: 5 },
+    { date: '2026-04-04', predicted_events: 4, ci_low: 2, ci_high: 6 },
+    { date: '2026-04-05', predicted_events: 7, ci_low: 3, ci_high: 9 }, // выброс
+  ],
+  anomaly: true,
+  recommendations: [
+    'Срочный разбор пика 5 апреля с водителем (7 событий против базлайна ~3).',
+    'Внеплановая проверка режима труда и отдыха (ночные рейсы).',
+    'Дополнительный контроль ADAS/DMS до стабилизации тренда.',
+  ],
+  narrative:
+    'Тренд риска растёт; 5 апреля — выраженный выброс (7 событий, выше верхней границы коридора). ' +
+    'Рекомендуется немедленная интервенция.',
+}
+
+/** Прогноз по ТС с нормализацией госномера; дефолт — ровный кейс (§9.1). */
+export function getFixtureForecast(plate: string): RiskForecast {
+  return normPlate(plate) === normPlate(FORECAST_ANOMALY.plate) ? FORECAST_ANOMALY : FORECAST
 }
 
 /** Риск-зоны: 1 incident-кластер + 1 РЭБ-кластер (§8.1 v_risk_zones). */
@@ -1363,9 +1423,19 @@ export const RISK_BREAKDOWN: RiskBreakdown = {
 
 // ── AI-хелперы (повторяют сигнатуры клиента) ───────────────────────────────────
 
-/** Сцена + погодная сверка по id (GET /api/incidents/{id}/scene). Демо — всегда inc-001. */
-export function getFixtureScene(_id: string): SceneResponse {
-  return { scene: SCENE, weather: WEATHER }
+/**
+ * f15 · Сцены по id инцидента (демо): inc-001 — фолбэк без расхождения,
+ * inc-002 — кейс расхождения «камера ↔ погода» (бейдж). Прочие id → inc-001,
+ * чтобы чип сцены был виден на любой карточке в фикстур-режиме.
+ */
+const SCENE_BY_ID: Record<string, SceneResponse> = {
+  'inc-001': { scene: SCENE, weather: WEATHER },
+  'inc-002': { scene: SCENE_INC_002, weather: WEATHER_INC_002 },
+}
+
+/** Сцена + погодная сверка по id (GET /api/incidents/{id}/scene), id-aware. */
+export function getFixtureScene(id: string): SceneResponse {
+  return SCENE_BY_ID[id] ?? SCENE_BY_ID['inc-001']
 }
 
 /** Цепочки усталости по госномеру: демо-ТС → одиночный признак, иначе [] (валидно, §8.0 b20). */

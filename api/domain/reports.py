@@ -78,6 +78,7 @@ class DriverReport(BaseModel):
     kpi: ReportKPI
     disciplinary_warning: bool  # порог: gross>=3 ИЛИ safety_score<60
     violations: list[ViolationRow] = []
+    narrative: str | None = None  # b22 (Волна 4.2): нарратив + коучинг.
 
 
 class FleetByDriver(BaseModel):
@@ -113,6 +114,7 @@ class FleetReport(BaseModel):
     vehicles_count: int
     by_drivers: list[FleetByDriver] = []
     by_vehicles: list[FleetByVehicle] = []
+    narrative: str | None = None  # b22 (Волна 4.2): нарратив + коучинг.
 
 
 class VehicleReport(BaseModel):

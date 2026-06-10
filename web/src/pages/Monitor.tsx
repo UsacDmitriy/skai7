@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Clock, Loader2, MapPinOff, RefreshCw } from 'lucide-react'
+import { useMap } from 'react-leaflet'
+import * as L from 'leaflet'
+import { Clock, Layers, Loader2, MapPinOff, RefreshCw } from 'lucide-react'
 import * as client from '@/api/client'
-import type { IncidentSummary, Severity, Source } from '@/api/types'
+import type { IncidentSummary, RiskZone, RiskZoneKind, Severity, Source } from '@/api/types'
 import { Card, ScoreBar, SeverityBadge } from '@/components'
 import { SabotageWidget } from '@/components/SabotageWidget'
 import { MapView, MarkerLayer, RoleToggle } from '@/components/map'
 import type { MapUnit } from '@/components/map'
+import { RiskHeatLayer } from '@/components/ai/RiskHeatLayer'
 import { useRole } from '@/state/role'
+import type { Role } from '@/state/role'
 import { dedupeByUnit, filterByRole } from '@/state/roleFilter'
 import { cn } from '@/components/ui/cn'
 
@@ -119,6 +123,117 @@ function computeCenter(incidents: IncidentSummary[]): [number, number] {
   return [lat, lon]
 }
 
+// ── f18 · Тепловая карта нарушений + риск-зоны (идея #14) ─────────────────────
+
+/** Слои карты, переключаемые независимо. */
+type LayerKey = 'heat' | 'incident' | 'reb'
+
+/** Тип фильтра по часу пика зоны (`peak_hour` 0..23) либо «все часы». */
+type ZoneHour = number | 'all'
+
+/** Максимум точек теплового слоя нарушений — защита от лагов при многих алярмах. */
+const MAX_HEAT_POINTS = 500
+
+/** Префикс кода DMS-аларма: Логист не видит DMS-зоны (как и DMS-ленту, f13). */
+const DMS_PREFIX = 'DMS'
+
+/** Экранирование текста зоны для HTML-попапа Leaflet. */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+/**
+ * Ролевая видимость риск-зон: Логист — без DMS-зон (зоны с `top_alarm_code`,
+ * начинающимся на `DMS`). Остальные роли видят все зоны. Чистая, без мутаций.
+ */
+function zonesForRole(role: Role, zones: readonly RiskZone[]): RiskZone[] {
+  if (role === 'logist') return zones.filter((z) => !z.top_alarm_code.startsWith(DMS_PREFIX))
+  return [...zones]
+}
+
+/**
+ * Видимые алярмы → псевдо-зоны для теплового слоя нарушений: каждая точка —
+ * `centroid` алярма, «жар» по `risk_score`. При многих точках берём топ по риску
+ * (`MAX_HEAT_POINTS`) — слой остаётся отзывчивым. `peak_hour` не используется в
+ * heat-режиме (0), чтобы не зависеть от часового пояса.
+ */
+function buildHeatZones(incidents: IncidentSummary[]): RiskZone[] {
+  const pts = incidents.filter(hasCoords)
+  const limited =
+    pts.length > MAX_HEAT_POINTS
+      ? [...pts].sort((a, b) => b.risk_score - a.risk_score).slice(0, MAX_HEAT_POINTS)
+      : pts
+  return limited.map((inc) => ({
+    zone_id: inc.id,
+    centroid: [inc.lat as number, inc.lon as number],
+    radius_m: 250,
+    alarm_count: 1,
+    avg_risk: inc.risk_score,
+    top_alarm_code: inc.alarm_label_ru,
+    peak_hour: 0,
+    kind: 'incident' as RiskZoneKind,
+  }))
+}
+
+/**
+ * ZoneInfoLayer — интерактивные маркеры центроидов риск-зон с попапом
+ * (`top_alarm_code`, час пика `peak_hour`, число алярмов `alarm_count`).
+ * Идёт поверх `RiskHeatLayer` (тот рисует «жар», но некликабелен §d7).
+ * Живёт только внутри `MapView`/`MapContainer` (использует `useMap`).
+ */
+function ZoneInfoLayer({ zones, kind }: { zones: RiskZone[]; kind: RiskZoneKind }) {
+  const map = useMap()
+  const layerRef = useRef<L.LayerGroup | null>(null)
+
+  useEffect(() => {
+    if (!layerRef.current) {
+      layerRef.current = L.layerGroup().addTo(map)
+    }
+    const layer = layerRef.current
+    layer.clearLayers()
+
+    for (const zone of zones.filter((z) => z.kind === kind)) {
+      const [lat, lon] = zone.centroid
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue
+
+      L.circleMarker([lat, lon], {
+        radius: 7,
+        weight: 2,
+        color: '#fff',
+        fillColor: 'var(--sev-high)',
+        fillOpacity: 0.9,
+      })
+        .bindPopup(
+          `<div class="text-xs leading-relaxed">
+             <div class="font-semibold">${escapeHtml(zone.top_alarm_code)}</div>
+             <div>Час пика: ${zone.peak_hour}:00</div>
+             <div>Алярмов: ${zone.alarm_count}</div>
+             <div>Средний риск: ${zone.avg_risk.toFixed(0)}</div>
+           </div>`,
+        )
+        .addTo(layer)
+    }
+
+    return () => {
+      layer.clearLayers()
+    }
+  }, [map, zones, kind])
+
+  // Очистка слоя при размонтировании.
+  useEffect(() => {
+    return () => {
+      layerRef.current?.remove()
+      layerRef.current = null
+    }
+  }, [])
+
+  return null
+}
+
 function Chip({
   active,
   onClick,
@@ -156,6 +271,21 @@ export default function Monitor() {
   const [sortKey, setSortKey] = useState<SortKey>('ts')
   const [selected, setSelected] = useState<string | null>(null)
 
+  // f18 · слои карты (тепловая карта нарушений + риск-зоны) и фильтр по часу пика.
+  const [layers, setLayers] = useState<Record<LayerKey, boolean>>({
+    heat: false,
+    incident: false,
+    reb: false,
+  })
+  const [zoneHour, setZoneHour] = useState<ZoneHour>('all')
+  const [zones, setZones] = useState<RiskZone[]>([])
+  const [zonesLoading, setZonesLoading] = useState(false)
+  const [zonesError, setZonesError] = useState<string | null>(null)
+
+  const toggleLayer = useCallback((key: LayerKey) => {
+    setLayers((prev) => ({ ...prev, [key]: !prev[key] }))
+  }, [])
+
   // Безопасник — акцент на риск: лента по умолчанию сортируется по risk_score.
   useEffect(() => {
     if (role === 'security') setSortKey('risk_score')
@@ -180,6 +310,27 @@ export default function Monitor() {
 
   useEffect(() => load(), [load])
 
+  // f18 · риск-зоны (`GET /api/zones`, b19). Один запрос всех зон; фильтрация
+  // по типу/часу/роли — на клиенте. Пустой набор валиден (слой пуст, карта жива).
+  const loadZones = useCallback(() => {
+    let alive = true
+    setZonesLoading(true)
+    setZonesError(null)
+    client
+      .getZones()
+      .then((data) => alive && setZones(data))
+      .catch(
+        (e: unknown) =>
+          alive && setZonesError(e instanceof Error ? e.message : 'Ошибка загрузки зон'),
+      )
+      .finally(() => alive && setZonesLoading(false))
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  useEffect(() => loadZones(), [loadZones])
+
   // Ролевая видимость (f13: единое правило `filterByRole` — общее с лентой событий).
   const roleVisible = useMemo(() => filterByRole(role, incidents), [role, incidents])
 
@@ -194,6 +345,26 @@ export default function Monitor() {
   // Маркеры: дедуп ленты по госномеру (MarkerLayer ещё раз защитит от дублей).
   const units = useMemo(() => buildUnits(visible), [visible])
   const center = useMemo(() => computeCenter(incidents), [incidents])
+
+  // f18 · тепловой слой нарушений из видимых (роль+фильтр) алярмов; кап по точкам.
+  const heatZones = useMemo(() => buildHeatZones(visible), [visible])
+
+  // f18 · риск-зоны под текущую роль и фильтр по часу пика (`peak_hour`).
+  const visibleZones = useMemo(() => {
+    const roled = zonesForRole(role, zones)
+    return zoneHour === 'all' ? roled : roled.filter((z) => z.peak_hour === zoneHour)
+  }, [zones, role, zoneHour])
+
+  // Часы, в которые реально есть зоны (для компактного селектора фильтра по часу).
+  const zoneHours = useMemo(() => {
+    const set = new Set(zonesForRole(role, zones).map((z) => z.peak_hour))
+    return [...set].sort((a, b) => a - b)
+  }, [zones, role])
+
+  // Сброс осиротевшего фильтра по часу, если под текущую роль такого часа нет.
+  useEffect(() => {
+    if (zoneHour !== 'all' && !zoneHours.includes(zoneHour)) setZoneHour('all')
+  }, [zoneHours, zoneHour])
 
   // Смена роли/фильтра не оставляет «осиротевшую» подсветку.
   useEffect(() => {
@@ -230,12 +401,85 @@ export default function Monitor() {
       {/* ── Сводка саботажа камеры (f12, идея #9) ─────────────────────────── */}
       <SabotageWidget variant="compact" />
 
+      {/* ── f18 · Слои карты: тепловая карта нарушений + риск-зоны (идея #14) ─ */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted">
+          <Layers className="h-3.5 w-3.5" aria-hidden />
+          Слои:
+        </span>
+        <Chip active={layers.heat} onClick={() => toggleLayer('heat')}>
+          Тепловая карта
+        </Chip>
+        <Chip active={layers.incident} onClick={() => toggleLayer('incident')}>
+          Зоны инцидентов
+        </Chip>
+        <Chip active={layers.reb} onClick={() => toggleLayer('reb')}>
+          РЭБ-зоны
+        </Chip>
+
+        {/* Фильтр зон по часу пика (`peak_hour`); виден, когда есть слой зон. */}
+        {(layers.incident || layers.reb) && zoneHours.length > 0 && (
+          <label className="ml-1 inline-flex items-center gap-1.5 text-xs text-muted">
+            <Clock className="h-3.5 w-3.5" aria-hidden />
+            Час пика:
+            <select
+              value={zoneHour}
+              onChange={(e) =>
+                setZoneHour(e.target.value === 'all' ? 'all' : Number(e.target.value))
+              }
+              className="rounded-md border border-border bg-surface px-1.5 py-1 text-xs text-ink"
+            >
+              <option value="all">все</option>
+              {zoneHours.map((h) => (
+                <option key={h} value={h}>
+                  {h}:00
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+
+        {/* Состояния загрузки/ошибки зон (карта продолжает работать). */}
+        {zonesLoading && (
+          <span className="inline-flex items-center gap-1 text-xs text-muted" role="status">
+            <Loader2 className="h-3 w-3 animate-spin" aria-hidden />
+            зоны…
+          </span>
+        )}
+        {!zonesLoading && zonesError && (
+          <button
+            type="button"
+            onClick={loadZones}
+            className="inline-flex items-center gap-1 rounded-md border border-critical-border bg-critical-bg px-2 py-1 text-xs text-critical-text hover:opacity-90"
+          >
+            <RefreshCw className="h-3 w-3" aria-hidden />
+            зоны не загрузились — повторить
+          </button>
+        )}
+      </div>
+
       {/* ── Карта + лента ─────────────────────────────────────────────────── */}
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 lg:grid-cols-[1fr_minmax(340px,400px)]">
         {/* Карта (рендерится всегда, в т.ч. при пустой/ошибочной ленте). */}
         <div className="relative min-h-[360px] overflow-hidden rounded-xl border border-border">
           <MapView center={center} zoom={DEFAULT_ZOOM}>
             {!loading && !error && <MarkerLayer units={units} onSelect={handleSelect} />}
+            {/* f18 · тепловая карта нарушений (переиспользуем d7 RiskHeatLayer). */}
+            {layers.heat && !error && <RiskHeatLayer zones={heatZones} kind="incident" />}
+            {/* f18 · слой зон инцидентов: «жар» (d7) + кликабельные центроиды-попапы. */}
+            {layers.incident && (
+              <>
+                <RiskHeatLayer zones={visibleZones} kind="incident" />
+                <ZoneInfoLayer zones={visibleZones} kind="incident" />
+              </>
+            )}
+            {/* f18 · РЭБ-зоны отдельным слоем (никто из конкурентов их не даёт). */}
+            {layers.reb && (
+              <>
+                <RiskHeatLayer zones={visibleZones} kind="reb" />
+                <ZoneInfoLayer zones={visibleZones} kind="reb" />
+              </>
+            )}
           </MapView>
           {loading && (
             <div

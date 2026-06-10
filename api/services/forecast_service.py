@@ -347,10 +347,16 @@ def forecast(db: duckdb.DuckDBPyConnection, plate: str) -> RiskForecast:
     trend = _trend_arima(counts, anchor) or _trend_baseline(counts, anchor)
     anomaly, reason = _detect_anomaly(ordered_stats)
 
-    return RiskForecast(
+    result = RiskForecast(
         plate=plate,
         trend=trend,
         anomaly=anomaly,
         anomaly_reason=reason,
         recommendations=_recommendations(rows),
     )
+    # b22 (Волна 4.2): нарратив + коучинг. Ленивый импорт — избегаем цикла
+    # narrative_service ↔ forecast_service (RiskForecast определён здесь).
+    from api.services import narrative_service
+
+    result.narrative = narrative_service.narrate(result)
+    return result
