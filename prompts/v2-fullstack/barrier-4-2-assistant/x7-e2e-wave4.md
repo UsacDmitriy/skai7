@@ -59,6 +59,12 @@ post '{"text":"asdkjhqwe"}'                  | jq -e '.text|length>0'           
 curl -s -X POST localhost:8000/api/copilot/chat -d '{}' -H 'content-type: application/json' -o /dev/null -w '%{http_code}'  # 422
 diff <(post '{"text":"сравни Иванова и Петрова"}') <(post '{"text":"сравни Иванова и Петрова"}')  # детерминизм fallback
 curl -s localhost:8000/api/reports/driver/<plate> | jq -e 'has("narrative")'                  # b22: поле narrative (§7.5)
+post '{"text":"сравни Иванова и Петрова"}' | jq -e '[.tool_calls[].name]|index("driver_report")!=null'  # E1: маршрутизация по таблице b21
+diff <(curl -s localhost:8000/api/reports/driver/<plate> | jq .narrative) \
+     <(curl -s localhost:8000/api/reports/driver/<plate> | jq .narrative)                     # D1: narrative детерминирован (b22)
+curl -s localhost:8000/api/reports/driver/<plate> | jq -e '.narrative|type=="string" and length>0'      # D1: narrative не NULL
+curl -s localhost:8000/api/reports/forecast/<plate> \
+  | jq -e '.anomaly==false and (.anomaly_reason//""|test("недостаточно"))'                    # G1/§8.0: b18 = фолбэк на 2-дневных данных
 # governance §8.6 — реальная конвенция флага: SKAI_AI_<NAME> (0/false/off → выкл), НЕ AI_*_ENABLED.
 # Флаги читаются на старте процесса → задаём env при запуске сервера для проверки:
 #   SKAI_AI_COPILOT=0 make api  →  POST /copilot/chat = 200 {"enabled":false} (не 5xx)
@@ -74,6 +80,8 @@ curl -s localhost:8000/api/incidents/<id>/scene | jq -e '.state.source|test("liv
 - Обратная совместимость: P0/P1/P2 + Волна 3 регресс зелёный (risk_score/sabotage/отчёты/fleet-health не сломаны).
 - Типы §8.4 совпадают; фронт без ошибок typecheck.
 - `b24`-governance работает (флаг off → «disabled» 200; мета `AiFeatureState`).
+- Прогноз = детерминированный фолбэк §8.0 (`anomaly=false`, причина «недостаточно истории»);
+  `narrative` не NULL и стабилен между запросами; маршрутизация фолбэка соответствует таблице b21.
 
 ## Финализация — НЕ трогаем `main`
 

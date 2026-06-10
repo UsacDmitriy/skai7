@@ -14,6 +14,13 @@
 - `chat("show sabotage events")` (EN) → `lang="en"`, выбран `sabotage`.
 - Мусор/пустой ввод → не бросает, вежливый дефолт.
 - Детерминизм фолбэка (один вход → один выход); определение языка по кириллице.
+- **Маршрутизация по таблице b21 (`@pytest.mark.parametrize`, ассерт по `tool_calls[].name`, §8.4):**
+  - RU: «кто в группе риска сегодня?» → `forecast`/`zones`; «сравни Иванова и Петрова» → `driver_report`;
+    «почему у этого ТС высокий риск?» → `list_incidents`; «саботаж за неделю» → `sabotage`;
+    «кто устал за рулём?» → `fatigue`.
+  - EN: "compare Ivanov and Petrov" → `driver_report`; "sabotage events" → `sabotage`;
+    "fleet report" → `fleet_report`.
+- Детерминизм ответа целиком: один и тот же текст дважды → идентичный `CopilotMessage` (поля и порядок).
 
 ## Check
 

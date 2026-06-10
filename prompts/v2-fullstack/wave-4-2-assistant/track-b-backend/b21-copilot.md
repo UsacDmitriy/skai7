@@ -3,7 +3,8 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/copilot_service.py`,
 > роутер `api/routers/copilot.py` (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`). Расширяет паттерн `nlu_service`.
 > **Модель:** 🔴 Opus — оркестрация LLM tool-use, надёжный фолбэк, двуязычность.
-> **Волна 4.2**, окно 1 (backend). Зависит от: существующие сервисы (incidents/reports/forecast/zones/fatigue/sabotage).
+> **Волна 4.2**, окно 1 (backend). Зависит от: существующие сервисы (incidents/reports/forecast/zones/fatigue/sabotage);
+> **b24** (Волна 4.1, выполнен) — флаг `copilot` и мета `AiFeatureState` из `api/core/ai_flags.py`/`ai_runtime.py`.
 
 ## Цель
 
@@ -27,6 +28,50 @@
   - **Feature-flag** `copilot` (b24) + **latency-budget** (превышение → краткий фолбэк), мета `AiFeatureState`.
   - **Audit-trail** (b26): каждый вызов tool пишется в `output/audit.csv`; событие `copilot_tool_success` → метрики (b25).
 
+## Tool-схема и фолбэк-маршрутизация (доспецификация, аудит 2026-06-10)
+
+> Код уже выполнен в `feat/backend` (73bd1d8) — секция фиксирует обязательный формат как источник истины.
+> Красный x7 по маршрутизации/схеме → дефект чинится по этой секции.
+
+**Формат tool-определения — Groq function-calling (OpenAI-совместимый), пример `list_incidents`:**
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "list_incidents",
+    "description": "Список инцидентов с фильтрами (severity/plate/limit)",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "severity": {"type": "string", "enum": ["critical", "warning", "info"]},
+        "vehicle_plate": {"type": "string", "description": "госномер ТС"},
+        "limit": {"type": "integer", "default": 10}
+      },
+      "required": []
+    }
+  }
+}
+```
+
+**Таблица маршрутизации фраза → tool (фолбэк-regex, RU/EN, без сети):**
+
+| Паттерн (regex, флаг i) | Tool(s) | Пример фразы |
+|---|---|---|
+| `групп[ае] риска \| кто рискует \| high.?risk \| risky` | `forecast` + `zones` | «кто в группе риска сегодня?» |
+| `сравни \| compare` | `driver_report` ×2 (оба имени) | «сравни Иванова и Петрова» |
+| `почему.*(риск\|score) \| why.*(risk\|score)` | `list_incidents` + объяснение risk | «почему у этого ТС высокий риск?» |
+| `саботаж \| tamper \| sabotage` | `sabotage` | «show sabotage events» |
+| `устал \| сонлив \| drowsy \| fatigue \| yawn` | `fatigue` | «кто устал за рулём?» |
+| `инцидент \| событи \| incident \| event` | `list_incidents` | «события за сегодня» |
+| `отч[её]т \| парк \| fleet \| report` | `fleet_report` | «отчёт по парку» |
+| — нет совпадений — | без tool | вежливое «уточните запрос» |
+
+Правила:
+- Фолбэк зовёт **те же** tool-функции, что и Groq-ветка (никакого дублирования логики).
+- В обеих ветках выбранные инструменты отражаются в `tool_calls: {name,args}[]` ответа (§8.4) —
+  по ним проверяется маршрутизация (tu-copilot, x7).
+
 ## Check
 
 - `from api.services.copilot_service import chat` импортируется без сети и без `groq`.
@@ -34,6 +79,8 @@
 - `chat("compare drivers ...")` (EN) → `lang="en"`, осмысленный ответ.
 - Мусор/пустой ввод → не бросает, вежливый дефолт.
 - При заданном ключе и нет сети — молчаливый уход в фолбэк (как nlu).
+- `chat("сравни Иванова и Петрова")` → в `tool_calls` есть `driver_report`; `chat("show sabotage events")` → `sabotage`.
+- Каждая строка таблицы маршрутизации → объявленный tool в `tool_calls` (параметризованные кейсы — tu-copilot).
 
 ## Коммит (обязательно)
 
