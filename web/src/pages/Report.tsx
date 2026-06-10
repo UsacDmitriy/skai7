@@ -38,6 +38,7 @@ import type {
   ViolationRow,
 } from '@/api/types'
 import { ForecastSparkline } from '@/components/ai/ForecastSparkline'
+import { RiskWaterfall } from '@/components/ai/RiskWaterfall'
 import {
   Button,
   Card,
@@ -442,6 +443,9 @@ function VideoPanel({
             )}
 
             {incident.evidence_summary && <p className="text-xs text-muted">{incident.evidence_summary}</p>}
+
+            {/* f20 · explainability (§8.8): почему такой риск у нарушения — waterfall вкладов. */}
+            <RiskWaterfall id={incident.id} />
           </>
         )}
       </aside>
