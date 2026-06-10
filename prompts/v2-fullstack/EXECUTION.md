@@ -298,7 +298,7 @@ flowchart TD
 
     subgraph W43["ВОЛНА 4.3 · AI Ops & Trust — backend ∥ web → tests/CI"]
         direction LR
-        subgraph B43["🪟 Окно 1 · backend — ⚠ metrics в ALL_ROUTERS"]
+        subgraph B43["🪟 Окно 1 · backend — ⚠ роутеры через автодискавери"]
             direction TB
             b25["b25 ai-metrics + data-quality · 🔵"]
             b26["b26 security-baseline (auth/audit/throttle) · 🔴"]
@@ -511,7 +511,7 @@ git **внутри промпта** (`x7` GUARD+merge → e2e 4.2 + регрес
 
 | Окно | Промпты | Примечание |
 | --- | --- | --- |
-| 1 Backend | `b25`🔵 (метрики/data-quality) ∥ `b26`🔴 (security/audit/throttle/SLO) ∥ `b27`🔵 (`/risk-breakdown`, владелец #19) | `b25`/`b27` регистрируют роутеры `metrics`/`risk_breakdown` в `ALL_ROUTERS`; `b26` — middleware в `main.py` (dev: off) |
+| 1 Backend | `b25`🔵 (метрики/data-quality) ∥ `b26`🔴 (security/audit/throttle/SLO) ∥ `b27`🔵 (`/risk-breakdown`, владелец #19) | роутеры `b25`/`b27` подхватываются автодискавери `api/main.py:_discover_routers` (модульный `router`; `ALL_ROUTERS` — легаси, не редактировать; openapi-ассерт в Check); `b26` — middleware в `main.py` (флаг `SKAI_SECURITY_ENABLED`, дефолт off) |
 | 2 Web | `f20`🔵 (risk-waterfall ← b27) ∥ `f21`🔵 (`/metrics` панель) ; **целостность экранов:** `f23`🔵 (триггер DispatchAlert #5, `EventsFeed.tsx`) ∥ **`f22`🔵 → `f24`🔵** (оба правят `App.tsx` NAV — последовательно) | аддит. к IncidentCard/Report; `/metrics` — из prep `w3-18`; **f22/f24 делят `App.tsx` → не параллелить** |
 | 3 Tests/CI | `t5`🟢 (CURRENT_STATUS) ∥ `t6`🔵 (remote CI + nightly live-smoke) ; per-feature `tu-metrics`∥`tu-security`∥`tu-riskbreakdown`🔵 | расширяют каркас `gen_status.py`/`.github/workflows` из prep `w3-19`; unit-паритет с 4.1/4.2 |
 

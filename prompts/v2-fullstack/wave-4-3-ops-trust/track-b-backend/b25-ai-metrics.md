@@ -37,6 +37,9 @@
 - `GET /api/metrics/ai` → 200 `AiMetrics`; значения детерминированы на тестовом наборе событий.
 - `GET /api/metrics/data-quality` → 200 `DataQuality`; `*_ratio ∈ [0,1]`; считается из реальных таблиц.
 - Пустые события → нулевые/корректные дефолты, не падает.
+- `curl -s localhost:8000/openapi.json | jq -e '.paths."/api/metrics/ai" and .paths."/api/metrics/data-quality"'`
+  — роутер подхвачен автодискавери (нужен **модульный** `router = APIRouter(...)`; иное имя атрибута →
+  тихий 404, прецедент scene-эндпоинта Волны 4.1).
 
 ## Коммит (обязательно)
 

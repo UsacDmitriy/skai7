@@ -27,6 +27,17 @@ git merge feat/backend feat/web feat/tests   # 4.3: b25, b26, f20, f21, t5, t6
 - **x6** (smoke 4.1): `incident_scene`/`incident_weather`/`v_risk_zones` собраны; governance-мета есть.
 - **x7** (e2e 4.2): копилот/сцена/прогноз/heatmap/вердикт работают на фолбэке; регресс P0–P2 + Волна 3 зелёный.
 
+## Gate: prep-артефакты Волны 3 на месте (w3-16…19)
+
+```bash
+test -f api/sql/33_ai_metric_events.sql                                   # w3-16: таблица событий метрик
+grep -q "interface AiMetrics" web/src/api/types.ts \
+  && grep -q "interface RiskBreakdown" web/src/api/types.ts               # w3-17: AI-типы фронта
+test -f .github/workflows/ci.yml && test -f scripts/gen_status.py         # w3-19: каркас CI/status
+```
+
+Любой провал → **СТОП**: prep Волны 3 не смержен в `integration` — чинить до барьера, не после.
+
 ## Цель
 
 Закрыть **измеримость (#18), explainability (#19), hardening (#20)** и подтвердить, что весь AI-слой
@@ -40,12 +51,15 @@ git merge feat/backend feat/web feat/tests   # 4.3: b25, b26, f20, f21, t5, t6
    схемы §8.7; `*_ratio ∈ [0,1]`; экран `/metrics` рисует KPI + data-quality (светофор). Пустые события → дефолты.
 3. **Explainability (f20):** `GET /api/incidents/{id}/risk-breakdown` → 200 (§8.8); waterfall на карточке/в
    отчёте, **сумма вкладов = `risk_score`** (зеркалит §2; без кэша погоды вклад weather=0).
+   Схема — **плоская** (§8.8 + `web/src/api/types.ts:RiskBreakdown`): `severity_w/speed_ratio/night/freq_w/
+   weather_bonus + total_risk_score`, НЕ массив `components[]`.
 4. **Status (t5):** `python scripts/gen_status.py` детерминированно обновляет `CURRENT_STATUS.md`;
    перечень эндпоинтов/таблиц совпадает с фактическими роутерами/`api/sql` (не с README).
 5. **CI (t6):** CI-workflow зелёный на чистом checkout (lint/typecheck/test = зеркало `scripts/check.sh`);
    **nightly smoke на ЖИВОМ API** (`VITE_USE_FIXTURES=false`) проходит и краснеет при backend-регрессе.
-6. **Security (b26, если `SECURITY_ENABLED=true`):** без токена → 401; мутации пишут `output/audit.csv`;
-   throttle на `/copilot/chat`/STT → 429; `docs/SLO.md` существует. В dev (`false`) — всё как раньше.
+6. **Security (b26, если `SKAI_SECURITY_ENABLED=true` на старте сервера):** без токена → 401; мутации пишут
+   `output/audit.csv`; throttle на `/copilot/chat`/STT → 429; `docs/SLO.md` существует.
+   В dev (дефолт `false`) — всё как раньше.
 
 ## Универсальный гейт + негативы ops/trust (обязательно — ФИНАЛ)
 
@@ -54,15 +68,20 @@ git merge feat/backend feat/web feat/tests   # 4.3: b25, b26, f20, f21, t5, t6
 
 Негативы/инварианты измеримости и explainability (доп.):
 ```bash
-# §8.8 explainability: сумма вкладов = risk_score (точно)
+# §8.8 explainability: сумма вкладов = risk_score (точно; ПЛОСКАЯ схема §8.8/types.ts, НЕ components[])
 curl -s localhost:8000/api/incidents/<id>/risk-breakdown \
-  | jq -e '([.components[].contribution]|add*100|round) == .total_risk_score'
+  | jq -e '((.severity_w+.speed_ratio+.night+.freq_w+.weather_bonus)|round) == .total_risk_score'
 test "$(curl -s -o /dev/null -w '%{http_code}' localhost:8000/api/incidents/__nope__/risk-breakdown)" = 404
 # §8.7 метрики/качество: доли в [0,1], пустые события → дефолты, не 5xx
 curl -s localhost:8000/api/metrics/data-quality | jq -e 'to_entries|all(.value>=0 and .value<=1)'
 curl -s localhost:8000/api/metrics/ai | jq -e 'type=="object"'
-# §8.9 security: dev off — как раньше; on — 401 без токена; throttle → 429
-SECURITY_ENABLED=true curl -s -o /dev/null -w '%{http_code}' localhost:8000/api/incidents   # → 401
+# §8.0 регресс: прогноз остаётся детерминированным фолбэком на 2-дневных данных
+curl -s localhost:8000/api/reports/forecast/<plate> \
+  | jq -e '.anomaly==false and (.anomaly_reason//""|test("недостаточно"))'
+# §8.9 security: флаг pydantic-settings (env_prefix="SKAI_") читается на СТАРТЕ сервера —
+# env на процессе curl НЕ действует (та же конвенция, что SKAI_AI_* в x7):
+#   SKAI_SECURITY_ENABLED=true make api  →  curl /api/incidents (без токена) = 401
+#   перезапуск без env                   →  200 (dev-режим, всё как раньше)
 # live-smoke: НЕ фикстуры
 VITE_USE_FIXTURES=false  # nightly-smoke бьёт живой API
 ```

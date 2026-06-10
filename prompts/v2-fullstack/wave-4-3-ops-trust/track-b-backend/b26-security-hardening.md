@@ -12,8 +12,14 @@ audit-trail действий, rate-limit на тяжёлые эндпоинты,
 
 ## Состав
 
-- `api/core/security.py` — middleware bearer/API-key (вкл/выкл флагом `SECURITY_ENABLED`, в dev — off);
-  при on — 401 без токена. Не трогает контракты ответов.
+- `api/core/security.py` — middleware bearer/API-key; при on — 401 без токена. Не трогает контракты ответов.
+  - **Дом флага (обязательно):** поле `security_enabled: bool = False` в `Settings`
+    (`api/core/config.py`, pydantic-settings, `env_prefix="SKAI_"` → env-переменная
+    **`SKAI_SECURITY_ENABLED`**; голая `SECURITY_ENABLED` процессом НЕ читается).
+  - Middleware читает `settings.security_enabled` (не кэшировать значение на импорте модуля);
+    при `False` — полный no-op (ветка 401 недостижима).
+  - **Гарантия blast-radius:** при дефолте `False` ни один существующий эндпоинт/тест
+    P0–P2/Волн 3–4 не меняет поведение.
 - `api/core/audit.py` — audit-trail: кто/что/когда по мутациям (`/actions`, `/copilot/chat`, tickets) →
   `output/audit.csv` (детерминированная схема, без `Date.now()` в логике — время из запроса/события).
 - **Throttle/rate-limit** на тяжёлые эндпоинты (`/reports/transcribe`, `/copilot/chat`): лимит запросов
@@ -22,8 +28,11 @@ audit-trail действий, rate-limit на тяжёлые эндпоинты,
 
 ## Check
 
-- `SECURITY_ENABLED=false` (dev/демо) → все эндпоинты работают как раньше (регресс P0–P2/Волны 4 зелёный).
-- `SECURITY_ENABLED=true` → запрос без токена → 401; с токеном → как обычно.
+- `python -c "from api.core.config import settings; assert settings.security_enabled is False"` — дефолт off доказан.
+- Флаг читается на **СТАРТЕ процесса сервера** (env на curl не действует):
+  `SKAI_SECURITY_ENABLED=true make api` → запрос без токена → 401, с токеном → как обычно;
+  перезапуск без env → все эндпоинты как раньше (регресс P0–P2/Волн 3–4 зелёный).
+- `pytest api/tests/unit -q` зелёный на дефолтных настройках (security off).
 - Мутации пишут строку в `output/audit.csv`; throttle на `/copilot/chat`/STT даёт 429 при превышении.
 - `docs/SLO.md` существует с целевыми latency/availability и error budget.
 
@@ -33,6 +42,6 @@ audit-trail действий, rate-limit на тяжёлые эндпоинты,
 
 ```bash
 # параллельно в одном worktree — стейджи только свои файлы (НЕ git add -A)
-git add api/core/security.py api/core/audit.py docs/SLO.md api/main.py
+git add api/core/security.py api/core/audit.py docs/SLO.md api/main.py api/core/config.py
 git commit -m "b26: <что сделано>"
 ```

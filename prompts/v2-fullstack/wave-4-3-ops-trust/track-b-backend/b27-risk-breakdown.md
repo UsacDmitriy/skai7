@@ -17,6 +17,14 @@
   - Зеркалит формулу §2/§8.2: `severity_w` (0.45·sev_w), `speed_ratio` (0.25·…), `night` (0.15·…),
     `freq_w` (0.15·…), `weather_bonus` (надбавка b17, §8.2) — каждый как **абсолютный вклад в 0..100**.
   - `total` = сумма вкладов = `risk_score` инцидента (клампится так же).
+  - **Схема ответа — ПЛОСКАЯ** (§8.8 + prep-тип `RiskBreakdown`, `web/src/api/types.ts:738`):
+    `{ id, severity_w, speed_ratio, night, freq_w, weather_bonus, total_risk_score }` — НЕ массив `components[]`.
+  - `weather_bonus` — в **очках score**: enrichment `weather_risk_bonus()` возвращает сырой коэффициент
+    {0, 0.1, 0.2} ДО умножения на 100 → конвертировать `·100`.
+  - Правило округления для точного равенства: вклады — float; `total_risk_score = кламп(round(сумма))`
+    и ДОЛЖЕН равняться `risk_score` того же инцидента из `/api/incidents/{id}`.
+  - **Источник истины — `api/core/enrichment.py` (функция `risk_score`, ~строка 231): ИМПОРТИРОВАТЬ
+    веса/функции, не копировать константы** (дрейф формулы ловит tu-riskbreakdown).
   - Без кэша погоды → `weather_bonus = 0` (обратная совместимость, как enrichment).
   - Детерминированно (без ML/сети), чисто из enrichment.
 - Роутер `GET /api/incidents/{id}/risk-breakdown`; неизвестный `id` → 404.
@@ -26,6 +34,9 @@
 - `GET /api/incidents/{id}/risk-breakdown` → 200 `RiskBreakdown`; **сумма вкладов == `risk_score`** того же инцидента.
 - Каждый вклад ≥ 0; `weather_bonus = 0` без кэша; детерминизм (один вход → один выход).
 - Неизвестный `id` → 404. Регресс enrichment/`tu-enrichment` зелёный (не меняем формулу, только раскладываем).
+- `curl -s localhost:8000/openapi.json | jq -e '.paths."/api/incidents/{id}/risk-breakdown"'` — роутер подхвачен автодискавери.
+- Инвариант на **всех 55** инцидентах: `round(severity_w+speed_ratio+night+freq_w+weather_bonus)
+  == total_risk_score == risk_score` (закрепляется в tu-riskbreakdown).
 
 ## Коммит (обязательно)
 
