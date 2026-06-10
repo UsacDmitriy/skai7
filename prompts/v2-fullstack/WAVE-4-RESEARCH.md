@@ -336,3 +336,11 @@ registry-tools, ForecastService+RecommendationEngine+NarrativeRenderer, REB DBSC
 fixture-mode маскирует backend-регресс (→ live-smoke в `t6`/`x7`), малый объём данных для AI (→ baseline-first +
 confidence bands, уже в `b18`).
 
+---
+
+> **Обновление 2026-06-10.** Документ остаётся методологией Волны 4 (4.1–4.3). Дальнейшие исследования
+> вынесены: конкурентный анализ (Lytx/Samsara/Netradyne/Wialon/Montrans/ФНИС × клиентские интервью) →
+> [`COMPETITORS.md`](COMPETITORS.md); кандидаты следующей волны (review queue, коучинг-цикл, green-zone,
+> консистентность фаза 2) → [`WAVE-5-BACKLOG.md`](WAVE-5-BACKLOG.md). Консистентность данных реализуется
+> Волной 4.4 «Data Trust» — контракт §10, промпты `wave-4-4-data-trust/`, барьер x9.
+

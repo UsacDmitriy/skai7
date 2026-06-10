@@ -1,4 +1,4 @@
-# FEATURES — матрица трассировки фич (идеи #1–#10)
+# FEATURES — матрица трассировки фич (идеи #1–#22)
 
 > **Зачем.** Волны делятся по приоритету (P0/P1/P2) и треку (backend ∥ web ∥ tests), а граница —
 > контракт. При такой модели одна фича **размазана** по нескольким промптам и собирается только
@@ -55,6 +55,8 @@
 | #18 | Измеримость: метрики + data-quality | `AiMetrics`/`DataQuality` §8.7 (`ai_metric_events`) | b25 (агрегация/события; продьюсеры f16/f17/f18) | f21 metrics/data-quality | tu-metrics, t-wave4-frontend | 4.3 | x8 |
 | #19 | Explainability: risk-waterfall | `RiskBreakdown` §8.8 (декомпозиция risk_score) | **b27** (`/risk-breakdown` из enrichment) | f20 risk-waterfall | tu-riskbreakdown | 4.3 | x8 |
 | #20 | Hardening (foundation) | §8.9: status/CI/security | b26 (auth/audit/throttle) | (—) | t5 (CURRENT_STATUS), t6 (CI+live-smoke), tu-security | 4.3 | x8 |
+| #21 | Кросс-сверка скоростей (data trust) | `v_speed_check` §10.3, `SpeedCheck` §10.2 | b29 (`/speed-check`) | f25 (SpeedCheckBadge на карточке) | tu-consistency | 4.4 | x9 |
+| #22 | Валидатор консистентности + evidence rate | `v_consistency_checks` §10.3, `ConsistencyReport` §10.2 | b28 (`/api/consistency`) | f25 (ConsistencyPanel на `/metrics`) | tu-consistency | 4.4 | x9 |
 
 > Бэклог/хардненинг, относящийся к фичам: W3-1 (Ticket §7.5 для #6), W3-2 (DIAGNOSTIC для #9-смежного),
 > W3-5 (мёртвая ветка «нет видео» для #1/#4) — см. `wave-3-backlog/`.
@@ -180,6 +182,30 @@
 
 ### #20 · Hardening — foundation (4.3, x8)
 - **Depth:** единый `CURRENT_STATUS.md` (анти-дрейф), remote CI + **nightly live-API smoke** (анти-fixture-маскировка), security baseline (auth/audit/throttle, SLO).
-- **Edge:** `SECURITY_ENABLED=false` (демо) → как раньше; live-smoke краснеет при backend-регрессе, который fixtures скрывают.
+- **Edge:** `SKAI_SECURITY_ENABLED` не задан (дефолт `false`, демо) → как раньше; live-smoke краснеет при backend-регрессе, который fixtures скрывают.
 - **Реализация:** `t5` (`gen_status.py`/`CURRENT_STATUS.md`), `t6` (`.github/workflows/*`), `b26` (`security.py`/`audit.py`/`SLO.md`).
 - **Tests:** CI зелёный; live-smoke на `VITE_USE_FIXTURES=false`; audit пишет `output/audit.csv`.
+
+> **Волна 4.4 «Data Trust» (#21–#22)** — консистентность данных, главный блокер доверия из клиентских
+> интервью: Фомин (PepsiCo) — расхождение скоростей видео↔телематика, «39 ДТП → видео подтвердило 5»;
+> Маслов (Балтика) — дубли терминалов. Контракт — **§10** (аддендум). Конкурентный паттерн — Lytx
+> review-queue (`COMPETITORS.md`). Без AI: детерминированный SQL.
+
+### #21 · Кросс-сверка скоростей — data trust per incident (4.4, x9)
+- **Depth:** на каждом инциденте сравнение скорости из события (`"Speed"` алярма) и GPS-трека (ближайшая
+  точка ±10 с); `delta` → `ok`/`minor`/`major`; `truth_source='gps_track'` (ASSUMPTION §10.2: CAN-данных нет).
+- **Edge:** нет точки в окне/нет скорости события → `no_data` (200, не 5xx); пустые координаты не валят view;
+  детерминизм (повторный вызов байт-идентичен).
+- **Реализация:** `b29` (`/api/incidents/{id}/speed-check`, `35_v_speed_check.sql`) + `f25` (`SpeedCheckBadge`
+  на карточке рядом с f15-чипом; в UI «GPS-трек», не «CAN»).
+- **Tests:** tu-consistency (`test_speed_check.py`): окно ±10 с (9 с берёт / 11 с нет), табличные пороги, 404, `no_data`.
+
+### #22 · Валидатор консистентности + evidence rate (4.4, x9)
+- **Depth:** 7 канонических кросс-датасетных проверок (§10.3): ТС без трека, инцидент без видео
+  (→ `evidence_rate` — метрика Фомина 5/39), дубли терминалов (Маслов), покрытие vehicle_matches,
+  монотонность таймстемпов, валидность координат, расхождение скоростей (→ `speed_agreement_rate`).
+- **Edge:** пустой источник → `total=0, ratio=0, ok`; статусы в сервисе (fail >0.2 / warn >0 / ok);
+  `sample_ids` ≤ 5; все `ratio ∈ [0,1]`.
+- **Реализация:** `b28` (`/api/consistency`, `34_v_consistency.sql`) + `f25` (`ConsistencyPanel` на `/metrics`
+  ниже f21-панели).
+- **Tests:** tu-consistency (`test_consistency.py`): границы статусов, инварианты `evidence_rate`/`speed_agreement_rate`, детерминизм, датасет-факт пустых координат.
