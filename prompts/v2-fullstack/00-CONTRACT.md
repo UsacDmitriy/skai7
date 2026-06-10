@@ -779,3 +779,60 @@ NavProblemVehicle { public_unit_id: str|null, plate: str|null, vehicle_label: st
 | b29 | `api/sql/35_v_speed_check.sql`, `api/services/speed_check_service.py`, роутер `api/routers/speed_check.py`, `api/domain/speed.py`; + согласованная замена CTE-заглушки `speed_disagreement` в `34_v_consistency.sql` (b28 знает) | b28 (строго последовательно) |
 | f25 | `web/src/components/ai/SpeedCheckBadge.tsx`, `web/src/components/ai/ConsistencyPanel.tsx`; аддитивные правки `IncidentCard.tsx`/`Metrics.tsx`/`api/{types,client,fixtures}.ts` | b28/b29 (схемы §10.2), f15/f21 (точки вставки) |
 | tu-consistency | `api/tests/unit/test_consistency.py`, `api/tests/unit/test_speed_check.py` | b28/b29 |
+
+---
+
+## 11. Волна 5.1 — Review Queue (очередь верификации событий) · аддендум
+
+> Добавлено 2026-06-10. Обоснование: Фомин (PepsiCo) — «39 ДТП в телематике, видео подтвердило 5» —
+> нужен workflow подтверждения/отклонения событий, а не разовая кнопка; паттерн лидера — Lytx
+> human-in-the-loop review queue (`COMPETITORS.md`). Выполняется ПОСЛЕ барьера x9, барьер — x10.
+
+### 11.0 Принцип и статусная модель (единый словарь)
+
+- Статус ревью инцидента: `pending` (нет решения) · `validated` (подтверждён) · `dismissed` (отклонён).
+- **Источник истины статуса ревью — ТОЛЬКО журнал `output/review_queue.csv`** (паттерн `actions.csv`):
+  колонки `decided_at,incident_id,decision,note`; статус = **последняя** запись по `incident_id`;
+  нет записи → `pending`. Легаси-экшен `validate` из §3.4 (`actions.csv`) НЕ трогаем и НЕ дублируем —
+  он остаётся аудит-следом; двух источников статуса ревью быть не должно.
+- `decided_at` пишется сервером при записи (прецедент `actions_service.record`); в бизнес-логике
+  чтения времени нет (детерминизм чтения сохраняется).
+- Решение по инциденту перезаписываемо: новая запись в журнале побеждает (append-only журнал).
+
+### 11.1 Эндпоинты
+
+- `GET /api/review-queue?status=pending|validated|dismissed` → `ReviewQueue` (без фильтра — все).
+- `POST /api/review-queue/{incident_id}` body `{decision: 'validated'|'dismissed', note?: string}` →
+  обновлённый `ReviewItem`; неизвестный `incident_id` → 404; невалидный `decision` → 422.
+- При решении — эмит события `review_decision` в `ai_metric_events` через эмиттер b25
+  (недоступен/выключен → тихий no-op, решение всё равно записано).
+
+### 11.2 Схемы (Pydantic / TS)
+
+- `ReviewItem { incident_id, alarm_code, severity, vehicle_plate, ts, video_available: bool, status: 'pending'|'validated'|'dismissed', note: string|null, decided_at: string|null }`
+- `ReviewQueue { items: ReviewItem[], counts: { pending: int, validated: int, dismissed: int }, evidence_rate: number }`
+  - `items` — все инциденты `v_incidents` (не хардкодить 55 — считать), статус из журнала;
+  - `counts` согласованы с `items` (сумма = всего инцидентов); `evidence_rate` — из §10 (контекст очереди).
+
+### 11.3 Frontend
+
+- `web/src/pages/ReviewQueue.tsx` — живой экран на **существующем** маршруте `/validation`
+  (NAV-пункт «Блок валидации»): таблица инцидентов (код/severity/ТС/время/чип «видео есть/нет»),
+  фильтр по статусу, счётчики, кнопки «✓ Подтвердить» / «✗ Отклонить» (+ опц. заметка),
+  клик по строке → `/incidents/{id}` (доказательная карточка).
+- **Ревизия допущения f22 по его же критерию отката:** у `/validation` появился владелец → бейдж
+  «Будущее» снят, ключ удалён из `COMING_SOON`, маршрут ведёт на живой экран. `/response` — без изменений.
+
+### 11.4 Негативные кейсы
+
+- Пустой/отсутствующий журнал → все `pending`, не 5xx. Битая строка журнала → пропустить, не падать.
+- Повторное решение → статус перезаписан, в `counts` инцидент один раз.
+- 404 на неизвестный id; 422 на неизвестный `decision`; пустая `note` валидна.
+
+### 11.5 Владение (без пересечений)
+
+| Промпт | Владеет | Зависит от |
+|---|---|---|
+| b30 | `api/services/review_service.py`, роутер `api/routers/review.py`, `api/domain/review.py`; журнал `output/review_queue.csv` | v_incidents (b3), §10 evidence_rate (b28), эмиттер b25 |
+| f26 | `web/src/pages/ReviewQueue.tsx`; аддитивные правки `web/src/App.tsx` (роут/NAV/COMING_SOON), `web/src/api/{types,client,fixtures}.ts` | b30 (схемы §11.2), f22 (снимает его «Будущее» с `/validation`) |
+| tu-review | `api/tests/unit/test_review.py` | b30 |
