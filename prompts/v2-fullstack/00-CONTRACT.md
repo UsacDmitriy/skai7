@@ -699,3 +699,83 @@ NavProblemVehicle { public_unit_id: str|null, plate: str|null, vehicle_label: st
 | w3-11 fleet-health-hub | `web/src/pages/{FleetHealth,FuelCard,SensorCard,NavProblemList}.tsx` | w3-10, d2/d4 |
 | w3-12 cross-wiring | правки `web/src/pages/{IncidentCard,TripDossier,Report,EventsFeed}.tsx` (аддитивно) | w3-10 |
 | w3-13 nav-signposting | `web/src/App.tsx`, `web/src/components/.../ComingSoon.tsx` | w3-11 |
+
+---
+
+## 10. Волна 4.4 — Data Trust (консистентность данных) · аддендум
+
+> Добавлено 2026-06-10 (паттерн аддендума §9). Обоснование — интервью клиентов: Фомин (PepsiCo) —
+> расхождение скоростей видео↔телематика, «39 ДТП в телематике, видео подтвердило 5»; Маслов (Балтика) —
+> дубли ТС из-за двух терминалов, рассинхрон статусов. Конкурентный паттерн — Lytx review-queue
+> (см. `COMPETITORS.md`). Волна выполняется ПОСЛЕ барьера x8 (финал Волны 4), барьер — x9.
+
+### 10.0 Принцип
+
+Все проверки — **детерминированный SQL поверх существующих таблиц** DuckDB. Никакого AI/сети:
+это НЕ AI-фича → без `AiFeatureState`/`ai_flags`. Тоталы не хардкодить (55/94 и т.п.) — считать запросом.
+Повторный вызов любого эндпоинта → байт-идентичный ответ.
+
+### 10.1 Эндпоинты
+
+- `GET /api/consistency` → `ConsistencyReport` (агрегат всех проверок).
+- `GET /api/incidents/{id}/speed-check` → `SpeedCheck`; неизвестный `id` → 404.
+
+### 10.2 Схемы (Pydantic / TS)
+
+- `ConsistencyCheck { check_id, title_ru, status: 'ok'|'warn'|'fail', affected_count, total, ratio, sample_ids: string[], description_ru }`
+  - `ratio = affected_count/total ∈ [0,1]` (total=0 → ratio=0); `sample_ids` ≤ 5 примеров;
+  - статусы считает **сервис** (не SQL): `fail` если `ratio > 0.2`, `warn` если `ratio > 0`, иначе `ok`.
+- `ConsistencyReport { checks: ConsistencyCheck[], evidence_rate, speed_agreement_rate, generated_at_source: 'duckdb' }`
+  - `evidence_rate = 1 − ratio(incident_no_video)`; `speed_agreement_rate = 1 − ratio(speed_disagreement)`.
+- `SpeedCheck { id, event_speed_kmh: number|null, track_speed_kmh: number|null, max_track_speed_kmh: number|null, delta_kmh: number|null, agreement: 'ok'|'minor'|'major'|'no_data', truth_source: 'gps_track' }`
+  - пороги по `delta_kmh = |event − track|`: `ok` ≤ 5 · `minor` ≤ 15 · `major` > 15;
+  - ближайшая точка трека в окне **±10 с** от начала события; нет точки в окне или нет `"Speed"` события → `no_data` (не 5xx).
+- **ASSUMPTION (зафиксировано):** CAN-скорости в датасете НЕТ. Источник истины — GPS-трек
+  (`video_events__track_points.speed_kmh`), `truth_source='gps_track'`. Требование Фомина «истина = CAN»
+  аппроксимируется GPS до появления CAN-датасета (Волна 5, см. `WAVE-5-BACKLOG.md` W5-5).
+
+### 10.3 SQL views (идемпотентные `CREATE OR REPLACE VIEW`, файлы `api/sql/34_*.sql`, `35_*.sql`)
+
+`34_v_consistency.sql` → view `v_consistency_checks` (строка на проверку: `check_id, affected_count, total`;
+по CTE на проверку). Канонические 7 проверок:
+
+| check_id | Таблицы | Суть (SQL-идея) |
+|---|---|---|
+| `video_fleet_no_track` | alarms, track_points | `"UnitStateNumber"` из alarms без единой строки в `track_points` (по `unit_state_number`) |
+| `incident_no_video` | alarms, video_files | алармы с `"VideoCount" > 0`, но без строк в `video_files` (по `alarm_id`) — пробел доказательной базы |
+| `terminal_duplication` | alarms | `"UnitStateNumber"` с >1 различным `"TerminalId"` (дубли терминалов — кейс Маслова) |
+| `plate_match_coverage` | reference__vehicle_matches | доля строк с `match_status <> 'matched'` по каждому `source_list` (fuel/sensors/navigation) |
+| `timestamp_monotonicity` | track_points | `alarm_id`, где `timestamp_utc` убывает при росте `point_index` (битый порядок точек) |
+| `coordinate_sanity` | alarms, track_points | NULL/пустые/вне диапазона (±90/±180) /(0,0) координаты — в alarms такие строки реально есть |
+| `speed_disagreement` | v_speed_check | доля алармов с `agreement='major'` |
+
+`35_v_speed_check.sql` → view `v_speed_check` (строка на аларм): `event_speed` = `CAST(NULLIF("Speed", '') AS DOUBLE)`
+из alarms; `track_speed` = `speed_kmh` ближайшей точки `track_points` в окне ±10 с (оконно:
+`row_number() OVER (PARTITION BY alarm_id ORDER BY abs(epoch(timestamp_utc) - epoch(event_begin_utc)))` —
+колонка `event_begin_utc` уже есть в `track_points`; ASOF JOIN не использовать);
+`max_track_speed` = `max(speed_kmh)` из `video_events__max_speed_points` по `alarm_id`.
+
+### 10.4 Frontend (аддитивно)
+
+- `web/src/components/ai/SpeedCheckBadge.tsx` — бейдж на `IncidentCard.tsx` рядом с `SceneContextChip` (f15):
+  «Скорость: событие N · GPS M → совпадает/расходится», tooltip про источник истины (GPS-трек).
+- `web/src/components/ai/ConsistencyPanel.tsx` — секция на `Metrics.tsx` ниже `DataQualityPanel` (f21):
+  светофор по 7 проверкам + `evidence_rate`/`speed_agreement_rate`.
+- Типы §10.2 → `web/src/api/types.ts`; клиент `getConsistency()`, `getSpeedCheck(id)` → `client.ts`;
+  фикстуры (включая кейсы `no_data` и `major`) → `fixtures.ts` — за тем же свитчем `USE_FIXTURES`.
+
+### 10.5 Негативные кейсы
+
+- Аларм без точек трека в окне → `agreement='no_data'`, не 5xx; `delta_kmh=null`.
+- Пустые `"Latitude"`/`"Longitude"` в alarms не валят view (попадают в `coordinate_sanity`).
+- Все `ratio ∈ [0,1]`; пустая таблица-источник → `total=0, ratio=0, status='ok'`.
+- Повторный вызов `/api/consistency` и `/speed-check` → идентичный ответ (детерминизм).
+
+### 10.6 Владение (без пересечений)
+
+| Промпт | Владеет | Зависит от |
+|---|---|---|
+| b28 | `api/sql/34_v_consistency.sql`, `api/services/consistency_service.py`, роутер `api/routers/consistency.py`, `api/domain/consistency.py` | b1 (ETL), §10.1–10.3 |
+| b29 | `api/sql/35_v_speed_check.sql`, `api/services/speed_check_service.py`, роутер `api/routers/speed_check.py`, `api/domain/speed.py`; + согласованная замена CTE-заглушки `speed_disagreement` в `34_v_consistency.sql` (b28 знает) | b28 (строго последовательно) |
+| f25 | `web/src/components/ai/SpeedCheckBadge.tsx`, `web/src/components/ai/ConsistencyPanel.tsx`; аддитивные правки `IncidentCard.tsx`/`Metrics.tsx`/`api/{types,client,fixtures}.ts` | b28/b29 (схемы §10.2), f15/f21 (точки вставки) |
+| tu-consistency | `api/tests/unit/test_consistency.py`, `api/tests/unit/test_speed_check.py` | b28/b29 |
