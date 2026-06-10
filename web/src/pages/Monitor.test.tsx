@@ -33,6 +33,8 @@ vi.mock('@/components/SabotageWidget', () => ({
 const listIncidents = vi.fn()
 vi.mock('@/api/client', () => ({
   listIncidents: () => listIncidents(),
+  // f18: Monitor запрашивает риск-зоны при монтировании; пустой набор валиден.
+  getZones: () => Promise.resolve([]),
 }))
 
 // Импорт страницы — после vi.mock (hoisted), чтобы подхватились заглушки.

@@ -22,7 +22,11 @@ vi.mock('@/components/map', () => ({
 vi.mock('@/components/SabotageWidget', () => ({
   SabotageWidget: () => <div data-testid="sabotage" />,
 }))
-vi.mock('@/api/client', () => ({ listIncidents: vi.fn() }))
+vi.mock('@/api/client', () => ({
+  listIncidents: vi.fn(),
+  // f18: Monitor запрашивает риск-зоны при монтировании; пустой набор валиден.
+  getZones: () => Promise.resolve([]),
+}))
 
 import * as client from '@/api/client'
 import Monitor from './Monitor'

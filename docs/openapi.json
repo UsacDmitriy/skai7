@@ -112,13 +112,24 @@
         }
       }
     },
-    "/api/fuel": {
-      "get": {
+    "/api/copilot/chat": {
+      "post": {
         "tags": [
-          "fuel"
+          "copilot"
         ],
-        "summary": "List Fuel",
-        "operationId": "list_fuel_api_fuel_get",
+        "summary": "Chat",
+        "description": "Свободный запрос → выбор инструмента → `CopilotMessage` (§8.4).\n\nФлаг `copilot` выкл → 200 «feature disabled» (§8.6, не 5xx). Без `GROQ_API_KEY`\nсервис детерминированно уходит в фолбэк. Мусор/пустой ввод → вежливый дефолт.",
+        "operationId": "chat_api_copilot_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -127,17 +138,98 @@
                 "schema": {}
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/fuel/{plate}": {
+    "/api/fatigue": {
       "get": {
         "tags": [
-          "fuel"
+          "fatigue"
         ],
-        "summary": "Get Fuel",
-        "operationId": "get_fuel_api_fuel__plate__get",
+        "summary": "List Fatigue",
+        "description": "Цепочки усталости (скользящее окно 90 мин). Опционально `?plate=`.\n\nФлаг `fatigue` выкл → 200 «feature disabled» (§8.6, не 5xx).",
+        "operationId": "list_fatigue_api_fatigue_get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Plate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fleet-health": {
+      "get": {
+        "tags": [
+          "fleet-health"
+        ],
+        "summary": "Get Fleet Health",
+        "description": "Хаб «Здоровье парка» (§9.6): покрытие по доменам + ростер 17 ТС объединения.",
+        "operationId": "get_fleet_health_api_fleet_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FleetHealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/forecast/{plate}": {
+      "get": {
+        "tags": [
+          "forecast"
+        ],
+        "summary": "Risk Forecast",
+        "description": "Прогноз нарушений на 7 дней + аномалия + рекомендации (§8.4).\n\nФлаг `forecast` выкл → 200 «feature disabled» (§8.6, не 5xx). Неизвестный\n`plate` → 404. Известный ТС с пустой историей → валидный нулевой прогноз.",
+        "operationId": "risk_forecast_api_reports_forecast__plate__get",
         "parameters": [
           {
             "name": "plate",
@@ -155,6 +247,75 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fuel": {
+      "get": {
+        "tags": [
+          "fuel"
+        ],
+        "summary": "List Fuel",
+        "description": "Топливный ростер (10 ТС). Headline KPI — `volume_delta_zis_minus_card_l`.",
+        "operationId": "list_fuel_api_fuel_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FuelVehicleSummary"
+                  },
+                  "type": "array",
+                  "title": "Response List Fuel Api Fuel Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fuel/{plate}": {
+      "get": {
+        "tags": [
+          "fuel"
+        ],
+        "summary": "Get Fuel",
+        "description": "Карточка топлива ТС. 404 при неизвестном госномере (§9.5, детерминированно).",
+        "operationId": "get_fuel_api_fuel__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FuelVehicleCard"
+                }
               }
             }
           },
@@ -461,13 +622,20 @@
           "navigation"
         ],
         "summary": "List Navigation",
+        "description": "Список проблемных треков навигации (§9.1) → вход в `/api/reb/{reb_link_id}`.",
         "operationId": "list_navigation_api_navigation_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NavProblemVehicle"
+                  },
+                  "type": "array",
+                  "title": "Response List Navigation Api Navigation Get"
+                }
               }
             }
           }
@@ -480,6 +648,7 @@
           "navigation"
         ],
         "summary": "Get Navigation",
+        "description": "Сводка ТС по госномеру. 404 при неизвестном (§9.5).\n\n`{plate:path}` — навигационные госномера содержат `/` (напр. `А 230 КУ/550 RUS`).",
         "operationId": "get_navigation_api_navigation__plate__get",
         "parameters": [
           {
@@ -497,7 +666,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/NavProblemVehicle"
+                }
               }
             }
           },
@@ -834,19 +1005,67 @@
         }
       }
     },
-    "/api/sensors": {
+    "/api/incidents/{incident_id}/scene": {
       "get": {
         "tags": [
-          "sensors"
+          "scene"
         ],
-        "summary": "List Sensors",
-        "operationId": "list_sensors_api_sensors_get",
+        "summary": "Get Scene",
+        "description": "Сцена + погодная сверка инцидента (§8.3/§8.4).\n\nФлаг `scene` выкл → `FeatureDisabledResponse` (200, §8.6). Неизвестный\nинцидент → 404. Известный без предрасчёта → детерминированный фолбэк.",
+        "operationId": "get_scene_api_incidents__incident_id__scene_get",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Incident Id"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sensors": {
+      "get": {
+        "tags": [
+          "sensors"
+        ],
+        "summary": "List Sensors",
+        "description": "Сводка сенсорной диагностики по всем ТС (§9.2) — 7 строк.",
+        "operationId": "list_sensors_api_sensors_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SensorVehicleSummary"
+                  },
+                  "type": "array",
+                  "title": "Response List Sensors Api Sensors Get"
+                }
               }
             }
           }
@@ -859,6 +1078,7 @@
           "sensors"
         ],
         "summary": "Get Sensors",
+        "description": "Карточка сенсоров по госномеру/UUID. 404 при неизвестном ТС.\n\n`{plate:path}` — госномера могут содержать `/` (напр. `А 230 КУ/550 RUS`).",
         "operationId": "get_sensors_api_sensors__plate__get",
         "parameters": [
           {
@@ -876,7 +1096,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/SensorVehicleCard"
+                }
               }
             }
           },
@@ -981,6 +1203,71 @@
                   },
                   "type": "array",
                   "title": "Response List Vehicles Api Vehicles Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/zones": {
+      "get": {
+        "tags": [
+          "zones"
+        ],
+        "summary": "List Zones",
+        "description": "Зоны риска. Фильтры: `?kind=incident|reb`, `?hour=0..23`.\n\nФлаг `zones` выкл → 200 «feature disabled» (§8.6, не 5xx). Час вне 0..23 —\nбитый фильтр: ни одна зона не совпадает → `[]` (не 422/500, §8.0 деградация).",
+        "operationId": "list_zones_api_zones_get",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(incident|reb)$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "hour",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hour"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -1170,6 +1457,31 @@
         "title": "Camera",
         "description": "Канонический слот камеры (§2/§3.1). Длина массива всегда 3 (ADAS/DMS/СНЗ)."
       },
+      "ChatRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "lang": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lang"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "ChatRequest",
+        "description": "Тело `POST /api/copilot/chat` (§8.4): свободный запрос RU/EN + опц. язык."
+      },
       "DispatchAlert": {
         "properties": {
           "incident": {
@@ -1274,6 +1586,17 @@
             "type": "array",
             "title": "Violations",
             "default": []
+          },
+          "narrative": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Narrative"
           }
         },
         "type": "object",
@@ -1382,6 +1705,155 @@
         "title": "FleetByVehicle",
         "description": "Строка агрегата по ТС (§7.5 FleetReport.by_vehicles)."
       },
+      "FleetCoverage": {
+        "properties": {
+          "fuel": {
+            "type": "integer",
+            "title": "Fuel"
+          },
+          "sensors": {
+            "type": "integer",
+            "title": "Sensors"
+          },
+          "navigation": {
+            "type": "integer",
+            "title": "Navigation"
+          },
+          "in_video_fleet": {
+            "type": "integer",
+            "title": "In Video Fleet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fuel",
+          "sensors",
+          "navigation",
+          "in_video_fleet"
+        ],
+        "title": "FleetCoverage",
+        "description": "Баннер покрытия (§9.0): размеры популяций по доменам + пересечение с видеопарком.\n\nЭто размеры ИСТОЧНИКОВ (v_fuel/v_sensors/matched-nav), а не строк ростера:\nнапр. `sensors=7`, хотя в объединении 6 (одно ТС без резолва госномера выпало)."
+      },
+      "FleetHealthResponse": {
+        "properties": {
+          "coverage": {
+            "$ref": "#/components/schemas/FleetCoverage"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/FleetHealthRow"
+            },
+            "type": "array",
+            "title": "Rows",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "coverage"
+        ],
+        "title": "FleetHealthResponse",
+        "description": "Ответ `GET /api/fleet-health` (§9.6): баннер покрытия + ростер ТС объединения."
+      },
+      "FleetHealthRow": {
+        "properties": {
+          "plate": {
+            "type": "string",
+            "title": "Plate"
+          },
+          "plate_norm": {
+            "type": "string",
+            "title": "Plate Norm"
+          },
+          "has_fuel": {
+            "type": "boolean",
+            "title": "Has Fuel"
+          },
+          "has_sensors": {
+            "type": "boolean",
+            "title": "Has Sensors"
+          },
+          "has_nav": {
+            "type": "boolean",
+            "title": "Has Nav"
+          },
+          "fuel_delta_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fuel Delta L"
+          },
+          "sensors_gap_can_gps_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sensors Gap Can Gps Km"
+          },
+          "sensors_online_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "online",
+                  "stale",
+                  "offline"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sensors Online Status"
+          },
+          "nav_gap_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nav Gap Count"
+          },
+          "reb_link_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reb Link Id"
+          },
+          "in_video_fleet": {
+            "type": "boolean",
+            "title": "In Video Fleet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plate",
+          "plate_norm",
+          "has_fuel",
+          "has_sensors",
+          "has_nav",
+          "in_video_fleet"
+        ],
+        "title": "FleetHealthRow",
+        "description": "Строка ростера «Здоровье парка» (§9.6) — одно ТС объединения.\n\nФлаги `has_*` говорят, в каких доменах ТС присутствует; KPI-поля `null`\nу отсутствующего домена (рендер «—»). `plate` — чистый госномер (у fuel =\nсобственный `vehicle_id`), `reb_link_id` — UUID для входа в `/api/reb/{id}`."
+      },
       "FleetReport": {
         "properties": {
           "period": {
@@ -1409,6 +1881,17 @@
             "type": "array",
             "title": "By Vehicles",
             "default": []
+          },
+          "narrative": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Narrative"
           }
         },
         "type": "object",
@@ -1419,6 +1902,400 @@
         ],
         "title": "FleetReport",
         "description": "GET /api/reports/fleet (§7.5, идея #2 В-2)."
+      },
+      "FuelEvent": {
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "title": "Event Id"
+          },
+          "event_ts": {
+            "type": "string",
+            "title": "Event Ts"
+          },
+          "event_name": {
+            "type": "string",
+            "title": "Event Name"
+          },
+          "volume_l": {
+            "type": "number",
+            "title": "Volume L"
+          },
+          "before_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before L"
+          },
+          "after_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After L"
+          },
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lat"
+          },
+          "lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lon"
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event_id",
+          "event_ts",
+          "event_name",
+          "volume_l"
+        ],
+        "title": "FuelEvent",
+        "description": "Топливное событие ЗИС (заправка/слив) (§9.2)."
+      },
+      "FuelReconRow": {
+        "properties": {
+          "row_id": {
+            "type": "string",
+            "title": "Row Id"
+          },
+          "transaction_ts": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transaction Ts"
+          },
+          "event_ts": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Ts"
+          },
+          "transaction_volume_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transaction Volume L"
+          },
+          "sensor_volume_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sensor Volume L"
+          },
+          "volume_delta_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Volume Delta L"
+          },
+          "time_delta_min": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Delta Min"
+          },
+          "amount_rub": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount Rub"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "row_id",
+          "status"
+        ],
+        "title": "FuelReconRow",
+        "description": "Строка сверки транзакция карты ↔ событие сенсора (§9.2). Поля nullable."
+      },
+      "FuelSummary": {
+        "properties": {
+          "fuel_spent_l": {
+            "type": "number",
+            "title": "Fuel Spent L"
+          },
+          "total_mileage_km": {
+            "type": "number",
+            "title": "Total Mileage Km"
+          },
+          "average_consumption_l_per_100km": {
+            "type": "number",
+            "title": "Average Consumption L Per 100Km"
+          },
+          "average_speed_kmh": {
+            "type": "number",
+            "title": "Average Speed Kmh"
+          },
+          "fuelings_count": {
+            "type": "integer",
+            "title": "Fuelings Count"
+          },
+          "defuelings_count": {
+            "type": "integer",
+            "title": "Defuelings Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fuel_spent_l",
+          "total_mileage_km",
+          "average_consumption_l_per_100km",
+          "average_speed_kmh",
+          "fuelings_count",
+          "defuelings_count"
+        ],
+        "title": "FuelSummary",
+        "description": "Агрегаты пробега/расхода ТС (§9.2, из `fuel__fuel_summary`)."
+      },
+      "FuelVehicleCard": {
+        "properties": {
+          "vehicle_id": {
+            "type": "string",
+            "title": "Vehicle Id"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "vin": {
+            "type": "string",
+            "title": "Vin"
+          },
+          "fuel_volume_zis_l": {
+            "type": "number",
+            "title": "Fuel Volume Zis L"
+          },
+          "fuel_volume_card_l": {
+            "type": "number",
+            "title": "Fuel Volume Card L"
+          },
+          "volume_delta_zis_minus_card_l": {
+            "type": "number",
+            "title": "Volume Delta Zis Minus Card L"
+          },
+          "refuel_count_zis": {
+            "type": "integer",
+            "title": "Refuel Count Zis"
+          },
+          "transaction_count_card": {
+            "type": "integer",
+            "title": "Transaction Count Card"
+          },
+          "period_start": {
+            "type": "string",
+            "title": "Period Start"
+          },
+          "period_end": {
+            "type": "string",
+            "title": "Period End"
+          },
+          "recon_status": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "review",
+              "missing_sensor_event"
+            ],
+            "title": "Recon Status"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuelSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reconciliation": {
+            "items": {
+              "$ref": "#/components/schemas/FuelReconRow"
+            },
+            "type": "array",
+            "title": "Reconciliation",
+            "default": []
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/FuelEvent"
+            },
+            "type": "array",
+            "title": "Events",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "vehicle_id",
+          "model",
+          "vin",
+          "fuel_volume_zis_l",
+          "fuel_volume_card_l",
+          "volume_delta_zis_minus_card_l",
+          "refuel_count_zis",
+          "transaction_count_card",
+          "period_start",
+          "period_end",
+          "recon_status"
+        ],
+        "title": "FuelVehicleCard",
+        "description": "Карточка топлива ТС (§9.2): summary + списки сверки и событий.\n\n`summary` = None для ТС без строки в `fuel__fuel_summary` (валидно, не ошибка);\nпустые `reconciliation`/`events` — тоже валидны (§9.5)."
+      },
+      "FuelVehicleSummary": {
+        "properties": {
+          "vehicle_id": {
+            "type": "string",
+            "title": "Vehicle Id"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "vin": {
+            "type": "string",
+            "title": "Vin"
+          },
+          "fuel_volume_zis_l": {
+            "type": "number",
+            "title": "Fuel Volume Zis L"
+          },
+          "fuel_volume_card_l": {
+            "type": "number",
+            "title": "Fuel Volume Card L"
+          },
+          "volume_delta_zis_minus_card_l": {
+            "type": "number",
+            "title": "Volume Delta Zis Minus Card L"
+          },
+          "refuel_count_zis": {
+            "type": "integer",
+            "title": "Refuel Count Zis"
+          },
+          "transaction_count_card": {
+            "type": "integer",
+            "title": "Transaction Count Card"
+          },
+          "period_start": {
+            "type": "string",
+            "title": "Period Start"
+          },
+          "period_end": {
+            "type": "string",
+            "title": "Period End"
+          },
+          "recon_status": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "review",
+              "missing_sensor_event"
+            ],
+            "title": "Recon Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "vehicle_id",
+          "model",
+          "vin",
+          "fuel_volume_zis_l",
+          "fuel_volume_card_l",
+          "volume_delta_zis_minus_card_l",
+          "refuel_count_zis",
+          "transaction_count_card",
+          "period_start",
+          "period_end",
+          "recon_status"
+        ],
+        "title": "FuelVehicleSummary",
+        "description": "Строка топливного ростера (§9.2). Headline KPI — `volume_delta_zis_minus_card_l`."
       },
       "GapPeriod": {
         "properties": {
@@ -1920,6 +2797,104 @@
         "title": "IncidentSummary",
         "description": "Строка ленты GET /api/incidents (§3.1)."
       },
+      "NavProblemVehicle": {
+        "properties": {
+          "public_unit_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Public Unit Id"
+          },
+          "plate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plate"
+          },
+          "vehicle_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vehicle Label"
+          },
+          "brand": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Brand"
+          },
+          "problem_description": {
+            "type": "string",
+            "title": "Problem Description"
+          },
+          "match_status": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "unmatched"
+            ],
+            "title": "Match Status"
+          },
+          "gap_count": {
+            "type": "integer",
+            "title": "Gap Count"
+          },
+          "total_periods": {
+            "type": "integer",
+            "title": "Total Periods"
+          },
+          "total_gap_duration_sec": {
+            "type": "integer",
+            "title": "Total Gap Duration Sec"
+          },
+          "reb_link_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reb Link Id"
+          },
+          "in_video_fleet": {
+            "type": "boolean",
+            "title": "In Video Fleet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "problem_description",
+          "match_status",
+          "gap_count",
+          "total_periods",
+          "total_gap_duration_sec",
+          "in_video_fleet"
+        ],
+        "title": "NavProblemVehicle",
+        "description": "Строка списка проблемных треков (§9.2) → deep-view `/api/reb/{reb_link_id}`.\n\n5 matched + 1 unmatched ТС. У unmatched `public_unit_id`/`plate`/`reb_link_id`\n= null (строка не кликабельна в РЭБ), но `problem_description` живой (§9.5)."
+      },
       "QueryRequest": {
         "properties": {
           "text": {
@@ -2157,6 +3132,16 @@
               }
             ],
             "title": "Video Url"
+          },
+          "verdict_confidence": {
+            "type": "number",
+            "title": "Verdict Confidence",
+            "default": 0.0
+          },
+          "verdict_reason": {
+            "type": "string",
+            "title": "Verdict Reason",
+            "default": ""
           }
         },
         "type": "object",
@@ -2169,7 +3154,424 @@
           "driver_name"
         ],
         "title": "SabotageEvent",
-        "description": "Событие саботажа камеры (§7.5). `video_url` nullable — доступного кадра может не быть."
+        "description": "Событие саботажа камеры (§7.5). `video_url` nullable — доступного кадра может не быть.\n\n`verdict_confidence`/`verdict_reason` (b23, идея #16) — аддитивный «умный вердикт»:\nдетерминированное усиление детекции кросс-проверкой сцены (b16/b17). Дефолты\nдержат обратную совместимость: нет кэша сцены → базовая уверенность, нейтральная причина."
+      },
+      "SensorDailyPoint": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "distance_km": {
+            "type": "number",
+            "title": "Distance Km"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "distance_km"
+        ],
+        "title": "SensorDailyPoint",
+        "description": "Точка спарклайна суточного пробега (§9.2) — ровно 7/ТС из `daily_mileage`."
+      },
+      "SensorEngine": {
+        "properties": {
+          "first_ignition_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Ignition On"
+          },
+          "last_ignition_off": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Ignition Off"
+          },
+          "ignition_duration": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ignition Duration"
+          },
+          "idle_duration": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Idle Duration"
+          }
+        },
+        "type": "object",
+        "title": "SensorEngine",
+        "description": "Статистика двигателя ТС (`sensors__engine_statistics`)."
+      },
+      "SensorFuelLevel": {
+        "properties": {
+          "first_fuel_level": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Fuel Level"
+          },
+          "last_fuel_level": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Fuel Level"
+          },
+          "delta_fuel_level": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delta Fuel Level"
+          }
+        },
+        "type": "object",
+        "title": "SensorFuelLevel",
+        "description": "Сводка уровня топлива по датчику (`sensors__fuel_level_summary`)."
+      },
+      "SensorSnapshot": {
+        "properties": {
+          "speed_kmh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speed Kmh"
+          },
+          "fuel_volume": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fuel Volume"
+          },
+          "satellite_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Satellite Amount"
+          },
+          "timestamp_utc": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timestamp Utc"
+          },
+          "last_valid_navigation_timestamp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Valid Navigation Timestamp"
+          },
+          "odometer_mileage": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Odometer Mileage"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          }
+        },
+        "type": "object",
+        "title": "SensorSnapshot",
+        "description": "Последний онлайн-снапшот ТС (`sensors__online_snapshot`)."
+      },
+      "SensorVehicleCard": {
+        "properties": {
+          "public_unit_id": {
+            "type": "string",
+            "title": "Public Unit Id"
+          },
+          "vehicle_label": {
+            "type": "string",
+            "title": "Vehicle Label"
+          },
+          "plate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plate"
+          },
+          "gps_total_distance_km": {
+            "type": "number",
+            "title": "Gps Total Distance Km"
+          },
+          "distance_odometer_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Odometer Km"
+          },
+          "distance_gap_odometer_minus_gps_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Gap Odometer Minus Gps Km"
+          },
+          "max_speed_kmh": {
+            "type": "number",
+            "title": "Max Speed Kmh"
+          },
+          "average_speed_kmh": {
+            "type": "number",
+            "title": "Average Speed Kmh"
+          },
+          "satellite_amount": {
+            "type": "integer",
+            "title": "Satellite Amount"
+          },
+          "online_status": {
+            "type": "string",
+            "enum": [
+              "online",
+              "stale",
+              "offline"
+            ],
+            "title": "Online Status"
+          },
+          "sensor_count": {
+            "type": "integer",
+            "title": "Sensor Count"
+          },
+          "daily_mileage": {
+            "items": {
+              "$ref": "#/components/schemas/SensorDailyPoint"
+            },
+            "type": "array",
+            "title": "Daily Mileage",
+            "default": []
+          },
+          "engine": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SensorEngine"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fuel_level": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SensorFuelLevel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "snapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SensorSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "public_unit_id",
+          "vehicle_label",
+          "gps_total_distance_km",
+          "max_speed_kmh",
+          "average_speed_kmh",
+          "satellite_amount",
+          "online_status",
+          "sensor_count"
+        ],
+        "title": "SensorVehicleCard",
+        "description": "Карточка сенсоров ТС (§9.2): сводка + динамика + под-блоки.\n\n`daily_mileage` — спарклайн из 7-точечного `daily_mileage` (НЕ graph_points).\n`engine`/`fuel_level`/`snapshot` — null, если у ТС нет соответствующей строки."
+      },
+      "SensorVehicleSummary": {
+        "properties": {
+          "public_unit_id": {
+            "type": "string",
+            "title": "Public Unit Id"
+          },
+          "vehicle_label": {
+            "type": "string",
+            "title": "Vehicle Label"
+          },
+          "plate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plate"
+          },
+          "gps_total_distance_km": {
+            "type": "number",
+            "title": "Gps Total Distance Km"
+          },
+          "distance_odometer_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Odometer Km"
+          },
+          "distance_gap_odometer_minus_gps_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Gap Odometer Minus Gps Km"
+          },
+          "max_speed_kmh": {
+            "type": "number",
+            "title": "Max Speed Kmh"
+          },
+          "average_speed_kmh": {
+            "type": "number",
+            "title": "Average Speed Kmh"
+          },
+          "satellite_amount": {
+            "type": "integer",
+            "title": "Satellite Amount"
+          },
+          "online_status": {
+            "type": "string",
+            "enum": [
+              "online",
+              "stale",
+              "offline"
+            ],
+            "title": "Online Status"
+          },
+          "sensor_count": {
+            "type": "integer",
+            "title": "Sensor Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "public_unit_id",
+          "vehicle_label",
+          "gps_total_distance_km",
+          "max_speed_kmh",
+          "average_speed_kmh",
+          "satellite_amount",
+          "online_status",
+          "sensor_count"
+        ],
+        "title": "SensorVehicleSummary",
+        "description": "Строка сводки сенсорной диагностики ТС (§9.2). 1 строка = 1 ТС (7 шт.)."
       },
       "TelemetryPoint": {
         "properties": {

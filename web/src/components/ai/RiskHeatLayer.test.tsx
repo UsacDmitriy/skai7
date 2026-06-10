@@ -16,7 +16,7 @@ const circleHandle = { bindTooltip: vi.fn(), addTo: vi.fn() }
 circleHandle.bindTooltip.mockReturnValue(circleHandle)
 circleHandle.addTo.mockReturnValue(circleHandle)
 
-const circle = vi.fn(() => circleHandle)
+const circle = vi.fn((..._args: unknown[]) => circleHandle)
 const layerGroupHandle = {
   addTo: vi.fn(),
   clearLayers: vi.fn(),
