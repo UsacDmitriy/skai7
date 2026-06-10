@@ -19,6 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import api.routers as routers_pkg
 from api.core.config import settings
 from api.core.duckdb_conn import close_connection
+from api.core.security import SecurityMiddleware
 
 logger = logging.getLogger("skai.api")
 
@@ -60,6 +61,10 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # Security baseline (b26 · §8.9): auth (gated SKAI_SECURITY_ENABLED) + throttle + audit.
+    # Аддитивно: при дефолте security_enabled=False auth — полный no-op, контракты не меняются.
+    app.add_middleware(SecurityMiddleware)
 
     @app.get("/api/health")
     def health() -> dict[str, str]:
