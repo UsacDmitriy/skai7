@@ -20,6 +20,7 @@ import {
 import {
   BrowserRouter,
   type Location,
+  Navigate,
   NavLink,
   Outlet,
   Route,
@@ -42,34 +43,41 @@ import { RoleProvider } from '@/state/role'
 type NavItem = { to: string; label: string; icon: LucideIcon; badge?: string }
 type NavGroup = { title: string; items: NavItem[] }
 
-// Бейдж `W4` — честная подпись «мёртвых» пунктов: экран приедет в Волне 4.
-// Рабочие пункты (Волна ≤3) бейджа не несут.
+// f22 · Таксономия бейджей навигации (честность пунктов меню):
+//   • живой экран (или редирект на живой)      → без бейджа;
+//   • scaffold / in-progress (экран на подходе) → `Скоро` (снимут f17/f21);
+//   • вне скоупа / нужен новый источник данных  → `Будущее` (волна не обещана).
+// Прежний `W4` упразднён: 6 из 8 «W4»-пунктов не имели владельца — 3 дубля ушли
+// в редирект на живые экраны Волны 4, остальные размечены `Скоро`/`Будущее`.
 const NAV: NavGroup[] = [
   {
     title: 'Мониторинг',
     items: [
       { to: '/monitor', label: 'Карта', icon: MapIcon },
-      { to: '/safety', label: 'Мониторинг безопасности', icon: Shield, badge: 'W4' },
+      // /safety → редирект на /metrics (живой экран): бейдж снят.
+      { to: '/safety', label: 'Мониторинг безопасности', icon: Shield },
     ],
   },
   {
     title: 'Видеоаналитика',
     items: [
       { to: '/events', label: 'События', icon: FileText },
-      { to: '/live', label: 'Прямая трансляция', icon: Radio, badge: 'W4' },
-      { to: '/archive', label: 'Видеоархив', icon: Film, badge: 'W4' },
-      { to: '/downloads', label: 'Загрузки', icon: Download, badge: 'W4' },
-      { to: '/validation', label: 'Блок валидации', icon: CheckCircle, badge: 'W4' },
-      { to: '/response', label: 'Блок реагирования', icon: Bell, badge: 'W4' },
+      { to: '/live', label: 'Прямая трансляция', icon: Radio, badge: 'Будущее' },
+      { to: '/archive', label: 'Видеоархив', icon: Film, badge: 'Будущее' },
+      { to: '/downloads', label: 'Загрузки', icon: Download, badge: 'Будущее' },
+      { to: '/validation', label: 'Блок валидации', icon: CheckCircle, badge: 'Будущее' },
+      { to: '/response', label: 'Блок реагирования', icon: Bell, badge: 'Будущее' },
       { to: '/tickets', label: 'Заявки', icon: ClipboardList },
     ],
   },
   {
     title: 'Дашборды и отчёты',
     items: [
-      { to: '/dashboards', label: 'Дашборды', icon: BarChart2, badge: 'W4' },
+      // /dashboards → редирект на /metrics (живой экран): бейдж снят.
+      { to: '/dashboards', label: 'Дашборды', icon: BarChart2 },
       { to: '/report', label: 'Отчёты', icon: FileText },
-      { to: '/quick-report', label: 'Быстрый отчёт', icon: Zap, badge: 'W4' },
+      // /quick-report → редирект на /copilot (живой экран): бейдж снят.
+      { to: '/quick-report', label: 'Быстрый отчёт', icon: Zap },
     ],
   },
   {
@@ -80,12 +88,12 @@ const NAV: NavGroup[] = [
     ],
   },
   {
-    // Каркас под Волну 4: маршруты/пункты заведены заранее (против экранов-сирот).
-    // Бейдж `W4` снимут промпты f17/f21, когда экраны будут влиты.
+    // Каркас под Волну 4: /copilot (§8.3) и /metrics (§8.7) рендерят scaffold-
+    // страницы. Бейдж `Скоро` снимут промпты f17/f21, когда экраны будут влиты.
     title: 'AI',
     items: [
-      { to: '/copilot', label: 'Копилот', icon: Bot, badge: 'W4' },
-      { to: '/metrics', label: 'Метрики', icon: Gauge, badge: 'W4' },
+      { to: '/copilot', label: 'Копилот', icon: Bot, badge: 'Скоро' },
+      { to: '/metrics', label: 'Метрики', icon: Gauge, badge: 'Скоро' },
     ],
   },
 ]
@@ -196,46 +204,43 @@ function Placeholder({ title }: { title: string }) {
 // ── Сигнпостинг «мёртвых» пунктов меню (w3-13, §9.4) ──────────────────────────
 // Карта `path → ComingSoon`: честная подпись «скоро / Волна 4» вместо пустого 404.
 // Разделы Волны 4 (видеостриминг, workflow, BI-копилот) ещё не реализованы.
+// f22 · /safety, /dashboards, /quick-report ушли из карты — теперь это редиректы
+// на живые экраны Волны 4 (см. <Navigate> в AppRoutes), а не сигнпост-заглушки.
+// Видеостриминг и workflow — `kind: 'future'`: волна не обещана, нужен новый источник.
 const COMING_SOON: Record<string, ComingSoonProps> = {
-  '/safety': {
-    title: 'Мониторинг безопасности',
-    description: 'Агрегированные KPI безопасности по парку.',
-    wave: 4,
-  },
   '/live': {
     title: 'Прямая трансляция',
-    description: 'Видеопоток с бортовых камер — стриминг.',
+    description:
+      'Нужен live-источник: датасет исторический (94 MP4 по событию), потока с бортовых камер нет.',
     wave: 4,
+    kind: 'future',
   },
   '/archive': {
     title: 'Видеоархив',
-    description: 'Архив записей по событиям — стриминг.',
+    description:
+      'Нужен live-источник (датасет исторический). Покадровое видео по событию уже доступно в карточке инцидента — «Запросить архив».',
     wave: 4,
+    kind: 'future',
   },
   '/downloads': {
     title: 'Загрузки',
-    description: 'Выгрузка фрагментов и отчётов — стриминг.',
+    description:
+      'Массовая выгрузка фрагментов — нужен live-источник (датасет исторический).',
     wave: 4,
+    kind: 'future',
   },
   '/validation': {
     title: 'Блок валидации',
-    description: 'Очередь валидации алармов — workflow.',
+    description: 'Очередь валидации алармов — workflow-движок, будущая волна.',
     wave: 4,
+    kind: 'future',
   },
   '/response': {
     title: 'Блок реагирования',
-    description: 'Маршрутизация и эскалация реагирования — workflow.',
+    description:
+      'Маршрутизация и эскалация реагирования — workflow-движок, будущая волна.',
     wave: 4,
-  },
-  '/dashboards': {
-    title: 'Дашборды',
-    description: 'Расширенная BI-аналитика — AI-копилот (§8).',
-    wave: 4,
-  },
-  '/quick-report': {
-    title: 'Быстрый отчёт',
-    description: 'Генерация отчёта по запросу — AI-копилот (§8).',
-    wave: 4,
+    kind: 'future',
   },
 }
 
@@ -381,6 +386,19 @@ function AppRoutes() {
                 <NavProblemList />
               </Suspense>
             }
+          />
+          {/* f22 redirect (ASSUMPTION, см. промпт f22): дубли реальных экранов
+              Волны 4 ведут на живой экран по сходству. §7.8/§8 их НЕ мандатируют —
+              откат: появился промпт-владелец экрана → снять Navigate, вернуть
+              ключ в COMING_SOON (ревизия на каждом барьере x9+). */}
+          <Route path="/safety" element={<Navigate to="/metrics" replace />} />
+          <Route
+            path="/dashboards"
+            element={<Navigate to="/metrics" replace />}
+          />
+          <Route
+            path="/quick-report"
+            element={<Navigate to="/copilot" replace />}
           />
           {/* Каркас Волны 4 (w3-18): /copilot (f17) и /metrics (f21). До влития —
               ComingSoon; f17/f21 заменят страницы без правок этих маршрутов. */}
