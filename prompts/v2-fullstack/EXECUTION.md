@@ -205,7 +205,7 @@ integration (x1/x2), поэтому в параллельной фазе их н
 
 ```mermaid
 flowchart TD
-    DONE["✅ ВОЛНЫ 1–2 ЗАВЕРШЕНЫ<br/>P0+P1/P2 в main (88ed8cf)<br/>барьеры x1–x4 отработали"]
+    DONE["✅ ВОЛНЫ 1–3 ЗАВЕРШЕНЫ<br/>P0/P1/P2 + Волна 3 в main (c11245e)<br/>барьеры x1–x5 отработали<br/>Волны 4.1 (x6) + 4.2 (x7) зелёные на integration (d99a00f) — в main войдут с x8"]
 
     subgraph W3["ВОЛНА 3 · бэклог + хардненинг + целостность MVP (§9) — backend ∥ web; тесты следом за кодом"]
         direction LR
