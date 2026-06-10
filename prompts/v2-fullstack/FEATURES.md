@@ -1,4 +1,4 @@
-# FEATURES — матрица трассировки фич (идеи #1–#22)
+# FEATURES — матрица трассировки фич (идеи #1–#26)
 
 > **Зачем.** Волны делятся по приоритету (P0/P1/P2) и треку (backend ∥ web ∥ tests), а граница —
 > контракт. При такой модели одна фича **размазана** по нескольким промптам и собирается только
@@ -57,6 +57,10 @@
 | #20 | Hardening (foundation) | §8.9: status/CI/security | b26 (auth/audit/throttle) | (—) | t5 (CURRENT_STATUS), t6 (CI+live-smoke), tu-security | 4.3 | x8 |
 | #21 | Кросс-сверка скоростей (data trust) | `v_speed_check` §10.3, `SpeedCheck` §10.2 | b29 (`/speed-check`) | f25 (SpeedCheckBadge на карточке) | tu-consistency | 4.4 | x9 |
 | #22 | Валидатор консистентности + evidence rate | `v_consistency_checks` §10.3, `ConsistencyReport` §10.2 | b28 (`/api/consistency`) | f25 (ConsistencyPanel на `/metrics`) | tu-consistency | 4.4 | x9 |
+| #23 | Очередь верификации событий | журнал `output/review_queue.csv`, `ReviewQueue` §11.2 | b30 (`/api/review-queue`) | f26 (живой `/validation`) | tu-review | 5.1 | x10 |
+| #24 | Цикл обучения водителя (демо-синтетика) | `training_assignments` §12.1, `CoachingCard` §12.3 | b31 (генератор) → b32 (`/api/coaching`) | f27 (секция отчёта + бейдж демо) | tu-coaching | 5.2 | x11 |
+| #25 | Позитивный скоринг / green zone | алармы + `speed_limit_for`, `PositiveScore` §13.1 | b33 (`/api/positive-score`) | f28 (блок позитива в отчёте) | tu-score | 5.3 | x12 |
+| #26 | Единый рейтинг водителя + лидерборд | бленд §13.2 (риск §2 + позитив §13.1), `DriverScore` | b34 (`/api/driver-score`) | f28 (`/leaderboard`) | tu-score | 5.3 | x12 |
 
 > Бэклог/хардненинг, относящийся к фичам: W3-1 (Ticket §7.5 для #6), W3-2 (DIAGNOSTIC для #9-смежного),
 > W3-5 (мёртвая ветка «нет видео» для #1/#4) — см. `wave-3-backlog/`.
@@ -209,3 +213,38 @@
 - **Реализация:** `b28` (`/api/consistency`, `34_v_consistency.sql`) + `f25` (`ConsistencyPanel` на `/metrics`
   ниже f21-панели).
 - **Tests:** tu-consistency (`test_consistency.py`): границы статусов, инварианты `evidence_rate`/`speed_agreement_rate`, детерминизм, датасет-факт пустых координат.
+
+> **Волна 5 (#23–#26)** — три под-волны поверх Data Trust: workflow верификации (Lytx-паттерн),
+> цикл обучения (дословный запрос Оздоева, синтетика), скоринговый слой (Netradyne-паттерн).
+> Контракты — **§11/§12/§13**. W5-5 (CAN/online-статусы) остаётся в `WAVE-5-BACKLOG.md` — нет датасетов.
+
+### #23 · Очередь верификации событий (5.1, x10)
+- **Depth:** статусная модель `pending/validated/dismissed`; журнал append-only, последняя запись побеждает;
+  `evidence_rate` (§10) как контекст; эмит `review_decision` в метрики b25.
+- **Edge:** пустой/битый журнал → pending/пропуск строки (не 5xx); перезапись решения; 404/422;
+  изоляция от `actions.csv` (§11.0 — единый словарь).
+- **Реализация:** `b30` (`/api/review-queue`, журнал) + `f26` (живой `/validation` — ревизия допущения f22).
+- **Tests:** tu-review (tmp-журнал, перезапись, негативы, изоляция).
+
+### #24 · Цикл обучения водителя (5.2, x11)
+- **Depth:** инцидент → курс (словарь по `Type`) → тест 18/20 → KPI completion/pass/repeat;
+  `repeat_within_30d` — реальный расчёт по алармам; данные — детерминированная синтетика (crc32).
+- **Edge:** повторная генерация → байт-идентичный CSV; водитель без назначений → нулевые KPI (200);
+  `pass_rate` без завершивших → 0.0; **UI обязан показывать бейдж «синтетические данные»**.
+- **Реализация:** `b31` (генератор + `make seed`) → `b32` (`/api/coaching`) + `f27` (секция отчёта).
+- **Tests:** tu-coaching (детерминизм, словарь курсов, пороги, KPI-инварианты).
+
+### #25 · Позитивный скоринг / green zone (5.3, x12)
+- **Depth:** чистые дни + соблюдение лимитов (`speed_limit_for` импорт) + без HARSH; формула §13.1
+  зафиксирована; `green_zone` = compliant ≥0.95 и нет critical.
+- **Edge:** ТС без алармов → 100/green (не NaN); пустые `Speed` вне знаменателя; дисклеймер периода обязателен.
+- **Реализация:** `b33` (`/api/positive-score/{plate}`) + `f28` (блок позитива в отчёте).
+- **Tests:** tu-score (ручной пересчёт, границы green_zone, пустой знаменатель).
+
+### #26 · Единый рейтинг водителя + лидерборд (5.3, x12)
+- **Depth:** бленд §13.2: `0.6·(100−avg_risk) + 0.4·positive`; компоненты float, `clamp(round())`
+  один раз (урок b27); лидерборд всех ТС `driver_reference`, tie-break по plate.
+- **Edge:** ТС без алармов → `avg_risk=0`, в рейтинге; риск из готовых инцидентов (§2 не копируется);
+  стабильная сортировка; геймификация сверх лидерборда — НЕ в скоупе (бэклог W5-4).
+- **Реализация:** `b34` (`/api/driver-score`, вызывает b33) + `f28` (`/leaderboard` + NAV).
+- **Tests:** tu-score (инвариант бленда на всём лидерборде, tie-break, изоляция формулы §2).
