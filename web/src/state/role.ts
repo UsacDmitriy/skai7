@@ -86,3 +86,38 @@ export function useRole(): RoleContextValue {
   if (!ctx) throw new Error('useRole должен использоваться внутри <RoleProvider>')
   return ctx
 }
+
+// ── f24 · Роль-видимость NAV (согласовано с контент-фильтром, issue #4) ─────────
+
+/**
+ * Опциональная роль-привязка пункта/группы NAV. Семантика безопасного дефолта:
+ * `roles` отсутствует ⇒ виден **всем** ролям (текущее поведение); задан ⇒ виден
+ * только перечисленным ролям. Контракт фильтрует роль на уровне данных/слоёв, а
+ * не разделов меню — поэтому по умолчанию `roles` не проставляется (см. f24).
+ */
+export interface RoleScoped {
+  roles?: Role[]
+}
+
+/** Виден ли роль-привязанный элемент данной роли (нет `roles` ⇒ всем). */
+function isVisibleForRole(scoped: RoleScoped, role: Role): boolean {
+  return scoped.roles === undefined || scoped.roles.includes(role)
+}
+
+/**
+ * Чистый селектор роль-видимых групп NAV. Группа/пункт без `roles` виден всем;
+ * с `roles` — только перечисленным. Пустые после фильтра группы отбрасываются.
+ * Вход не мутируется; неизвестная роль безопасна (показывает дефолт-видимые).
+ */
+export function navForRole<
+  Item extends RoleScoped,
+  Group extends RoleScoped & { items: Item[] },
+>(role: Role, groups: Group[]): Group[] {
+  return groups
+    .filter((group) => isVisibleForRole(group, role))
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => isVisibleForRole(item, role)),
+    }))
+    .filter((group) => group.items.length > 0)
+}

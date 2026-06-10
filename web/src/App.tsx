@@ -29,7 +29,7 @@ import {
 } from 'react-router-dom'
 import { ComingSoon, type ComingSoonProps } from '@/components/ComingSoon'
 import { cn } from '@/components/ui/cn'
-import { RoleProvider } from '@/state/role'
+import { navForRole, type Role, RoleProvider, useRole } from '@/state/role'
 
 /**
  * Каркас SPA (f1): BrowserRouter + AppShell (сайдбар 48/240 + header 56) + роуты.
@@ -40,8 +40,18 @@ import { RoleProvider } from '@/state/role'
  */
 
 // ── Навигация (источник — DESIGN.md §Components/Боковое меню) ──────────────────
-type NavItem = { to: string; label: string; icon: LucideIcon; badge?: string }
-type NavGroup = { title: string; items: NavItem[] }
+// f24 · Опциональное поле `roles` (пункт/группа) — роль-видимость, согласованная
+// с контент-фильтром (`roleFilter.ts`): нет `roles` ⇒ видно всем (безопасный
+// дефолт). Сейчас не проставлено нигде (контракт мандатит фильтрацию данных, а не
+// разделов меню) — механизм заведён, фактическая видимость для всех ролей едина.
+type NavItem = {
+  to: string
+  label: string
+  icon: LucideIcon
+  badge?: string
+  roles?: Role[]
+}
+type NavGroup = { title: string; items: NavItem[]; roles?: Role[] }
 
 // f22 · Таксономия бейджей навигации (честность пунктов меню):
 //   • живой экран (или редирект на живой)      → без бейджа;
@@ -100,6 +110,11 @@ const NAV: NavGroup[] = [
 
 // ── Сайдбар: 48px свёрнут, разворачивается до 240px по hover ───────────────────
 function Sidebar() {
+  // f24 · Меню согласовано с ролью (единый источник — RoleProvider/useRole).
+  // Дефолт = все секции (ни один пункт не помечен `roles`), но NAV теперь умеет
+  // роль-фильтрацию, согласованную с in-screen контент-фильтром (issue #4).
+  const { role } = useRole()
+  const groups = navForRole(role, NAV)
   return (
     <aside className="group/sb sticky top-0 z-20 flex h-screen w-12 shrink-0 flex-col overflow-hidden border-r border-border bg-surface transition-[width] duration-200 ease-out hover:w-60">
       <div className="flex h-14 items-center gap-2 px-3">
@@ -112,7 +127,7 @@ function Sidebar() {
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 overflow-y-auto py-2">
-        {NAV.map((group) => (
+        {groups.map((group) => (
           <div key={group.title} className="flex flex-col gap-0.5">
             <div className="h-4 px-3 text-[11px] font-medium uppercase tracking-wider text-muted opacity-0 transition-opacity duration-200 group-hover/sb:opacity-100">
               {group.title}
