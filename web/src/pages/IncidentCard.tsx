@@ -22,6 +22,7 @@ import type {
   IncidentDetail,
   SceneResponse,
   Severity,
+  SpeedCheck,
   Source,
   Status,
   Ticket,
@@ -36,6 +37,7 @@ import {
   VideoPlayer,
 } from '@/components'
 import { SceneContextChip } from '@/components/ai/SceneContextChip'
+import { SpeedCheckBadge } from '@/components/ai/SpeedCheckBadge'
 import { DiscrepancyBadge } from '@/components/ai/DiscrepancyBadge'
 import { RiskWaterfall } from '@/components/ai/RiskWaterfall'
 import { cn } from '@/components/ui/cn'
@@ -187,6 +189,9 @@ export default function IncidentCard() {
   const [scene, setScene] = useState<SceneResponse | null>(null)
   const [sceneLoading, setSceneLoading] = useState(true)
 
+  // f25 · сверка скоростей событие ↔ GPS-трек (§10.2, кейс Фомина).
+  const [speedCheck, setSpeedCheck] = useState<SpeedCheck | null>(null)
+
   // Роль пользователя (локальный переключатель — до реализации f13/глобального контекста).
   const [role, setRole] = useState<AppRole>('dispatcher')
 
@@ -251,6 +256,23 @@ export default function IncidentCard() {
       })
       .finally(() => {
         if (alive) setSceneLoading(false)
+      })
+    return () => {
+      alive = false
+    }
+  }, [id])
+
+  // f25 · подтянуть сверку скоростей (мягко: ошибка/404 → бейдж скрыт, карточка не падает).
+  useEffect(() => {
+    let alive = true
+    setSpeedCheck(null)
+    client
+      .getSpeedCheck(id)
+      .then((data) => {
+        if (alive) setSpeedCheck(data)
+      })
+      .catch(() => {
+        if (alive) setSpeedCheck(null)
       })
     return () => {
       alive = false
@@ -474,7 +496,7 @@ export default function IncidentCard() {
       {/* ── f15 · Контекст сцены (идея #11) ─────────────────────────────────────
           Погода/день-ночь/покрытие + флаг расхождения «камера ↔ погода».
           Нет данных сцены / 404 → блок скрыт (не рендерится), карточка не падает. */}
-      {(sceneLoading || scene) && (
+      {(sceneLoading || scene || speedCheck) && (
         <Card>
           <div className="flex flex-wrap items-center gap-3">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
@@ -496,6 +518,8 @@ export default function IncidentCard() {
                 </>
               )
             )}
+            {/* f25 · сверка скоростей событие ↔ GPS-трек (§10.2). Скрыт при ошибке/нет данных трека. */}
+            {speedCheck && <SpeedCheckBadge speed={speedCheck} />}
           </div>
         </Card>
       )}
