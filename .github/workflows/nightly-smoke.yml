@@ -1,0 +1,160 @@
+# Nightly live-smoke на ЖИВОМ API (t6 · Волна 4.3 · 00-CONTRACT §8.9).
+#
+# Зачем отдельно от ci.yml: основной гейт гоняет TestClient и юнит-тесты — он
+# зелёный даже если фронт сидит на фикстурах (VITE_USE_FIXTURES=true). Этот job
+# поднимает РЕАЛЬНЫЙ uvicorn и бьёт по HTTP сквозь весь стек
+# (incidents / reports / forecast / zones / copilot). Backend-регресс, который
+# «маскируется» фикстурами, здесь краснеет.
+#
+# VITE_USE_FIXTURES=false — фиксируем намерение: ходим в живой backend, не в моки.
+name: nightly-smoke
+
+on:
+  schedule:
+    # Каждый день в 02:30 UTC.
+    - cron: "30 2 * * *"
+  workflow_dispatch: {}  # ручной запуск из вкладки Actions.
+
+permissions:
+  contents: read
+
+env:
+  API_PORT: "8000"
+  API_BASE: "http://127.0.0.1:8000"
+  VITE_USE_FIXTURES: "false"
+
+jobs:
+  live-smoke:
+    name: live API smoke (incidents · reports · forecast · zones · copilot)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r api/requirements.txt
+
+      # `make db`: реальная DuckDB из datasets/ready — без неё API не отдаёт данные.
+      - name: Build DuckDB (make db)
+        run: make db
+
+      # Поднимаем живой uvicorn (эквивалент `make api`, но без --reload — стабильнее в CI).
+      # Все AI-флаги по умолчанию enabled (SKAI_AI_* не заданы) → отдаём реальные данные.
+      - name: Start live API
+        run: |
+          python -m uvicorn api.main:app --host 127.0.0.1 --port "${API_PORT}" \
+            > uvicorn.log 2>&1 &
+          echo "API_PID=$!" >> "$GITHUB_ENV"
+
+      - name: Wait for /api/health
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS "${API_BASE}/api/health" >/dev/null 2>&1; then
+              echo "API готов (попытка $i)"; exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::API не поднялся за 30s"; cat uvicorn.log; exit 1
+
+      # Сквозной smoke по HTTP. Только stdlib (urllib) — без лишних зависимостей.
+      # Любой не-2xx (кроме осознанных проверок) или пустой ответ → exit 1 → job красный.
+      - name: Smoke live endpoints
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          BASE = os.environ["API_BASE"]
+          failures: list[str] = []
+
+          def call(method: str, path: str, body: dict | None = None):
+              url = f"{BASE}{path}"
+              data = json.dumps(body).encode() if body is not None else None
+              req = urllib.request.Request(url, data=data, method=method)
+              if data is not None:
+                  req.add_header("Content-Type", "application/json")
+              with urllib.request.urlopen(req, timeout=30) as resp:
+                  return resp.status, json.loads(resp.read() or b"null")
+
+          def check(name: str, method: str, path: str, *, body=None, expect_list=False,
+                    forbid_disabled=False):
+              try:
+                  status, payload = call(method, path, body)
+              except urllib.error.HTTPError as e:
+                  failures.append(f"{name}: HTTP {e.code} на {path}")
+                  return None
+              except Exception as e:  # noqa: BLE001 — smoke ловит всё
+                  failures.append(f"{name}: {type(e).__name__} на {path}: {e}")
+                  return None
+              if status != 200:
+                  failures.append(f"{name}: status {status} != 200 на {path}")
+                  return None
+              if expect_list and not isinstance(payload, list):
+                  failures.append(f"{name}: ожидался список, получено {type(payload).__name__}")
+                  return None
+              # Анти-фикстура: AI-фича не должна прийти выключенной на живом прогоне.
+              if forbid_disabled and isinstance(payload, dict) and payload.get("enabled") is False:
+                  failures.append(f"{name}: фича выключена (enabled=false) — флаг SKAI_AI_* сбит?")
+                  return None
+              print(f"OK  {name}: {method} {path} -> 200")
+              return payload
+
+          # 1) zones — список зон риска (по памяти ~29 географических зон).
+          zones = check("zones", "GET", "/api/zones", expect_list=True, forbid_disabled=True)
+          if isinstance(zones, list) and not zones:
+              failures.append("zones: живой API вернул пустой список зон")
+
+          # 2) incidents — список инцидентов.
+          check("incidents", "GET", "/api/incidents", expect_list=True)
+
+          # 3) Берём реальный plate из живого парка для reports/forecast.
+          vehicles = check("vehicles", "GET", "/api/vehicles", expect_list=True)
+          plate = None
+          if isinstance(vehicles, list) and vehicles:
+              plate = vehicles[0].get("plate")
+          if not plate:
+              failures.append("vehicles: не удалось получить plate для reports/forecast")
+          else:
+              # Номера ТС кириллические → URL-кодируем сегмент пути.
+              plate_q = urllib.parse.quote(plate, safe="")
+              # 4) reports — отчёт по водителю/ТС.
+              check("reports.driver", "GET", f"/api/reports/driver/{plate_q}")
+              # 5) forecast — прогноз риска (AI-фича).
+              check("forecast", "GET", f"/api/reports/forecast/{plate_q}", forbid_disabled=True)
+
+          # 6) copilot — свободный запрос (без GROQ_API_KEY уходит в детерминированный фолбэк).
+          check("copilot", "POST", "/api/copilot/chat",
+                body={"text": "сколько инцидентов сегодня", "lang": "ru"},
+                forbid_disabled=True)
+
+          if failures:
+              print("\n=== SMOKE FAILED ===", file=sys.stderr)
+              for f in failures:
+                  print(f" ✗ {f}", file=sys.stderr)
+              sys.exit(1)
+          print("\n✓ live-smoke: все эндпоинты живого API зелёные")
+          PY
+
+      - name: Dump API log on failure
+        if: failure()
+        run: |
+          echo "::error::nightly live-smoke упал — вероятен backend-регресс на живом API"
+          echo "----- uvicorn.log -----"
+          cat uvicorn.log || true
+
+      - name: Stop live API
+        if: always()
+        run: kill "${API_PID}" 2>/dev/null || true

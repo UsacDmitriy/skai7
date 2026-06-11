@@ -1,10 +1,12 @@
-# CI-скелет (w3-19 · подготовка Волны 4 · 00-CONTRACT §8.9).
-# Remote-гейт ЗЕРКАЛИТ единый локальный `scripts/check.sh`
-# (ruff → pytest → web typecheck → vitest) — анти-дрейф local↔remote.
-# Минимально-зелёный на чистом checkout. Один job, без матрицы.
+# Remote CI-гейт (t6 · Волна 4.3 · 00-CONTRACT §8.9).
+# ЗЕРКАЛИТ единый локальный `scripts/check.sh` (ruff → pytest → web typecheck → vitest)
+# — анти-дрейф local↔remote: тот же скрипт, что разработчик гоняет перед коммитом.
 #
-# Расширяется t6 (Волна 4.3): матрица версий python/node, кэш `make db`,
-# и отдельный `.github/workflows/nightly-smoke.yml` — smoke на ЖИВОМ API.
+# Отличие от голого скелета (w3-19): перед check.sh собираем `make db`, чтобы
+# интеграционные тесты на собранной DuckDB (фикстуры `real_db`/`client`) реально
+# выполнялись, а не уходили в `pytest.skip`. Это и есть страховка от backend-регресса,
+# который иначе «маскируется» под зелёный прогон на пустом окружении.
+# Один job, без матрицы версий; nightly live-smoke вынесен в nightly-smoke.yml.
 name: CI
 
 on:
@@ -41,7 +43,6 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       # `make install-py` + ruff (ruff не в requirements; check.sh ждёт его на PATH/в python).
-      # t6 может вынести тяжёлый STT/NLU-стек (faster-whisper/groq) в отдельный кэш-слой.
       - name: Install Python deps (+ ruff)
         run: |
           python -m pip install --upgrade pip
@@ -52,6 +53,11 @@ jobs:
         working-directory: web
         run: npm ci
 
-      # Единый гейт: тот же скрипт, что и локально перед коммитом.
+      # `make db`: собираем DuckDB из datasets/ready, чтобы интеграционные тесты
+      # (client/real_db) шли против реальной базы, а не пропускались (skip).
+      - name: Build DuckDB (make db)
+        run: make db
+
+      # Единый гейт: тот же скрипт, что и локально перед коммитом (анти-дрейф).
       - name: Run scripts/check.sh
         run: bash scripts/check.sh
