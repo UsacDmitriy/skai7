@@ -16,13 +16,15 @@ function renderAppAt(path: string) {
 }
 
 describe('App · сигнпостинг ComingSoon (§9.4)', () => {
-  it('мёртвый путь /live → ComingSoon с описанием секции и пилюлей «Волна 4», не generic', async () => {
+  it('путь /live → честный сигнпост «Будущее» (нужен live-источник), без обещания волны', async () => {
     renderAppAt('/live')
 
-    // Описание конкретной секции (а не generic «Раздел в разработке»).
-    expect(await screen.findByText('Видеопоток с бортовых камер — стриминг.')).toBeInTheDocument()
-    // Пилюля «Скоро · Волна 4».
-    expect(screen.getByText(/Скоро · Волна 4/)).toBeInTheDocument()
+    // f22: описание честное — датасет исторический, нужен live-источник.
+    expect(await screen.findByText(/нужен live-источник/i)).toBeInTheDocument()
+    // Пилюля «Будущее» (нейтральный тон), а НЕ «Скоро · Волна N».
+    // «Будущее» встречается и в бейдже сайдбара, и в пилюле карточки — оба честны.
+    expect(screen.getAllByText('Будущее').length).toBeGreaterThan(0)
+    expect(screen.queryByText(/Скоро · Волна/)).not.toBeInTheDocument()
     // Generic-заглушка не используется.
     expect(screen.queryByText('Раздел в разработке')).not.toBeInTheDocument()
   })
@@ -33,5 +35,31 @@ describe('App · сигнпостинг ComingSoon (§9.4)', () => {
     // Контент реального хаба (баннер покрытия) подтверждает живой экран.
     expect(await screen.findByText('Покрытие парка')).toBeInTheDocument()
     expect(screen.queryByText(/Скоро · Волна/)).not.toBeInTheDocument()
+  })
+})
+
+describe('App · редиректы дублей (f22, ASSUMPTION — продуктовое решение, не контракт)', () => {
+  // ASSUMPTION: цели редиректов выбраны «по сходству»; §7.8/§8 их не мандатируют.
+  // Правятся при ревизии (барьер x9+), когда появится промпт-владелец экрана.
+  it('/safety → редирект на живой /metrics', async () => {
+    renderAppAt('/safety')
+
+    expect(await screen.findByText('Метрики и качество данных')).toBeInTheDocument()
+    expect(window.location.pathname).toBe('/metrics')
+  })
+
+  it('/dashboards → редирект на живой /metrics', async () => {
+    renderAppAt('/dashboards')
+
+    expect(await screen.findByText('Метрики и качество данных')).toBeInTheDocument()
+    expect(window.location.pathname).toBe('/metrics')
+  })
+
+  it('/quick-report → редирект на живой /copilot', async () => {
+    renderAppAt('/quick-report')
+
+    // Реальный экран копилота (заголовок панели) подтверждает живую цель.
+    expect(await screen.findByText('AI-копилот')).toBeInTheDocument()
+    expect(window.location.pathname).toBe('/copilot')
   })
 })

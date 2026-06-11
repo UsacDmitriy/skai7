@@ -37,6 +37,7 @@ import {
 } from '@/components'
 import { SceneContextChip } from '@/components/ai/SceneContextChip'
 import { DiscrepancyBadge } from '@/components/ai/DiscrepancyBadge'
+import { RiskWaterfall } from '@/components/ai/RiskWaterfall'
 import { cn } from '@/components/ui/cn'
 
 /**
@@ -415,6 +416,8 @@ export default function IncidentCard() {
           <div className="w-48 shrink-0">
             <div className="text-[11px] uppercase tracking-wide text-muted">Риск-скор</div>
             <ScoreBar score={inc.risk_score} className="mt-1" />
+            {/* f20 · explainability (§8.8): раскрывашка «Почему такой риск» — waterfall вкладов. */}
+            <RiskWaterfall id={inc.id} className="mt-3" />
             {/* w3-12 · кросс-врезка: инцидент → видеодосье рейса (trip_id == incident_id). */}
             <Button
               variant="secondary"

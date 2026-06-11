@@ -33,5 +33,11 @@ class Settings(BaseSettings):
     whisper_model: str = "large-v3"
     whisper_device: str = "cpu"
 
+    # Security baseline (§8.9, b26). Дефолт OFF — нулевой blast-radius на демо/тесты.
+    # Включается ТОЛЬКО на старте процесса сервера через env `SKAI_SECURITY_ENABLED=true`
+    # (голая `SECURITY_ENABLED` не читается — нужен префикс SKAI_). Middleware читает
+    # `settings.security_enabled` на каждом запросе, поэтому значение не кэшируется на импорте.
+    security_enabled: bool = False
+
 
 settings = Settings()

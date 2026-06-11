@@ -2,13 +2,18 @@
 
 > ⚠️ **Не редактировать вручную.** Источник — `scripts/gen_status.py` (00-CONTRACT §8.9).
 > Перечень роутеров/таблиц берётся из факта (`api/routers`, `api/sql`), не из README.
-> Статус: ✅ реализовано · 🟡 заглушка (501)/в работе · ⬜ план (файла нет).
-> Скелет (w3-19); t5 доводит до сверки с прогоном тестов (pytest/vitest).
+> Статус: ✅ реализовано (тесты зелёные) · 🟡 заглушка (501)/в работе · ❌ тесты падают · ⬜ план (файла нет).
+> «✅ требует зелёных тестов»: сверка с последним прогоном pytest/vitest (`reports/`).
+
+## Тесты (последний прогон)
+
+- Итог: **✅ всё зелёное** — 679 passed · 0 failed · 0 errors · 2 skipped (всего 681).
+- Источник: `reports/pytest-junit.xml` (pytest) + `reports/vitest-junit.xml` (vitest), последний прогон.
 
 ## Сводка
 
-- Роутеры (`api/routers`): **12** (✅ 9 · 🟡 3)
-- SQL-объекты (`api/sql`): **6** (✅ 6)
+- Роутеры (`api/routers`): **18** (✅ 18 · 🟡 0 · ❌ 0)
+- SQL-объекты (`api/sql`): **13** (✅ 13 · ❌ 0)
 
 ## P0 · Ядро MVP — инциденты · отчёты · парк
 
@@ -34,16 +39,27 @@
 - ✅ `v_reb`
 - ✅ `v_sabotage`
 
-## Волна 3 · Тёмные данные — fuel · sensors · navigation (подъём из 501)
+## Волна 3 · Тёмные данные — fuel · sensors · navigation · здоровье парка
 
-- 🟡 `fuel` (`/api/fuel`) — заглушка 501
-- 🟡 `navigation` (`/api/navigation`) — заглушка 501
-- 🟡 `sensors` (`/api/sensors`) — заглушка 501
+- ✅ `fleet_health` (`/api/fleet-health`)
+- ✅ `fuel` (`/api/fuel`)
+- ✅ `navigation` (`/api/navigation`)
+- ✅ `sensors` (`/api/sensors`)
+- ✅ `v_fleet_health`
+- ✅ `v_fuel`
+- ✅ `v_nav_problem`
+- ✅ `v_sensors`
 
-## Волна 4 · AI Ops & Trust (каркас w3-16…19; логика — Волна 4.3)
+## Волна 4 · AI Ops & Trust — копилот · прогноз · усталость · сцена · риск-зоны
 
-- ⬜ `metrics` — роутер (план, файла нет)
-- ⬜ `ai_metric_events` — план, объекта нет
+- ✅ `copilot` (`/api/copilot`)
+- ✅ `fatigue` (`/api/fatigue`)
+- ✅ `forecast` (`/api/reports`)
+- ✅ `scene` (`/api/incidents`)
+- ✅ `zones` (`/api/zones`)
+- ✅ `ai_metric_events`
+- ✅ `incident_scene`
+- ✅ `incident_weather`
 
 ## Инвентарь (факт с диска)
 
@@ -51,22 +67,35 @@
 
 - ✅ `actions` (`/api/actions`)
 - ✅ `alerts` (`/api/alerts`)
-- 🟡 `fuel` (`/api/fuel`) — заглушка 501
+- ✅ `copilot` (`/api/copilot`)
+- ✅ `fatigue` (`/api/fatigue`)
+- ✅ `fleet_health` (`/api/fleet-health`)
+- ✅ `forecast` (`/api/reports`)
+- ✅ `fuel` (`/api/fuel`)
 - ✅ `incidents` (`/api/incidents`)
-- 🟡 `navigation` (`/api/navigation`) — заглушка 501
+- ✅ `navigation` (`/api/navigation`)
 - ✅ `reb` (`/api`)
 - ✅ `reports` (`/api/reports`)
 - ✅ `sabotage` (`/api`)
-- 🟡 `sensors` (`/api/sensors`) — заглушка 501
+- ✅ `scene` (`/api/incidents`)
+- ✅ `sensors` (`/api/sensors`)
 - ✅ `tickets` (`/api/tickets`)
 - ✅ `trips` (`/api/trips`)
 - ✅ `vehicles` (`/api/vehicles`)
+- ✅ `zones` (`/api/zones`)
 
 ### SQL-объекты (`api/sql/*.sql`)
 
+- ✅ `ai_metric_events`
+- ✅ `incident_scene`
+- ✅ `incident_weather`
 - ✅ `v_driver_report`
 - ✅ `v_fleet`
+- ✅ `v_fleet_health`
+- ✅ `v_fuel`
 - ✅ `v_incidents`
+- ✅ `v_nav_problem`
 - ✅ `v_reb`
 - ✅ `v_sabotage`
+- ✅ `v_sensors`
 - ✅ `v_vehicle`

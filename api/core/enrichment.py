@@ -228,24 +228,45 @@ def continuous_driving_min(movement_duration: str | None) -> int:
         return 0
 
 
-def risk_score(
+# ---------------------------------------------------------------------------
+# Веса формулы risk_score (§2) — единый источник истины.
+# Вынесены на уровень модуля, чтобы explainability (b27, §8.8) ИМПОРТИРОВАЛ их,
+# а не копировал константы (дрейф ловит tu-riskbreakdown).
+# ---------------------------------------------------------------------------
+
+# Вес тяжести по уровню; неизвестный severity → 0.2 (как low).
+SEVERITY_WEIGHTS: dict[str, float] = {
+    "critical": 1.0,
+    "high": 0.7,
+    "medium": 0.45,
+    "low": 0.2,
+}
+
+# Веса слагаемых перед суммированием (§2). Ключи зеркалят поля RiskBreakdown (§8.8).
+RISK_TERM_WEIGHTS: dict[str, float] = {
+    "severity_w": 0.45,
+    "speed_ratio": 0.25,
+    "night": 0.15,
+    "freq_w": 0.15,
+}
+
+
+def risk_term_coeffs(
     severity: str,
     speed_kmh: float,
     speed_limit_kmh: int,
     is_night: bool,
     events_last_7d: int,
-) -> int:
-    """Формула риска §2, результат 0..100.
+) -> dict[str, float]:
+    """Сырые коэффициенты слагаемых формулы §2 (ДО умножения на веса и ·100).
 
-    sev_w: critical=1.0, high=0.7, medium=0.45, low=0.2
-    speed_ratio = min(speed_kmh / speed_limit_kmh, 1.5) / 1.5  (guard div/0)
-    night = 1 if is_night else 0
-    freq_w = min(events_last_7d / 7, 1)
-    result = round(100 * (0.45*sev_w + 0.25*speed_ratio + 0.15*night + 0.15*freq_w))
-    clamped to [0, 100].
+    sev_w: critical=1.0, high=0.7, medium=0.45, low=0.2 (неизвестный → low).
+    speed_ratio = min(speed_kmh / speed_limit_kmh, 1.5) / 1.5  (guard div/0).
+    night = 1 if is_night else 0.
+    freq_w = min(events_last_7d / 7, 1).
+    Источник истины для risk_score и risk_breakdown (b27) — оба зовут эту функцию.
     """
-    _sev_weights = {"critical": 1.0, "high": 0.7, "medium": 0.45, "low": 0.2}
-    sev_w = _sev_weights.get(severity.lower(), 0.2)
+    sev_w = SEVERITY_WEIGHTS.get(severity.lower(), 0.2)
 
     if speed_limit_kmh == 0:
         speed_ratio = 0.0
@@ -255,7 +276,30 @@ def risk_score(
     night_w = 1.0 if is_night else 0.0
     freq_w = min(events_last_7d / 7, 1.0)
 
-    raw = 100.0 * (0.45 * sev_w + 0.25 * speed_ratio + 0.15 * night_w + 0.15 * freq_w)
+    return {
+        "severity_w": sev_w,
+        "speed_ratio": speed_ratio,
+        "night": night_w,
+        "freq_w": freq_w,
+    }
+
+
+def risk_score(
+    severity: str,
+    speed_kmh: float,
+    speed_limit_kmh: int,
+    is_night: bool,
+    events_last_7d: int,
+) -> int:
+    """Формула риска §2, результат 0..100.
+
+    result = round(100 * Σ(вес_слагаемого · коэффициент)), клампится в [0, 100].
+    Коэффициенты и веса — из `risk_term_coeffs` / `RISK_TERM_WEIGHTS` (общий источник).
+    """
+    coeffs = risk_term_coeffs(
+        severity, speed_kmh, speed_limit_kmh, is_night, events_last_7d
+    )
+    raw = 100.0 * sum(RISK_TERM_WEIGHTS[k] * coeffs[k] for k in RISK_TERM_WEIGHTS)
     return max(0, min(100, round(raw)))
 
 
