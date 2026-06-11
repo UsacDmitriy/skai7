@@ -24,6 +24,9 @@ __pycache__/
 .pytest_cache/
 **/.ipynb_checkpoints/
 
+# JUnit-отчёты для gen_status.py (t5 · §8.9): пишет scripts/check.sh / CI, не в VCS
+reports/
+
 # Тест-покрытие (артефакты pytest-cov / vitest — не в VCS, гейт x5)
 .coverage
 .coverage.*
