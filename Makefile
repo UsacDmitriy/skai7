@@ -38,8 +38,9 @@ install-web: ## npm-зависимости (web/)
 db: ## Собрать DuckDB из datasets/ready (b1)
 	$(PY) -m api.etl.build_duckdb
 
-seed: ## Сгенерировать справочник водителей data/seed/ (b7)
+seed: ## Сгенерировать справочник водителей data/seed/ (b7) + датасет обучения (b31)
 	$(PY) -m api.etl.seed_drivers
+	$(PY) -m api.etl.seed_coaching
 
 api: ## Запустить FastAPI на :$(API_PORT) (b4)
 	@[ -f $(DUCKDB) ] || { echo "Нет $(DUCKDB) — сначала: make db"; exit 1; }
