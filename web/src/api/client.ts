@@ -7,6 +7,7 @@
  */
 import {
   AI_METRICS,
+  COACHING_SUMMARIES,
   CONSISTENCY_REPORT,
   DATA_QUALITY,
   DRIVER_REPORT,
@@ -28,6 +29,7 @@ import {
   getFixtureForecast,
   getFixtureFuel,
   getFixtureIncident,
+  getFixtureCoaching,
   getFixtureNavProblem,
   getFixtureReb,
   getFixtureScene,
@@ -39,6 +41,8 @@ import {
 import type {
   Action,
   AiMetrics,
+  CoachingCard,
+  CoachingSummary,
   ConsistencyReport,
   CopilotMessage,
   DataQuality,
@@ -416,4 +420,23 @@ export function postReviewDecision(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ decision, note }),
   })
+}
+
+// ── Волна 5.2 · Coaching Loop (§12) — цикл обучения водителя ────────────────────
+
+/** Сводки обучения по водителям (§12.2 `GET /api/coaching`). */
+export function getCoachingSummary(): Promise<CoachingSummary[]> {
+  if (USE_FIXTURES) return Promise.resolve(COACHING_SUMMARIES)
+  return request<CoachingSummary[]>('/coaching')
+}
+
+/** Карточка обучения водителя (§12.2 `GET /api/coaching/{plate}`); plate не из driver_reference → 404. */
+export function getCoaching(plate: string): Promise<CoachingCard> {
+  if (USE_FIXTURES) {
+    const card = getFixtureCoaching(plate)
+    return card
+      ? Promise.resolve(card)
+      : Promise.reject(new ApiError(404, `Driver ${plate} not found`))
+  }
+  return request<CoachingCard>(`/coaching/${encodeURIComponent(plate)}`)
 }
