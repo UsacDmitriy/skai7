@@ -75,7 +75,8 @@ const NAV: NavGroup[] = [
       { to: '/live', label: 'Прямая трансляция', icon: Radio, badge: 'Будущее' },
       { to: '/archive', label: 'Видеоархив', icon: Film, badge: 'Будущее' },
       { to: '/downloads', label: 'Загрузки', icon: Download, badge: 'Будущее' },
-      { to: '/validation', label: 'Блок валидации', icon: CheckCircle, badge: 'Будущее' },
+      // f26: владелец /validation появился — живой экран, бейдж снят.
+      { to: '/validation', label: 'Блок валидации', icon: CheckCircle },
       { to: '/response', label: 'Блок реагирования', icon: Bell, badge: 'Будущее' },
       { to: '/tickets', label: 'Заявки', icon: ClipboardList },
     ],
@@ -244,12 +245,7 @@ const COMING_SOON: Record<string, ComingSoonProps> = {
     wave: 4,
     kind: 'future',
   },
-  '/validation': {
-    title: 'Блок валидации',
-    description: 'Очередь валидации алармов — workflow-движок, будущая волна.',
-    wave: 4,
-    kind: 'future',
-  },
+  // f26: /validation удалён из COMING_SOON — теперь живой экран (см. <Route> выше).
   '/response': {
     title: 'Блок реагирования',
     description:
@@ -276,6 +272,8 @@ const Monitor = lazy(() => import('@/pages/Monitor')) as ComponentType
 const IncidentCard = lazy(() => import('@/pages/IncidentCard')) as ComponentType
 const Report = lazy(() => import('@/pages/Report')) as ComponentType
 const Tickets = lazy(() => import('@/pages/Tickets')) as ComponentType
+// f26: владелец /validation появился — ревизия допущения f22.
+const ReviewQueue = lazy(() => import('@/pages/ReviewQueue')) as ComponentType
 const TripDossier = lazy(() => import('@/pages/TripDossier')) as ComponentType
 const RebRecovery = lazy(() => import('@/pages/RebRecovery')) as ComponentType
 const FleetHealth = lazy(() => import('@/pages/FleetHealth')) as ComponentType
@@ -351,6 +349,16 @@ function AppRoutes() {
             element={
               <Suspense fallback={<Placeholder title="Загрузка…" />}>
                 <Tickets />
+              </Suspense>
+            }
+          />
+          {/* f26: /validation — живой экран очереди верификации (§11.3).
+              Был сиротой f22 («Будущее») — владелец появился, ревизия допущения. */}
+          <Route
+            path="/validation"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <ReviewQueue />
               </Suspense>
             }
           />

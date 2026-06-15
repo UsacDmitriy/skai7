@@ -29,6 +29,15 @@ describe('App · сигнпостинг ComingSoon (§9.4)', () => {
     expect(screen.queryByText('Раздел в разработке')).not.toBeInTheDocument()
   })
 
+  it('/validation → живой экран очереди (f26 снял «Будущее» f22), не ComingSoon', async () => {
+    renderAppAt('/validation')
+
+    // Живой экран очереди верификации (заголовок) подтверждает владельца сироты.
+    expect(await screen.findByText('Очередь верификации')).toBeInTheDocument()
+    // Сигнпост-описание f22 ушло — ключ удалён из COMING_SOON.
+    expect(screen.queryByText(/workflow-движок, будущая волна/)).not.toBeInTheDocument()
+  })
+
   it('/fleet-health → реальный экран (не ComingSoon)', async () => {
     renderAppAt('/fleet-health')
 

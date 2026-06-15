@@ -804,3 +804,31 @@ export interface SpeedCheck {
   agreement: SpeedAgreement
   truth_source: 'gps_track'
 }
+
+// review-queue (§11) — очередь верификации инцидентов диспетчером.
+
+/** Статус решения по инциденту в очереди (§11.2). */
+export type ReviewStatus = 'pending' | 'validated' | 'dismissed'
+
+/** Одна строка очереди верификации — инцидент + статус решения (§11.2, дословно). */
+export interface ReviewItem {
+  incident_id: string
+  alarm_code: string
+  severity: Severity
+  vehicle_plate: string
+  ts: string
+  video_available: boolean
+  status: ReviewStatus
+  /** Заметка диспетчера; нет решения / без заметки → null. */
+  note: string | null
+  /** Момент решения (ISO); ещё не решён → null. */
+  decided_at: string | null
+}
+
+/** `GET /api/review-queue` — очередь верификации + счётчики и доказательность (§11.2). */
+export interface ReviewQueue {
+  items: ReviewItem[]
+  counts: { pending: number; validated: number; dismissed: number }
+  /** Доля инцидентов с видеодоказательством (контекст из §10). */
+  evidence_rate: number
+}

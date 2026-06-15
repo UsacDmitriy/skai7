@@ -21,7 +21,9 @@ import {
   VEHICLES,
   VEHICLE_REPORT,
   ZONES,
+  applyFixtureReviewDecision,
   getFixtureCopilot,
+  getFixtureReviewQueue,
   getFixtureFatigue,
   getFixtureForecast,
   getFixtureFuel,
@@ -52,6 +54,9 @@ import type {
   NavProblemVehicle,
   QueryResult,
   RebRecovery,
+  ReviewItem,
+  ReviewQueue,
+  ReviewStatus,
   RiskBreakdown,
   RiskForecast,
   RiskZone,
@@ -384,4 +389,31 @@ export function getSpeedCheck(id: string): Promise<SpeedCheck> {
       : Promise.reject(new ApiError(404, `Speed-check ${id} not found`))
   }
   return request<SpeedCheck>(`/incidents/${encodeURIComponent(id)}/speed-check`)
+}
+
+// ── Волна 5.1 · Review-queue (§11) — очередь верификации инцидентов ─────────────
+
+/** Очередь верификации, опц. фильтр по статусу (§11.1 `GET /api/review-queue`). */
+export function getReviewQueue(status?: ReviewStatus): Promise<ReviewQueue> {
+  if (USE_FIXTURES) return Promise.resolve(getFixtureReviewQueue(status))
+  return request<ReviewQueue>(`/review-queue${qs({ status })}`)
+}
+
+/** Решение по инциденту (§11.1 `POST /api/review-queue/{id}`) → обновлённый `ReviewItem`. */
+export function postReviewDecision(
+  id: string,
+  decision: 'validated' | 'dismissed',
+  note?: string,
+): Promise<ReviewItem> {
+  if (USE_FIXTURES) {
+    const item = applyFixtureReviewDecision(id, decision, note)
+    return item
+      ? Promise.resolve(item)
+      : Promise.reject(new ApiError(404, `Incident ${id} not found`))
+  }
+  return request<ReviewItem>(`/review-queue/${encodeURIComponent(id)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ decision, note }),
+  })
 }
