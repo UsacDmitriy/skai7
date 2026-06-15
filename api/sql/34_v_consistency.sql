@@ -78,12 +78,38 @@ coordinate_sanity AS (
          COUNT(*) AS "total"
   FROM coordinate_rows
 ),
--- 7. Расхождение скоростей видео↔телематика. b29 заменяет эту CTE-заглушку на агрегат
---    v_speed_check (доля алармов с agreement='major'). До b29 view нет → нейтральный 0/0.
+-- 7. Расхождение скоростей видео↔телематика: доля алармов с agreement='major' (b29).
+--    Условие major зеркалит сервисные пороги §10.2: оба источника не-NULL и |Δ| > 15.
+--    NB: логика v_speed_check (b29) инлайнится здесь намеренно — 34_ грузится ДО 35_
+--    (лексикографически), а DuckDB связывает view при создании → прямая ссылка на
+--    v_speed_check была бы forward-reference и ломала бы `make db`. Семантика идентична
+--    35_v_speed_check.sql (ближайшая точка трека ±10 с оконной функцией).
+speed_nearest AS (
+  SELECT alarm_id,
+         speed_kmh,
+         row_number() OVER (
+           PARTITION BY alarm_id
+           ORDER BY abs(epoch(timestamp_utc) - epoch(event_begin_utc))
+         ) AS rn,
+         abs(epoch(timestamp_utc) - epoch(event_begin_utc)) AS dist_s
+  FROM video_events__track_points
+),
+speed_pairs AS (
+  SELECT CAST(NULLIF(CAST(a."Speed" AS VARCHAR), '') AS DOUBLE) AS event_speed_kmh,
+         CASE WHEN n.dist_s <= 10 THEN n.speed_kmh END          AS track_speed_kmh
+  FROM video_events__selected_video_alarms a
+  LEFT JOIN speed_nearest n
+    ON n.alarm_id = CAST(a."AlarmId" AS VARCHAR) AND n.rn = 1
+),
 speed_disagreement AS (
   SELECT 'speed_disagreement' AS "check_id",
-         0 AS "affected_count",
-         0 AS "total"
+         COUNT(*) FILTER (
+           WHERE event_speed_kmh IS NOT NULL
+             AND track_speed_kmh IS NOT NULL
+             AND abs(event_speed_kmh - track_speed_kmh) > 15
+         ) AS "affected_count",
+         COUNT(*) AS "total"
+  FROM speed_pairs
 )
 SELECT "check_id", "affected_count", "total" FROM video_fleet_no_track
 UNION ALL SELECT "check_id", "affected_count", "total" FROM incident_no_video
