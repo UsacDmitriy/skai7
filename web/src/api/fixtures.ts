@@ -11,6 +11,10 @@
  */
 import type {
   AiMetrics,
+  CoachingAssignment,
+  CoachingCard,
+  CoachingKpi,
+  CoachingSummary,
   ConsistencyReport,
   CopilotLang,
   CopilotMessage,
@@ -1693,4 +1697,98 @@ export function applyFixtureReviewDecision(
   item.note = note && note.length > 0 ? note : null
   item.decided_at = '2026-06-15T12:00:00'
   return { ...item }
+}
+
+// ── Волна 5.2 · Coaching Loop (§12) — цикл обучения водителя (СИНТЕТИКА) ─────────
+// Три назначения по инцидентам Иванова (А777ВВ 77): passed / failed / incomplete,
+// у одного repeat_within_30d:true. KPI согласованы со списком (§12.3):
+//   completion = 2/3 (две с `completed_at`) · pass = 1/2 (один сдавший из двух
+//   завершивших) · repeat = 1/3. Литерал `synthetic:true` → UI рисует бейдж демо (§12.0).
+
+const COACHING_ASSIGNMENTS: CoachingAssignment[] = [
+  {
+    assignment_id: 'TA-0001',
+    incident_id: 'inc-001',
+    course_id: 'C-FATIGUE',
+    course_title_ru: 'Контроль усталости',
+    assigned_at: '2026-04-02T00:36:43', // = Begin аларма (§12.1)
+    due_at: '2026-04-05T00:36:43', // assigned_at + 72h
+    test_score: 19, // >=18 → passed
+    status: 'passed',
+    completed_at: '2026-04-03T10:36:43',
+    repeat_within_30d: true,
+  },
+  {
+    assignment_id: 'TA-0002',
+    incident_id: 'inc-006',
+    course_id: 'C-SPEED',
+    course_title_ru: 'Скоростной режим',
+    assigned_at: '2026-04-01T22:10:00',
+    due_at: '2026-04-04T22:10:00',
+    test_score: 12, // >=10 завершил, но <18 → failed
+    status: 'failed',
+    completed_at: '2026-04-02T18:10:00',
+    repeat_within_30d: false,
+  },
+  {
+    assignment_id: 'TA-0003',
+    incident_id: 'inc-007',
+    course_id: 'C-SMOOTH',
+    course_title_ru: 'Плавное вождение',
+    assigned_at: '2026-03-31T08:42:00',
+    due_at: '2026-04-03T08:42:00',
+    test_score: 7, // <10 → не завершил
+    status: 'incomplete',
+    completed_at: null,
+    repeat_within_30d: false,
+  },
+]
+
+const COACHING_KPI: CoachingKpi = {
+  completion_rate: 2 / 3,
+  pass_rate: 1 / 2,
+  repeat_violation_rate: 1 / 3,
+}
+
+/** Карточки обучения по `vehicle_plate` (§12.3). Ключи совпадают с DRIVER_REPORT/FLEET_REPORT. */
+export const COACHING_CARDS: Record<string, CoachingCard> = {
+  'А777ВВ 77': {
+    vehicle_plate: 'А777ВВ 77',
+    driver_id: 'DRV-2841',
+    driver_name: 'Иванов Алексей Петрович',
+    assignments: COACHING_ASSIGNMENTS,
+    kpi: COACHING_KPI,
+    synthetic: true,
+  },
+  // Негатив §12.4: водитель из driver_reference без назначений → пустой список + нулевые KPI (200, не 404).
+  'Е902СТ 150': {
+    vehicle_plate: 'Е902СТ 150',
+    driver_id: 'DRV-4501',
+    driver_name: 'Сидоров Владимир Николаевич',
+    assignments: [],
+    kpi: { completion_rate: 0, pass_rate: 0, repeat_violation_rate: 0 },
+    synthetic: true,
+  },
+}
+
+/** Сводки `GET /api/coaching` — сортировка по `repeat_violation_rate` desc (§12.2). */
+export const COACHING_SUMMARIES: CoachingSummary[] = Object.values(COACHING_CARDS)
+  .map((c) => ({
+    vehicle_plate: c.vehicle_plate,
+    driver_id: c.driver_id,
+    driver_name: c.driver_name,
+    total: c.assignments.length,
+    kpi: { ...c.kpi },
+  }))
+  .sort((a, b) => b.kpi.repeat_violation_rate - a.kpi.repeat_violation_rate)
+
+/** Карточка обучения по plate; неизв. plate → undefined (→ 404 в клиенте). */
+export function getFixtureCoaching(plate: string): CoachingCard | undefined {
+  const card = COACHING_CARDS[plate]
+  if (!card) return undefined
+  return {
+    ...card,
+    assignments: card.assignments.map((a) => ({ ...a })),
+    kpi: { ...card.kpi },
+  }
 }

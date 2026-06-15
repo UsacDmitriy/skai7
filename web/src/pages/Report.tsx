@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   Archive,
   Check,
   ChevronLeft,
   ChevronRight,
+  Clock,
   ExternalLink,
+  FlaskConical,
+  GraduationCap,
   Inbox,
   Info,
   Lightbulb,
@@ -25,6 +28,9 @@ import { ApiError } from '@/api/client'
 import { trackEvent } from '@/api/metrics'
 import * as voice from '@/api/voice'
 import type {
+  CoachingAssignment,
+  CoachingCard,
+  CoachingStatus,
   DriverReport,
   FleetByDriverRow,
   FleetByVehicleRow,
@@ -626,6 +632,166 @@ function ForecastCard({
   )
 }
 
+// ── f27 · Секция «Обучение водителя» (фича #24, §12.4) ────────────────────────
+// Цикл обучения по инцидентам: курс → тест (порог 18/20) → повтор за 30 дней.
+// Данные СИНТЕТИЧЕСКИЕ (датасета обучения нет) → обязательный бейдж демо (§12.0).
+// Состояния: loading/error — секцию тихо скрыть (отчёт не ломать); пустые
+// назначения — «обучение не назначалось» (пустота информативна, секцию не прятать).
+
+const COACHING_STATUS: Record<
+  CoachingStatus,
+  { label: string; icon: typeof Check; cls: string }
+> = {
+  passed: { label: 'Сдан', icon: Check, cls: 'bg-ok-bg text-ok-text' },
+  failed: { label: 'Провален', icon: X, cls: 'bg-critical-bg text-critical-text' },
+  incomplete: { label: 'Не завершён', icon: Clock, cls: 'bg-warning-bg text-warning-text' },
+}
+
+/** ratio ∈ [0,1] → целые проценты (KPI обучения, §12.3). */
+function ratioPct(ratio: number): number {
+  return Math.round(ratio * 100)
+}
+
+/** Статус-чип: иконка + текст (a11y — не только цветом, §12.4/§31). */
+function CoachingStatusChip({ status }: { status: CoachingStatus }) {
+  const s = COACHING_STATUS[status]
+  const Icon = s.icon
+  return (
+    <span className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${s.cls}`}>
+      <Icon className="h-3.5 w-3.5" aria-hidden />
+      {s.label}
+    </span>
+  )
+}
+
+function CoachingKpiChip({ label, value, danger }: { label: string; value: number; danger?: boolean }) {
+  return (
+    <div className={`rounded-md border px-3 py-2 ${danger ? 'border-critical-border bg-critical-bg' : 'border-border bg-surface'}`}>
+      <div className="text-[11px] uppercase tracking-wide text-muted">{label}</div>
+      <div className={`mt-0.5 text-lg font-bold tabular-nums ${danger ? 'text-critical-text' : 'text-ink'}`}>
+        {value}%
+      </div>
+    </div>
+  )
+}
+
+const COACHING_COLUMNS: Column<CoachingAssignment>[] = [
+  {
+    id: 'course',
+    header: 'Курс',
+    cell: (r) => (
+      <div>
+        <div className="font-medium text-ink">{r.course_title_ru}</div>
+        <div className="text-[11px] tabular-nums text-muted">{r.course_id}</div>
+      </div>
+    ),
+  },
+  {
+    id: 'period',
+    header: 'Назначено / дедлайн',
+    cell: (r) => (
+      <span className="tabular-nums text-muted">
+        {formatTime(r.assigned_at)} → {formatTime(r.due_at)}
+      </span>
+    ),
+  },
+  {
+    id: 'score',
+    header: 'Балл',
+    align: 'center',
+    cell: (r) => <span className="tabular-nums text-ink">{r.test_score}/20</span>,
+  },
+  { id: 'status', header: 'Статус', cell: (r) => <CoachingStatusChip status={r.status} /> },
+  {
+    id: 'repeat',
+    header: 'Повтор за 30 дней',
+    align: 'center',
+    cell: (r) =>
+      r.repeat_within_30d ? (
+        <span
+          className="inline-flex items-center gap-1 text-critical-text"
+          title="Повторное нарушение того же типа в окне ±30 дней"
+        >
+          <TriangleAlert className="h-3.5 w-3.5" aria-hidden /> Да
+        </span>
+      ) : (
+        <span className="text-muted" aria-label="Без повтора">—</span>
+      ),
+  },
+]
+
+function CoachingSection({ plate }: { plate: string }) {
+  const navigate = useNavigate()
+  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [card, setCard] = useState<CoachingCard | null>(null)
+
+  useEffect(() => {
+    let active = true
+    setState('loading')
+    setCard(null)
+    client
+      .getCoaching(plate)
+      .then((c) => {
+        if (!active) return
+        setCard(c)
+        setState('ready')
+      })
+      .catch(() => {
+        if (active) setState('error')
+      })
+    return () => {
+      active = false
+    }
+  }, [plate])
+
+  // loading / error — секцию тихо скрыть (§12.4: отчёт не ломать).
+  if (state !== 'ready' || !card) return null
+
+  const { kpi, assignments } = card
+  return (
+    <Card className="p-0">
+      <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
+        <GraduationCap className="h-4 w-4 text-primary" aria-hidden />
+        <h3 className="text-sm font-semibold text-ink">Обучение водителя</h3>
+        {/* Бейдж синтетики — обязателен (§12.0), warning-тон, рядом с заголовком. */}
+        {card.synthetic && (
+          <span className="inline-flex items-center gap-1 rounded bg-warning-bg px-2 py-0.5 text-xs font-medium text-warning-text">
+            <FlaskConical className="h-3.5 w-3.5" aria-hidden />
+            синтетические данные (демо)
+          </span>
+        )}
+      </div>
+
+      <div className="space-y-4 p-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <CoachingKpiChip label="Завершение" value={ratioPct(kpi.completion_rate)} />
+          <CoachingKpiChip label="Сдача теста" value={ratioPct(kpi.pass_rate)} />
+          <CoachingKpiChip
+            label="Повторные нарушения"
+            value={ratioPct(kpi.repeat_violation_rate)}
+            danger={kpi.repeat_violation_rate > 0}
+          />
+        </div>
+
+        {assignments.length === 0 ? (
+          <div className="flex flex-col items-center gap-2 py-8 text-center text-muted">
+            <Inbox className="h-7 w-7" aria-hidden />
+            <p className="text-sm">Обучение не назначалось</p>
+          </div>
+        ) : (
+          <DataTable
+            columns={COACHING_COLUMNS}
+            rows={assignments}
+            rowKey={(r) => r.assignment_id}
+            onRowClick={(r) => navigate(`/incidents/${r.incident_id}`)}
+            emptyLabel="Обучение не назначалось"
+          />
+        )}
+      </div>
+    </Card>
+  )
+}
+
 // ── Дашборды ──────────────────────────────────────────────────────────────────
 
 function DriverDashboard({
@@ -679,6 +845,9 @@ function DriverDashboard({
           <ViolationsTable rows={report.violations} selectedId={selectedId} onOpen={onOpen} onCursor={onCursor} />
         )}
       </Card>
+
+      {/* f27 · секция «Обучение водителя» (§12.4) — после KPI-блоков; синтетика-демо. */}
+      <CoachingSection plate={report.vehicle_plate} />
     </div>
   )
 }

@@ -832,3 +832,59 @@ export interface ReviewQueue {
   /** Доля инцидентов с видеодоказательством (контекст из §10). */
   evidence_rate: number
 }
+
+// ── Волна 5.2 · Coaching Loop (§12.3) — цикл обучения водителя ──────────────────
+// Данные СИНТЕТИЧЕСКИЕ (датасета обучения не существует): схема несёт литерал
+// `synthetic: true`, UI обязан показывать бейдж «синтетические данные» (§12.0).
+// repeat_within_30d — реальный расчёт по алармам (та же UnitState+Type в ±30 дн).
+
+/** Статус прохождения курса (§12.3): сдан / провален / не завершён. */
+export type CoachingStatus = 'passed' | 'failed' | 'incomplete'
+
+/** Назначение курса по инциденту (§12.3, дословно). */
+export interface CoachingAssignment {
+  assignment_id: string
+  incident_id: string
+  course_id: string
+  course_title_ru: string
+  assigned_at: string
+  due_at: string
+  /** Балл теста 0..20 (порог сдачи 18, §12.0). */
+  test_score: number
+  /** passed (passed=true) · failed (completed_at есть, passed=false) · incomplete (completed_at пуст). */
+  status: CoachingStatus
+  completed_at: string | null
+  repeat_within_30d: boolean
+}
+
+/** KPI цикла обучения (§12.3); все ratio ∈ [0,1]. */
+export interface CoachingKpi {
+  /** Доля с `completed_at` от всех. */
+  completion_rate: number
+  /** Доля сдавших от завершивших (0 завершивших → 0.0). */
+  pass_rate: number
+  /** Доля с `repeat_within_30d` от всех. */
+  repeat_violation_rate: number
+}
+
+/** Сводка обучения по водителю — `GET /api/coaching` (§12.3). */
+export interface CoachingSummary {
+  vehicle_plate: string
+  driver_id: string
+  driver_name: string
+  total: number
+  kpi: CoachingKpi
+}
+
+/**
+ * Карточка обучения водителя — `GET /api/coaching/{plate}` (§12.3).
+ * `synthetic` — литерал-маркер демо-режима: UI обязан показать бейдж «синтетические данные».
+ */
+export interface CoachingCard {
+  vehicle_plate: string
+  driver_id: string
+  driver_name: string
+  assignments: CoachingAssignment[]
+  kpi: CoachingKpi
+  synthetic: true
+}
