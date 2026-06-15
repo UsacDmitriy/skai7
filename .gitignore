@@ -14,6 +14,7 @@ datasets/**/*.mkv
 # Frontend (web/)
 web/node_modules/
 web/dist/
+node_modules/
 
 # Python
 __pycache__/

@@ -112,6 +112,28 @@
         }
       }
     },
+    "/api/consistency": {
+      "get": {
+        "tags": [
+          "consistency"
+        ],
+        "summary": "Get Consistency",
+        "description": "Отчёт консистентности данных (§10.2): 7 проверок + сводные доли доверия.\n\nДетерминированно из DuckDB; повторный вызов → идентичный ответ.",
+        "operationId": "get_consistency_api_consistency_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsistencyReport"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/copilot/chat": {
       "post": {
         "tags": [
@@ -1244,6 +1266,49 @@
         }
       }
     },
+    "/api/incidents/{incident_id}/speed-check": {
+      "get": {
+        "tags": [
+          "speed-check"
+        ],
+        "summary": "Get Speed Check",
+        "description": "Сверка скорости событие↔GPS-трек инцидента (§10.2).\n\nНеизвестный `incident_id` → 404. Детерминированно из DuckDB.",
+        "operationId": "get_speed_check_api_incidents__incident_id__speed_check_get",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Incident Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeedCheck"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/tickets": {
       "get": {
         "tags": [
@@ -1654,6 +1719,104 @@
         ],
         "title": "ChatRequest",
         "description": "Тело `POST /api/copilot/chat` (§8.4): свободный запрос RU/EN + опц. язык."
+      },
+      "ConsistencyCheck": {
+        "properties": {
+          "check_id": {
+            "type": "string",
+            "title": "Check Id"
+          },
+          "title_ru": {
+            "type": "string",
+            "title": "Title Ru"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "warn",
+              "fail"
+            ],
+            "title": "Status"
+          },
+          "affected_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Affected Count"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total"
+          },
+          "ratio": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Ratio"
+          },
+          "sample_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Sample Ids"
+          },
+          "description_ru": {
+            "type": "string",
+            "title": "Description Ru"
+          }
+        },
+        "type": "object",
+        "required": [
+          "check_id",
+          "title_ru",
+          "status",
+          "affected_count",
+          "total",
+          "ratio",
+          "description_ru"
+        ],
+        "title": "ConsistencyCheck",
+        "description": "Одна проверка консистентности (§10.2).\n\n`ratio = affected_count/total ∈ [0,1]` (total=0 → 0.0); статус считает СЕРВИС\n(§10.2): `fail` если ratio > 0.2, `warn` если ratio > 0, иначе `ok`.\n`sample_ids` — до 5 примеров (id аларма или госномер) для drill-down фронта."
+      },
+      "ConsistencyReport": {
+        "properties": {
+          "checks": {
+            "items": {
+              "$ref": "#/components/schemas/ConsistencyCheck"
+            },
+            "type": "array",
+            "title": "Checks"
+          },
+          "evidence_rate": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Evidence Rate"
+          },
+          "speed_agreement_rate": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Speed Agreement Rate"
+          },
+          "generated_at_source": {
+            "type": "string",
+            "const": "duckdb",
+            "title": "Generated At Source",
+            "default": "duckdb"
+          }
+        },
+        "type": "object",
+        "required": [
+          "checks",
+          "evidence_rate",
+          "speed_agreement_rate"
+        ],
+        "title": "ConsistencyReport",
+        "description": "Агрегат всех проверок консистентности (§10.2).\n\n`evidence_rate = 1 − ratio(incident_no_video)` — доля алармов с видео-доказательством;\n`speed_agreement_rate = 1 − ratio(speed_disagreement)` — согласие скоростей видео↔GPS.\n`generated_at_source` фиксирован как `'duckdb'`: источник — материализованные таблицы."
       },
       "DataQuality": {
         "properties": {
@@ -3915,6 +4078,81 @@
         ],
         "title": "SensorVehicleSummary",
         "description": "Строка сводки сенсорной диагностики ТС (§9.2). 1 строка = 1 ТС (7 шт.)."
+      },
+      "SpeedCheck": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "event_speed_kmh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Speed Kmh"
+          },
+          "track_speed_kmh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track Speed Kmh"
+          },
+          "max_track_speed_kmh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Track Speed Kmh"
+          },
+          "delta_kmh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delta Kmh"
+          },
+          "agreement": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "minor",
+              "major",
+              "no_data"
+            ],
+            "title": "Agreement"
+          },
+          "truth_source": {
+            "type": "string",
+            "const": "gps_track",
+            "title": "Truth Source",
+            "default": "gps_track"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "agreement"
+        ],
+        "title": "SpeedCheck",
+        "description": "Сверка скорости события и GPS-трека (§10.2).\n\n`delta_kmh = |event − track|` (оба не NULL), иначе None. Пороги (считает сервис):\n`ok` ≤ 5 · `minor` ≤ 15 · `major` > 15; `no_data` если любой источник NULL.\nASSUMPTION (§10.2): истина — GPS-трек → `truth_source` всегда `'gps_track'`."
       },
       "TelemetryPoint": {
         "properties": {
