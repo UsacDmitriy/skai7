@@ -11,6 +11,7 @@
  */
 import type {
   AiMetrics,
+  ConsistencyReport,
   CopilotLang,
   CopilotMessage,
   DataQuality,
@@ -33,6 +34,7 @@ import type {
   SceneResponse,
   SensorVehicleCard,
   SensorVehicleSummary,
+  SpeedCheck,
   Ticket,
   TripDossier,
   VehicleReport,
@@ -1419,6 +1421,132 @@ export const RISK_BREAKDOWN: RiskBreakdown = {
   freq_w: 6,
   weather_bonus: 18,
   total_risk_score: 97, // 45+13+15+6+18
+}
+
+// ── Data Trust (§10): консистентность данных + сверка скоростей ────────────────
+
+/**
+ * Консистентность датасетов (§10.2). 7 канонических проверок; статус по `ratio`
+ * (§10.2: `fail` >0.2 · `warn` >0 · иначе `ok`). Минимум одна `warn` и одна `fail`.
+ * `evidence_rate = 1 − ratio(incident_no_video)`, `speed_agreement_rate = 1 − ratio(speed_disagreement)`.
+ */
+export const CONSISTENCY_REPORT: ConsistencyReport = {
+  checks: [
+    {
+      check_id: 'video_fleet_no_track',
+      title_ru: 'Видео без GPS-трека',
+      status: 'ok',
+      affected_count: 0,
+      total: 55,
+      ratio: 0,
+      sample_ids: [],
+      description_ru: 'ТС с видеособытиями, у которых нет ни одной точки GPS-трека.',
+    },
+    {
+      check_id: 'incident_no_video',
+      title_ru: 'Инциденты без видеодоказательства',
+      status: 'warn',
+      affected_count: 3,
+      total: 94,
+      ratio: 3 / 94,
+      sample_ids: ['inc-014', 'inc-027', 'inc-061'],
+      description_ru: 'Алармы с заявленным видео (VideoCount>0), но без файлов видео — пробел доказательной базы.',
+    },
+    {
+      check_id: 'terminal_duplication',
+      title_ru: 'Дубли терминалов на ТС',
+      status: 'fail',
+      affected_count: 12,
+      total: 40,
+      ratio: 12 / 40,
+      sample_ids: ['А777ВВ 77', 'В123АА 99', 'С456ОР 77', 'Е789КХ 50', 'Н012МТ 77'],
+      description_ru: 'Одно ТС с несколькими TerminalId — рассинхрон статусов из-за двух терминалов (кейс Маслова).',
+    },
+    {
+      check_id: 'plate_match_coverage',
+      title_ru: 'Несопоставленные госномера',
+      status: 'warn',
+      affected_count: 8,
+      total: 120,
+      ratio: 8 / 120,
+      sample_ids: ['fuel:Х555ОХ 77', 'sensors:У666УУ 50', 'navigation:Т777ТТ 99'],
+      description_ru: 'Строки справочников (топливо/датчики/навигация), не сматченные с парком по госномеру.',
+    },
+    {
+      check_id: 'timestamp_monotonicity',
+      title_ru: 'Порядок точек трека',
+      status: 'ok',
+      affected_count: 0,
+      total: 300,
+      ratio: 0,
+      sample_ids: [],
+      description_ru: 'Алармы, где время точек трека убывает при росте индекса (битый порядок).',
+    },
+    {
+      check_id: 'coordinate_sanity',
+      title_ru: 'Координаты вне диапазона',
+      status: 'warn',
+      affected_count: 2,
+      total: 94,
+      ratio: 2 / 94,
+      sample_ids: ['inc-008', 'inc-073'],
+      description_ru: 'Пустые/нулевые/выходящие за ±90/±180 координаты в алармах.',
+    },
+    {
+      check_id: 'speed_disagreement',
+      title_ru: 'Расхождение скоростей',
+      status: 'warn',
+      affected_count: 5,
+      total: 94,
+      ratio: 5 / 94,
+      sample_ids: ['inc-002', 'inc-019', 'inc-044', 'inc-052', 'inc-088'],
+      description_ru: 'Алармы, где скорость события и GPS-трека расходятся более чем на 15 км/ч (agreement=major).',
+    },
+  ],
+  evidence_rate: 1 - 3 / 94,
+  speed_agreement_rate: 1 - 5 / 94,
+  generated_at_source: 'duckdb',
+}
+
+/**
+ * Сверка скоростей по id (§10.2). Три демо-кейса: `ok` (32/28.4),
+ * `major` (90/61), `no_data` (нет точки трека → все null). Прочие id → `ok`-кейс,
+ * чтобы бейдж был виден на любой карточке в фикстур-режиме.
+ */
+const SPEED_CHECK_BY_ID: Record<string, SpeedCheck> = {
+  'inc-001': {
+    id: 'inc-001',
+    event_speed_kmh: 32,
+    track_speed_kmh: 28.4,
+    max_track_speed_kmh: 34.1,
+    delta_kmh: 3.6,
+    agreement: 'ok',
+    truth_source: 'gps_track',
+  },
+  'inc-002': {
+    id: 'inc-002',
+    event_speed_kmh: 90,
+    track_speed_kmh: 61,
+    max_track_speed_kmh: 72.5,
+    delta_kmh: 29,
+    agreement: 'major',
+    truth_source: 'gps_track',
+  },
+  'inc-003': {
+    id: 'inc-003',
+    event_speed_kmh: null,
+    track_speed_kmh: null,
+    max_track_speed_kmh: null,
+    delta_kmh: null,
+    agreement: 'no_data',
+    truth_source: 'gps_track',
+  },
+}
+
+/** Сверка скоростей по id (GET /api/incidents/{id}/speed-check), id-aware. */
+export function getFixtureSpeedCheck(id: string): SpeedCheck | undefined {
+  const sc = SPEED_CHECK_BY_ID[id] ?? SPEED_CHECK_BY_ID['inc-001']
+  return { ...sc, id }
 }
 
 // ── AI-хелперы (повторяют сигнатуры клиента) ───────────────────────────────────

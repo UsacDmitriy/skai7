@@ -7,6 +7,7 @@
  */
 import {
   AI_METRICS,
+  CONSISTENCY_REPORT,
   DATA_QUALITY,
   DRIVER_REPORT,
   FLEET_HEALTH,
@@ -29,12 +30,14 @@ import {
   getFixtureReb,
   getFixtureScene,
   getFixtureSensor,
+  getFixtureSpeedCheck,
   getFixtureTrip,
   listFixtureIncidents,
 } from './fixtures'
 import type {
   Action,
   AiMetrics,
+  ConsistencyReport,
   CopilotMessage,
   DataQuality,
   DriverReport,
@@ -57,6 +60,7 @@ import type {
   SceneResponse,
   SensorVehicleCard,
   SensorVehicleSummary,
+  SpeedCheck,
   TelemetryPoint,
   Ticket,
   Transcription,
@@ -361,4 +365,23 @@ export function getRiskBreakdown(id: string): Promise<RiskBreakdown> {
   return request<RiskBreakdown>(
     `/incidents/${encodeURIComponent(id)}/risk-breakdown`,
   )
+}
+
+// ── Волна 4.4 · Data Trust (§10) — консистентность данных + сверка скоростей ────
+
+/** Сводка консистентности датасетов (§10.1 `GET /api/consistency`). */
+export function getConsistency(): Promise<ConsistencyReport> {
+  if (USE_FIXTURES) return Promise.resolve(CONSISTENCY_REPORT)
+  return request<ConsistencyReport>('/consistency')
+}
+
+/** Сверка скоростей события и GPS-трека (§10.1 `GET /api/incidents/{id}/speed-check`). */
+export function getSpeedCheck(id: string): Promise<SpeedCheck> {
+  if (USE_FIXTURES) {
+    const sc = getFixtureSpeedCheck(id)
+    return sc
+      ? Promise.resolve(sc)
+      : Promise.reject(new ApiError(404, `Speed-check ${id} not found`))
+  }
+  return request<SpeedCheck>(`/incidents/${encodeURIComponent(id)}/speed-check`)
 }

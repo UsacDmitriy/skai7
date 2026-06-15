@@ -754,3 +754,53 @@ export interface RiskBreakdown {
   weather_bonus: number
   total_risk_score: number
 }
+
+// data-trust (§10) — консистентность данных + сверка скоростей. НЕ AI-фича: без governance-меты.
+
+/** Статус проверки консистентности (§10.2): `fail` при ratio>0.2 · `warn` при ratio>0 · иначе `ok`. */
+export type ConsistencyStatus = 'ok' | 'warn' | 'fail'
+
+/** Одна детерминированная проверка консистентности (§10.2). `ratio = affected_count/total ∈ [0,1]`. */
+export interface ConsistencyCheck {
+  check_id: string
+  title_ru: string
+  status: ConsistencyStatus
+  affected_count: number
+  total: number
+  /** `affected_count/total`; `total=0 → 0`. */
+  ratio: number
+  /** До 5 примеров `id` затронутых записей. */
+  sample_ids: string[]
+  description_ru: string
+}
+
+/** `GET /api/consistency` — агрегат всех проверок (§10.2). */
+export interface ConsistencyReport {
+  checks: ConsistencyCheck[]
+  /** `1 − ratio(incident_no_video)` — доля инцидентов с видеодоказательством. */
+  evidence_rate: number
+  /** `1 − ratio(speed_disagreement)` — доля алармов с согласованной скоростью. */
+  speed_agreement_rate: number
+  generated_at_source: 'duckdb'
+}
+
+/** Согласие скоростей события и GPS-трека (§10.2): `ok` ≤5 · `minor` ≤15 · `major` >15 · `no_data`. */
+export type SpeedAgreement = 'ok' | 'minor' | 'major' | 'no_data'
+
+/**
+ * `GET /api/incidents/{id}/speed-check` — сверка скорости события и GPS-трека (§10.2).
+ * Источник истины — GPS-трек (`truth_source='gps_track'`): CAN-данных в датасете нет (ASSUMPTION §10.2).
+ */
+export interface SpeedCheck {
+  id: string
+  /** Скорость из события аларма, км/ч; нет значения → null. */
+  event_speed_kmh: number | null
+  /** Скорость ближайшей точки трека (окно ±10 с), км/ч; нет точки → null. */
+  track_speed_kmh: number | null
+  /** Максимум скорости трека по аларму, км/ч; нет данных → null. */
+  max_track_speed_kmh: number | null
+  /** `|event − track|`, км/ч; нет данных → null. */
+  delta_kmh: number | null
+  agreement: SpeedAgreement
+  truth_source: 'gps_track'
+}

@@ -2,8 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { Inbox, RotateCcw, TriangleAlert } from 'lucide-react'
 import { Button, Card } from '@/components'
 import { DataQualityPanel, MetricTile, formatRatio } from '@/components/ai/DataQualityPanel'
-import { getAiMetrics, getDataQuality } from '@/api/client'
-import type { AiMetrics, DataQuality } from '@/api/types'
+import { ConsistencyPanel } from '@/components/ai/ConsistencyPanel'
+import { getAiMetrics, getConsistency, getDataQuality } from '@/api/client'
+import type { AiMetrics, ConsistencyReport, DataQuality } from '@/api/types'
 
 /**
  * f21 · Панель доверия и пользы (`/metrics`). Против `00-CONTRACT.md` §8.7.
@@ -102,6 +103,8 @@ export default function Metrics() {
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
   const [data, setData] = useState<MetricsData | null>(null)
   const [error, setError] = useState<string | null>(null)
+  // f25 · консистентность (§10) — мягко: ошибка не валит экран, панель → заглушка.
+  const [consistency, setConsistency] = useState<ConsistencyReport | null>(null)
 
   const load = useCallback(() => {
     setState('loading')
@@ -115,6 +118,11 @@ export default function Metrics() {
         setError(e instanceof Error ? e.message : 'Не удалось загрузить метрики.')
         setState('error')
       })
+    // Консистентность грузится независимо: её ошибка не ломает страницу метрик.
+    setConsistency(null)
+    getConsistency()
+      .then(setConsistency)
+      .catch(() => setConsistency(null))
   }, [])
 
   useEffect(load, [load])
@@ -173,6 +181,18 @@ export default function Metrics() {
             ) : data ? (
               <DataQualityPanel data={data.quality} />
             ) : null}
+          </section>
+
+          {/* Консистентность данных (§10, f25): светофор по 7 проверкам + сводные доли */}
+          <section className="space-y-3">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
+              Консистентность данных
+            </h2>
+            {state === 'loading' ? (
+              <TilesSkeleton count={2} />
+            ) : (
+              <ConsistencyPanel data={consistency} />
+            )}
           </section>
         </>
       )}
