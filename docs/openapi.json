@@ -112,6 +112,75 @@
         }
       }
     },
+    "/api/coaching": {
+      "get": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Get Coaching Summary",
+        "description": "Сводка по водителям (§12.2), сортировка по `repeat_violation_rate` desc.",
+        "operationId": "get_coaching_summary_api_coaching_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CoachingSummary"
+                  },
+                  "type": "array",
+                  "title": "Response Get Coaching Summary Api Coaching Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/coaching/{plate}": {
+      "get": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Get Coaching Card",
+        "description": "Карточка водителя (§12.2). `plate` не из `driver_reference` → 404.",
+        "operationId": "get_coaching_card_api_coaching__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoachingCard"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/consistency": {
       "get": {
         "tags": [
@@ -1827,6 +1896,179 @@
         ],
         "title": "ChatRequest",
         "description": "Тело `POST /api/copilot/chat` (§8.4): свободный запрос RU/EN + опц. язык."
+      },
+      "CoachingAssignment": {
+        "properties": {
+          "assignment_id": {
+            "type": "string",
+            "title": "Assignment Id"
+          },
+          "incident_id": {
+            "type": "string",
+            "title": "Incident Id"
+          },
+          "course_id": {
+            "type": "string",
+            "title": "Course Id"
+          },
+          "course_title_ru": {
+            "type": "string",
+            "title": "Course Title Ru"
+          },
+          "assigned_at": {
+            "type": "string",
+            "title": "Assigned At"
+          },
+          "due_at": {
+            "type": "string",
+            "title": "Due At"
+          },
+          "test_score": {
+            "type": "integer",
+            "title": "Test Score"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "failed",
+              "incomplete"
+            ],
+            "title": "Status"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "repeat_within_30d": {
+            "type": "boolean",
+            "title": "Repeat Within 30D"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "assignment_id",
+          "incident_id",
+          "course_id",
+          "course_title_ru",
+          "assigned_at",
+          "due_at",
+          "test_score",
+          "status",
+          "repeat_within_30d"
+        ],
+        "title": "CoachingAssignment",
+        "description": "Назначение курса по инциденту (§12.3)."
+      },
+      "CoachingCard": {
+        "properties": {
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "driver_id": {
+            "type": "string",
+            "title": "Driver Id"
+          },
+          "driver_name": {
+            "type": "string",
+            "title": "Driver Name"
+          },
+          "assignments": {
+            "items": {
+              "$ref": "#/components/schemas/CoachingAssignment"
+            },
+            "type": "array",
+            "title": "Assignments"
+          },
+          "kpi": {
+            "$ref": "#/components/schemas/CoachingKpi"
+          },
+          "synthetic": {
+            "type": "boolean",
+            "const": true,
+            "title": "Synthetic",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "vehicle_plate",
+          "driver_id",
+          "driver_name",
+          "assignments",
+          "kpi"
+        ],
+        "title": "CoachingCard",
+        "description": "Карточка водителя (§12.3) — ответ `GET /api/coaching/{plate}`.\n\n`synthetic` — литерал `true` (честность §12.0): датасета обучения не существует."
+      },
+      "CoachingKpi": {
+        "properties": {
+          "completion_rate": {
+            "type": "number",
+            "title": "Completion Rate"
+          },
+          "pass_rate": {
+            "type": "number",
+            "title": "Pass Rate"
+          },
+          "repeat_violation_rate": {
+            "type": "number",
+            "title": "Repeat Violation Rate"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "completion_rate",
+          "pass_rate",
+          "repeat_violation_rate"
+        ],
+        "title": "CoachingKpi",
+        "description": "KPI цикла обучения (§12.3) — все доли ∈ [0,1].\n\ncompletion = с `completed_at`/всего; pass = passed/завершивших (0 завершивших → 0.0);\nrepeat = с `repeat_within_30d`/всего."
+      },
+      "CoachingSummary": {
+        "properties": {
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "driver_id": {
+            "type": "string",
+            "title": "Driver Id"
+          },
+          "driver_name": {
+            "type": "string",
+            "title": "Driver Name"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "kpi": {
+            "$ref": "#/components/schemas/CoachingKpi"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "vehicle_plate",
+          "driver_id",
+          "driver_name",
+          "total",
+          "kpi"
+        ],
+        "title": "CoachingSummary",
+        "description": "Сводка по водителю (§12.3) — строка `GET /api/coaching`."
       },
       "ConsistencyCheck": {
         "properties": {
