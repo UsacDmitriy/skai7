@@ -16,7 +16,7 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Callable, Iterator
+from typing import Iterator
 
 import pytest
 
