@@ -124,7 +124,12 @@ def queue(
     counts = {"pending": 0, "validated": 0, "dismissed": 0}
     items: list[ReviewItem] = []
     for row in rows_to_dicts(
-        db.execute(f'SELECT {_INCIDENT_COLUMNS} FROM "v_incidents"')
+        db.execute(
+            # ORDER BY обязателен — детерминизм ответа (§11.2, §3 чек-листа).
+            # "ts" DESC — как список инцидентов (incidents_repo); "id" — тай-брейк.
+            f'SELECT {_INCIDENT_COLUMNS} FROM "v_incidents" '
+            'ORDER BY "ts" DESC, "id"'
+        )
     ):
         item = _to_item(row, decisions.get(str(row["id"])))
         counts[item.status] += 1  # счётчики — по всем (до фильтра)
