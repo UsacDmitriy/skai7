@@ -1087,6 +1087,114 @@
         }
       }
     },
+    "/api/review-queue": {
+      "get": {
+        "tags": [
+          "review"
+        ],
+        "summary": "Get Review Queue",
+        "description": "Очередь верификации (§11.1). Без `status` — все инциденты; `counts` — по всем.\n\nНеизвестный `status` в query → 422 (Literal). Детерминированно из DuckDB + журнала.",
+        "operationId": "get_review_queue_api_review_queue_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "pending",
+                    "validated",
+                    "dismissed"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewQueue"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/review-queue/{incident_id}": {
+      "post": {
+        "tags": [
+          "review"
+        ],
+        "summary": "Decide Review",
+        "description": "Записать решение по инциденту (§11.1). Неизвестный id → 404; решение перезаписываемо.",
+        "operationId": "decide_review_api_review_queue__incident_id__post",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Incident Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewItem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/incidents/{incident_id}/risk-breakdown": {
       "get": {
         "tags": [
@@ -1856,6 +1964,35 @@
         ],
         "title": "DataQuality",
         "description": "Доверие к данным (§8.7). Все `*_ratio` ∈ [0,1]; считаются из реальных view."
+      },
+      "DecisionRequest": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "validated",
+              "dismissed"
+            ],
+            "title": "Decision"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "decision"
+        ],
+        "title": "DecisionRequest",
+        "description": "Тело POST /api/review-queue/{incident_id} (§11.1).\n\n`decision` — Literal: неизвестное значение → 422 (Pydantic). Пустая `note`\nвалидна (§11.4)."
       },
       "DispatchAlert": {
         "properties": {
@@ -3550,6 +3687,134 @@
         ],
         "title": "ReportQuery",
         "description": "Разобранный NLU-запрос (§7.3/§7.5). Результат `nlu_service.parse`."
+      },
+      "ReviewCounts": {
+        "properties": {
+          "pending": {
+            "type": "integer",
+            "title": "Pending"
+          },
+          "validated": {
+            "type": "integer",
+            "title": "Validated"
+          },
+          "dismissed": {
+            "type": "integer",
+            "title": "Dismissed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pending",
+          "validated",
+          "dismissed"
+        ],
+        "title": "ReviewCounts",
+        "description": "Счётчики по статусам (§11.2): сумма = всего инцидентов в `v_incidents`."
+      },
+      "ReviewItem": {
+        "properties": {
+          "incident_id": {
+            "type": "string",
+            "title": "Incident Id"
+          },
+          "alarm_code": {
+            "type": "string",
+            "title": "Alarm Code"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity"
+          },
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "ts": {
+            "type": "string",
+            "title": "Ts"
+          },
+          "video_available": {
+            "type": "boolean",
+            "title": "Video Available"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "validated",
+              "dismissed"
+            ],
+            "title": "Status"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "decided_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "incident_id",
+          "alarm_code",
+          "severity",
+          "vehicle_plate",
+          "ts",
+          "video_available",
+          "status"
+        ],
+        "title": "ReviewItem",
+        "description": "Строка очереди верификации (§11.2): инцидент + его статус ревью."
+      },
+      "ReviewQueue": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/ReviewCounts"
+          },
+          "evidence_rate": {
+            "type": "number",
+            "title": "Evidence Rate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "counts",
+          "evidence_rate"
+        ],
+        "title": "ReviewQueue",
+        "description": "Ответ GET /api/review-queue (§11.2): инциденты + счётчики + контекст доверия."
       },
       "RiskBreakdown": {
         "properties": {
