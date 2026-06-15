@@ -26,6 +26,9 @@ import type {
   IncidentSummary,
   NavProblemVehicle,
   RebRecovery,
+  ReviewItem,
+  ReviewQueue,
+  ReviewStatus,
   RiskBreakdown,
   RiskForecast,
   RiskZone,
@@ -1579,4 +1582,115 @@ export function getFixtureCopilot(text: string): CopilotMessage {
   const lang: CopilotLang = CYRILLIC.test(text) ? 'ru' : 'en'
   const reply = COPILOT.find((m) => m.role === 'assistant' && m.lang === lang)
   return reply ?? COPILOT[1]
+}
+
+// ── Волна 5.1 · Review-queue (§11) — очередь верификации ───────────────────────
+// Все три статуса; есть инцидент без видео (inc-005, video_available:false);
+// counts согласованы с items; evidence_rate из §10 (контекст очереди).
+
+const REVIEW_ITEMS: ReviewItem[] = [
+  {
+    incident_id: 'inc-001',
+    alarm_code: 'FATIGUE',
+    severity: 'critical',
+    vehicle_plate: 'А777ВВ 77',
+    ts: '2026-04-02T08:12:00',
+    video_available: true,
+    status: 'pending',
+    note: null,
+    decided_at: null,
+  },
+  {
+    incident_id: 'inc-002',
+    alarm_code: 'FORWARD_COLLISION',
+    severity: 'high',
+    vehicle_plate: 'В123АА 99',
+    ts: '2026-04-02T09:35:00',
+    video_available: true,
+    status: 'pending',
+    note: null,
+    decided_at: null,
+  },
+  {
+    incident_id: 'inc-003',
+    alarm_code: 'DISTRACTION',
+    severity: 'medium',
+    vehicle_plate: 'С456ОР 77',
+    ts: '2026-04-03T10:58:00',
+    video_available: true,
+    status: 'validated',
+    note: 'Подтверждено: водитель отвлёкся на телефон.',
+    decided_at: '2026-04-03T12:10:00',
+  },
+  {
+    incident_id: 'inc-004',
+    alarm_code: 'OVERSPEED',
+    severity: 'high',
+    vehicle_plate: 'Е789КХ 50',
+    ts: '2026-04-04T07:20:00',
+    video_available: true,
+    status: 'dismissed',
+    note: 'Ложное срабатывание — спуск с горы, скорость в норме.',
+    decided_at: '2026-04-04T08:05:00',
+  },
+  {
+    incident_id: 'inc-005',
+    alarm_code: 'SMOKING',
+    severity: 'low',
+    vehicle_plate: 'Н012МТ 77',
+    ts: '2026-04-05T14:42:00',
+    video_available: false,
+    status: 'pending',
+    note: null,
+    decided_at: null,
+  },
+  {
+    incident_id: 'inc-006',
+    alarm_code: 'NO_SEATBELT',
+    severity: 'medium',
+    vehicle_plate: 'К345ЕВ 99',
+    ts: '2026-04-06T11:15:00',
+    video_available: true,
+    status: 'validated',
+    note: null,
+    decided_at: '2026-04-06T13:00:00',
+  },
+]
+
+/** Изменяемая очередь верификации (демо-режим: решения переписывают статус). */
+export const REVIEW_QUEUE: ReviewItem[] = REVIEW_ITEMS.map((r) => ({ ...r }))
+
+function reviewCounts(items: ReviewItem[]): ReviewQueue['counts'] {
+  return {
+    pending: items.filter((i) => i.status === 'pending').length,
+    validated: items.filter((i) => i.status === 'validated').length,
+    dismissed: items.filter((i) => i.status === 'dismissed').length,
+  }
+}
+
+/** Очередь верификации с опц. фильтром; counts/evidence_rate — по всей очереди (§11.2). */
+export function getFixtureReviewQueue(status?: ReviewStatus): ReviewQueue {
+  const items = status ? REVIEW_QUEUE.filter((i) => i.status === status) : REVIEW_QUEUE
+  return {
+    items: items.map((r) => ({ ...r })),
+    counts: reviewCounts(REVIEW_QUEUE),
+    evidence_rate: 0.9,
+  }
+}
+
+/**
+ * Применить решение к очереди (демо-режим, мутирует REVIEW_QUEUE — решение
+ * перезаписываемо, §11.4). Неизвестный id → undefined (→ 404 в клиенте).
+ */
+export function applyFixtureReviewDecision(
+  id: string,
+  decision: 'validated' | 'dismissed',
+  note?: string,
+): ReviewItem | undefined {
+  const item = REVIEW_QUEUE.find((i) => i.incident_id === id)
+  if (!item) return undefined
+  item.status = decision
+  item.note = note && note.length > 0 ? note : null
+  item.decided_at = '2026-06-15T12:00:00'
+  return { ...item }
 }
