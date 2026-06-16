@@ -11,6 +11,7 @@ import {
   CONSISTENCY_REPORT,
   DATA_QUALITY,
   DRIVER_REPORT,
+  DRIVER_SCORES,
   FLEET_HEALTH,
   FLEET_REPORT,
   FUEL_VEHICLES,
@@ -31,6 +32,7 @@ import {
   getFixtureIncident,
   getFixtureCoaching,
   getFixtureNavProblem,
+  getFixturePositiveScore,
   getFixtureReb,
   getFixtureScene,
   getFixtureSensor,
@@ -47,6 +49,7 @@ import type {
   CopilotMessage,
   DataQuality,
   DriverReport,
+  DriverScore,
   FatigueChain,
   FleetHealthResponse,
   FleetReport,
@@ -56,6 +59,7 @@ import type {
   IncidentFilters,
   IncidentSummary,
   NavProblemVehicle,
+  PositiveScore,
   QueryResult,
   RebRecovery,
   ReviewItem,
@@ -439,4 +443,23 @@ export function getCoaching(plate: string): Promise<CoachingCard> {
       : Promise.reject(new ApiError(404, `Driver ${plate} not found`))
   }
   return request<CoachingCard>(`/coaching/${encodeURIComponent(plate)}`)
+}
+
+// ── Волна 5.3 · Driver Value (§13) — позитивный скоринг + единый рейтинг ─────────
+
+/** Лидерборд водителей (§13.2 `GET /api/driver-score`): unified desc, tie-break plate asc. */
+export function getLeaderboard(): Promise<DriverScore[]> {
+  if (USE_FIXTURES) return Promise.resolve(DRIVER_SCORES)
+  return request<DriverScore[]>('/driver-score')
+}
+
+/** Позитивный скоринг ТС (§13.1 `GET /api/positive-score/{plate}`); plate не из driver_reference → 404. */
+export function getPositiveScore(plate: string): Promise<PositiveScore> {
+  if (USE_FIXTURES) {
+    const ps = getFixturePositiveScore(plate)
+    return ps
+      ? Promise.resolve(ps)
+      : Promise.reject(new ApiError(404, `Vehicle ${plate} not found`))
+  }
+  return request<PositiveScore>(`/positive-score/${encodeURIComponent(plate)}`)
 }
