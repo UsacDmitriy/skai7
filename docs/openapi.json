@@ -243,6 +243,75 @@
         }
       }
     },
+    "/api/driver-score": {
+      "get": {
+        "tags": [
+          "driver-score"
+        ],
+        "summary": "Get Driver Leaderboard",
+        "description": "Лидерборд всех ТС (§13.2): `unified_score` desc, тай-брейк `vehicle_plate` asc.",
+        "operationId": "get_driver_leaderboard_api_driver_score_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DriverScore"
+                  },
+                  "type": "array",
+                  "title": "Response Get Driver Leaderboard Api Driver Score Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/driver-score/{plate}": {
+      "get": {
+        "tags": [
+          "driver-score"
+        ],
+        "summary": "Get Driver Score",
+        "description": "Единый рейтинг ТС (§13.2). `plate` не из `driver_reference` → 404.",
+        "operationId": "get_driver_score_api_driver_score__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DriverScore"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/fatigue": {
       "get": {
         "tags": [
@@ -845,6 +914,49 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NavProblemVehicle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/positive-score/{plate}": {
+      "get": {
+        "tags": [
+          "positive-score"
+        ],
+        "summary": "Get Positive Score",
+        "description": "Позитивный скоринг ТС (§13.1). `plate` не из `driver_reference` → 404.",
+        "operationId": "get_positive_score_api_positive_score__plate__get",
+        "parameters": [
+          {
+            "name": "plate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositiveScore"
                 }
               }
             }
@@ -2367,6 +2479,61 @@
         "title": "DriverReport",
         "description": "GET /api/reports/driver/{plate} (§7.5, идея #2 В-1)."
       },
+      "DriverScore": {
+        "properties": {
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "driver_id": {
+            "type": "string",
+            "title": "Driver Id"
+          },
+          "driver_name": {
+            "type": "string",
+            "title": "Driver Name"
+          },
+          "unified_score": {
+            "type": "integer",
+            "title": "Unified Score"
+          },
+          "risk_component": {
+            "type": "number",
+            "title": "Risk Component"
+          },
+          "positive_component": {
+            "type": "number",
+            "title": "Positive Component"
+          },
+          "avg_risk_score": {
+            "type": "number",
+            "title": "Avg Risk Score"
+          },
+          "positive_score": {
+            "type": "integer",
+            "title": "Positive Score"
+          },
+          "green_zone": {
+            "type": "boolean",
+            "title": "Green Zone"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "vehicle_plate",
+          "driver_id",
+          "driver_name",
+          "unified_score",
+          "risk_component",
+          "positive_component",
+          "avg_risk_score",
+          "positive_score",
+          "green_zone"
+        ],
+        "title": "DriverScore",
+        "description": "Единый рейтинг ТС/водителя (§13.2) — элемент лидерборда и ответ по plate.\n\n`unified_score = clamp(round(risk_component + positive_component), 0, 100)`, где\n`risk_component = 0.6·(100 − avg_risk_score)` и `positive_component = 0.4·positive_score`\n(компоненты — float без промежуточных округлений, итог округляется один раз, §13.0).\n`avg_risk_score` — средний `risk_score` инцидентов ТС (§2, не пересчёт); нет алармов → `0.0`.\n`positive_score`/`green_zone` — из сервиса позитивного скоринга (§13.1)."
+      },
       "FleetByDriver": {
         "properties": {
           "driver": {
@@ -3728,6 +3895,56 @@
         ],
         "title": "NavProblemVehicle",
         "description": "Строка списка проблемных треков (§9.2) → deep-view `/api/reb/{reb_link_id}`.\n\n5 matched + 1 unmatched ТС. У unmatched `public_unit_id`/`plate`/`reb_link_id`\n= null (строка не кликабельна в РЭБ), но `problem_description` живой (§9.5)."
+      },
+      "PositiveScore": {
+        "properties": {
+          "vehicle_plate": {
+            "type": "string",
+            "title": "Vehicle Plate"
+          },
+          "period_days": {
+            "type": "integer",
+            "title": "Period Days"
+          },
+          "total_days": {
+            "type": "integer",
+            "title": "Total Days"
+          },
+          "clean_days": {
+            "type": "integer",
+            "title": "Clean Days"
+          },
+          "compliant_events_ratio": {
+            "type": "number",
+            "title": "Compliant Events Ratio"
+          },
+          "harsh_free_ratio": {
+            "type": "number",
+            "title": "Harsh Free Ratio"
+          },
+          "positive_score": {
+            "type": "integer",
+            "title": "Positive Score"
+          },
+          "green_zone": {
+            "type": "boolean",
+            "title": "Green Zone"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "vehicle_plate",
+          "period_days",
+          "total_days",
+          "clean_days",
+          "compliant_events_ratio",
+          "harsh_free_ratio",
+          "positive_score",
+          "green_zone"
+        ],
+        "title": "PositiveScore",
+        "description": "Позитивный скоринг ТС (§13.1) — ответ `GET /api/positive-score/{plate}`.\n\n`period_days` дублирует `total_days` — поле для UI-дисклеймера «за период N дн.»\n(честность §13.0: датасет покрывает мало дней). Доли ∈ [0,1]; `positive_score` ∈\n[0,100]; `green_zone` — `compliant_events_ratio ≥ 0.95` И нет critical-алармов."
       },
       "QueryRequest": {
         "properties": {
