@@ -20,6 +20,7 @@ import type {
   CopilotMessage,
   DataQuality,
   DriverReport,
+  DriverScore,
   FatigueChain,
   FleetHealthResponse,
   FleetReport,
@@ -29,6 +30,7 @@ import type {
   IncidentFilters,
   IncidentSummary,
   NavProblemVehicle,
+  PositiveScore,
   RebRecovery,
   ReviewItem,
   ReviewQueue,
@@ -1791,4 +1793,135 @@ export function getFixtureCoaching(plate: string): CoachingCard | undefined {
     assignments: card.assignments.map((a) => ({ ...a })),
     kpi: { ...card.kpi },
   }
+}
+
+// ── Волна 5.3 · Driver Value (§13) — позитивный скоринг + единый рейтинг ─────────
+// Детерминированы из алармов/треков (§13.0). Период покрытия датасета — 18 дн.
+// (общий `period_days`/`total_days` для всех ТС, как `COUNT(DISTINCT date(Begin))`).
+// Числа согласованы между PositiveScore и DriverScore по формулам §13.1/§13.2:
+//   positive = round(100·(0.5·compliant + 0.3·clean/total + 0.2·harsh_free));
+//   risk_component = 0.6·(100 − avg_risk); positive_component = 0.4·positive;
+//   unified = clamp(round(risk_component + positive_component), 0, 100).
+
+const PERIOD_DAYS = 18
+
+/** Позитивный скоринг по `vehicle_plate` (§13.1). Сидоров — «чистый» кейс (все ratio 1.0). */
+export const POSITIVE_SCORES: Record<string, PositiveScore> = {
+  // Чистый кейс §13.4: ТС без алармов → clean_days=total_days, ratios 1.0, avg_risk 0.
+  'Е902СТ 150': {
+    vehicle_plate: 'Е902СТ 150',
+    period_days: PERIOD_DAYS,
+    total_days: PERIOD_DAYS,
+    clean_days: 18,
+    compliant_events_ratio: 1.0,
+    harsh_free_ratio: 1.0,
+    positive_score: 100,
+    green_zone: true,
+  },
+  'К451МА 77': {
+    vehicle_plate: 'К451МА 77',
+    period_days: PERIOD_DAYS,
+    total_days: PERIOD_DAYS,
+    clean_days: 15,
+    compliant_events_ratio: 0.97,
+    harsh_free_ratio: 0.95,
+    positive_score: 93,
+    green_zone: true,
+  },
+  'В345КМ 97': {
+    vehicle_plate: 'В345КМ 97',
+    period_days: PERIOD_DAYS,
+    total_days: PERIOD_DAYS,
+    clean_days: 11,
+    compliant_events_ratio: 0.88,
+    harsh_free_ratio: 0.82,
+    positive_score: 79,
+    green_zone: false,
+  },
+  'Н124УУ 199': {
+    vehicle_plate: 'Н124УУ 199',
+    period_days: PERIOD_DAYS,
+    total_days: PERIOD_DAYS,
+    clean_days: 8,
+    compliant_events_ratio: 0.79,
+    harsh_free_ratio: 0.7,
+    positive_score: 67,
+    green_zone: false,
+  },
+  // Обычный кейс: высокий риск, низкие доли (Иванов — герой остальных экранов).
+  'А777ВВ 77': {
+    vehicle_plate: 'А777ВВ 77',
+    period_days: PERIOD_DAYS,
+    total_days: PERIOD_DAYS,
+    clean_days: 3,
+    compliant_events_ratio: 0.6,
+    harsh_free_ratio: 0.45,
+    positive_score: 44,
+    green_zone: false,
+  },
+}
+
+/** Лидерборд `GET /api/driver-score` (§13.2): ВСЕ ТС, сортировка unified desc, tie-break plate asc. */
+export const DRIVER_SCORES: DriverScore[] = [
+  {
+    vehicle_plate: 'Е902СТ 150',
+    driver_id: 'DRV-4501',
+    driver_name: 'Сидоров Владимир Николаевич',
+    unified_score: 100,
+    risk_component: 60.0,
+    positive_component: 40.0,
+    avg_risk_score: 0.0, // §13.4: ТС без алармов
+    positive_score: 100,
+    green_zone: true,
+  },
+  {
+    vehicle_plate: 'К451МА 77',
+    driver_id: 'DRV-6104',
+    driver_name: 'Новиков Александр Владимирович',
+    unified_score: 84,
+    risk_component: 46.8,
+    positive_component: 37.2,
+    avg_risk_score: 22.0,
+    positive_score: 93,
+    green_zone: true,
+  },
+  {
+    vehicle_plate: 'В345КМ 97',
+    driver_id: 'DRV-3912',
+    driver_name: 'Петров Дмитрий Сергеевич',
+    unified_score: 63,
+    risk_component: 31.2,
+    positive_component: 31.6,
+    avg_risk_score: 48.0,
+    positive_score: 79,
+    green_zone: false,
+  },
+  {
+    vehicle_plate: 'Н124УУ 199',
+    driver_id: 'DRV-5023',
+    driver_name: 'Козлов Иван Андреевич',
+    unified_score: 46,
+    risk_component: 19.2,
+    positive_component: 26.8,
+    avg_risk_score: 68.0,
+    positive_score: 67,
+    green_zone: false,
+  },
+  {
+    vehicle_plate: 'А777ВВ 77',
+    driver_id: 'DRV-2841',
+    driver_name: 'Иванов Алексей Петрович',
+    unified_score: 22,
+    risk_component: 4.8,
+    positive_component: 17.6,
+    avg_risk_score: 92.0,
+    positive_score: 44,
+    green_zone: false,
+  },
+]
+
+/** Позитивный скоринг по plate; неизв. plate → undefined (→ 404 в клиенте). */
+export function getFixturePositiveScore(plate: string): PositiveScore | undefined {
+  const ps = POSITIVE_SCORES[plate]
+  return ps ? { ...ps } : undefined
 }

@@ -11,11 +11,13 @@ import {
   GraduationCap,
   Inbox,
   Info,
+  Leaf,
   Lightbulb,
   LineChart,
   RotateCcw,
   Search,
   Sparkles,
+  ThumbsUp,
   TrendingUp,
   TriangleAlert,
   Truck,
@@ -36,6 +38,7 @@ import type {
   FleetByVehicleRow,
   FleetReport,
   IncidentDetail,
+  PositiveScore,
   QueryResult,
   ReportKPI,
   RiskForecast,
@@ -792,6 +795,117 @@ function CoachingSection({ plate }: { plate: string }) {
   )
 }
 
+// ── f28 · Блок «Позитивное вождение» (фича #26, §13.1/§13.3) ──────────────────
+// Позитивная сторона вождения, не только нарушения: positive_score крупно, бейдж
+// green_zone, три составляющие (соблюдение лимитов / чистые дни / без резких манёвров)
+// с долями, дисклеймер периода (§13.0). Ошибка API → блок тихо скрыт (отчёт не ломать).
+
+/** Доля компоненты: иконка + подпись + крупный процент + долевая полоса. */
+function PositiveComponent({
+  label,
+  ratio,
+  hint,
+}: {
+  label: string
+  ratio: number
+  hint?: string
+}) {
+  const pct = ratioPct(ratio)
+  return (
+    <div className="rounded-md border border-border bg-surface px-3 py-2">
+      <div className="text-[11px] uppercase tracking-wide text-muted">{label}</div>
+      <div className="mt-0.5 text-lg font-bold tabular-nums text-ink">{pct}%</div>
+      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-bg" aria-hidden>
+        <div className="h-full rounded-full bg-ok" style={{ width: `${pct}%` }} />
+      </div>
+      {hint && <div className="mt-1 text-[11px] text-muted">{hint}</div>}
+    </div>
+  )
+}
+
+function PositiveDrivingSection({ plate }: { plate: string }) {
+  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [score, setScore] = useState<PositiveScore | null>(null)
+
+  useEffect(() => {
+    let active = true
+    setState('loading')
+    setScore(null)
+    client
+      .getPositiveScore(plate)
+      .then((s) => {
+        if (!active) return
+        setScore(s)
+        setState('ready')
+      })
+      .catch(() => {
+        if (active) setState('error')
+      })
+    return () => {
+      active = false
+    }
+  }, [plate])
+
+  // loading / error — блок тихо скрыть (§13.3: отчёт не ломать).
+  if (state !== 'ready' || !score) return null
+
+  // Чистые дни как доля периода — для согласованной полосы (§13.1).
+  const cleanRatio = score.total_days > 0 ? score.clean_days / score.total_days : 1
+
+  return (
+    <Card className="p-0">
+      <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
+        <ThumbsUp className="h-4 w-4 text-ok-text" aria-hidden />
+        <h3 className="text-sm font-semibold text-ink">Позитивное вождение</h3>
+        {score.green_zone && (
+          <span className="inline-flex items-center gap-1 rounded bg-ok-bg px-2 py-0.5 text-xs font-medium text-ok-text">
+            <Leaf className="h-3.5 w-3.5" aria-hidden />
+            зелёная зона
+          </span>
+        )}
+      </div>
+
+      <div className="space-y-4 p-4">
+        {/* positive_score крупно + дисклеймер периода (§13.0 — обязателен). */}
+        <div className="flex flex-wrap items-end gap-3">
+          <div>
+            <div className="text-[11px] uppercase tracking-wide text-muted">
+              Позитивный скоринг
+            </div>
+            <div className="text-3xl font-bold tabular-nums text-ok-text">
+              {score.positive_score}
+              <span className="ml-1 text-base font-normal text-muted">/100</span>
+            </div>
+          </div>
+          <p className="inline-flex items-center gap-1.5 text-xs text-muted">
+            <Info className="h-3.5 w-3.5" aria-hidden />
+            за период {score.period_days} дн.
+          </p>
+        </div>
+
+        {/* Три составляющие с долями (§13.3). */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <PositiveComponent
+            label="Соблюдение лимитов"
+            ratio={score.compliant_events_ratio}
+            hint="скорость ≤ лимита"
+          />
+          <PositiveComponent
+            label="Чистые дни"
+            ratio={cleanRatio}
+            hint={`${score.clean_days} из ${score.total_days} дн.`}
+          />
+          <PositiveComponent
+            label="Без резких манёвров"
+            ratio={score.harsh_free_ratio}
+            hint="доля без HARSH-событий"
+          />
+        </div>
+      </div>
+    </Card>
+  )
+}
+
 // ── Дашборды ──────────────────────────────────────────────────────────────────
 
 function DriverDashboard({
@@ -848,6 +962,9 @@ function DriverDashboard({
 
       {/* f27 · секция «Обучение водителя» (§12.4) — после KPI-блоков; синтетика-демо. */}
       <CoachingSection plate={report.vehicle_plate} />
+
+      {/* f28 · блок «Позитивное вождение» (§13.3) — ПОСЛЕ секции обучения f27. */}
+      <PositiveDrivingSection plate={report.vehicle_plate} />
     </div>
   )
 }

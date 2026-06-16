@@ -888,3 +888,43 @@ export interface CoachingCard {
   kpi: CoachingKpi
   synthetic: true
 }
+
+// ── Волна 5.3 · Driver Value (§13.1/§13.2) — позитивный скоринг + единый рейтинг ─
+// Аддитивно. Поля/типы 1:1 со схемами контракта (формулы зафиксированы в §13 —
+// исполнитель не изобретает веса). Данные детерминированы из алармов/треков (§13.0):
+// дисклеймер периода `period_days` обязателен везде, где есть positive/unified score.
+
+/** `GET /api/positive-score/{plate}` (§13.1); plate не из `driver_reference` → 404. */
+export interface PositiveScore {
+  vehicle_plate: string
+  /** Окно покрытия датасета, дн. — обязательный UI-дисклеймер (§13.0). */
+  period_days: number
+  /** COUNT(DISTINCT date(Begin)) по всем алармам датасета. */
+  total_days: number
+  /** total_days − дни с алармами этого ТС. */
+  clean_days: number
+  /** Доля алармов с `Speed ≤ speed_limit`; пустой знаменатель → 1.0. */
+  compliant_events_ratio: number
+  /** 1 − (HARSH_*-алармы / все алармы); 0 алармов → 1.0. */
+  harsh_free_ratio: number
+  positive_score: number
+  /** `compliant_events_ratio ≥ 0.95` И нет critical-алармов за период. */
+  green_zone: boolean
+}
+
+/** Строка лидерборда `GET /api/driver-score` (§13.2); `GET /api/driver-score/{plate}` → 404 при неизв. plate. */
+export interface DriverScore {
+  vehicle_plate: string
+  driver_id: string
+  driver_name: string
+  /** `clamp(round(risk_component + positive_component), 0, 100)`. */
+  unified_score: number
+  /** `0.6·(100 − avg_risk_score)` (float). */
+  risk_component: number
+  /** `0.4·positive_score` (float). */
+  positive_component: number
+  /** Средний risk_score алармов ТС (готовые инциденты); нет алармов → 0.0. */
+  avg_risk_score: number
+  positive_score: number
+  green_zone: boolean
+}

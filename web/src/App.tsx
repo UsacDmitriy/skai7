@@ -15,6 +15,7 @@ import {
   Navigation,
   Radio,
   Shield,
+  Trophy,
   Zap,
 } from 'lucide-react'
 import {
@@ -87,6 +88,8 @@ const NAV: NavGroup[] = [
       // /dashboards → редирект на /metrics (живой экран): бейдж снят.
       { to: '/dashboards', label: 'Дашборды', icon: BarChart2 },
       { to: '/report', label: 'Отчёты', icon: FileText },
+      // f28: лидерборд водителей (§13.3) — живой экран, без бейджа.
+      { to: '/leaderboard', label: 'Рейтинг водителей', icon: Trophy },
       // /quick-report → редирект на /copilot (живой экран): бейдж снят.
       { to: '/quick-report', label: 'Быстрый отчёт', icon: Zap },
     ],
@@ -271,6 +274,8 @@ const EventsFeed = lazy(() => import('@/pages/EventsFeed')) as ComponentType
 const Monitor = lazy(() => import('@/pages/Monitor')) as ComponentType
 const IncidentCard = lazy(() => import('@/pages/IncidentCard')) as ComponentType
 const Report = lazy(() => import('@/pages/Report')) as ComponentType
+// f28: лидерборд водителей (§13.3) — живой экран Волны 5.3.
+const Leaderboard = lazy(() => import('@/pages/Leaderboard')) as ComponentType
 const Tickets = lazy(() => import('@/pages/Tickets')) as ComponentType
 // f26: владелец /validation появился — ревизия допущения f22.
 const ReviewQueue = lazy(() => import('@/pages/ReviewQueue')) as ComponentType
@@ -341,6 +346,14 @@ function AppRoutes() {
             element={
               <Suspense fallback={<Placeholder title="Загрузка…" />}>
                 <Report />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <Leaderboard />
               </Suspense>
             }
           />
