@@ -1,10 +1,11 @@
 """Сервис домена incidents — сборка контрактных ответов (§3.1 / §2).
 
 Берёт сырую строку `v_incidents` (репозиторий) и достраивает enrichment-поля
-детерминированным модулем `api/core/enrichment.py`. Поля, которых пока нет в
-enrichment (driver_region/department/safety_score, confidence, event_version,
-sensor_active_after_sec) и в `driver_reference` (§7.1, b7), вычисляются здесь
-детерминированно — это сервисный fallback до подключения реальных источников.
+детерминированным модулем `api/core/enrichment.py`. driver_region/department/
+safety_score берутся DB-first из `driver_reference` (§7.1) — единый источник с
+отчётом водителя (§7). Поля без источника (confidence, event_version,
+sensor_active_after_sec) и fallback при plate вне справочника вычисляются здесь
+детерминированно.
 """
 
 from __future__ import annotations
@@ -26,7 +27,7 @@ from api.repositories import incidents_repo as repo
 from api.services import actions_service
 
 # ---------------------------------------------------------------------------
-# Детерминированные пулы для полей без источника (TODO: driver_reference §7.1, b7)
+# Детерминированные пулы — fallback для plate вне driver_reference (§7.1)
 # ---------------------------------------------------------------------------
 
 _REGIONS = [
@@ -68,20 +69,35 @@ def _seed(value: str) -> int:
     return zlib.crc32(value.encode()) & 0xFFFFFFFF
 
 
-def _driver_region(plate: str) -> str:
-    # TODO: заменить на driver_reference.region (§7.1, b7).
-    return _REGIONS[_seed(plate) % len(_REGIONS)]
+def _driver_profile(
+    db: duckdb.DuckDBPyConnection, plate: str, risk_score: int
+) -> dict[str, Any]:
+    """`region`/`department`/`safety_score` из `driver_reference` (§7.1); единый источник.
 
-
-def _driver_department(plate: str) -> str:
-    # TODO: заменить на driver_reference.department (§7.1, b7).
-    return _DEPARTMENTS[(_seed(plate) // 7) % len(_DEPARTMENTS)]
-
-
-def _driver_safety_score(plate: str, risk_score: int) -> int:
-    # §7.1: safety_score = 100 − среднего risk_score ТС. Здесь приближаем по текущему алярму.
-    # TODO: заменить на driver_reference.safety_score (§7.1, b7).
-    return max(0, min(100, 100 - risk_score))
+    DB-first — те же значения, что и в отчёте водителя (§7), иначе одно ТС показывало бы
+    разные регион/отдел/safety_score на карточке инцидента и в отчёте (рассинхрон данных).
+    Plate вне справочника → детерминированный fallback (пулы / `100 − risk_score`).
+    """
+    if db is not None:
+        try:
+            row = db.execute(
+                'SELECT "region","department","safety_score" '
+                'FROM "driver_reference" WHERE "vehicle_plate"=?',
+                [plate],
+            ).fetchone()
+            if row and row[0] and row[1] and row[2] is not None:
+                return {
+                    "region": row[0],
+                    "department": row[1],
+                    "safety_score": max(0, min(100, int(row[2]))),
+                }
+        except Exception:
+            pass
+    return {
+        "region": _REGIONS[_seed(plate) % len(_REGIONS)],
+        "department": _DEPARTMENTS[(_seed(plate) // 7) % len(_DEPARTMENTS)],
+        "safety_score": max(0, min(100, 100 - risk_score)),
+    }
 
 
 def _confidence(incident_id: str, video_available: bool) -> int:
@@ -199,6 +215,7 @@ def get_detail(
     ts = row.get("ts") or ""
     video_available = bool(row.get("video_available"))
     alarm_code = row.get("alarm_code") or row.get("alarm_type") or ""
+    _profile = _driver_profile(db, plate, e["risk_score"])
 
     video_files = repo.video_files_for(db, incident_id)
     cameras = [Camera(**c) for c in enrichment.cameras_from_videofiles(video_files)]
@@ -233,9 +250,9 @@ def get_detail(
         unit_name=row.get("unit_name") or "",
         driver_id=e["driver_id"],
         driver_phone=e["driver_phone"],
-        driver_region=_driver_region(plate),
-        driver_department=_driver_department(plate),
-        driver_safety_score=_driver_safety_score(plate, e["risk_score"]),
+        driver_region=_profile["region"],
+        driver_department=_profile["department"],
+        driver_safety_score=_profile["safety_score"],
         speed_limit_kmh=e["speed_limit_kmh"],
         is_night=e["is_night"],
         continuous_driving_min=e["continuous_driving_min"],

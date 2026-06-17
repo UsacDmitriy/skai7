@@ -189,6 +189,25 @@ class TestIncidentsService:
         assert detail.driver_region and detail.driver_department
         assert 0 <= detail.driver_safety_score <= 100
 
+    def test_get_detail_driver_fields_match_reference(self, db):
+        """region/department/safety_score — из driver_reference (§7.1), не фабрикуются.
+
+        Единый источник с отчётом водителя (§7): одно ТС не должно показывать разные
+        регион/отдел/safety_score на карточке инцидента и в отчёте.
+        """
+        from api.services.incidents_service import get_detail, list_summaries
+
+        detail = get_detail(db, list_summaries(db, {})[0].id)
+        ref = db.execute(
+            'SELECT "region", "department", "safety_score" '
+            'FROM "driver_reference" WHERE "vehicle_plate"=?',
+            [detail.vehicle_plate],
+        ).fetchone()
+        assert ref is not None, "ТС инцидента должно быть в driver_reference"
+        assert detail.driver_region == ref[0]
+        assert detail.driver_department == ref[1]
+        assert detail.driver_safety_score == max(0, min(100, int(ref[2])))
+
     def test_get_detail_unknown_returns_none(self, db):
         from api.services.incidents_service import get_detail
 

@@ -55,7 +55,7 @@ _CHECK_META: dict[str, dict[str, str]] = {
 }
 
 # Запросы примеров (≤5) на каждую проверку. ORDER BY обязателен — детерминизм ответа.
-# speed_disagreement — заглушка до b29 (нет v_speed_check) → примеров нет.
+# speed_disagreement — через v_speed_check (b29); критерий |событие−трек|>15 км/ч (§10.2).
 _SAMPLE_SQL: dict[str, str] = {
     "video_fleet_no_track": """
         SELECT a.usn AS sample
@@ -113,6 +113,15 @@ _SAMPLE_SQL: dict[str, str] = {
            OR TRY_CAST(NULLIF("Longitude", '') AS DOUBLE) > 180
            OR (TRY_CAST(NULLIF("Latitude", '') AS DOUBLE) = 0
                AND TRY_CAST(NULLIF("Longitude", '') AS DOUBLE) = 0)
+        ORDER BY sample
+        LIMIT 5
+    """,
+    "speed_disagreement": """
+        SELECT "id" AS sample
+        FROM v_speed_check
+        WHERE "event_speed_kmh" IS NOT NULL
+          AND "track_speed_kmh" IS NOT NULL
+          AND abs("event_speed_kmh" - "track_speed_kmh") > 15
         ORDER BY sample
         LIMIT 5
     """,
