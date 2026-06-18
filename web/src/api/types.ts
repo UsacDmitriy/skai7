@@ -814,6 +814,7 @@ export type ReviewStatus = 'pending' | 'validated' | 'dismissed'
 export interface ReviewItem {
   incident_id: string
   alarm_code: string
+  alarm_label_ru: string
   severity: Severity
   vehicle_plate: string
   ts: string

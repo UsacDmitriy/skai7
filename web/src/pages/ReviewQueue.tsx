@@ -294,7 +294,7 @@ function ReviewRow({
     <tr
       role="button"
       tabIndex={0}
-      aria-label={`Инцидент ${item.incident_id}, ${item.alarm_code}, ${item.vehicle_plate}`}
+      aria-label={`Инцидент ${item.incident_id}, ${item.alarm_label_ru}, ${item.vehicle_plate}`}
       onClick={onClick}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -304,7 +304,7 @@ function ReviewRow({
       }}
       className="cursor-pointer border-b border-border transition-colors hover:bg-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
-      <td className="px-3 py-2 font-medium text-ink">{item.alarm_code}</td>
+      <td className="px-3 py-2 font-medium text-ink">{item.alarm_label_ru}</td>
       <td className="px-3 py-2">
         <SeverityBadge severity={item.severity} label={SEVERITY_LABEL[item.severity]} />
       </td>

@@ -94,10 +94,9 @@ export function RiskWaterfallView({ data }: { data: RiskBreakdown }) {
                 {f.label}
               </span>
               <span className={cn('shrink-0 tabular-nums font-medium', text)}>
-                {value >= 0 ? '+' : '−'}
-                {Math.abs(value)}
+                {`${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}`}
               </span>
-              <span className="w-10 shrink-0 text-right tabular-nums text-muted">{running}</span>
+              <span className="w-12 shrink-0 text-right tabular-nums text-muted">{running.toFixed(1)}</span>
             </li>
           )
         })}

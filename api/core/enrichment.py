@@ -324,10 +324,19 @@ def weather_risk_bonus(scene: dict | None, weather: dict | None) -> float:
     return round(bonus, 3)
 
 
+_SEVERITY_RU = {
+    "critical": "критический",
+    "high": "высокий",
+    "medium": "средний",
+    "low": "низкий",
+}
+
+
 def evidence_summary(alarm_code: str, speed_kmh: float, severity: str) -> str:
     """Текстовое описание тревоги по шаблону."""
     template = _EVIDENCE_TEMPLATES.get(alarm_code, _DEFAULT_EVIDENCE_TEMPLATE)
-    return template.format(speed=speed_kmh, severity=severity, alarm_code=alarm_code)
+    severity_ru = _SEVERITY_RU.get(severity, severity)
+    return template.format(speed=speed_kmh, severity=severity_ru, alarm_code=alarm_code)
 
 
 def cameras_from_videofiles(rows: list[dict]) -> list[dict]:

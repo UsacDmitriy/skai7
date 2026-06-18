@@ -39,7 +39,7 @@ _CSV_COLUMNS = ["decided_at", "incident_id", "decision", "note"]
 
 # Поля инцидента для ReviewItem (§11.2) — берём только нужное из v_incidents.
 _INCIDENT_COLUMNS = (
-    '"id", "alarm_code", "severity", "vehicle_plate", "ts", "video_available"'
+    '"id", "alarm_code", "alarm_label_ru", "severity", "vehicle_plate", "ts", "video_available"'
 )
 
 
@@ -90,6 +90,7 @@ def _to_item(row: dict, decision: Optional[dict]) -> ReviewItem:
     return ReviewItem(
         incident_id=str(row["id"]),
         alarm_code=row["alarm_code"],
+        alarm_label_ru=row["alarm_label_ru"],
         severity=row["severity"],
         vehicle_plate=row["vehicle_plate"],
         ts=str(row["ts"]),

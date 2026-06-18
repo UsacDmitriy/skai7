@@ -465,8 +465,8 @@ export default function IncidentCard() {
             <span className="tabular-nums">{formatDateTime(inc.ts)}</span>
           </Field>
           <Field label="Скорость">
-            <span className="tabular-nums">{inc.speed_kmh}</span> км/ч{' '}
-            <span className="text-muted">(лимит <span className="tabular-nums">{inc.speed_limit_kmh}</span>)</span>
+            <span className="tabular-nums">{Math.round(inc.speed_kmh)}</span> км/ч{' '}
+            <span className="text-muted">(лимит <span className="tabular-nums">{Math.round(inc.speed_limit_kmh)}</span>)</span>
           </Field>
           <div className="col-span-2 min-w-0">
             <div className="text-[11px] uppercase tracking-wide text-muted">Адрес</div>

@@ -68,6 +68,7 @@ describe('f26 · ReviewQueue', () => {
     vi.mocked(client.postReviewDecision).mockResolvedValue({
       incident_id: 'inc-001',
       alarm_code: 'FATIGUE',
+      alarm_label_ru: 'Усталость водителя',
       severity: 'critical',
       vehicle_plate: 'А777ВВ 77',
       ts: '2026-04-02T08:12:00',

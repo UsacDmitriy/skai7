@@ -26,6 +26,7 @@ class ReviewItem(BaseModel):
 
     incident_id: str
     alarm_code: str
+    alarm_label_ru: str
     severity: Severity
     vehicle_plate: str
     ts: str

@@ -237,7 +237,7 @@ class TestEvidenceSummary:
 
     def test_known_code_contains_severity(self):
         summary = evidence_summary("Yawning", 60.0, "high")
-        assert "high" in summary
+        assert "высокий" in summary
 
     def test_unknown_code_fallback(self):
         summary = evidence_summary("UNKNOWN_XYZ_CODE", 55.0, "low")

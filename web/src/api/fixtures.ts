@@ -1598,6 +1598,7 @@ const REVIEW_ITEMS: ReviewItem[] = [
   {
     incident_id: 'inc-001',
     alarm_code: 'FATIGUE',
+    alarm_label_ru: 'Усталость водителя',
     severity: 'critical',
     vehicle_plate: 'А777ВВ 77',
     ts: '2026-04-02T08:12:00',
@@ -1609,6 +1610,7 @@ const REVIEW_ITEMS: ReviewItem[] = [
   {
     incident_id: 'inc-002',
     alarm_code: 'FORWARD_COLLISION',
+    alarm_label_ru: 'Опасное сближение',
     severity: 'high',
     vehicle_plate: 'В123АА 99',
     ts: '2026-04-02T09:35:00',
@@ -1620,6 +1622,7 @@ const REVIEW_ITEMS: ReviewItem[] = [
   {
     incident_id: 'inc-003',
     alarm_code: 'DISTRACTION',
+    alarm_label_ru: 'Отвлечение от дороги',
     severity: 'medium',
     vehicle_plate: 'С456ОР 77',
     ts: '2026-04-03T10:58:00',
@@ -1631,6 +1634,7 @@ const REVIEW_ITEMS: ReviewItem[] = [
   {
     incident_id: 'inc-004',
     alarm_code: 'OVERSPEED',
+    alarm_label_ru: 'Превышение скорости',
     severity: 'high',
     vehicle_plate: 'Е789КХ 50',
     ts: '2026-04-04T07:20:00',
@@ -1642,6 +1646,7 @@ const REVIEW_ITEMS: ReviewItem[] = [
   {
     incident_id: 'inc-005',
     alarm_code: 'SMOKING',
+    alarm_label_ru: 'Курение за рулём',
     severity: 'low',
     vehicle_plate: 'Н012МТ 77',
     ts: '2026-04-05T14:42:00',
@@ -1653,6 +1658,7 @@ const REVIEW_ITEMS: ReviewItem[] = [
   {
     incident_id: 'inc-006',
     alarm_code: 'NO_SEATBELT',
+    alarm_label_ru: 'Ремень безопасности',
     severity: 'medium',
     vehicle_plate: 'К345ЕВ 99',
     ts: '2026-04-06T11:15:00',

@@ -41,15 +41,15 @@ describe('RiskWaterfallView', () => {
   it('показывает каждый вклад со знаком', () => {
     render(<RiskWaterfallView data={BREAKDOWN} />)
     expect(screen.getByText('Тяжесть')).toBeInTheDocument()
-    expect(screen.getByText('+45')).toBeInTheDocument()
-    expect(screen.getByText('+18')).toBeInTheDocument()
+    expect(screen.getByText('+45.0')).toBeInTheDocument()
+    expect(screen.getByText('+18.0')).toBeInTheDocument()
   })
 
   it('weather_bonus=0 (без кэша) → вклад 0, не ломается', () => {
     const noCache: RiskBreakdown = { ...BREAKDOWN, weather_bonus: 0, total_risk_score: 79 }
     render(<RiskWaterfallView data={noCache} />)
     const weatherRow = screen.getByText('Погода/сцена').closest('li')!
-    expect(within(weatherRow).getByText('+0')).toBeInTheDocument()
+    expect(within(weatherRow).getByText('+0.0')).toBeInTheDocument()
     const totalRow = screen.getByText('Итоговый риск').closest('li')!
     expect(within(totalRow).getByText('79')).toBeInTheDocument()
   })

@@ -414,7 +414,7 @@ export default function DispatchAlert() {
               Телеметрия момента
             </h3>
             <div className="text-right">
-              <span className="text-2xl font-bold tabular-nums text-ink">{inc.speed_kmh}</span>
+              <span className="text-2xl font-bold tabular-nums text-ink">{Math.round(inc.speed_kmh)}</span>
               <span className="ml-1 text-xs text-muted">км/ч в момент</span>
             </div>
           </div>

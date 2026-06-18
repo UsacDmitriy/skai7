@@ -127,9 +127,9 @@ function SpeedProof({ speed }: { speed: number }) {
     <div className="flex flex-col items-center justify-center rounded-md border border-critical/30 bg-critical-bg px-4 py-3 text-center">
       <Gauge className="h-5 w-5 text-critical-text" aria-hidden />
       {/* a11y: смысл не только цветом — подпись «машина едет · N км/ч» доступна скринридеру. */}
-      <span className="sr-only">машина едет · {speed} км/ч</span>
+      <span className="sr-only">машина едет · {Math.round(speed)} км/ч</span>
       <div aria-hidden className="mt-1 text-2xl font-bold tabular-nums text-critical-text">
-        {speed}
+        {Math.round(speed)}
         <span className="ml-1 text-sm font-medium">км/ч</span>
       </div>
       <div aria-hidden className="text-[11px] font-medium uppercase tracking-wide text-critical-text/80">
@@ -427,7 +427,7 @@ function CompactWidget({ className }: { className?: string }) {
               </span>
               <span className="shrink-0 tabular-nums text-xs font-medium text-critical-text">
                 <span className="sr-only">машина едет · </span>
-                {ev.speed_kmh} км/ч
+                {Math.round(ev.speed_kmh)} км/ч
               </span>
             </li>
           ))}

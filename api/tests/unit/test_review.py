@@ -28,6 +28,7 @@ _INCIDENTS = [
     {
         "id": "12345",
         "alarm_code": "DMS_DROWSY",
+        "alarm_label_ru": "Засыпание за рулём",
         "severity": "critical",
         "vehicle_plate": "T780РН198",
         "ts": "2026-05-14T08:12:00Z",
@@ -36,6 +37,7 @@ _INCIDENTS = [
     {
         "id": "12346",
         "alarm_code": "ADAS_FCW",
+        "alarm_label_ru": "Столкновение спереди",
         "severity": "high",
         "vehicle_plate": "A123ВС777",
         "ts": "2026-05-14T09:00:00Z",
@@ -44,6 +46,7 @@ _INCIDENTS = [
     {
         "id": "12347",
         "alarm_code": "DMS_PHONE",
+        "alarm_label_ru": "Использование телефона",
         "severity": "medium",
         "vehicle_plate": "К456ОР198",
         "ts": "2026-05-14T10:30:00Z",
@@ -52,6 +55,7 @@ _INCIDENTS = [
     {
         "id": "12348",
         "alarm_code": "ADAS_LDW",
+        "alarm_label_ru": "Выезд из полосы",
         "severity": "low",
         "vehicle_plate": "М789ТУ716",
         "ts": "2026-05-14T11:45:00Z",
