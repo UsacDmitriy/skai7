@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+from enum import Enum
 from typing import Literal
 
 from pydantic import BaseModel
@@ -158,3 +159,41 @@ class FatigueChain(BaseModel):
     events: list[FatigueEvent]
     window_min: int
     severity: Severity
+
+
+# ---------------------------------------------------------------------------
+# REB Anomaly Zones (reb_anomaly_service)
+# ---------------------------------------------------------------------------
+
+
+class AnomalyType(str, Enum):
+    gap = "gap"
+    speed_spike = "speed_spike"
+    coord_jump = "coord_jump"
+
+
+class VehicleAnomaly(BaseModel):
+    """Одно ТС в РЭБ-зоне с наиболее тяжёлой аномалией."""
+
+    vehicle_plate: str
+    anomaly_type: AnomalyType
+    max_speed_kmh: float | None
+    lat: float
+    lon: float
+    ts_start: str
+    ts_end: str | None
+    possible_route: list[list[float]]
+    reb_link_id: str | None
+
+
+class RebAnomalyZone(BaseModel):
+    """Кластер аномалий телеметрии с оценкой достоверности РЭБ-подавления."""
+
+    zone_id: str
+    centroid: list[float]
+    radius_m: float
+    confidence: int
+    confidence_label: str
+    vehicles: list[VehicleAnomaly]
+    event_count: int
+    date_count: int
