@@ -371,7 +371,7 @@ function EventsTable({
         <tr className="border-b-2 border-border bg-bg text-left">
           <Th>Тип</Th>
           <Th>Источник</Th>
-          <Th>Severity</Th>
+          <Th>Серьёзность</Th>
           <Th>Риск</Th>
           <Th>ТС · водитель</Th>
           <Th align="right">Скорость</Th>

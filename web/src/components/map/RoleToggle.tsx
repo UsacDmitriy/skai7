@@ -19,8 +19,8 @@ export interface RoleToggleProps {
 
 const ROLES: { role: Role; emoji: string; label: string }[] = [
   { role: 'logist', emoji: '🏭', label: 'Логист' },
-  { role: 'dispatcher', emoji: '🛡', label: 'Диспетчер' },
-  { role: 'security', emoji: '🔒', label: 'Безопасник' },
+  { role: 'dispatcher', emoji: '🛡', label: 'Спец. мониторинга' },
+  { role: 'security', emoji: '🔒', label: 'Диспетчер' },
 ]
 
 export function RoleToggle({ value, onChange, className }: RoleToggleProps) {

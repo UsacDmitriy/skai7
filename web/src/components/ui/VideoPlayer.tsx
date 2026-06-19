@@ -108,13 +108,6 @@ export function VideoPlayer({
         className="h-full w-full"
         aria-label={ariaLabel}
       />
-      {eventMarkerPct != null && (
-        <div
-          className="pointer-events-none absolute bottom-0 top-0 w-0.5 bg-warning"
-          style={{ left: `${Math.min(100, Math.max(0, eventMarkerPct))}%` }}
-          aria-hidden
-        />
-      )}
     </div>
   )
 }

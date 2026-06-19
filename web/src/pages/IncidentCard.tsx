@@ -87,11 +87,11 @@ type AppRole = 'logist' | 'dispatcher' | 'safety'
 
 const ROLE_LABELS: Record<AppRole, string> = {
   logist: 'Логист 🏭',
-  dispatcher: 'Диспетчер 🛡',
-  safety: 'Безопасник 🔒',
+  dispatcher: 'Спец. мониторинга 🛡',
+  safety: 'Диспетчер 🔒',
 }
 
-/** Деструктивные действия — только Безопасник. */
+/** Деструктивные действия — только Диспетчер. */
 const SAFETY_ONLY: ActionType[] = ['validate', 'stop_vehicle']
 
 // ── Форматтеры (таймзона парка) ───────────────────────────────────────────────
@@ -534,57 +534,72 @@ export default function IncidentCard() {
 
             {inc.video_available ? (
               <>
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                  {/* ADAS · фронтальная */}
-                  <div className="space-y-1">
-                    {adasStatus === 'warning' && (
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-warning-text">
-                        <span className="h-1.5 w-1.5 rounded-full bg-warning" aria-hidden /> Нестабильна
-                      </span>
-                    )}
-                    <VideoPlayer
-                      src={inc.cam_front_url ? client.videoUrl(inc.id, 1) : undefined}
-                      eventMarkerPct={eventMarkerPct}
-                      onTimeUpdate={setCurrentSec}
-                      seekTo={seekSec}
-                      ariaLabel="Видео ADAS · фронтальная камера"
-                    />
-                    <span className="text-xs text-muted">ADAS · фронтальная</span>
-                  </div>
-                  {/* DMS · салон */}
-                  <div className="space-y-1">
-                    {dmsStatus === 'warning' && (
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-warning-text">
-                        <span className="h-1.5 w-1.5 rounded-full bg-warning" aria-hidden /> Нестабильна
-                      </span>
-                    )}
-                    <VideoPlayer
-                      src={inc.cam_dms_url ? client.videoUrl(inc.id, 5) : undefined}
-                      eventMarkerPct={eventMarkerPct}
-                      seekTo={seekSec}
-                      ariaLabel="Видео DMS · камера салона"
-                    />
-                    <span className="text-xs text-muted">DMS · салон</span>
-                  </div>
-                </div>
-                {/* Другие камеры — только если cam_extra непуст */}
-                {inc.cam_extra.length > 0 && (
-                  <div className="mt-3">
-                    <div className="mb-1 text-xs font-medium text-muted">Другие камеры</div>
-                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-                      {inc.cam_extra.map((cam) => (
-                        <div key={cam.channel} className="space-y-1">
+                {(() => {
+                  const hasDms = !!inc.cam_dms_url
+                  const dmsSlotCam = !hasDms ? inc.cam_extra[0] : null
+                  const restExtra = hasDms ? inc.cam_extra : inc.cam_extra.slice(1)
+                  return (
+                    <>
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        {/* ADAS · фронтальная */}
+                        <div className="space-y-1">
+                          {adasStatus === 'warning' && (
+                            <span className="inline-flex items-center gap-1 text-xs font-medium text-warning-text">
+                              <span className="h-1.5 w-1.5 rounded-full bg-warning" aria-hidden /> Нестабильна
+                            </span>
+                          )}
                           <VideoPlayer
-                            src={client.videoUrl(inc.id, cam.channel as VideoChannel)}
+                            src={inc.cam_front_url ? client.videoUrl(inc.id, 1) : undefined}
+                            onTimeUpdate={setCurrentSec}
                             seekTo={seekSec}
-                            ariaLabel={`Видео · канал ${cam.channel}`}
+                            ariaLabel="Видео ADAS · фронтальная камера"
                           />
-                          <span className="text-xs text-muted">Канал {cam.channel}</span>
+                          <span className="text-xs text-muted">ADAS · фронтальная</span>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                        {/* DMS · салон или первая доступная камера */}
+                        <div className="space-y-1">
+                          {hasDms && dmsStatus === 'warning' && (
+                            <span className="inline-flex items-center gap-1 text-xs font-medium text-warning-text">
+                              <span className="h-1.5 w-1.5 rounded-full bg-warning" aria-hidden /> Нестабильна
+                            </span>
+                          )}
+                          <VideoPlayer
+                            src={
+                              hasDms
+                                ? client.videoUrl(inc.id, 5)
+                                : dmsSlotCam
+                                  ? client.videoUrl(inc.id, dmsSlotCam.channel as VideoChannel)
+                                  : undefined
+                            }
+                            seekTo={seekSec}
+                            ariaLabel={hasDms ? 'Видео DMS · камера салона' : `Видео · канал ${dmsSlotCam?.channel}`}
+                          />
+                          <span className="text-xs text-muted">
+                            {hasDms ? 'DMS · салон' : dmsSlotCam ? `Канал ${dmsSlotCam.channel}` : 'DMS · салон'}
+                          </span>
+                        </div>
+                      </div>
+                      {/* Остальные дополнительные камеры */}
+                      {restExtra.length > 0 && (
+                        <div className="mt-3">
+                          <div className="mb-1 text-xs font-medium text-muted">Другие камеры</div>
+                          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+                            {restExtra.map((cam) => (
+                              <div key={cam.channel} className="space-y-1">
+                                <VideoPlayer
+                                  src={client.videoUrl(inc.id, cam.channel as VideoChannel)}
+                                  seekTo={seekSec}
+                                  ariaLabel={`Видео · канал ${cam.channel}`}
+                                />
+                                <span className="text-xs text-muted">Канал {cam.channel}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )
+                })()}
               </>
             ) : (
               <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-dashed border-border bg-bg py-10 text-center">
@@ -700,11 +715,11 @@ export default function IncidentCard() {
                     disabled={blocked || (pending != null && pending !== a.action)}
                     onClick={() => !blocked && runAction(a.action)}
                     className="w-full justify-start"
-                    title={blocked ? `Только Безопасник: ${a.label}` : undefined}
+                    title={blocked ? `Только Диспетчер: ${a.label}` : undefined}
                     aria-disabled={blocked}
                   >
                     {a.label}
-                    {blocked && <span className="ml-auto text-[10px] opacity-60">🔒 Безопасник</span>}
+                    {blocked && <span className="ml-auto text-[10px] opacity-60">🔒 Диспетчер</span>}
                   </Button>
                 )
               })}

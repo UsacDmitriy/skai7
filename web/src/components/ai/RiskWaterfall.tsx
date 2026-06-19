@@ -29,11 +29,11 @@ export interface RiskWaterfallProps {
 
 /** Порядок и подписи слагаемых waterfall (§2 + §8.2 — погодная надбавка). */
 const FACTORS: { key: keyof RiskBreakdown; label: string; hint: string }[] = [
-  { key: 'severity_w', label: 'Тяжесть', hint: 'severity_w · вес 0.45' },
-  { key: 'speed_ratio', label: 'Превышение', hint: 'speed_ratio · вес 0.25' },
-  { key: 'night', label: 'Ночь', hint: 'is_night · вес 0.15' },
-  { key: 'weather_bonus', label: 'Погода/сцена', hint: '§8.2 надбавка (0 без кэша)' },
-  { key: 'freq_w', label: 'Частота', hint: 'events_last_7d · вес 0.15' },
+  { key: 'severity_w', label: 'Тяжесть', hint: 'Насколько серьёзно нарушение' },
+  { key: 'speed_ratio', label: 'Скорость', hint: 'Превышение скоростного лимита' },
+  { key: 'night', label: 'Ночь', hint: 'Повышенный риск в ночное время суток' },
+  { key: 'weather_bonus', label: 'Погода', hint: 'Сложные дорожные условия (дождь, туман, лёд)' },
+  { key: 'freq_w', label: 'Частота', hint: 'Количество похожих событий за 7 дней' },
 ]
 
 /** Цвет вклада по знаку/величине доли в итоге (токены d1). */
@@ -55,8 +55,6 @@ export function RiskWaterfallView({ data }: { data: RiskBreakdown }) {
   // Денонимантор стэк-полосы — сумма ширин (по модулю), чтобы нулевые/мелкие вклады не ломали раскладку.
   const widthBasis = FACTORS.reduce((s, f) => s + Math.abs(data[f.key] as number), 0) || 1
 
-  let running = 0
-
   return (
     <div className="space-y-3">
       {/* Горизонтальная стэк-полоса: ширина сегмента ∝ модулю вклада. */}
@@ -75,28 +73,26 @@ export function RiskWaterfallView({ data }: { data: RiskBreakdown }) {
               key={f.key}
               className={cn('h-full', bar)}
               style={{ width: `${pct}%` }}
-              title={`${f.label}: ${value >= 0 ? '+' : ''}${value} (${f.hint})`}
+              title={`${f.label}: ${value >= 0 ? '+' : ''}${value}`}
             />
           )
         })}
       </div>
 
-      {/* Список вкладов: подпись, вклад со знаком, накопительная сумма. */}
+      {/* Список вкладов: точка · подпись · вклад со знаком. */}
       <ul className="space-y-1">
         {FACTORS.map((f) => {
           const value = data[f.key] as number
-          running += value
           const { bar, text } = levelClasses(value, total)
           return (
-            <li key={f.key} className="flex items-center gap-2 text-sm">
-              <span className={cn('h-2.5 w-2.5 shrink-0 rounded-sm', bar)} aria-hidden />
-              <span className="min-w-0 flex-1 truncate text-ink" title={f.hint}>
+            <li key={f.key} className="grid grid-cols-[10px_1fr_auto] items-center gap-2 text-sm">
+              <span className={cn('h-2.5 w-2.5 rounded-sm', bar)} aria-hidden />
+              <span className="truncate text-ink" title={f.hint}>
                 {f.label}
               </span>
-              <span className={cn('shrink-0 tabular-nums font-medium', text)}>
+              <span className={cn('tabular-nums font-medium', text)}>
                 {`${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}`}
               </span>
-              <span className="w-12 shrink-0 text-right tabular-nums text-muted">{running.toFixed(1)}</span>
             </li>
           )
         })}
