@@ -61,6 +61,7 @@ import type {
   NavProblemVehicle,
   PositiveScore,
   QueryResult,
+  RebAnomalyZone,
   RebRecovery,
   ReviewItem,
   ReviewQueue,
@@ -257,6 +258,11 @@ export function getReb(id: string): Promise<RebRecovery> {
       : Promise.reject(new ApiError(404, `REB ${id} not found`))
   }
   return request<RebRecovery>(`/reb/${encodeURIComponent(id)}`)
+}
+
+export function getRebAnomalies(): Promise<RebAnomalyZone[]> {
+  if (USE_FIXTURES) return Promise.resolve([])
+  return request<RebAnomalyZone[]>('/reb/anomalies')
 }
 
 export function getSabotage(): Promise<SabotageEvent[]> {

@@ -15,7 +15,7 @@ export type Severity = 'critical' | 'high' | 'medium' | 'low'
 export type Source = 'DMS' | 'ADAS' | 'TELEMATICS' | 'COMBINED' | 'DIAGNOSTIC'
 
 /** Жизненный цикл инцидента/заявки. Единый enum (contract-change #1). */
-export type Status = 'active' | 'in_progress' | 'validated' | 'closed'
+export type Status = 'active' | 'in_progress' | 'validated' | 'false_positive' | 'closed'
 
 /** Состояние камеры. `warning` = «Нестабильна». */
 export type CameraStatus = 'online' | 'offline' | 'warning'
@@ -131,13 +131,13 @@ export interface VehicleSummary {
 // ── Actions (§3.4) ────────────────────────────────────────────────────────────
 
 export type ActionType =
-  | 'mark_reviewed'
+  | 'validate'
+  | 'false_positive'
   | 'create_task'
   | 'export_report'
   | 'request_archive'
   | 'call_driver'
   | 'notify_hr'
-  | 'validate'
   | 'stop_vehicle'
 
 /** Тело и ответ `POST /actions`. */
@@ -312,6 +312,33 @@ export interface RebRecovery {
   gps_track: RebGpsPoint[]
   gap_periods: RebGapPeriod[]
   video_frames: RebVideoFrame[]
+}
+
+// ── REB Anomaly Zones ─────────────────────────────────────────────────────
+
+export type AnomalyType = 'gap' | 'speed_spike' | 'coord_jump'
+
+export interface RebVehicleAnomaly {
+  vehicle_plate: string
+  anomaly_type: AnomalyType
+  max_speed_kmh: number | null
+  lat: number
+  lon: number
+  ts_start: string
+  ts_end: string | null
+  possible_route: [number, number][]
+  reb_link_id: string | null
+}
+
+export interface RebAnomalyZone {
+  zone_id: string
+  centroid: [number, number]
+  radius_m: number
+  confidence: number
+  confidence_label: 'reb' | 'suspicious'
+  vehicles: RebVehicleAnomaly[]
+  event_count: number
+  date_count: number
 }
 
 /** Элемент `GET /sabotage` (идея #9). */
