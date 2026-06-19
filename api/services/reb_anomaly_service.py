@@ -12,8 +12,8 @@ confidence score. Зоны с score < 20 отбрасываются как шу�
 from __future__ import annotations
 
 import math
-from collections import Counter, defaultdict
-from datetime import datetime, timezone
+from collections import defaultdict
+from datetime import datetime
 from typing import Any
 
 import duckdb
@@ -123,7 +123,7 @@ def _load_gap_periods(db: duckdb.DuckDBPyConnection) -> list[dict[str, Any]]:
 def _load_speed_spikes(db: duckdb.DuckDBPyConnection) -> list[dict[str, Any]]:
     """GPS-точки с speed_kmh > 150 (нереальная скорость при РЭБ-подавлении)."""
     rows = rows_to_dicts(db.execute(
-        f"""
+        """
         SELECT
             p."vehicle_id"          AS vehicle_plate,
             CAST(tp."latitude"  AS DOUBLE) AS lat,
@@ -135,10 +135,11 @@ def _load_speed_spikes(db: duckdb.DuckDBPyConnection) -> list[dict[str, Any]]:
           ON tp."public_unit_id" = p."public_unit_id"
          AND tp."date"           = p."date"
          AND tp."period_index"   = p."period_index"
-        WHERE tp."speed_kmh" > {_SPEED_SPIKE_THRESHOLD}
+        WHERE tp."speed_kmh" > ?
           AND tp."latitude"  IS NOT NULL
           AND tp."longitude" IS NOT NULL
-        """
+        """,
+        [_SPEED_SPIKE_THRESHOLD],
     ))
     result = []
     for r in rows:

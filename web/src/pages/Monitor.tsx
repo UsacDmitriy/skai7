@@ -337,7 +337,7 @@ export default function Monitor() {
   useEffect(() => loadZones(), [loadZones])
 
   const loadRebAnomalies = useCallback(() => {
-    if (rebAnomalyZones.length > 0) return // уже загружено
+    if (rebAnomalyZones.length > 0 || rebAnomalyLoading) return
     let alive = true
     setRebAnomalyLoading(true)
     client
@@ -346,7 +346,7 @@ export default function Monitor() {
       .catch(() => { if (alive) setRebAnomalyZones([]) })
       .finally(() => { if (alive) setRebAnomalyLoading(false) })
     return () => { alive = false }
-  }, [rebAnomalyZones.length])
+  }, [rebAnomalyZones.length, rebAnomalyLoading])
 
   useEffect(() => {
     if (layers.reb_anomaly) loadRebAnomalies()
