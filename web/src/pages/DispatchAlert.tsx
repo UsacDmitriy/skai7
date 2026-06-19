@@ -135,7 +135,7 @@ export default function DispatchAlert() {
     closingRef.current = true
     if (alert?.incident) {
       void client
-        .postAction({ incident_id: alert.incident.id, action: 'mark_reviewed', comment: '' })
+        .postAction({ incident_id: alert.incident.id, action: 'validate', comment: '' })
         .catch(() => {})
     }
     goBackground()

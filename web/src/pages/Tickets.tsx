@@ -54,13 +54,13 @@ function dayKey(iso: string): string {
 // ── Человекочитаемые типы действий (§3.4) ─────────────────────────────────────
 
 const ACTION_LABEL: Record<ActionType, string> = {
-  mark_reviewed: 'Отмечено просмотром',
+  validate: 'Подтверждено',
+  false_positive: 'Ложное срабатывание',
   create_task: 'Создание задачи',
   export_report: 'Экспорт отчёта',
   request_archive: 'Запрос архива',
   call_driver: 'Звонок водителю',
   notify_hr: 'Уведомление HR',
-  validate: 'Валидация',
   stop_vehicle: 'Остановка ТС',
 }
 
@@ -74,6 +74,7 @@ const STATUS_LABEL: Record<Status, string> = {
   active: 'Активна',
   in_progress: 'В работе',
   validated: 'Подтверждена',
+  false_positive: 'Ложное срабатывание',
   closed: 'Закрыта',
 }
 
@@ -81,6 +82,7 @@ const STATUS_BADGE: Record<Status, string> = {
   active: 'bg-primary-50 text-primary',
   in_progress: 'bg-warning-bg text-warning-text',
   validated: 'bg-ok-bg text-ok-text',
+  false_positive: 'bg-bg text-muted ring-1 ring-border',
   closed: 'bg-bg text-muted ring-1 ring-border',
 }
 

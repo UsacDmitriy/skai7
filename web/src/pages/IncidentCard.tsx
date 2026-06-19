@@ -4,7 +4,7 @@ import {
   AlertTriangle,
   Archive,
   ArrowLeft,
-  CheckCircle2,
+  XCircle,
   ClipboardList,
   MapPin,
   OctagonX,
@@ -72,6 +72,7 @@ const STATUS_LABEL: Record<Status, string> = {
   active: 'Активен',
   in_progress: 'В работе',
   validated: 'Подтверждён',
+  false_positive: 'Ложное срабатывание',
   closed: 'Закрыт',
 }
 
@@ -92,7 +93,7 @@ const ROLE_LABELS: Record<AppRole, string> = {
 }
 
 /** Деструктивные действия — только Диспетчер. */
-const SAFETY_ONLY: ActionType[] = ['validate', 'stop_vehicle']
+const SAFETY_ONLY: ActionType[] = ['stop_vehicle']
 
 // ── Форматтеры (таймзона парка) ───────────────────────────────────────────────
 
@@ -122,14 +123,14 @@ type ActionSpec = {
   action: ActionType
   label: string
   variant: 'primary' | 'secondary' | 'danger'
-  icon: typeof CheckCircle2
+  icon: typeof XCircle
 }
 
 const ACTIONS: ActionSpec[] = [
-  { action: 'mark_reviewed', label: 'Проверено', variant: 'secondary', icon: CheckCircle2 },
+  { action: 'validate', label: 'Подтвердить', variant: 'primary', icon: ShieldCheck },
+  { action: 'false_positive', label: 'Ложное срабатывание', variant: 'secondary', icon: XCircle },
   { action: 'create_task', label: 'Создать заявку', variant: 'primary', icon: ClipboardList },
   { action: 'call_driver', label: 'Позвонить водителю', variant: 'secondary', icon: Phone },
-  { action: 'validate', label: 'Валидация', variant: 'primary', icon: ShieldCheck },
   { action: 'stop_vehicle', label: 'Стоп ТС', variant: 'danger', icon: OctagonX },
 ]
 

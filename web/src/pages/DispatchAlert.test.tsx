@@ -40,7 +40,7 @@ describe('f9 · DispatchAlert', () => {
   beforeEach(() => {
     vi.mocked(client.postAction).mockResolvedValue({
       incident_id: 'x',
-      action: 'mark_reviewed',
+      action: 'validate',
       comment: '',
       status: 'in_progress',
     })

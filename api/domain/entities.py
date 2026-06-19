@@ -16,13 +16,13 @@ from api.domain.incidents import IncidentDetail, TelemetryPoint
 
 # Допустимые действия журнала (§3.4).
 ActionType = Literal[
-    "mark_reviewed",
+    "validate",
+    "false_positive",
     "create_task",
     "export_report",
     "request_archive",
     "call_driver",
     "notify_hr",
-    "validate",
     "stop_vehicle",
 ]
 

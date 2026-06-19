@@ -15,11 +15,10 @@ from api.core.config import settings
 from api.domain.common import Status
 from api.domain.entities import Action
 
-# Маппинг действия → новый статус инцидента (§3.1 enum Status).
-# mark_reviewed/validate → «Проверена»; остальные операционные → «В работе».
+# Маппинг действия → новый статус инцидента.
 _ACTION_TO_STATUS: dict[str, Status] = {
-    "mark_reviewed": "validated",
     "validate": "validated",
+    "false_positive": "false_positive",
     "create_task": "in_progress",
     "export_report": "in_progress",
     "request_archive": "in_progress",

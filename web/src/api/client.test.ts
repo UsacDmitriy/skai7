@@ -112,7 +112,7 @@ describe('client (fixtures) · incidents/vehicles/actions §3.2–§3.4', () => 
     const client = await loadClient()
     const res = await client.postAction({
       incident_id: 'inc-001',
-      action: 'mark_reviewed',
+      action: 'validate',
       comment: '',
     })
     expect(fetchSpy).not.toHaveBeenCalled()
