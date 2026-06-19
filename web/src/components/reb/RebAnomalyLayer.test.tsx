@@ -43,13 +43,13 @@ vi.mock('leaflet', () => ({
     marker: (...args: unknown[]) => marker(...args),
     polyline: (...args: unknown[]) => polyline(...args),
     layerGroup: () => layerGroup(),
-    divIcon: (...args: unknown[]) => divIcon(...args),
+    divIcon: (..._args: unknown[]) => divIcon(),
   },
   circle: (...args: unknown[]) => circle(...args),
   marker: (...args: unknown[]) => marker(...args),
   polyline: (...args: unknown[]) => polyline(...args),
   layerGroup: () => layerGroup(),
-  divIcon: (...args: unknown[]) => divIcon(...args),
+  divIcon: (..._args: unknown[]) => divIcon(),
 }))
 
 vi.mock('react-leaflet', () => ({

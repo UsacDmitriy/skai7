@@ -4,7 +4,8 @@ import { useMap } from 'react-leaflet'
 import * as L from 'leaflet'
 import { Clock, Layers, Loader2, MapPinOff, RefreshCw } from 'lucide-react'
 import * as client from '@/api/client'
-import type { IncidentSummary, RiskZone, RiskZoneKind, Severity, Source } from '@/api/types'
+import type { IncidentSummary, RebAnomalyZone, RiskZone, RiskZoneKind, Severity, Source } from '@/api/types'
+import { RebAnomalyLayer } from '@/components/reb/RebAnomalyLayer'
 import { Card, ScoreBar, SeverityBadge } from '@/components'
 import { SabotageWidget } from '@/components/SabotageWidget'
 import { MapView, MarkerLayer, RoleToggle } from '@/components/map'
@@ -126,7 +127,7 @@ function computeCenter(incidents: IncidentSummary[]): [number, number] {
 // ── f18 · Тепловая карта нарушений + риск-зоны (идея #14) ─────────────────────
 
 /** Слои карты, переключаемые независимо. */
-type LayerKey = 'heat' | 'incident' | 'reb'
+type LayerKey = 'heat' | 'incident' | 'reb' | 'reb_anomaly'
 
 /** Тип фильтра по часу пика зоны (`peak_hour` 0..23) либо «все часы». */
 type ZoneHour = number | 'all'
@@ -276,11 +277,15 @@ export default function Monitor() {
     heat: false,
     incident: false,
     reb: false,
+    reb_anomaly: false,
   })
   const [zoneHour, setZoneHour] = useState<ZoneHour>('all')
   const [zones, setZones] = useState<RiskZone[]>([])
   const [zonesLoading, setZonesLoading] = useState(false)
   const [zonesError, setZonesError] = useState<string | null>(null)
+
+  const [rebAnomalyZones, setRebAnomalyZones] = useState<RebAnomalyZone[]>([])
+  const [rebAnomalyLoading, setRebAnomalyLoading] = useState(false)
 
   const toggleLayer = useCallback((key: LayerKey) => {
     setLayers((prev) => ({ ...prev, [key]: !prev[key] }))
@@ -330,6 +335,22 @@ export default function Monitor() {
   }, [])
 
   useEffect(() => loadZones(), [loadZones])
+
+  const loadRebAnomalies = useCallback(() => {
+    if (rebAnomalyZones.length > 0) return // уже загружено
+    let alive = true
+    setRebAnomalyLoading(true)
+    client
+      .getRebAnomalies()
+      .then((data) => { if (alive) setRebAnomalyZones(data) })
+      .catch(() => { if (alive) setRebAnomalyZones([]) })
+      .finally(() => { if (alive) setRebAnomalyLoading(false) })
+    return () => { alive = false }
+  }, [rebAnomalyZones.length])
+
+  useEffect(() => {
+    if (layers.reb_anomaly) loadRebAnomalies()
+  }, [layers.reb_anomaly, loadRebAnomalies])
 
   // Ролевая видимость (f13: единое правило `filterByRole` — общее с лентой событий).
   const roleVisible = useMemo(() => filterByRole(role, incidents), [role, incidents])
@@ -416,6 +437,10 @@ export default function Monitor() {
         <Chip active={layers.reb} onClick={() => toggleLayer('reb')}>
           РЭБ-зоны
         </Chip>
+        <Chip active={layers.reb_anomaly} onClick={() => toggleLayer('reb_anomaly')}>
+          {rebAnomalyLoading ? <Loader2 className="h-3 w-3 animate-spin" aria-hidden /> : null}
+          РЭБ-аномалии
+        </Chip>
 
         {/* Фильтр зон по часу пика (`peak_hour`); виден, когда есть слой зон. */}
         {(layers.incident || layers.reb) && zoneHours.length > 0 && (
@@ -479,6 +504,10 @@ export default function Monitor() {
                 <RiskHeatLayer zones={visibleZones} kind="reb" />
                 <ZoneInfoLayer zones={visibleZones} kind="reb" />
               </>
+            )}
+            {/* РЭБ-аномалии: аномальные зоны по данным getRebAnomalies. */}
+            {layers.reb_anomaly && rebAnomalyZones.length > 0 && (
+              <RebAnomalyLayer zones={rebAnomalyZones} />
             )}
           </MapView>
           {loading && (
