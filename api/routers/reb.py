@@ -13,12 +13,18 @@ import duckdb
 from fastapi import APIRouter, Depends, HTTPException
 
 from api.core.duckdb_conn import get_db
-from api.domain.entities import RebRecovery
-from api.services import reb_service
+from api.domain.entities import RebAnomalyZone, RebRecovery
+from api.services import reb_anomaly_service, reb_service
 
 router = APIRouter(prefix="/api", tags=["reb"])
 
 DbDep = Annotated[duckdb.DuckDBPyConnection, Depends(get_db)]
+
+
+@router.get("/reb/anomalies", response_model=list[RebAnomalyZone])
+def get_reb_anomalies(db: DbDep) -> list[RebAnomalyZone]:
+    """Детектированные РЭБ-зоны с confidence score и per-vehicle аномалиями."""
+    return reb_anomaly_service.detect_anomalies(db)
 
 
 @router.get("/reb/{id:path}", response_model=RebRecovery)
