@@ -49,6 +49,8 @@ import type {
   VehicleReport,
   VehicleSummary,
   WeatherCrossCheck,
+  HypercareRule,
+  HypercareEvidence,
 } from './types'
 
 // ── Детали инцидентов (полная форма IncidentDetail) ───────────────────────────
@@ -1931,3 +1933,93 @@ export function getFixturePositiveScore(plate: string): PositiveScore | undefine
   const ps = POSITIVE_SCORES[plate]
   return ps ? { ...ps } : undefined
 }
+
+// ── Hypercare фикстуры ────────────────────────────────────────────────────────
+
+export const HYPERCARE_RULES: HypercareRule[] = [
+  {
+    id: 'R-SABOTAGE',
+    name: 'Саботаж камеры',
+    enabled: true,
+    role_scope: 'security',
+    trigger: { kind: 'event', alarm_codes: ['CAMERA_TAMPER'] },
+    window: { before_sec: 300, after_sec: 120, mode: 'continuous' },
+    cameras: [1, 5, 2, 3],
+  },
+  {
+    id: 'R-SUBST',
+    name: 'Подмена водителя',
+    enabled: true,
+    role_scope: 'security',
+    trigger: { kind: 'event', alarm_codes: ['DRIVER_SUBSTITUTION'] },
+    window: { before_sec: 0, after_sec: 900, mode: 'interval', interval_sec: 300 },
+    cameras: [5],
+  },
+  {
+    id: 'R-CRASH',
+    name: 'Удар / ДТП',
+    enabled: true,
+    role_scope: 'dispatcher',
+    trigger: { kind: 'event', alarm_codes: ['CRASH_SENSOR'] },
+    window: { before_sec: 10, after_sec: 30, mode: 'continuous' },
+    cameras: [1, 5, 2, 3],
+  },
+  {
+    id: 'R-FUEL',
+    name: 'Слив топлива',
+    enabled: true,
+    role_scope: 'security',
+    trigger: { kind: 'sensor', metric: 'fuel_drop', op: 'lte', threshold: -10, window_sec: 60 },
+    window: { before_sec: 60, after_sec: 120, mode: 'continuous', clip_len_sec: 15 },
+    cameras: [1, 3],
+  },
+  {
+    id: 'R-IGNITION',
+    name: 'Предрейс-контроль',
+    enabled: false,
+    role_scope: 'dispatcher',
+    trigger: { kind: 'sensor', metric: 'ignition_on' },
+    window: { before_sec: 0, after_sec: 300, mode: 'interval', interval_sec: 60 },
+    cameras: [5],
+  },
+  {
+    id: 'R-MANUAL',
+    name: 'Ручной запрос',
+    enabled: true,
+    role_scope: 'dispatcher',
+    trigger: { kind: 'manual' },
+    window: { before_sec: 60, after_sec: 120, mode: 'continuous' },
+    cameras: [1, 5],
+  },
+]
+
+export const HYPERCARE_EVIDENCE: HypercareEvidence[] = [
+  {
+    id: 'R-SABOTAGE:a1',
+    rule_id: 'R-SABOTAGE',
+    rule_name: 'Саботаж камеры',
+    vehicle_plate: 'А079АМ250',
+    driver: 'Иванов И.',
+    trigger_ts: '2026-05-14T14:23:07',
+    trigger_label: 'Саботаж камеры',
+    status: 'fulfilled',
+    items: [
+      { channel: 1, kind: 'video', offset_sec: 0, status: 'available', url: '/api/incidents/a1/video/1' },
+      { channel: 5, kind: 'video', offset_sec: 0, status: 'available', url: '/api/incidents/a1/video/5' },
+    ],
+  },
+  {
+    id: 'R-FUEL:a2',
+    rule_id: 'R-FUEL',
+    rule_name: 'Слив топлива',
+    vehicle_plate: 'В224ВВ125',
+    driver: 'Петров П.',
+    trigger_ts: '2026-05-14T13:55:40',
+    trigger_label: 'Слив топлива',
+    status: 'pending',
+    items: [
+      { channel: 1, kind: 'video', offset_sec: 0, status: 'pending', eta_sec: 120 },
+      { channel: 3, kind: 'video', offset_sec: 0, status: 'pending', eta_sec: 120 },
+    ],
+  },
+]

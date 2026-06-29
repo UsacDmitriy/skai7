@@ -15,6 +15,8 @@ import {
   FLEET_HEALTH,
   FLEET_REPORT,
   FUEL_VEHICLES,
+  HYPERCARE_EVIDENCE,
+  HYPERCARE_RULES,
   NAV_PROBLEMS,
   RISK_BREAKDOWN,
   SABOTAGE_EVENTS,
@@ -48,6 +50,9 @@ import type {
   ConsistencyReport,
   CopilotMessage,
   DataQuality,
+  HypercareEvidence,
+  HypercareManualRequest,
+  HypercareRule,
   DriverReport,
   DriverScore,
   FatigueChain,
@@ -468,4 +473,34 @@ export function getPositiveScore(plate: string): Promise<PositiveScore> {
       : Promise.reject(new ApiError(404, `Vehicle ${plate} not found`))
   }
   return request<PositiveScore>(`/positive-score/${encodeURIComponent(plate)}`)
+}
+
+// ── Hypercare (Гиперопека) ────────────────────────────────────────────────────
+
+export function getHypercareRules(): Promise<HypercareRule[]> {
+  if (USE_FIXTURES) return Promise.resolve(HYPERCARE_RULES)
+  return request<HypercareRule[]>('/hypercare/rules')
+}
+
+export function evaluateHypercare(
+  rules: HypercareRule[],
+  role: string,
+): Promise<HypercareEvidence[]> {
+  if (USE_FIXTURES) return Promise.resolve(HYPERCARE_EVIDENCE)
+  return request<HypercareEvidence[]>('/hypercare/evidence', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rules, role }),
+  })
+}
+
+export function requestHypercare(
+  req: HypercareManualRequest,
+): Promise<HypercareEvidence> {
+  if (USE_FIXTURES) return Promise.resolve(HYPERCARE_EVIDENCE[1])
+  return request<HypercareEvidence>('/hypercare/request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(req),
+  })
 }

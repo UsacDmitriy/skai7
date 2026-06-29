@@ -956,3 +956,70 @@ export interface DriverScore {
   positive_score: number
   green_zone: boolean
 }
+
+// ── Hypercare (Гиперопека) ────────────────────────────────────────────────────
+
+export type HypercareTriggerKind = 'event' | 'sensor' | 'schedule' | 'manual'
+export type HypercareEvidenceStatus = 'fulfilled' | 'partial' | 'pending' | 'empty'
+export type HypercareClipStatus = 'available' | 'pending'
+export type HypercareRoleScope = 'logist' | 'dispatcher' | 'security' | 'all'
+export type HypercareSensorMetric = 'fuel_drop' | 'ignition_on' | 'ignition_off' | 'idle'
+
+export interface HypercareTriggerSpec {
+  kind: HypercareTriggerKind
+  alarm_codes?: string[]
+  metric?: HypercareSensorMetric
+  op?: 'lt' | 'gt' | 'lte' | 'gte'
+  threshold?: number
+  window_sec?: number
+  interval_min?: number
+  time_from?: string
+  time_to?: string
+}
+
+export interface HypercareWindowSpec {
+  before_sec: number
+  after_sec: number
+  mode: 'continuous' | 'interval'
+  interval_sec?: number
+  clip_len_sec?: number
+}
+
+export interface HypercareRule {
+  id: string
+  name: string
+  enabled: boolean
+  role_scope: HypercareRoleScope
+  trigger: HypercareTriggerSpec
+  window: HypercareWindowSpec
+  cameras: number[]
+}
+
+export interface HypercareEvidenceClip {
+  channel: number
+  kind: 'video' | 'photo'
+  offset_sec: number
+  status: HypercareClipStatus
+  url?: string
+  eta_sec?: number
+}
+
+export interface HypercareEvidence {
+  id: string
+  rule_id: string
+  rule_name: string
+  vehicle_plate: string
+  driver?: string | null
+  trigger_ts: string
+  trigger_label: string
+  status: HypercareEvidenceStatus
+  items: HypercareEvidenceClip[]
+}
+
+export interface HypercareManualRequest {
+  vehicle_plate: string
+  trigger_ts: string
+  before_sec: number
+  after_sec: number
+  cameras: number[]
+}
