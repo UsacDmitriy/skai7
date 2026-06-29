@@ -48,7 +48,7 @@ describe('RiskWaterfallView', () => {
   it('weather_bonus=0 (без кэша) → вклад 0, не ломается', () => {
     const noCache: RiskBreakdown = { ...BREAKDOWN, weather_bonus: 0, total_risk_score: 79 }
     render(<RiskWaterfallView data={noCache} />)
-    const weatherRow = screen.getByText('Погода/сцена').closest('li')!
+    const weatherRow = screen.getByText('Погода').closest('li')!
     expect(within(weatherRow).getByText('+0.0')).toBeInTheDocument()
     const totalRow = screen.getByText('Итоговый риск').closest('li')!
     expect(within(totalRow).getByText('79')).toBeInTheDocument()

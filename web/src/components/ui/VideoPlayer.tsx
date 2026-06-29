@@ -108,6 +108,14 @@ export function VideoPlayer({
         className="h-full w-full"
         aria-label={ariaLabel}
       />
+      {/* Жёлтая метка события на таймлайне (idea #1): позиция = % длины ролика. */}
+      {eventMarkerPct != null && Number.isFinite(eventMarkerPct) && (
+        <div
+          className="pointer-events-none absolute bottom-0 top-0 w-0.5 bg-warning"
+          style={{ left: `${eventMarkerPct}%` }}
+          aria-hidden
+        />
+      )}
     </div>
   )
 }
