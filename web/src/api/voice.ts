@@ -36,15 +36,16 @@ export function transcribe(blob: Blob, lang?: string): Promise<Transcription> {
 function mockNlu(text: string): ReportQuery {
   const t = text.toLowerCase()
   const isFleet = /парк|флот|всем|по тс|по машин|по водител[яеи]м|рейтинг/.test(t)
+  const period_days = /за сутки|за день|за ночь/.test(t) ? 1 : /за месяц/.test(t) ? 30 : 7
   if (isFleet) {
     const view = /тс|машин/.test(t) ? 'vehicles' : 'drivers'
-    return { kind: 'fleet', view, period_days: 7 }
+    return { kind: 'fleet', view, period_days }
   }
   return {
     kind: 'driver',
     driver_name: DRIVER_REPORT.driver.driver_name,
     plate: DRIVER_REPORT.vehicle_plate,
-    period_days: 7,
+    period_days,
   }
 }
 

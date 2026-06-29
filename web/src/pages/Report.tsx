@@ -56,11 +56,10 @@ import {
   ScoreBar,
   SeverityBadge,
   VideoPlayer,
-  VoiceButton,
   type VoiceButtonState,
   ConfirmationModal,
 } from '@/components'
-import { SabotageWidget } from '@/components/SabotageWidget'
+import { SmartQueryInput } from '@/components/ui/SmartQueryInput'
 
 /**
  * f7 · Аналитика + голос (`/report`). Полная версия, замещает scaffold f4 (§7.7).
@@ -1244,32 +1243,27 @@ export default function Report() {
           Надиктуйте или введите запрос — например «дисциплина Иванова за неделю» или «грубые нарушения по парку».
         </p>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          {voiceAvailable && (
-            <VoiceButton
-              state={voiceState}
-              onRecorded={onRecorded}
-              onStart={() => setVoiceState('recording')}
-              disabled={queryLoading}
-            />
-          )}
-
-          <div className="flex min-w-[16rem] flex-1 items-center gap-2 rounded-md border border-border bg-surface px-3 focus-within:border-primary">
-            <Search className="h-4 w-4 shrink-0 text-muted" aria-hidden />
-            <input
-              ref={inputRef}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && runQuery(text)}
-              placeholder="Сформулируйте запрос…"
-              aria-label="Текст запроса"
-              className="h-10 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-muted"
-            />
+        <div className="mt-4 flex flex-col gap-3">
+          <SmartQueryInput
+            value={text}
+            onChange={setText}
+            onSubmit={runQuery}
+            voice={voiceAvailable}
+            voiceState={voiceState}
+            onRecorded={onRecorded}
+            busy={queryLoading}
+            suggestions={[
+              'дисциплина Иванова за неделю',
+              'грубые нарушения по парку',
+              'рейтинг водителей',
+              'засыпания за ночь',
+            ]}
+          />
+          <div className="flex justify-end">
+            <Button variant="primary" icon={Sparkles} loading={queryLoading} onClick={() => runQuery(text)} disabled={!text.trim()}>
+              Построить
+            </Button>
           </div>
-
-          <Button variant="primary" icon={Sparkles} loading={queryLoading} onClick={() => runQuery(text)} disabled={!text.trim()}>
-            Построить
-          </Button>
         </div>
 
         {/* Честная деградация голоса (полиш §6) */}
@@ -1321,11 +1315,6 @@ export default function Report() {
           </p>
         </Card>
       )}
-
-      {/* ── Секция «Саботаж» (f12, идея #9) ───────────────────────────────────── */}
-      <div className="border-t border-border pt-4">
-        <SabotageWidget variant="full" />
-      </div>
 
       {/* ── Подтверждение разбора NLU (d5) ────────────────────────────────────── */}
       {pending && (

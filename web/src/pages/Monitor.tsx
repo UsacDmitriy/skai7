@@ -13,6 +13,8 @@ import type { MapUnit } from '@/components/map'
 import { RiskHeatLayer } from '@/components/ai/RiskHeatLayer'
 import { useRole } from '@/state/role'
 import type { Role } from '@/state/role'
+import { SmartQueryInput } from '@/components/ui/SmartQueryInput'
+import { alarmSearch } from '@/state/alarmSearch'
 import { dedupeByUnit, filterByRole } from '@/state/roleFilter'
 import { cn } from '@/components/ui/cn'
 
@@ -268,6 +270,7 @@ export default function Monitor() {
   const [error, setError] = useState<string | null>(null)
 
   const { role, setRole } = useRole()
+  const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<FilterKey>('all')
   const [sortKey, setSortKey] = useState<SortKey>('ts')
   const [selected, setSelected] = useState<string | null>(null)
@@ -355,13 +358,14 @@ export default function Monitor() {
   // Ролевая видимость (f13: единое правило `filterByRole` — общее с лентой событий).
   const roleVisible = useMemo(() => filterByRole(role, incidents), [role, incidents])
 
-  // Лента: роль + фильтр + сортировка. Показываем ВСЕ алярмы (в т.ч. без координат).
+  // Лента: роль → поиск → фильтр → сортировка. Показываем ВСЕ алярмы (в т.ч. без координат).
   const visible = useMemo(() => {
-    const rows = roleVisible.filter((inc) => passesFilter(inc, filter))
+    const searched = alarmSearch(search, roleVisible)
+    const rows = searched.filter((inc) => passesFilter(inc, filter))
     return [...rows].sort((a, b) =>
       sortKey === 'risk_score' ? b.risk_score - a.risk_score : b.ts.localeCompare(a.ts),
     )
-  }, [roleVisible, filter, sortKey])
+  }, [roleVisible, search, filter, sortKey])
 
   // Маркеры: дедуп ленты по госномеру (MarkerLayer ещё раз защитит от дублей).
   const units = useMemo(() => buildUnits(visible), [visible])
@@ -523,6 +527,12 @@ export default function Monitor() {
 
         {/* Лента активных алярмов. */}
         <div className="flex min-h-0 flex-col">
+          <SmartQueryInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Поиск: госномер, водитель, тип, «критичные», «риск>70»"
+            className="mb-3"
+          />
           <div className="mb-2 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-ink">
               Активные алярмы{' '}
