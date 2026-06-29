@@ -7,7 +7,7 @@ const base: IncidentSummary = {
   source: 'DMS', severity: 'medium', risk_level: 'medium', risk_score: 58,
   ts: '2026-05-19 02:59:00+04', vehicle_plate: 'С643УР799', driver: 'Волков Андрей',
   vehicle_model: 'Volvo FH', speed_kmh: 0, lat: null, lon: null, address: null,
-  video_available: true, status: 'new',
+  video_available: true, status: 'active',
 }
 const list: IncidentSummary[] = [
   base,

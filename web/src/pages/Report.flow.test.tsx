@@ -60,7 +60,7 @@ describe('f7 · Report — поток и каналы', () => {
     vi.mocked(voice.queryReport).mockResolvedValue(DRIVER_QUERY)
     renderReport()
 
-    fireEvent.change(screen.getByLabelText('Текст запроса'), {
+    fireEvent.change(screen.getByRole('searchbox'), {
       target: { value: 'дисциплина Иванова за неделю' },
     })
     fireEvent.click(screen.getByRole('button', { name: /Построить/ }))
