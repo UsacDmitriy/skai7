@@ -1,5 +1,14 @@
 {
   "mcpServers": {
+    "openrouter": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "/Users/dimausac/projects/skai_7/tools/openrouter-mcp/server.py"
+      ],
+      "env": {}
+    },
     "playwright": {
       "type": "stdio",
       "command": "npx",

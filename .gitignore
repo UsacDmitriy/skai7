@@ -51,3 +51,6 @@ skai7_clean/
 
 # git worktrees (вложенные, не трекаются)
 .worktrees/
+
+# OpenRouter MCP secrets
+tools/openrouter-mcp/.env
