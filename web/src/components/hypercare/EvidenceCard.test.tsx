@@ -12,8 +12,8 @@ const fulfilled: HypercareEvidence = {
   trigger_label: 'Вскрытие (TRUCK_BODY)',
   status: 'fulfilled',
   items: [
-    { channel: 1, kind: 'video', offset_sec: -300, status: 'fulfilled' },
-    { channel: 5, kind: 'video', offset_sec: -300, status: 'fulfilled' },
+    { channel: 1, kind: 'video', offset_sec: -300, status: 'available' },
+    { channel: 5, kind: 'video', offset_sec: -300, status: 'available' },
   ],
 }
 
@@ -63,10 +63,10 @@ describe('EvidenceCard', () => {
     expect(screen.queryByText(/И\.И\./)).toBeNull()
   })
 
-  test('clicking fulfilled clip calls onOpenClip', () => {
+  test('clicking available clip calls onOpenClip', () => {
     const onOpenClip = vi.fn()
     render(<EvidenceCard evidence={fulfilled} onOpenClip={onOpenClip} />)
-    fireEvent.click(screen.getByLabelText(/ADAS fulfilled/))
+    fireEvent.click(screen.getByLabelText(/ADAS available/))
     expect(onOpenClip).toHaveBeenCalledWith(fulfilled.items[0])
   })
 })

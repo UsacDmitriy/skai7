@@ -4,9 +4,9 @@ import EvidenceClipStrip from './EvidenceClipStrip'
 import type { HypercareEvidenceClip } from '@/api/types'
 
 const clips: HypercareEvidenceClip[] = [
-  { channel: 1, kind: 'video', offset_sec: -300, status: 'fulfilled' },
+  { channel: 1, kind: 'video', offset_sec: -300, status: 'available' },
   { channel: 5, kind: 'video', offset_sec: -300, status: 'pending', eta_sec: 42 },
-  { channel: 2, kind: 'video', offset_sec: -300, status: 'missing' },
+  { channel: 2, kind: 'video', offset_sec: -300, status: 'pending' },
 ]
 
 describe('EvidenceClipStrip', () => {
@@ -22,18 +22,18 @@ describe('EvidenceClipStrip', () => {
     expect(screen.getByText('SNZ-L')).toBeTruthy()
   })
 
-  test('calls onOpen when fulfilled clip clicked', () => {
+  test('calls onOpen when available clip clicked', () => {
     const onOpen = vi.fn()
     render(<EvidenceClipStrip items={clips} onOpen={onOpen} />)
-    fireEvent.click(screen.getByLabelText(/ADAS fulfilled/))
+    fireEvent.click(screen.getByLabelText(/ADAS available/))
     expect(onOpen).toHaveBeenCalledWith(clips[0])
   })
 
-  test('does not call onOpen for missing clip', () => {
+  test('does not call onOpen for pending clip', () => {
     const onOpen = vi.fn()
     render(<EvidenceClipStrip items={clips} onOpen={onOpen} />)
-    const missingBtn = screen.getByLabelText(/SNZ-L missing/)
-    expect(missingBtn).toBeDisabled()
+    const pendingBtn = screen.getByLabelText(/SNZ-L pending/)
+    expect(pendingBtn).toBeDisabled()
   })
 
   test('shows ETA for pending clip', () => {

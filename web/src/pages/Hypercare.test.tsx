@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, expect, test, vi, beforeEach } from 'vitest'
 import Hypercare from './Hypercare'
 import * as client from '@/api/client'
+import type { HypercareEvidence, HypercareRule } from '@/api/types'
 
 vi.mock('@/api/client', () => ({
   getHypercareRules: vi.fn(),
@@ -15,19 +16,19 @@ vi.mock('@/state/role', () => ({
   navForRole: (_role: string, nav: unknown[]) => nav,
 }))
 
-const mockRules = [
+const mockRules: HypercareRule[] = [
   {
     id: 'R-TEST',
     name: 'Вскрытие кузова',
     enabled: true,
     role_scope: 'security',
-    trigger: { kind: 'event' as const, alarm_codes: ['TRUCK_BODY'] },
-    window: { before_sec: 300, after_sec: 120, mode: 'continuous' as const },
-    cameras: [1, 5] as (1 | 2 | 3 | 5)[],
+    trigger: { kind: 'event', alarm_codes: ['TRUCK_BODY'] },
+    window: { before_sec: 300, after_sec: 120, mode: 'continuous' },
+    cameras: [1, 5],
   },
 ]
 
-const mockEvidence = [
+const mockEvidence: HypercareEvidence[] = [
   {
     id: 'ev-1',
     rule_id: 'R-TEST',
@@ -35,8 +36,8 @@ const mockEvidence = [
     vehicle_plate: 'А001АА77',
     trigger_ts: '2026-06-29T10:00:00',
     trigger_label: 'Вскрытие (TRUCK_BODY)',
-    status: 'fulfilled' as const,
-    items: [] as [],
+    status: 'fulfilled',
+    items: [],
   },
 ]
 

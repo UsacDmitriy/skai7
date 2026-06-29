@@ -19,7 +19,7 @@ describe('windowSummary', () => {
   })
 
   test('clip mode', () => {
-    const r = { ...rule, window: { ...rule.window, mode: 'clip' as const, clip_len_sec: 15 } }
+    const r = { ...rule, window: { ...rule.window, mode: 'continuous' as const, clip_len_sec: 15 } }
     expect(windowSummary(r)).toBe('−5м … +2м · клип 15с')
   })
 
