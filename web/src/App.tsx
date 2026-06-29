@@ -6,6 +6,7 @@ import {
   CheckCircle,
   ClipboardList,
   Download,
+  Eye,
   FileText,
   Film,
   Gauge,
@@ -99,6 +100,7 @@ const NAV: NavGroup[] = [
     items: [
       { to: '/fleet-health', label: 'Здоровье парка', icon: Heart },
       { to: '/navigation', label: 'Навигация (РЭБ)', icon: Navigation },
+      { to: '/hypercare', label: 'Гиперопека', icon: Eye },
     ],
   },
   {
@@ -293,6 +295,7 @@ const Copilot = lazy(() => import('@/pages/Copilot')) as ComponentType
 const Metrics = lazy(() => import('@/pages/Metrics')) as ComponentType
 const StyleGuide = lazy(() => import('@/pages/_StyleGuide')) as ComponentType
 const DispatchAlert = lazy(() => import('@/pages/DispatchAlert')) as ComponentType
+const Hypercare = lazy(() => import('@/pages/Hypercare')) as ComponentType
 
 /**
  * Роуты приложения. Маршрут `/alert/:id` (f9) — overlay-модал: рендерится
@@ -459,6 +462,14 @@ function AppRoutes() {
             element={
               <Suspense fallback={<Placeholder title="Загрузка витрины…" />}>
                 <StyleGuide />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/hypercare"
+            element={
+              <Suspense fallback={<Placeholder title="Загрузка…" />}>
+                <Hypercare />
               </Suspense>
             }
           />
