@@ -77,7 +77,7 @@ def _ask(model_slug: str, prompt: str, system: str | None = None) -> str:
         "Content-Type": "application/json",
     }
     try:
-        with httpx.Client(timeout=120) as cli:
+        with httpx.Client(timeout=600) as cli:
             r = cli.post(CLINE_URL, json=payload, headers=headers)
             r.raise_for_status()
             data = r.json()

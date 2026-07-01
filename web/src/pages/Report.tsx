@@ -15,7 +15,6 @@ import {
   Lightbulb,
   LineChart,
   RotateCcw,
-  Search,
   Sparkles,
   ThumbsUp,
   TrendingUp,

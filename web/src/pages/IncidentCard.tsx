@@ -287,11 +287,6 @@ export default function IncidentCard() {
     return { min, max, range: Math.max(1, max - min) }
   }, [incident])
 
-  const eventMarkerPct = useMemo(
-    () => ((0 - span.min) / span.range) * 100,
-    [span],
-  )
-
   const playheadOffset = span.min + currentSec
 
   const handleChartSeek = useCallback(

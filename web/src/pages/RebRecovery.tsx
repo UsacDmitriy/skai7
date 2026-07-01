@@ -290,18 +290,6 @@ function Bar({ className }: { className?: string }) {
   return <div className={`animate-pulse rounded bg-border/60 ${className ?? ''}`} />
 }
 
-function ErrorBlock({ message, onRetry }: { message: string; onRetry: () => void }) {
-  return (
-    <Card className="flex flex-col items-center gap-3 py-10 text-center">
-      <AlertTriangle className="h-8 w-8 text-high-text" aria-hidden />
-      <p className="max-w-sm text-sm text-muted">{message}</p>
-      <Button variant="secondary" icon={RotateCcw} onClick={onRetry}>
-        Повторить
-      </Button>
-    </Card>
-  )
-}
-
 // ── Экран ─────────────────────────────────────────────────────────────────────
 
 export default function RebRecovery() {

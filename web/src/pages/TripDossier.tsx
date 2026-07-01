@@ -189,8 +189,10 @@ export default function TripDossier() {
     }
   }, [id])
 
-  const track = trip?.track ?? []
-  const timeline = trip?.timeline ?? []
+  // useMemo стабилизирует ссылки: без него `?? []` даёт новый массив каждый
+  // рендер и обнуляет мемоизацию всех зависимых useMemo/useCallback ниже.
+  const track = useMemo(() => trip?.track ?? [], [trip])
+  const timeline = useMemo(() => trip?.timeline ?? [], [trip])
 
   const coords = useMemo(() => synthCoords(track), [track])
 

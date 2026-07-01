@@ -72,10 +72,12 @@ export function HypercareRulesProvider({ children }: { children: ReactNode }) {
 
   const toggleRule = useCallback((id: string) => {
     setOverlay((o) => {
-      const current = o[id]?.enabled ?? seed.find((r) => r.id === id)?.enabled ?? true
-      return { ...o, [id]: { enabled: !current } }
+      // Дефолт ищем в объединённом списке (seed + custom): кастомное правило
+      // с enabled=false иначе требовало бы двойного клика (фолбэк ?? true был неверен).
+      const base = o[id]?.enabled ?? [...seed, ...custom].find((r) => r.id === id)?.enabled ?? true
+      return { ...o, [id]: { enabled: !base } }
     })
-  }, [seed])
+  }, [seed, custom])
 
   const addRule = useCallback((rule: HypercareRule) => {
     setCustom((c) => [...c, rule])
