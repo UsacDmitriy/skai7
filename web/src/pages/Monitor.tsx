@@ -147,6 +147,7 @@ function escapeHtml(value: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
 }
 
 /**
@@ -289,6 +290,9 @@ export default function Monitor() {
 
   const [rebAnomalyZones, setRebAnomalyZones] = useState<RebAnomalyZone[]>([])
   const [rebAnomalyLoading, setRebAnomalyLoading] = useState(false)
+  // Аномалии грузим один раз на включение слоя. Ref (а не length>0): пустой
+  // ответ [] иначе не «запоминается» и слой циклически перезапрашивает данные.
+  const rebAnomalyFetchedRef = useRef(false)
 
   const toggleLayer = useCallback((key: LayerKey) => {
     setLayers((prev) => ({ ...prev, [key]: !prev[key] }))
@@ -340,19 +344,24 @@ export default function Monitor() {
   useEffect(() => loadZones(), [loadZones])
 
   const loadRebAnomalies = useCallback(() => {
-    if (rebAnomalyZones.length > 0 || rebAnomalyLoading) return
+    if (rebAnomalyFetchedRef.current) return
+    rebAnomalyFetchedRef.current = true
     let alive = true
     setRebAnomalyLoading(true)
     client
       .getRebAnomalies()
       .then((data) => { if (alive) setRebAnomalyZones(data) })
-      .catch(() => { if (alive) setRebAnomalyZones([]) })
+      .catch(() => {
+        // ошибка → снимаем флаг, чтобы повтор был возможен при следующем включении
+        if (alive) { rebAnomalyFetchedRef.current = false; setRebAnomalyZones([]) }
+      })
       .finally(() => { if (alive) setRebAnomalyLoading(false) })
     return () => { alive = false }
-  }, [rebAnomalyZones.length, rebAnomalyLoading])
+  }, [])
 
   useEffect(() => {
-    if (layers.reb_anomaly) loadRebAnomalies()
+    // return прокидывает cleanup (alive=false) от loadRebAnomalies.
+    if (layers.reb_anomaly) return loadRebAnomalies()
   }, [layers.reb_anomaly, loadRebAnomalies])
 
   // Ролевая видимость (f13: единое правило `filterByRole` — общее с лентой событий).
@@ -609,10 +618,10 @@ export default function Monitor() {
                     key={inc.id}
                     aria-current={isSelected ? 'true' : undefined}
                     ref={(el) => {
-                      // Первая карточка ТС — якорь скролла для onSelect.
-                      if (el && !cardRefs.current.has(inc.vehicle_plate)) {
-                        cardRefs.current.set(inc.vehicle_plate, el)
-                      }
+                      // Якорь скролла ТС для onSelect; на unmount (el===null) чистим
+                      // запись, иначе Map копит ссылки на detached DOM-узлы.
+                      if (el) cardRefs.current.set(inc.vehicle_plate, el)
+                      else cardRefs.current.delete(inc.vehicle_plate)
                     }}
                   >
                     <Card
