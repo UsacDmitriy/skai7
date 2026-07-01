@@ -53,5 +53,7 @@
   // "skills": { "paths": ["./skills"] }
 
   // ── Инструкции (дополняют AGENTS.md) ──────────────────────────────────────
-  "instructions": "Следуй AGENTS.md. Стек: DuckDB + FastAPI (Python 3.12) + React/Vite/Tailwind. Источник данных: datasets/ready/. Не вызывай прод-сервисы SKAI. Комментарии в коде только если WHY неочевиден."
+  "instructions": [
+    "Следуй AGENTS.md. Стек: DuckDB + FastAPI (Python 3.12) + React/Vite/Tailwind. Источник данных: datasets/ready/. Не вызывай прод-сервисы SKAI. Комментарии в коде только если WHY неочевиден."
+  ]
 }

@@ -54,3 +54,6 @@ skai7_clean/
 
 # OpenRouter MCP secrets
 tools/openrouter-mcp/.env
+
+# Cline MCP secrets
+tools/cline-mcp/.env
