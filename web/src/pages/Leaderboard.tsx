@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Inbox, Info, Leaf, RotateCw, Trophy, TriangleAlert } from 'lucide-react'
 import { Card } from '@/components'
 import { cn } from '@/components/ui/cn'
 import { getLeaderboard } from '@/api/client'
 import type { DriverScore } from '@/api/types'
+import { useAsyncLoad } from '@/state/useAsyncLoad'
 
 /**
  * f28 · Лидерборд водителей (`/leaderboard`, фичи #25/#26, §13.2/§13.3). Против
@@ -67,25 +68,10 @@ function ScoreBreakdown({ row }: { row: DriverScore }) {
 // ── Экран ──────────────────────────────────────────────────────────────────────
 export default function Leaderboard() {
   const navigate = useNavigate()
-  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
-  const [rows, setRows] = useState<DriverScore[]>([])
-  const [error, setError] = useState<string | null>(null)
-
-  const load = useCallback(() => {
-    setState('loading')
-    setError(null)
-    getLeaderboard()
-      .then((data) => {
-        setRows(data)
-        setState('ready')
-      })
-      .catch((e: unknown) => {
-        setError(e instanceof Error ? e.message : 'Не удалось загрузить рейтинг.')
-        setState('error')
-      })
-  }, [])
-
-  useEffect(() => load(), [load])
+  const { state, data, error, reload } = useAsyncLoad(getLeaderboard, {
+    errorMessage: 'Не удалось загрузить рейтинг.',
+  })
+  const rows = data ?? []
 
   // Клик по строке → отчёт водителя (тот же механизм, что drill в FleetDashboard).
   const openDriver = useCallback(
@@ -127,7 +113,7 @@ export default function Leaderboard() {
             <p className="max-w-sm text-sm text-muted">{error ?? 'Не удалось загрузить рейтинг.'}</p>
             <button
               type="button"
-              onClick={load}
+              onClick={reload}
               className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-medium text-ink transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <RotateCw className="h-4 w-4" aria-hidden />

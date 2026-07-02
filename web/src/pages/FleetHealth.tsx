@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
+import { useAsyncLoad } from '@/state/useAsyncLoad'
 import {
   Fuel,
   Inbox,
@@ -198,25 +199,9 @@ function CoverageBanner({ coverage }: { coverage: FleetHealthResponse['coverage'
 
 export default function FleetHealth() {
   const navigate = useNavigate()
-  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
-  const [data, setData] = useState<FleetHealthResponse | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  const load = useCallback(() => {
-    setState('loading')
-    setError(null)
-    getFleetHealth()
-      .then((resp) => {
-        setData(resp)
-        setState('ready')
-      })
-      .catch((e: unknown) => {
-        setError(e instanceof Error ? e.message : 'Не удалось загрузить здоровье парка.')
-        setState('error')
-      })
-  }, [])
-
-  useEffect(load, [load])
+  const { state, data, error, reload } = useAsyncLoad(getFleetHealth, {
+    errorMessage: 'Не удалось загрузить здоровье парка.',
+  })
 
   const handleRowClick = useCallback(
     (row: FleetHealthRow) => {
@@ -247,7 +232,7 @@ export default function FleetHealth() {
             <p className="max-w-sm text-sm text-muted">
               {error ?? 'Не удалось загрузить здоровье парка.'}
             </p>
-            <Button variant="secondary" icon={RotateCcw} onClick={load}>
+            <Button variant="secondary" icon={RotateCcw} onClick={reload}>
               Повторить
             </Button>
           </div>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useAsyncLoad } from '@/state/useAsyncLoad'
 import { Inbox, Navigation2, Radio, RotateCcw, TriangleAlert, Unlink, Video } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card } from '@/components'
@@ -108,25 +108,10 @@ function ProblemCard({ row }: { row: NavProblemVehicle }) {
 // ── Экран ─────────────────────────────────────────────────────────────────────
 
 export default function NavProblemList() {
-  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
-  const [rows, setRows] = useState<NavProblemVehicle[]>([])
-  const [error, setError] = useState<string | null>(null)
-
-  const load = useCallback(() => {
-    setState('loading')
-    setError(null)
-    listNavProblems()
-      .then((data) => {
-        setRows(data)
-        setState('ready')
-      })
-      .catch((e: unknown) => {
-        setError(e instanceof Error ? e.message : 'Не удалось загрузить список проблем навигации.')
-        setState('error')
-      })
-  }, [])
-
-  useEffect(load, [load])
+  const { state, data, error, reload } = useAsyncLoad(listNavProblems, {
+    errorMessage: 'Не удалось загрузить список проблем навигации.',
+  })
+  const rows = data ?? []
 
   return (
     <div className="space-y-4">
@@ -146,7 +131,7 @@ export default function NavProblemList() {
           <p className="max-w-sm text-sm text-muted">
             {error ?? 'Не удалось загрузить список проблем навигации.'}
           </p>
-          <Button variant="secondary" icon={RotateCcw} onClick={load}>
+          <Button variant="secondary" icon={RotateCcw} onClick={reload}>
             Повторить
           </Button>
         </Card>

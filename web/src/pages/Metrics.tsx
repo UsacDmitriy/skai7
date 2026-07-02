@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useAsyncLoad } from '@/state/useAsyncLoad'
 import { Inbox, RotateCcw, TriangleAlert } from 'lucide-react'
 import { Button, Card } from '@/components'
 import { DataQualityPanel, MetricTile, formatRatio } from '@/components/ai/DataQualityPanel'
 import { ConsistencyPanel } from '@/components/ai/ConsistencyPanel'
 import { getAiMetrics, getConsistency, getDataQuality } from '@/api/client'
-import type { AiMetrics, ConsistencyReport, DataQuality } from '@/api/types'
+import type { AiMetrics, DataQuality } from '@/api/types'
 
 /**
  * f21 · Панель доверия и пользы (`/metrics`). Против `00-CONTRACT.md` §8.7.
@@ -100,32 +100,14 @@ interface MetricsData {
 }
 
 export default function Metrics() {
-  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
-  const [data, setData] = useState<MetricsData | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  // f25 · консистентность (§10) — мягко: ошибка не валит экран, панель → заглушка.
-  const [consistency, setConsistency] = useState<ConsistencyReport | null>(null)
-
-  const load = useCallback(() => {
-    setState('loading')
-    setError(null)
-    Promise.all([getAiMetrics(), getDataQuality()])
-      .then(([ai, quality]) => {
-        setData({ ai, quality })
-        setState('ready')
-      })
-      .catch((e: unknown) => {
-        setError(e instanceof Error ? e.message : 'Не удалось загрузить метрики.')
-        setState('error')
-      })
-    // Консистентность грузится независимо: её ошибка не ломает страницу метрик.
-    setConsistency(null)
-    getConsistency()
-      .then(setConsistency)
-      .catch(() => setConsistency(null))
-  }, [])
-
-  useEffect(load, [load])
+  const { state, data, error, reload } = useAsyncLoad<MetricsData>(
+    () =>
+      Promise.all([getAiMetrics(), getDataQuality()]).then(([ai, quality]) => ({ ai, quality })),
+    { errorMessage: 'Не удалось загрузить метрики.' },
+  )
+  // f25 · консистентность (§10) грузится независимо и мягко: её ошибка → data=null
+  // (панель-заглушка), страницу метрик не ломает.
+  const { data: consistency } = useAsyncLoad(getConsistency)
 
   return (
     <div className="space-y-6">
@@ -141,7 +123,7 @@ export default function Metrics() {
         <Card className="flex flex-col items-center gap-3 py-12 text-center">
           <TriangleAlert className="h-8 w-8 text-high-text" aria-hidden />
           <p className="max-w-sm text-sm text-muted">{error ?? 'Не удалось загрузить метрики.'}</p>
-          <Button variant="secondary" icon={RotateCcw} onClick={load}>
+          <Button variant="secondary" icon={RotateCcw} onClick={reload}>
             Повторить
           </Button>
         </Card>
