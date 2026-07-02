@@ -43,6 +43,7 @@ export function VoiceButton({ state, onRecorded, disabled, onStart, onStop }: Vo
   const recorderRef = useRef<MediaRecorder | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const chunksRef = useRef<Blob[]>([])
+  const mountedRef = useRef(true)
 
   // Закрыть микрофонный поток (release tracks), чтобы не висел индикатор записи.
   const releaseStream = () => {
@@ -51,12 +52,23 @@ export function VoiceButton({ state, onRecorded, disabled, onStart, onStop }: Vo
   }
 
   // Размонтирование посреди записи не должно оставлять микрофон открытым.
-  useEffect(() => releaseStream, [])
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+      releaseStream()
+    }
+  }, [])
 
   const startRecording = async () => {
     if (recorderRef.current) return
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      // Размонтировались, пока висел запрос разрешения → закрыть поток сразу, иначе
+      // микрофон останется висеть (cleanup уже отработал до резолва getUserMedia).
+      if (!mountedRef.current) {
+        stream.getTracks().forEach((t) => t.stop())
+        return
+      }
       // Контракт transcribe — multipart wav; если браузер умеет только webm/opus,
       // отдаём как есть с корректным MIME (перекодировка — на f7/бэке).
       const mime =
