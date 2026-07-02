@@ -55,7 +55,7 @@ export default function RuleBuilder({
       trigger_ts: new Date(form.trigger_ts).toISOString(),
       before_sec: form.before_sec,
       after_sec: form.after_sec,
-      cameras: [...form.cameras].sort() as VideoChannel[],
+      cameras: [...form.cameras].sort((a, b) => a - b) as VideoChannel[],
     })
   }
 
