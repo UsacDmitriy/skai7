@@ -72,6 +72,7 @@ export default function DispatchAlert() {
 
   const dialogRef = useRef<HTMLDivElement>(null)
   const closingRef = useRef(false)
+  const timerRef = useRef<number>()
 
   // ── Возврат фокуса на триггер после закрытия модала (a11y) ───────────────────
   useEffect(() => {
@@ -110,6 +111,20 @@ export default function DispatchAlert() {
   }, [id])
 
   useEffect(() => load(), [load])
+
+  // Сброс локальных состояний при смене алерта (id): иначе callState/taskPending/
+  // feedback залипают со старого алерта, если модал переоткрыт на другой id.
+  useEffect(() => {
+    setCallState('idle')
+    setTaskPending(false)
+    setFeedback(null)
+  }, [id])
+
+  // Очистка отложенного закрытия (createTask) при размонтировании: иначе
+  // goBackground сработает после unmount → «мигрирующая» навигация + setState.
+  useEffect(() => () => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+  }, [])
 
   // Автофокус на первой кнопке после загрузки контента (Button не forwardRef —
   // целевую кнопку помечаем `data-autofocus`, иначе берём первую в DOM).
@@ -174,7 +189,8 @@ export default function DispatchAlert() {
       setFeedback({ kind: 'ok', text: 'Заявка создана' })
       closingRef.current = true
       // Дать прочитать тост, затем закрыть (setTimeout — UX-задержка, не вычисление времени).
-      window.setTimeout(goBackground, 1100)
+      // Таймер в ref → очищается на unmount (см. эффект выше).
+      timerRef.current = window.setTimeout(goBackground, 1100)
     } catch (e: unknown) {
       setTaskPending(false)
       const msg = e instanceof ApiError ? e.message : e instanceof Error ? e.message : 'Ошибка'

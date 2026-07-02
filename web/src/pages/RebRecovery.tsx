@@ -394,13 +394,15 @@ export default function RebRecovery() {
       })
       .sort((a, b) => tsMs(a.ts) - tsMs(b.ts))
     if (within.length > 0) return within
-    if (reb.video_frames.length === 0) return []
-    const nearest = reb.video_frames
+    // Fallback — ближайший кадр к началу разрыва. Фильтруем кадры с мусорным ts
+    // и защищаемся от невалидного gap.start: иначе NaN-компаратор ломает sort.
+    const startTs = tsMs(gap.start)
+    if (!Number.isFinite(startTs)) return []
+    const validFrames = reb.video_frames.filter((f) => Number.isFinite(tsMs(f.ts)))
+    if (validFrames.length === 0) return []
+    const nearest = validFrames
       .slice()
-      .sort(
-        (a, b) =>
-          Math.abs(tsMs(a.ts) - tsMs(gap.start)) - Math.abs(tsMs(b.ts) - tsMs(gap.start)),
-      )[0]
+      .sort((a, b) => Math.abs(tsMs(a.ts) - startTs) - Math.abs(tsMs(b.ts) - startTs))[0]
     return nearest ? [nearest] : []
   }, [selectedGi, reb])
 
