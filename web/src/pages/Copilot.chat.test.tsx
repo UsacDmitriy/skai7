@@ -93,4 +93,21 @@ describe('f17 · Copilot', () => {
     await waitFor(() => expect(screen.queryByRole('alert')).not.toBeInTheDocument())
     expect(copilot.sendCopilotMessage).toHaveBeenCalledTimes(2)
   })
+
+  it('retry не дублирует сообщение пользователя (регресс)', async () => {
+    vi.mocked(copilot.sendCopilotMessage)
+      .mockRejectedValueOnce(new Error('boom'))
+      .mockResolvedValueOnce(REPLY)
+
+    renderCopilot()
+    ask('Проверка дубля')
+
+    await waitFor(() => expect(screen.getByRole('alert')).toBeInTheDocument())
+    fireEvent.click(screen.getByRole('button', { name: 'Повторить' }))
+    expect(await screen.findByText(REPLY.text)).toBeInTheDocument()
+
+    // До фикса retry повторно добавлял user-бабл → было бы 2.
+    expect(screen.getAllByText('Проверка дубля')).toHaveLength(1)
+    expect(copilot.sendCopilotMessage).toHaveBeenCalledTimes(2)
+  })
 })

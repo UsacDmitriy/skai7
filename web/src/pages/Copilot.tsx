@@ -190,6 +190,9 @@ export default function Copilot() {
   // Язык последней реплики пользователя — для строк хрома и ретрая.
   const [uiLang, setUiLang] = useState<CopilotLang>('ru')
   const lastQuery = useRef<string | null>(null)
+  // Синхронный замок отправки: setState-loading асинхронен, два быстрых Enter
+  // иначе прошли бы проверку и отправили дубль.
+  const busyRef = useRef(false)
 
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const endRef = useRef<HTMLDivElement>(null)
@@ -205,12 +208,18 @@ export default function Copilot() {
     endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages, loading])
 
-  const ask = useCallback(async (text: string) => {
+  const ask = useCallback(async (text: string, isRetry = false) => {
+    if (busyRef.current) return
+    busyRef.current = true
     const lang = detectLang(text)
     lastQuery.current = text
     setUiLang(lang)
     setError(null)
-    setMessages((prev) => [...prev, { role: 'user', text, lang }])
+    // На retry user-сообщение уже в ленте — не добавляем повторно (иначе дубль
+    // бабла и дубль на бэкенд).
+    if (!isRetry) {
+      setMessages((prev) => [...prev, { role: 'user', text, lang }])
+    }
     setLoading(true)
     try {
       const reply = await sendCopilotMessage(text)
@@ -223,6 +232,7 @@ export default function Copilot() {
       setError(msg)
     } finally {
       setLoading(false)
+      busyRef.current = false
       // Возврат фокуса в поле ввода после ответа (фокус-менеджмент a11y).
       inputRef.current?.focus()
     }
@@ -230,13 +240,14 @@ export default function Copilot() {
 
   const submit = useCallback(() => {
     const text = input.trim()
-    if (!text || loading) return // пустой ввод заблокирован
+    if (!text || busyRef.current) return // пустой ввод/повторная отправка заблокированы
     setInput('')
     void ask(text)
-  }, [input, loading, ask])
+  }, [input, ask])
 
   const retry = useCallback(() => {
-    if (lastQuery.current) void ask(lastQuery.current)
+    if (busyRef.current || !lastQuery.current) return
+    void ask(lastQuery.current, true)
   }, [ask])
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
