@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   CheckCircle2,
   ChevronDown,
@@ -206,6 +206,10 @@ function ActionButtons({ event }: { event: SabotageEvent }) {
   const [pending, setPending] = useState<ActionKind | null>(null)
   const [done, setDone] = useState<Partial<Record<ActionKind, boolean>>>({})
   const [error, setError] = useState<string | null>(null)
+  // Карточка может размонтироваться (reload заменил events) во время in-flight
+  // postAction → защищаемся от setState на размонтированном компоненте.
+  const aliveRef = useRef(true)
+  useEffect(() => () => { aliveRef.current = false }, [])
 
   const run = useCallback(
     (kind: ActionKind, comment: string) => {
@@ -214,9 +218,9 @@ function ActionButtons({ event }: { event: SabotageEvent }) {
       // `notify_hr` — валидный ActionType в §3.4 (контракт расширён, TODO b13 снят).
       client
         .postAction({ incident_id: event.id, action: kind, comment })
-        .then(() => setDone((d) => ({ ...d, [kind]: true })))
-        .catch((e: unknown) => setError(humanError(e)))
-        .finally(() => setPending(null))
+        .then(() => { if (aliveRef.current) setDone((d) => ({ ...d, [kind]: true })) })
+        .catch((e: unknown) => { if (aliveRef.current) setError(humanError(e)) })
+        .finally(() => { if (aliveRef.current) setPending(null) })
     },
     [event.id],
   )
