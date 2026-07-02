@@ -479,18 +479,24 @@ function ForecastCard({
   const [error, setError] = useState<string | null>(null)
   const [accepted, setAccepted] = useState<Set<number>>(new Set())
 
+  // reqRef отсекает устаревший ответ при быстрой смене plate (гонка: медленный
+  // запрос A иначе перезаписал бы прогноз B). Единообразно с Coaching/Positive.
+  const reqRef = useRef(0)
   const load = useCallback(() => {
     setState('loading')
     setError(null)
     setForecast(null)
     setAccepted(new Set())
+    const my = ++reqRef.current
     client
       .getForecast(plate)
       .then((f) => {
+        if (reqRef.current !== my) return
         setForecast(f)
         setState('ready')
       })
       .catch((e: unknown) => {
+        if (reqRef.current !== my) return
         setError(humanError(e))
         setState('error')
       })
@@ -1112,6 +1118,9 @@ export default function Report() {
   )
 
   // ── Видео-панель (killer-feature) ───────────────────────────────────────────
+  // Актуальный id запрошенного видео: поздний ответ getIncident по старой строке
+  // иначе перезапишет данные уже открытой другой (open row1 → row2 → резолв row1).
+  const videoReqRef = useRef<string | null>(null)
   const openVideo = useCallback(
     (row: { id: string; source: Source | null }) => {
       setVideoSel(row)
@@ -1119,13 +1128,16 @@ export default function Report() {
       setVideoIncident(null)
       setVideoError(null)
       writeParams({ sel: row.id })
+      videoReqRef.current = row.id
       client
         .getIncident(row.id)
         .then((inc) => {
+          if (videoReqRef.current !== row.id) return
           setVideoIncident(inc)
           setVideoState('ready')
         })
         .catch((e: unknown) => {
+          if (videoReqRef.current !== row.id) return
           setVideoError(humanError(e))
           setVideoState('error')
         })
@@ -1134,6 +1146,7 @@ export default function Report() {
   )
 
   const closeVideo = useCallback(() => {
+    videoReqRef.current = null
     setVideoSel(null)
     setVideoIncident(null)
     setVideoState('loading')
