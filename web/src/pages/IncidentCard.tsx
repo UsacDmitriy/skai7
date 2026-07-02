@@ -41,6 +41,7 @@ import { SpeedCheckBadge } from '@/components/ai/SpeedCheckBadge'
 import { DiscrepancyBadge } from '@/components/ai/DiscrepancyBadge'
 import { RiskWaterfall } from '@/components/ai/RiskWaterfall'
 import { cn } from '@/components/ui/cn'
+import { useRole } from '@/state/role'
 
 /**
  * f14 · Hardening карточки инцидента (поверх f4, Волна 2.1).
@@ -84,15 +85,7 @@ const CAMERA_STATUS: Record<CameraStatus, { label: string; dot: string; text: st
 
 // ── Роли (§7.6) ───────────────────────────────────────────────────────────────
 
-type AppRole = 'logist' | 'dispatcher' | 'safety'
-
-const ROLE_LABELS: Record<AppRole, string> = {
-  logist: 'Логист 🏭',
-  dispatcher: 'Спец. мониторинга 🛡',
-  safety: 'Диспетчер 🔒',
-}
-
-/** Деструктивные действия — только Диспетчер. */
+/** Деструктивные действия — только Диспетчер (глобальная роль `dispatcher`, f13). */
 const SAFETY_ONLY: ActionType[] = ['stop_vehicle']
 
 // ── Форматтеры (таймзона парка) ───────────────────────────────────────────────
@@ -193,8 +186,9 @@ export default function IncidentCard() {
   // f25 · сверка скоростей событие ↔ GPS-трек (§10.2, кейс Фомина).
   const [speedCheck, setSpeedCheck] = useState<SpeedCheck | null>(null)
 
-  // Роль пользователя (локальный переключатель — до реализации f13/глобального контекста).
-  const [role, setRole] = useState<AppRole>('dispatcher')
+  // Роль пользователя — единый глобальный источник (f13, идея #10): согласована
+  // с лентой/картой через RoleProvider, переключается там (RoleToggle).
+  const { role } = useRole()
 
   // Синхронизация видео↔телеметрия (idea #1).
   const [currentSec, setCurrentSec] = useState(0)
@@ -208,6 +202,10 @@ export default function IncidentCard() {
     setIncident(null)
     setStatusOverride(null)
     setActionFeedback(null)
+    // Сброс синхронизации видео↔график: иначе новый инцидент открывается с
+    // playhead и seek от предыдущего (залипание currentSec/seekSec).
+    setCurrentSec(0)
+    setSeekSec(undefined)
     client
       .getIncident(id)
       .then((data) => {
@@ -534,6 +532,16 @@ export default function IncidentCard() {
                   const hasDms = !!inc.cam_dms_url
                   const dmsSlotCam = !hasDms ? inc.cam_extra[0] : null
                   const restExtra = hasDms ? inc.cam_extra : inc.cam_extra.slice(1)
+                  // Мастер-камера отдаёт currentSec (playhead графика). Первый
+                  // доступный плеер: фронт → DMS/слот. Иначе при cam_front_url=null
+                  // playhead стоял бы на месте, хотя остальные видео играют (bug 3).
+                  const frontSrc = inc.cam_front_url ? client.videoUrl(inc.id, 1) : undefined
+                  const dmsSrc = hasDms
+                    ? client.videoUrl(inc.id, 5)
+                    : dmsSlotCam
+                      ? client.videoUrl(inc.id, dmsSlotCam.channel as VideoChannel)
+                      : undefined
+                  const masterSrc = frontSrc ?? dmsSrc
                   return (
                     <>
                       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -545,8 +553,8 @@ export default function IncidentCard() {
                             </span>
                           )}
                           <VideoPlayer
-                            src={inc.cam_front_url ? client.videoUrl(inc.id, 1) : undefined}
-                            onTimeUpdate={setCurrentSec}
+                            src={frontSrc}
+                            onTimeUpdate={frontSrc && frontSrc === masterSrc ? setCurrentSec : undefined}
                             seekTo={seekSec}
                             ariaLabel="Видео ADAS · фронтальная камера"
                           />
@@ -560,13 +568,8 @@ export default function IncidentCard() {
                             </span>
                           )}
                           <VideoPlayer
-                            src={
-                              hasDms
-                                ? client.videoUrl(inc.id, 5)
-                                : dmsSlotCam
-                                  ? client.videoUrl(inc.id, dmsSlotCam.channel as VideoChannel)
-                                  : undefined
-                            }
+                            src={dmsSrc}
+                            onTimeUpdate={dmsSrc && dmsSrc === masterSrc ? setCurrentSec : undefined}
                             seekTo={seekSec}
                             ariaLabel={hasDms ? 'Видео DMS · камера салона' : `Видео · канал ${dmsSlotCam?.channel}`}
                           />
@@ -677,31 +680,12 @@ export default function IncidentCard() {
               <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
                 Действия
               </h2>
-              {/* Ролевой переключатель (локальный до f13) */}
-              <div className="flex gap-1" role="group" aria-label="Роль пользователя">
-                {(Object.keys(ROLE_LABELS) as AppRole[]).map((r) => (
-                  <button
-                    key={r}
-                    onClick={() => setRole(r)}
-                    className={cn(
-                      'rounded px-2 py-0.5 text-[10px] font-medium transition-colors',
-                      role === r
-                        ? 'bg-primary text-white'
-                        : 'bg-primary/10 text-primary hover:bg-primary/20',
-                    )}
-                    aria-pressed={role === r}
-                    title={`Переключить роль на ${ROLE_LABELS[r]}`}
-                  >
-                    {ROLE_LABELS[r]}
-                  </button>
-                ))}
-              </div>
             </div>
 
             <div className="flex flex-col gap-2">
               {ACTIONS.map((a) => {
                 const isSafetyOnly = SAFETY_ONLY.includes(a.action)
-                const blocked = isSafetyOnly && role !== 'safety'
+                const blocked = isSafetyOnly && role !== 'dispatcher'
                 return (
                   <Button
                     key={a.action}

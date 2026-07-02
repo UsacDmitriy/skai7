@@ -37,6 +37,7 @@ vi.mock('@/api/client', async (importOriginal) => {
 
 import * as client from '@/api/client'
 import IncidentCard from './IncidentCard'
+import { RoleProvider } from '@/state/role'
 
 function renderCard(id: string) {
   return render(
@@ -44,9 +45,11 @@ function renderCard(id: string) {
       initialEntries={[`/incidents/${id}`]}
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
-      <Routes>
-        <Route path="/incidents/:id" element={<IncidentCard />} />
-      </Routes>
+      <RoleProvider>
+        <Routes>
+          <Route path="/incidents/:id" element={<IncidentCard />} />
+        </Routes>
+      </RoleProvider>
     </MemoryRouter>,
   )
 }
@@ -63,11 +66,13 @@ function renderCardWithLocation(id: string) {
       initialEntries={[`/incidents/${id}`]}
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
-      <Routes>
-        <Route path="/incidents/:id" element={<IncidentCard />} />
-        <Route path="*" element={null} />
-      </Routes>
-      <LocationProbe />
+      <RoleProvider>
+        <Routes>
+          <Route path="/incidents/:id" element={<IncidentCard />} />
+          <Route path="*" element={null} />
+        </Routes>
+        <LocationProbe />
+      </RoleProvider>
     </MemoryRouter>,
   )
 }
