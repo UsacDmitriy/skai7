@@ -17,6 +17,7 @@ import { SmartQueryInput } from '@/components/ui/SmartQueryInput'
 import { alarmSearch } from '@/state/alarmSearch'
 import { dedupeByUnit, filterByRole } from '@/state/roleFilter'
 import { cn } from '@/components/ui/cn'
+import { resolveCssColor } from '@/components/ui/cssVar'
 
 /**
  * f6 · Живой мониторинг — карта (`/monitor`). Полная версия, **заменяет scaffold
@@ -208,7 +209,7 @@ function ZoneInfoLayer({ zones, kind }: { zones: RiskZone[]; kind: RiskZoneKind 
         radius: 7,
         weight: 2,
         color: '#fff',
-        fillColor: 'var(--sev-high)',
+        fillColor: resolveCssColor('var(--sev-high)'),
         fillOpacity: 0.9,
       })
         .bindPopup(

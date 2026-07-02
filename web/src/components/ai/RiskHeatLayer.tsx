@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useMap } from 'react-leaflet'
 import * as L from 'leaflet'
 import type { RiskZone, RiskZoneKind } from '../../api/types'
+import { resolveCssColor } from '../ui/cssVar'
 
 export interface RiskHeatLayerProps {
   zones: RiskZone[]
@@ -49,7 +50,7 @@ export function RiskHeatLayer({ zones, kind }: RiskHeatLayerProps) {
       L.circle([lat, lon], {
         radius: zone.radius_m > 0 ? zone.radius_m : 300,
         color: 'transparent',
-        fillColor: riskColor(zone.avg_risk),
+        fillColor: resolveCssColor(riskColor(zone.avg_risk)),
         fillOpacity: riskOpacity(zone.avg_risk),
         interactive: false,
       })
