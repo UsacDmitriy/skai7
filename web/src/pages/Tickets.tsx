@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Clock, FilterX, Inbox, RotateCcw, TriangleAlert } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button, Card, DataTable, type Column } from '@/components'
@@ -190,15 +190,20 @@ export default function Tickets() {
   const [error, setError] = useState<string | null>(null)
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS)
 
+  // reqRef отсекает устаревший ответ (повторный ретрай) и setState после unmount.
+  const reqRef = useRef(0)
   const load = useCallback(() => {
     setState('loading')
     setError(null)
+    const my = ++reqRef.current
     getTickets()
       .then((data) => {
+        if (reqRef.current !== my) return
         setTickets(data)
         setState('ready')
       })
       .catch((e: unknown) => {
+        if (reqRef.current !== my) return
         setError(e instanceof Error ? e.message : 'Не удалось загрузить заявки.')
         setState('error')
       })

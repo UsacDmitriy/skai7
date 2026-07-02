@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Check,
@@ -109,15 +109,21 @@ export default function ReviewQueue() {
   const [filter, setFilter] = useState<ReviewStatus>('pending')
   const [busyId, setBusyId] = useState<string | null>(null)
 
+  // reqRef отсекает устаревший ответ (гонка при быстрой смене фильтра) и setState
+  // после unmount.
+  const reqRef = useRef(0)
   const load = useCallback((status: ReviewStatus) => {
     setState('loading')
     setError(null)
+    const my = ++reqRef.current
     getReviewQueue(status)
       .then((data) => {
+        if (reqRef.current !== my) return
         setQueue(data)
         setState('ready')
       })
       .catch((e: unknown) => {
+        if (reqRef.current !== my) return
         setError(e instanceof Error ? e.message : 'Не удалось загрузить очередь.')
         setState('error')
       })
@@ -133,8 +139,10 @@ export default function ReviewQueue() {
       postReviewDecision(id, decision, note)
         .then(() => load(filter)) // refetch: счётчики и фильтр согласованы с журналом
         .catch((e: unknown) => {
-          setError(e instanceof Error ? e.message : 'Не удалось сохранить решение.')
-          setState('error')
+          // Локальный алерт вместо setState('error'): неудача одного решения не должна
+          // стирать весь список (страница остаётся в ready).
+          const msg = e instanceof Error ? e.message : 'Не удалось сохранить решение.'
+          window.alert(`Не удалось сохранить решение: ${msg}`)
         })
         .finally(() => setBusyId(null))
     },
