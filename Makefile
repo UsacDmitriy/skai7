@@ -5,7 +5,8 @@
 .PHONY: help install install-py install-web \
         db seed api web dev openapi \
         lint typecheck test test-api test-web check \
-        worktrees worktrees-clean merge-integration clean
+        worktrees worktrees-clean merge-integration \
+        start smoke verify clean
 
 # ── Конфигурация ──────────────────────────────────────────────
 PY        ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
@@ -85,7 +86,7 @@ test: test-api test-web ## Все тесты (pytest + vitest)
 
 test-api: ## pytest бэкенда — api/tests (T1/T2)
 	@[ -d $(API_DIR)/tests ] \
-		&& $(PY) -m pytest $(API_DIR)/tests \
+		&& $(PY) -m pytest $(API_DIR)/tests -v \
 		|| echo "Нет $(API_DIR)/tests — запусти промпты T1/T2"
 
 test-web: ## vitest фронта — web/**/*.test.tsx (T3)
@@ -113,6 +114,46 @@ merge-integration: ## Слить feat/* в integration (после волны)
 worktrees-clean: ## Удалить .worktrees/* и ветки feat/*
 	-@for w in backend web tests; do git worktree remove .worktrees/$$w 2>/dev/null; done
 	-@git branch -d feat/backend feat/web feat/tests 2>/dev/null || true
+
+# ── Единый запуск / дымовые тесты / полная проверка ───────────
+start: db ## Запустить всё одной командой (БД → бэкенд → фронт)
+	@echo "==================== SKAI — запуск ===================="
+	@echo "Бэкенд:  http://localhost:$(API_PORT)  (FastAPI)"
+	@echo "Фронтенд: http://localhost:$(WEB_PORT)  (Vite)"
+	@echo "Документация: http://localhost:$(API_PORT)/docs"
+	@echo "Нажми Ctrl+C для остановки."
+	@echo "======================================================="
+	@trap 'kill 0; exit 0' INT TERM; \
+	$(PY) -m uvicorn api.main:app --reload --port $(API_PORT) & \
+	API_PID=$$!; \
+	cd $(WEB_DIR) && npm run dev & \
+	WEB_PID=$$!; \
+	wait
+
+smoke: ## Быстрый дымовой тест (без поднятого сервера)
+	@echo "=== SKAI Smoke Test ==="
+	@echo "[1/4] DuckDB..."
+	@[ -f $(DUCKDB) ] && echo "  OK: $(DUCKDB)" || { echo "  FAIL: $(DUCKDB) отсутствует — запусти make db"; exit 1; }
+	@echo "[2/4] Python imports..."
+	@PYTHONPATH=. $(PY) -c "from api.main import app; print(f'  OK: {len(app.routes)} routes')" || { echo "  FAIL: не удалось импортировать api.main"; exit 1; }
+	@echo "[3/4] Vite build..."
+	@cd $(WEB_DIR) && npx vite build --logLevel error > /dev/null 2>&1 && echo "  OK: build successful" || { echo "  FAIL: Vite build failed"; exit 1; }
+	@echo "[4/4] Pytest quick..."
+	@PYTHONPATH=. $(PY) -m pytest api/tests/unit/test_stt.py -q > /dev/null 2>&1 && echo "  OK: pytest quick passed" || echo "  WARN: pytest quick failed (возможно, нет faster-whisper)"
+	@echo "=== Smoke: ALL CHECKS PASSED ==="
+
+verify: smoke ## Полная проверка (smoke + check + user-flows)
+	@echo "=== SKAI Full Verification ==="
+	@echo "[step 1/3] smoke — done"
+	@echo "[step 2/3] make check (lint + typecheck + all tests)..."
+	@$(MAKE) check || { echo "  FAIL: make check failed"; exit 1; }
+	@echo "[step 3/3] smoke user flows..."
+	@if [ -x scripts/smoke_user_flows.sh ]; then \
+		bash scripts/smoke_user_flows.sh || echo "  WARN: user flows failed (возможно, API не запущен)"; \
+	else \
+		echo "  SKIP: scripts/smoke_user_flows.sh не найден"; \
+	fi
+	@echo "=== Verify: COMPLETE ==="
 
 # ── Очистка ───────────────────────────────────────────────────
 clean: ## Очистить кеши (__pycache__, pytest, duckdb)

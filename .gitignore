@@ -2,6 +2,9 @@
 output/
 data/skai.duckdb
 
+# Environment (local secrets — шаблон .env.example коммитится)
+.env
+
 # AI-кэш (§8.1): placeholder Волны 3 + реальные значения b16/b17 — коммитим в git
 !data/ai/*.json
 
