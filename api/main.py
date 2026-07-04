@@ -16,6 +16,13 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import starlette.formparsers
+
+# Увеличиваем лимит multipart-загрузки для STT-транскрипции больших WAV.
+# Дефолт Starlette = 25 MB; Whisper large-v3 на 100 MB WAV требует больше.
+# Устанавливается на уровне модуля ДО uvicorn/Starlette-инициализации.
+starlette.formparsers.MultiPartParser.max_file_size = 200 * 1024 * 1024  # 200 MB
+
 import api.routers as routers_pkg
 from api.core.config import settings
 from api.core.duckdb_conn import close_connection
