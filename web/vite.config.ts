@@ -10,6 +10,11 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  // Pre-bundle тяжёлые deps для быстрого холодного старта и HMR.
+  // Recharts, Leaflet, lucide-react — самые крупные в проекте.
+  optimizeDeps: {
+    include: ['recharts', 'leaflet', 'lucide-react', 'react-leaflet'],
+  },
   server: {
     port: 5173,
     // Прокси к FastAPI: фронт ходит на /api без CORS-проблем.

@@ -15,6 +15,9 @@ WEB_DIR   := web
 API_PORT  ?= 8000
 WEB_PORT  ?= 5173
 DUCKDB    := data/skai.duckdb
+# API_WORKERS: 0 → авто = cpu_count; 4 на M4 Pro, 2-4 на Windows.
+# Для dev-режима с --reload воркеры не применяются (reload несовместим с workers).
+API_WORKERS ?= 0
 
 # ── Справка (по умолчанию) ────────────────────────────────────
 help: ## Показать список команд
@@ -45,6 +48,19 @@ seed: ## Сгенерировать справочник водителей data
 api: ## Запустить FastAPI на :$(API_PORT) (b4)
 	@[ -f $(DUCKDB) ] || { echo "Нет $(DUCKDB) — сначала: make db"; exit 1; }
 	$(PY) -m uvicorn api.main:app --reload --port $(API_PORT)
+
+api-prod: ## Запустить FastAPI с multi-worker (без reload) на :$(API_PORT)
+	@[ -f $(DUCKDB) ] || { echo "Нет $(DUCKDB) — сначала: make db"; exit 1; }
+	@WORKERS=$(API_WORKERS); \
+	if [ "$$WORKERS" = "0" ] || [ -z "$$WORKERS" ]; then \
+		if [ "$$(uname)" = "Darwin" ]; then \
+			WORKERS=$$(sysctl -n hw.physicalcpu 2>/dev/null || echo 4); \
+		else \
+			WORKERS=$$(nproc 2>/dev/null || echo 4); \
+		fi; \
+	fi; \
+	echo "Запуск uvicorn с $$WORKERS worker(ами) на порту $(API_PORT)"; \
+	$(PY) -m uvicorn api.main:app --workers $$WORKERS --port $(API_PORT)
 
 # ── Фронт (Track D/F) ─────────────────────────────────────────
 web: ## Запустить Vite dev-сервер на :$(WEB_PORT) (f1)

@@ -4,6 +4,13 @@
 импорт `faster_whisper` и создание `WhisperModel` происходят только внутри
 `_get_model()`, поэтому `import stt_service` не тянет тяжёлую зависимость при
 старте API. Всё локально: никакого `GROQ`/сети (STT и NLU независимы).
+
+Оптимизация CPU-утилизации (Apple Silicon M-series / x86):
+- `compute_type="default"` → CTranslate2 сам выбирает оптимальный тип под железо
+  (int8 на x86 с AVX-512, float16 на ARM/Apple Silicon, где int8 не даёт выигрыша).
+- `cpu_threads` / `num_workers` форсируются из конфига SKAI_WHISPER_CPU_THREADS /
+  SKAI_WHISPER_NUM_WORKERS. Дефолт 0 → автоопределение CTranslate2.
+  На 12-ядерном M4 Pro рекомендуется cpu_threads=8, num_workers=2.
 """
 
 from __future__ import annotations
@@ -38,10 +45,18 @@ def _get_model() -> Any | None:
         return None
     whisper_model = getattr(settings, "whisper_model", "large-v3")
     whisper_device = getattr(settings, "whisper_device", "cpu")
-    compute_type = "int8" if whisper_device == "cpu" else "float16"
+    # "default" — CTranslate2 автоопределяет int8/float16 под архитектуру CPU.
+    # На Apple Silicon int8 не даёт выигрыша, float16 работает быстрее.
+    compute_type = getattr(settings, "whisper_compute_type", "default")
+    cpu_threads = getattr(settings, "whisper_cpu_threads", 0)
+    num_workers = getattr(settings, "whisper_num_workers", 1)
     try:
         _model = WhisperModel(
-            whisper_model, device=whisper_device, compute_type=compute_type
+            whisper_model,
+            device=whisper_device,
+            compute_type=compute_type,
+            cpu_threads=cpu_threads,
+            num_workers=num_workers,
         )
     except Exception:
         _model_unavailable = True

@@ -39,6 +39,15 @@ def get_connection() -> duckdb.DuckDBPyConnection:
         )
 
     _connection = duckdb.connect(str(settings.db_path), read_only=True)
+
+    # PRAGMA-оптимизации под многопоточную нагрузку.
+    threads = getattr(settings, "duckdb_threads", 0)
+    if threads > 0:
+        _connection.execute(f"PRAGMA threads={threads}")
+    mem_mb = getattr(settings, "duckdb_memory_limit_mb", 0)
+    if mem_mb > 0:
+        _connection.execute(f"PRAGMA memory_limit='{mem_mb}MB'")
+
     return _connection
 
 
