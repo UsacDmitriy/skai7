@@ -255,8 +255,9 @@ class TestActionsService:
         csv_path = tmp_path / "actions.csv"
         assert csv_path.exists()
         lines = csv_path.read_text(encoding="utf-8").strip().splitlines()
-        assert lines[0] == "created_at,incident_id,action,comment"
+        assert lines[0] == "created_at,incident_id,action,comment,status"
         assert iid in lines[1]
+        assert lines[1].endswith(",validated")  # status персистится в журнал
         actions_service.reset_overrides()
 
 

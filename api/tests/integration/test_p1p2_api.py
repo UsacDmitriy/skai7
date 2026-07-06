@@ -77,6 +77,26 @@ class TestTickets:
         assert tickets[0].deadline is None
         assert tickets[0].is_overdue is False
 
+    def test_tickets_false_positive_status_preserved(
+        self, client: TestClient, tmp_path, monkeypatch
+    ):
+        # false_positive — валидный Status (§3.1); НЕ должен понижаться до active.
+        monkeypatch.setattr(settings, "output_dir", tmp_path)
+        csv_path = tmp_path / "actions.csv"
+        with csv_path.open("w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(["created_at", "incident_id", "action", "comment", "status"])
+            w.writerow(
+                ["2026-01-01T00:00:00+00:00", "INC-FP", "false_positive", "c",
+                 "false_positive"]
+            )
+
+        r = client.get("/api/tickets")
+        assert r.status_code == 200, r.text
+        tickets = [Ticket(**t) for t in r.json()]
+        assert len(tickets) == 1
+        assert tickets[0].status == "false_positive"
+
 
 # ---------------------------------------------------------------------------
 # GET /api/alerts/{id} → DispatchAlert (§7.5, идея #5)

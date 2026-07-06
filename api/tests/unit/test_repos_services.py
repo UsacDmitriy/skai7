@@ -65,12 +65,13 @@ class TestActionsService:
         csv_path = tmp_path / "actions.csv"
         assert csv_path.exists()
         lines = csv_path.read_text(encoding="utf-8").strip().splitlines()
-        # Колонки контракта §3.4 — дословно.
-        assert lines[0] == "created_at,incident_id,action,comment"
-        # created_at,incident_id,action,comment — ровно 4 поля в строке данных.
+        # Колонки контракта §3.4 — дословно (status персистится для multi-worker).
+        assert lines[0] == "created_at,incident_id,action,comment,status"
+        # created_at,incident_id,action,comment,... — контрактные поля данных.
         last = lines[-1].split(",")
         assert last[1:4] == ["INC-42", "create_task", "hello"]
         assert last[0]  # created_at не пуст
+        assert last[4] == "in_progress"  # status create_task → in_progress
 
         actions_service.reset_overrides()
 
@@ -85,5 +86,27 @@ class TestActionsService:
         assert actions_service.status_for("INC-7") == "active"  # дефолт
         actions_service.record(Action(incident_id="INC-7", action="validate", comment="ok"))
         assert actions_service.status_for("INC-7") == "validated"
+
+        actions_service.reset_overrides()
+
+    def test_status_persists_across_workers_via_csv(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Статус переживает multi-worker: другой воркер (пустой in-memory кеш)
+        читает статус из журнала CSV, а не теряет его (регресс d2d4d55)."""
+        from api.core.config import settings
+
+        monkeypatch.setattr(settings, "output_dir", tmp_path)
+        actions_service.reset_overrides()
+
+        actions_service.record(
+            Action(incident_id="INC-9", action="false_positive", comment="ложняк")
+        )
+        assert actions_service.status_for("INC-9") == "false_positive"
+
+        # Симулируем другой worker-процесс: его in-memory кеш пуст.
+        actions_service.reset_overrides()
+        # Статус НЕ теряется — читается из персистентного журнала.
+        assert actions_service.status_for("INC-9") == "false_positive"
 
         actions_service.reset_overrides()

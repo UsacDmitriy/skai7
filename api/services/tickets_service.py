@@ -30,7 +30,7 @@ _VIDEO_WINDOW_SEC = 15
 
 # Допустимые значения статуса заявки (единый enum §3.1). Дефолт — «active» (НЕ «new»).
 _VALID_STATUSES: frozenset[str] = frozenset(
-    {"active", "in_progress", "validated", "closed"}
+    {"active", "in_progress", "validated", "false_positive", "closed"}
 )
 
 

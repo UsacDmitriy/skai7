@@ -1,7 +1,12 @@
-"""Журнал действий (§3.4): запись в output/actions.csv + рантайм-статус инцидента.
+"""Журнал действий (§3.4): запись в output/actions.csv + статус инцидента.
 
-POST /api/actions меняет `status` инцидента в рантайме — отдельной таблицы нет,
-держим in-memory словарь (сбрасывается на рестарте; источник истины журнала — CSV).
+POST /api/actions меняет `status` инцидента. Отдельной таблицы нет — **источник
+истины статуса — журнал `output/actions.csv`** (паттерн `review_service`): статус
+пишется в колонку `status`, при чтении журнал сворачивается «последняя запись по
+`incident_id` побеждает». Это переживает multi-worker (`api-prod`, `api_workers=0`):
+воркер, не писавший действие, читает статус из журнала, а не теряет его.
+In-memory `_status_overrides` — write-through кеш поверх журнала (ускорение чтения
+в рамках процесса); при промахе кеша (другой воркер) статус берётся из CSV.
 `incidents_service` читает статус через `status_for`.
 """
 
@@ -27,9 +32,13 @@ _ACTION_TO_STATUS: dict[str, Status] = {
     "stop_vehicle": "in_progress",
 }
 
-_CSV_COLUMNS = ["created_at", "incident_id", "action", "comment"]
+# `status` персистится в журнал — иначе статус не переживал бы multi-worker.
+_CSV_COLUMNS = ["created_at", "incident_id", "action", "comment", "status"]
 
-# Рантайм-переопределения статуса (incident_id → Status).
+# Допустимые персистентные статусы (единый enum §3.1).
+_VALID_STATUSES: frozenset[str] = frozenset(_ACTION_TO_STATUS.values()) | {"active"}
+
+# Write-through кеш статуса поверх журнала (incident_id → Status).
 _status_overrides: dict[str, Status] = {}
 
 
@@ -47,16 +56,37 @@ def _ensure_csv() -> Path:
     return path
 
 
+def _csv_status_for(incident_id: str) -> Status | None:
+    """Последний непустой валидный статус инцидента из журнала или None.
+
+    Легаси-строки без колонки `status` (старый 4-колоночный формат) пропускаются →
+    их инциденты остаются в дефолте «active». Битые строки не роняют чтение.
+    """
+    path = _actions_csv_path()
+    if not path.exists():
+        return None
+    status: Status | None = None
+    with path.open(newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if str(row.get("incident_id") or "") != incident_id:
+                continue
+            raw = str(row.get("status") or "").strip()
+            if raw in _VALID_STATUSES:
+                status = raw  # type: ignore[assignment]  # последняя запись побеждает
+    return status
+
+
 def record(action: Action) -> Action:
-    """Дописывает действие в CSV и обновляет рантайм-статус инцидента."""
+    """Дописывает действие в CSV (со статусом) и обновляет кеш статуса."""
     path = _ensure_csv()
     created_at = datetime.now(timezone.utc).isoformat()
+    new_status = _ACTION_TO_STATUS.get(action.action)
     with path.open("a", newline="", encoding="utf-8") as f:
         csv.writer(f).writerow(
-            [created_at, action.incident_id, action.action, action.comment]
+            [created_at, action.incident_id, action.action, action.comment,
+             new_status or ""]
         )
 
-    new_status = _ACTION_TO_STATUS.get(action.action)
     if new_status is not None:
         _status_overrides[action.incident_id] = new_status
 
@@ -64,10 +94,17 @@ def record(action: Action) -> Action:
 
 
 def status_for(incident_id: str) -> Status:
-    """Текущий статус инцидента: рантайм-переопределение или дефолт «active» (§2)."""
-    return _status_overrides.get(incident_id, "active")
+    """Текущий статус инцидента: кеш → журнал CSV → дефолт «active» (§2).
+
+    Фолбэк на журнал делает статус видимым для воркера, не писавшего действие
+    (multi-worker safe). Дефолт — «active».
+    """
+    cached = _status_overrides.get(incident_id)
+    if cached is not None:
+        return cached
+    return _csv_status_for(incident_id) or "active"
 
 
 def reset_overrides() -> None:
-    """Сброс рантайм-статусов (для тестов)."""
+    """Сброс in-memory кеша статусов (для тестов; журнал CSV не трогаем)."""
     _status_overrides.clear()

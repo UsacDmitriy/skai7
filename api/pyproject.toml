@@ -21,6 +21,7 @@ select = ["E4", "E7", "E9", "F"]
 "core/enrichment.py" = ["F841"]            # b2 · неиспользуемая локальная `s`
 "services/incidents_service.py" = ["F841"] # b5 · неиспользуемая `video_available`
 "tests/**" = ["E402"]                       # x3 · поздний import в тесте
+"main.py" = ["E402"]                        # намеренный multipart-лимит STT до импортов (коммит 5af14ad)
 
 [tool.ruff.format]
 quote-style = "double"

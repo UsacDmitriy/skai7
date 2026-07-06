@@ -7,7 +7,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.domain.hypercare import (
-    EvidenceRequest,
     HypercareEvidence,
     HypercareRule,
     ManualRequest,
