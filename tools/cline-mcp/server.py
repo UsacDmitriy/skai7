@@ -36,8 +36,20 @@ CLINE_URL = os.getenv(
 )
 CLINE_TIMEOUT_SECONDS = float(os.getenv("CLINE_TIMEOUT_SECONDS", "600"))
 _SAFE_MODEL_PREFIX = "cline-pass/"
+_REQUIRED_ROUTES = {"simple", "simple-structured", "code", "synthesis", "review"}
+_PRIVATE_KEY_PATTERN = re.compile(
+    r"-----BEGIN(?: [A-Z0-9]+)* PRIVATE KEY-----.*?"
+    r"-----END(?: [A-Z0-9]+)* PRIVATE KEY-----",
+    re.IGNORECASE | re.DOTALL,
+)
+_BEARER_PATTERN = re.compile(
+    r"(?i)(authorization\s*[:=]\s*bearer\s+)[^\s,;]+"
+)
+_CREDENTIAL_URI_PATTERN = re.compile(
+    r"(?i)\b([a-z][a-z0-9+.-]*://)[^/\s:@]+:[^@\s/]+@"
+)
 _SECRET_PATTERN = re.compile(
-    r"(?i)\b(api[_-]?key|authorization|password|secret|token)\b"
+    r"(?i)\b(api[_-]?key|authorization|client[_-]?secret|credential|password|secret|token)\b"
     r"(\s*[:=]\s*)([^\s,;]+)"
 )
 
@@ -76,6 +88,12 @@ def load_model_registry(path: Path) -> tuple[dict[str, str], dict[str, str]]:
         raise ValueError("models.env does not define any CLINE_MODEL_* entries")
     if not routes:
         raise ValueError("models.env does not define any CLINE_ROUTE_* entries")
+    missing_routes = sorted(_REQUIRED_ROUTES - set(routes))
+    if missing_routes:
+        raise ValueError(
+            "models.env is missing required canonical routes: "
+            + ", ".join(missing_routes)
+        )
     missing_aliases = sorted(set(routes.values()) - set(models))
     if missing_aliases:
         raise ValueError(
@@ -101,15 +119,22 @@ def _api_key() -> str:
 
 
 def _redact(text: str) -> str:
+    text = _PRIVATE_KEY_PATTERN.sub("[REDACTED PRIVATE KEY]", text)
+    text = _CREDENTIAL_URI_PATTERN.sub(r"\1[REDACTED]@", text)
+    text = _BEARER_PATTERN.sub(r"\1[REDACTED]", text)
     return _SECRET_PATTERN.sub(lambda match: f"{match.group(1)}=[REDACTED]", text)
 
 
-def _purpose(prompt: str) -> str:
+def _prompt_field(prompt: str, field: str, limit: int) -> str:
+    prefix = f"{field}:"
     for line in prompt.splitlines():
-        if line.upper().startswith("TASK:"):
-            return _redact(line.split(":", 1)[1].strip())[:240] or "unspecified"
-    first_line = next((line.strip() for line in prompt.splitlines() if line.strip()), "")
-    return _redact(first_line)[:240] or "unspecified"
+        if line.upper().startswith(prefix):
+            return _redact(line.split(":", 1)[1].strip())[:limit]
+    return ""
+
+
+def _purpose(prompt: str) -> str:
+    return _prompt_field(prompt, "TASK", 240) or "unspecified"
 
 
 def record_audit(
@@ -125,13 +150,16 @@ def record_audit(
     response_chars: int,
 ) -> None:
     combined_instruction = prompt if system is None else f"SYSTEM: {system}\n{prompt}"
+    task = _purpose(prompt)
+    context_refs = _prompt_field(prompt, "CONTEXT_REFS", 700) or "not provided"
     _AUDIT_LEDGER.append(
         {
             "call": len(_AUDIT_LEDGER) + 1,
             "model": model_alias,
             "model_slug": model_slug,
-            "purpose": _purpose(prompt),
-            "instruction_preview": _redact(combined_instruction)[:1000],
+            "purpose": task,
+            "context_refs": context_refs,
+            "instruction_preview": f"TASK: {task}\nCONTEXT_REFS: {context_refs}",
             "prompt_chars": len(combined_instruction),
             "prompt_sha256": hashlib.sha256(
                 combined_instruction.encode("utf-8")

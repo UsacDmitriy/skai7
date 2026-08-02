@@ -57,7 +57,9 @@ Every final Claude/Codex response must include a `ClinePass delegation report`.
 Use `audit_report()` as the factual source when calls were made. Report total
 calls and, for each call, its model, purpose/instruction preview, prompt size or
 hash, token limit, status, finish reason, and usage when available. Redact
-secret-like values.
+secret-like values. The audit preview may contain only redacted `TASK` and
+`CONTEXT_REFS`; raw `CONTEXT`, system prompts, credentials, and private-key data
+must never be retained in the ledger.
 
 If there were no ClinePass calls, explicitly report `Total calls: 0` and the
 reason, for example: direct Claude/Codex work with native agents was sufficient,

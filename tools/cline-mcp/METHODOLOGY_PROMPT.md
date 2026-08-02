@@ -64,8 +64,10 @@ Claude/Codex must verify every accepted result.
 End every user-facing result with `ClinePass delegation report`.
 
 - If calls were made, use `audit_report()` and state the exact total. For every
-  call include model, purpose/instruction preview, prompt character count and
-  SHA-256, `max_tokens`, status, finish reason, and usage when available.
+  call include model, redacted `TASK` and `CONTEXT_REFS`, prompt character count
+  and SHA-256, `max_tokens`, status, finish reason, and usage when available.
+- The audit ledger must not retain raw `CONTEXT`, system prompts, credential
+  values, credential-bearing URIs, bearer tokens, or private-key blocks.
 - Redact secret-like data and refer to large contexts by file/reference and hash.
 - If no calls were made, state `Total calls: 0` and the factual reason (for
   example, direct Claude/Codex execution with native agents was sufficient).

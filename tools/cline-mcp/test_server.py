@@ -81,6 +81,18 @@ class ModelRegistryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "cline-pass/"):
                 self.server.load_model_registry(registry)
 
+    def test_registry_requires_canonical_routes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            registry = Path(directory) / "models.env"
+            registry.write_text(
+                "CLINE_MODEL_MINIMAX=cline-pass/minimax-m3\n"
+                "CLINE_ROUTE_SIMPLE=minimax\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ValueError, "required canonical routes"):
+                self.server.load_model_registry(registry)
+
     def test_server_source_has_no_versioned_model_slugs(self) -> None:
         source = SERVER_PATH.read_text(encoding="utf-8")
         for versioned_slug in (
@@ -106,7 +118,12 @@ class AuditTests(unittest.TestCase):
         self.server.reset_audit()
 
     def test_audit_reports_prompt_count_hash_and_redacted_instruction(self) -> None:
-        prompt = "TASK: classify input\nCONTEXT: token=top-secret\nOUTPUT_CONTRACT: JSON"
+        prompt = (
+            "TASK: classify input\n"
+            "CONTEXT_REFS: src/input.json\n"
+            "CONTEXT: token=top-secret raw-private-context\n"
+            "OUTPUT_CONTRACT: JSON"
+        )
         self.server.record_audit(
             model_alias="minimax",
             model_slug="cline-pass/minimax-m3",
@@ -125,12 +142,67 @@ class AuditTests(unittest.TestCase):
         call = report["calls"][0]
         self.assertEqual(call["model"], "minimax")
         self.assertEqual(call["purpose"], "classify input")
+        self.assertEqual(call["context_refs"], "src/input.json")
+        self.assertEqual(
+            call["instruction_preview"],
+            "TASK: classify input\nCONTEXT_REFS: src/input.json",
+        )
         self.assertEqual(call["prompt_chars"], len(prompt))
         self.assertEqual(len(call["prompt_sha256"]), 64)
         self.assertEqual(call["max_tokens"], 700)
         self.assertEqual(call["status"], "ok")
         self.assertEqual(call["finish_reason"], "stop")
         self.assertNotIn("top-secret", json.dumps(report))
+        self.assertNotIn("raw-private-context", json.dumps(report))
+
+    def test_redact_handles_bearer_uri_client_secret_and_private_key(self) -> None:
+        raw = (
+            "Authorization: Bearer bearer-value client_secret=client-value "
+            "postgres://alice:db-password@db.example/skai\n"
+            "-----BEGIN PRIVATE KEY-----\nprivate-key-material\n"
+            "-----END PRIVATE KEY-----"
+        )
+
+        redacted = self.server._redact(raw)
+
+        for secret in (
+            "bearer-value",
+            "client-value",
+            "alice",
+            "db-password",
+            "private-key-material",
+        ):
+            self.assertNotIn(secret, redacted)
+        self.assertIn("[REDACTED", redacted)
+
+    def test_audit_does_not_retain_system_prompt_or_context(self) -> None:
+        prompt = (
+            "TASK: bounded review\n"
+            "CONTEXT_REFS: api/service.py\n"
+            "CONTEXT: private-context-payload"
+        )
+        system = "system-private-instruction"
+
+        self.server.record_audit(
+            model_alias="kimi-k3",
+            model_slug="cline-pass/kimi-k3",
+            prompt=prompt,
+            system=system,
+            max_tokens=200,
+            status="ok",
+            finish_reason="stop",
+            usage=None,
+            response_chars=12,
+        )
+
+        report = json.loads(self.server.audit_report())
+        serialized = json.dumps(report)
+        self.assertNotIn("private-context-payload", serialized)
+        self.assertNotIn("system-private-instruction", serialized)
+        self.assertEqual(
+            report["calls"][0]["prompt_chars"],
+            len(f"SYSTEM: {system}\n{prompt}"),
+        )
 
     def test_audit_reset_clears_task_ledger(self) -> None:
         self.server.record_audit(
