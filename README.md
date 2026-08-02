@@ -49,7 +49,8 @@ cp .env.example .env
 
 ```
 .
-├── agents.md              ← описание задачи
+├── AGENTS.md              ← инструкции Claude/Codex и model policy
+├── PROJECT_SCOPE.md       ← описание задачи и контекст продукта
 ├── requirements.txt       ← pandas, numpy, altair
 ├── README.md              ← этот файл
 ├── backend/               ← дата-слой и бизнес-логика
