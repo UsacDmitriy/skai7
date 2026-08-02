@@ -60,15 +60,15 @@ def load_model_registry(path: Path) -> tuple[dict[str, str], dict[str, str]]:
         key, value = (part.strip() for part in line.split("=", 1))
         value = value.strip("'\"")
         if key.startswith("CLINE_MODEL_"):
-            alias = key.removeprefix("CLINE_MODEL_").lower()
+            alias = key.removeprefix("CLINE_MODEL_").lower().replace("_", "-")
             if not value.startswith(_SAFE_MODEL_PREFIX):
                 raise ValueError(
                     f"Model {alias!r} must use the {_SAFE_MODEL_PREFIX!r} prefix"
                 )
             models[alias] = value
         elif key.startswith("CLINE_ROUTE_"):
-            route = key.removeprefix("CLINE_ROUTE_").lower()
-            routes[route] = value.lower()
+            route = key.removeprefix("CLINE_ROUTE_").lower().replace("_", "-")
+            routes[route] = value.lower().replace("_", "-")
         else:
             raise ValueError(f"Unsupported models.env key on line {line_number}: {key}")
 
@@ -186,7 +186,7 @@ def _ask(
         "model": model_slug,
         "messages": messages,
         "temperature": 0,
-        "max_tokens": max_tokens,
+        "max_completion_tokens": max_tokens,
     }
     try:
         headers = {
@@ -290,7 +290,7 @@ def ask_kimi_k3(
     prompt: str, system: str | None = None, max_tokens: int = 4096
 ) -> str:
     """Call the configured Kimi K3 model."""
-    return _ask("kimi_k3", prompt, system, max_tokens)
+    return _ask("kimi-k3", prompt, system, max_tokens)
 
 
 @mcp.tool()
@@ -298,7 +298,7 @@ def ask_kimi_code(
     prompt: str, system: str | None = None, max_tokens: int = 4096
 ) -> str:
     """Call the configured Kimi coding model."""
-    return _ask("kimi_code", prompt, system, max_tokens)
+    return _ask("kimi-code", prompt, system, max_tokens)
 
 
 @mcp.tool()
@@ -312,7 +312,7 @@ def ask_deepseek(
     prompt: str, system: str | None = None, max_tokens: int = 4096
 ) -> str:
     """Call the configured DeepSeek synthesis model."""
-    return _ask("deepseek", prompt, system, max_tokens)
+    return _ask("deepseek-pro", prompt, system, max_tokens)
 
 
 @mcp.tool()
@@ -320,7 +320,7 @@ def ask_deepseek_flash(
     prompt: str, system: str | None = None, max_tokens: int = 4096
 ) -> str:
     """Call the configured DeepSeek flash model."""
-    return _ask("deepseek_flash", prompt, system, max_tokens)
+    return _ask("deepseek-flash", prompt, system, max_tokens)
 
 
 @mcp.tool()
@@ -342,7 +342,7 @@ def ask_mimo_pro(
     prompt: str, system: str | None = None, max_tokens: int = 4096
 ) -> str:
     """Call the configured MiMo Pro model."""
-    return _ask("mimo_pro", prompt, system, max_tokens)
+    return _ask("mimo-pro", prompt, system, max_tokens)
 
 
 @mcp.tool()
@@ -350,7 +350,7 @@ def ask_qwen_max(
     prompt: str, system: str | None = None, max_tokens: int = 4096
 ) -> str:
     """Call the configured Qwen Max model."""
-    return _ask("qwen_max", prompt, system, max_tokens)
+    return _ask("qwen-max", prompt, system, max_tokens)
 
 
 @mcp.tool()

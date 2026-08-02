@@ -39,11 +39,11 @@ Claude/Codex must verify every accepted result.
    improves a suitable bounded subtask.
 3. Select a policy route with `ask_route()`:
    - `simple`: drafts, labels, classification, non-strict extraction;
-   - `structured`: requirements or strict structured extraction;
+   - `simple-structured`: requirements or strict structured extraction;
    - `code`: isolated code/test proposals;
    - `synthesis`: broad synthesis over supplied context;
    - `review`: independent review;
-   - `review_secondary`: second opinion for a high-risk review.
+   - `review-secondary`: second opinion for a high-risk review.
 4. Build self-contained prompts with these sections:
 
    ```text

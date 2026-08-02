@@ -60,12 +60,13 @@ class ModelRegistryTests(unittest.TestCase):
             Path(__file__).with_name("models.env")
         )
 
-        self.assertEqual(models["kimi_k3"], "cline-pass/kimi-k3")
+        self.assertEqual(models["kimi-k3"], "cline-pass/kimi-k3")
         self.assertEqual(routes["simple"], "minimax")
-        self.assertEqual(routes["structured"], "kimi_k3")
-        self.assertEqual(routes["code"], "kimi_code")
-        self.assertEqual(routes["synthesis"], "deepseek")
-        self.assertEqual(routes["review"], "kimi_k3")
+        self.assertEqual(routes["simple-structured"], "kimi-k3")
+        self.assertEqual(routes["code"], "kimi-code")
+        self.assertEqual(routes["synthesis"], "deepseek-pro")
+        self.assertEqual(routes["review"], "kimi-k3")
+        self.assertEqual(routes["review-secondary"], "deepseek-pro")
         self.assertTrue(all(slug.startswith("cline-pass/") for slug in models.values()))
         self.assertTrue(all(alias in models for alias in routes.values()))
 
@@ -156,6 +157,46 @@ class AuditTests(unittest.TestCase):
         self.assertIn("[cline bridge error]", result)
         self.assertEqual(report["total_calls"], 1)
         self.assertEqual(report["calls"][0]["status"], "bridge_error")
+
+    def test_api_payload_uses_fireworks_completion_token_field(self) -> None:
+        captured: dict[str, object] = {}
+
+        class DummyResponse:
+            def raise_for_status(self) -> None:
+                pass
+
+            def json(self) -> dict[str, object]:
+                return {
+                    "data": {
+                        "choices": [
+                            {"message": {"content": "ok"}, "finish_reason": "stop"}
+                        ]
+                    }
+                }
+
+        class DummyClient:
+            def __init__(self, **_kwargs: object) -> None:
+                pass
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args: object) -> None:
+                pass
+
+            def post(self, _url: str, *, json: dict[str, object], **_kwargs: object):
+                captured.update(json)
+                return DummyResponse()
+
+        with (
+            mock.patch.dict("os.environ", {"CLINE_API_KEY": "test-key"}, clear=True),
+            mock.patch.object(self.server.httpx, "Client", DummyClient),
+        ):
+            result = self.server._ask("minimax", "TASK: draft", max_tokens=321)
+
+        self.assertEqual(result, "ok")
+        self.assertEqual(captured["max_completion_tokens"], 321)
+        self.assertNotIn("max_tokens", captured)
 
 
 if __name__ == "__main__":

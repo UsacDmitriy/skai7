@@ -40,9 +40,9 @@
 - At the start of a user task, call `reset_audit()` if the ClinePass bridge is
   available. Use `ask_route()` for policy routes and verify every useful result
   before accepting it.
-- Recommended routes: `simple` for drafts/classification, `structured` for
+- Recommended routes: `simple` for drafts/classification, `simple-structured` for
   strict structured extraction, `code` for isolated code/test proposals,
-  `synthesis` for broad synthesis, and `review` plus `review_secondary` for
+  `synthesis` for broad synthesis, and `review` plus `review-secondary` for
   independent or high-risk review.
 - A ClinePass prompt should contain `TASK`, `CONTEXT_REFS`, the minimum required
   `CONTEXT`, `OUTPUT_CONTRACT`, `CHECK`, and `STOP` conditions. Never send
