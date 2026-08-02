@@ -1,7 +1,7 @@
 # W3-16 · AI-фундамент: ML-зависимости + `data/ai/`-кэш + `ai_metric_events` (подготовка Волны 4)
 
 > Волна 3 · бэклог (**подготовка под Волну 4**). Трек **Backend/Data**. Против `00-CONTRACT.md` §8.0/§8.1/§8.7.
-> **Модель:** 🔵 Sonnet — детерминированный каркас против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированный каркас против контракта; гейт = секция Check.
 > **Владеет:** `api/requirements.txt` (добавки), `data/ai/` (каталог + схема + placeholder),
 > `api/etl/ai_cache_seed.py`, `api/sql/33_ai_metric_events.sql`. **Не блокирует** P0/P1/P2.
 > Разблокирует **b16,b17,b18,b19,b20,b23,b25** (Волна 4) — даёт каркас, который они **дополняют**, не пересоздают.

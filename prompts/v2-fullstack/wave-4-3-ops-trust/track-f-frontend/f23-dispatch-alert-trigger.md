@@ -2,7 +2,7 @@
 
 > Трек **Frontend**. **Волна 4.3 (Ops & Trust)** · достройка идеи #5 (целостность экранов).
 > Против `00-CONTRACT.md` §3.1 (`alarm_type_catalog.auto_request_video`), §7.5 (`DispatchAlert`), §7.8 (AC «Dispatch alert»).
-> **Модель:** 🔵 Sonnet — точечная навигация + overlay-паттерн; гейт = typecheck, без бизнес-логики модала.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — точечная навигация + overlay-паттерн; гейт = typecheck, без бизнес-логики модала.
 > **Владеет:** правкой `web/src/pages/EventsFeed.tsx` (+ опционально `web/src/pages/Monitor.tsx`). Зависит от f9 (`DispatchAlert.tsx`, маршрут `/alert/:id` в `App.tsx` уже есть).
 
 ## Контекст (зачем)

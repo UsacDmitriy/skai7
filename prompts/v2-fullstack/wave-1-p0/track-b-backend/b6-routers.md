@@ -1,7 +1,7 @@
 # b6 · Роутеры FastAPI
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §3.2–3.4. **Владеет:** `api/routers/*`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Подключает сервисы b5 (`get_detail`, `list_summaries`, …) и зависимость `get_db` (b4).
 > Регистрацию роутеров в app делает x2 (или этот промпт добавляет include — согласовать с b4-комментом).
 

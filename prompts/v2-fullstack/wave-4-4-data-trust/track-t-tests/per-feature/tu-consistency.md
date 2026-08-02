@@ -1,7 +1,7 @@
 # tu-consistency · Unit-тесты Data Trust (фичи #21/#22, модули b28/b29)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §10.2/§10.3/§10.5.
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_consistency.py`, `api/tests/unit/test_speed_check.py`.
 > Инфра — из `t1`. Гонится после `b29` (нужны оба view/сервиса).
 

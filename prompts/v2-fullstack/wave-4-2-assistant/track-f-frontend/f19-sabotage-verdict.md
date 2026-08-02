@@ -2,7 +2,7 @@
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §8 + §7.5. **Владеет:** **аддитивная** правка
 > `web/src/components/SabotageWidget.tsx`; f2-клиент.
-> **Модель:** 🔵 Sonnet — вёрстка/состояния против контракта; гейт = typecheck.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — вёрстка/состояния против контракта; гейт = typecheck.
 > **Волна 4.2**, окно 2 (web). Зависит от: b23 (`verdict_confidence`/`verdict_reason` в `SabotageEvent`).
 
 ## Цель

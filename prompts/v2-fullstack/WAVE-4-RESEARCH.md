@@ -239,20 +239,23 @@ Groq `groq.com/pricing` · Ollama `sitepoint.com/local-llms-complete-guide`.
 | **Предрасчёт+кэш** для VLM/API (`data/ai/*.json`, таблицы `incident_scene`/`incident_weather`) | §2.3 (офлайн/детерминизм) + §4.2a (VLM как enrichment) |
 | **Подволны 4.1/4.2 + барьеры** | паттерн Волны 2 в репо (консистентность) |
 | **Контракт-первый (`§8`)** | конвенция репо: кодим против `00-CONTRACT.md` |
-| **Модель-разметка Opus/Sonnet/Qwen** | прод-критерий из прошлых волн (на сложном не экономим) |
+| **Execution-разметка routine package / owner-only gate** | текущая owner-orchestrated политика: bounded routine work через ClinePass, high-judgement gates у Claude/Codex |
 | **Секции `## Коммит` + GUARD в `x6/x7`** | ранее закрытый разрыв «незакоммиченное на барьере» |
 | **Переиспользование** `enrichment.py`/`nlu_service`/`v_sabotage`/`Report.tsx`/`Monitor.tsx` | §2.2 (что уже реализовано) |
 
-### 6.2 Идея → промпты → модель → переиспользование
+### 6.2 Идея → промпты → execution class → переиспользование
 
-| Идея | Backend | Frontend/Design | Тесты | Модель (сложн.) | Переиспользует |
+| Идея | Backend | Frontend/Design | Тесты | Исполнение (сложн.) | Переиспользует |
 |---|---|---|---|---|---|
-| #11 Умное событие | `b16` scene (VLM, предрасчёт), `b17` weather-crosscheck + risk | `f15` scene-card, `d7` chips | `tu-scene`,`tu-weather` | b16/b18/b19 🔴 | `enrichment.risk_score`, кадры ch1/ch5, `v_incidents` |
-| #12 Прогноз | `b18` forecast (ARIMA+IForest), `b22` нарратив | `f16` forecast-report, `d7` sparkline | `tu-forecast` | b18 🔴 | `events_last_7d`, `reports_service` |
-| #13 Копилот | `b21` copilot (tool-use, RU/EN) | `f17` copilot-ui | `tu-copilot` | b21/f17 🔴 | `nlu_service` (расширение), все эндпоинты как tools |
-| #14 Геозоны/heatmap | `b19` zones (DBSCAN+РЭБ) | `f18` risk-heatmap, `d7` heat-layer | `tu-zones` | b19/f18 🔴 | `v_incidents` lat/lon, `navigation__track_periods`, Leaflet/`components/map` |
-| #15 Усталость | `b20` fatigue-chain | (копилот/монитор) | `tu-fatigue` | b20 🔵 | каталог алярмов, `ts` |
-| #16 Вердикт саботажа | `b23` verdict (confidence) | `f19` verdict-UI | `t-wave4-frontend` | b23 🔵 | `v_sabotage` (§7.5) + сцена #11 |
+| #11 Умное событие | `b16` scene (VLM, предрасчёт), `b17` weather-crosscheck + risk | `f15` scene-card, `d7` chips | `tu-scene`,`tu-weather` | b16/b18/b19 owner-only · Claude/Codex | `enrichment.risk_score`, кадры ch1/ch5, `v_incidents` |
+| #12 Прогноз | `b18` forecast (ARIMA+IForest), `b22` нарратив | `f16` forecast-report, `d7` sparkline | `tu-forecast` | b18 owner-only · Claude/Codex | `events_last_7d`, `reports_service` |
+| #13 Копилот | `b21` copilot (tool-use, RU/EN) | `f17` copilot-ui | `tu-copilot` | b21/f17 owner-only · Claude/Codex | `nlu_service` (расширение), все эндпоинты как tools |
+| #14 Геозоны/heatmap | `b19` zones (DBSCAN+РЭБ) | `f18` risk-heatmap, `d7` heat-layer | `tu-zones` | b19/f18 owner-only · Claude/Codex | `v_incidents` lat/lon, `navigation__track_periods`, Leaflet/`components/map` |
+| #15 Усталость | `b20` fatigue-chain | (копилот/монитор) | `tu-fatigue` | bounded ClinePass · worker · `code` | каталог алярмов, `ts` |
+| #16 Вердикт саботажа | `b23` verdict (confidence) | `f19` verdict-UI | `t-wave4-frontend` | bounded ClinePass · worker · `code` | `v_sabotage` (§7.5) + сцена #11 |
+
+Для routine-строк exact route alias и model slug разрешаются только из
+`tools/clinepass-mcp/models.env`; таблица не задаёт route-to-model mapping.
 
 ### 6.3 Как конкретные находки попали в текст промптов
 
@@ -281,10 +284,10 @@ Groq `groq.com/pricing` · Ollama `sitepoint.com/local-llms-complete-guide`.
 
 ## 7. Артефакты и верификация
 
-**Создано:** 23 промпта Волны 4 (15 🔵 + 8 🔴) + 4 README + 2 барьера; расширены `00-CONTRACT.md §8`,
+**Создано:** 23 промпта Волны 4 (15 bounded routine packages + 8 owner-only gates) + 4 README + 2 барьера; расширены `00-CONTRACT.md §8`,
 `FEATURES.md (#11–#16 + DoD)`, `EXECUTION.md` (раздел + mermaid + легенда **7/43/30 = 80**), `README.md`.
 
-**Проверки (Python, т.к. ugrep ложно реагировал на `\*\*`):** все 23 промпта — с модель-тегом и секцией
+**Проверки (Python, т.к. ugrep ложно реагировал на `\*\*`):** все 23 промпта — с execution-tag и секцией
 `## Коммит`; `x6`/`x7` содержат GUARD; mermaid сбалансирован (subgraph 30 / end 30). Физически 84 файла
 с тегом = 80 логических + 4 дубликата барьерных копий (`x2`×4/`x3`×2 по папкам).
 
@@ -300,7 +303,7 @@ Groq `groq.com/pricing` · Ollama `sitepoint.com/local-llms-complete-guide`.
 - **VLM-точность сцены** — эмпирически не замерял на данных SKAI; рекомендация опирается на литературу
   (>95 % для погоды/день-ночь) → поэтому VLM позиционирован как enrichment + ручная проверка кэша.
 - **Прогноз на 54 алярмах** — данных мало; в `b18` явно заложен baseline-фолбэк при нехватке точек.
-- Это **план/спека**: промпты исполнятся моделями позже; реальное качество фич подтвердит барьерный smoke
+- Это **план/спека**: промпты выполнятся owner-orchestrated packages позже; реальное качество фич подтвердит барьерный smoke
   (`x6`/`x7`), а не этот документ.
 
 ---
@@ -343,4 +346,3 @@ confidence bands, уже в `b18`).
 > [`COMPETITORS.md`](COMPETITORS.md); кандидаты следующей волны (review queue, коучинг-цикл, green-zone,
 > консистентность фаза 2) → [`WAVE-5-BACKLOG.md`](WAVE-5-BACKLOG.md). Консистентность данных реализуется
 > Волной 4.4 «Data Trust» — контракт §10, промпты `wave-4-4-data-trust/`, барьер x9.
-

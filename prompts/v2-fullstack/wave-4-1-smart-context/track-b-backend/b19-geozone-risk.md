@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.1/§8.3/§8.4. **Владеет:** `api/services/zones_service.py`,
 > `api/sql/32_v_risk_zones.sql`, роутер `api/routers/zones.py` (автодискавери `api/main.py:_discover_routers` —
 > объяви `router = APIRouter(...)` в своём файле; **НЕ** редактируй общий `api/routers/__init__.py`, иначе гонка с b18/b20).
-> **Модель:** 🔴 Opus — пространственная кластеризация + агрегация двух источников.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — пространственная кластеризация + агрегация двух источников.
 > **Волна 4.1**, окно 1 (backend). Зависит от: b3 (`v_incidents` lat/lon/risk), навигация (`period_type=3`).
 
 ## Цель

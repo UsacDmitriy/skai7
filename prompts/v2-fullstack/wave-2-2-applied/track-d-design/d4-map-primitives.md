@@ -1,7 +1,7 @@
 # d4 · Map-примитивы (Leaflet + React)
 
 > Трек **Design**. Против `00-CONTRACT.md` §4 (палитра) + §7.6 (добавки map/roles) + §7.7 (владение d4).
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > **Владеет:** `web/src/components/map/*` (`MapView.tsx`, `MarkerLayer.tsx`, `RoleToggle.tsx`).
 > Зависит от d1 (токены). Использует токены d1, но НЕ редактирует tailwind.config.
 > Карты — `react-leaflet`, иконки — `lucide-react`.

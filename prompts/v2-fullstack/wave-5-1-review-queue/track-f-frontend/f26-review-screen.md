@@ -3,7 +3,7 @@
 > Трек **Frontend**. Против `00-CONTRACT.md` §11.2/§11.3/§11.4. **Владеет:**
 > `web/src/pages/ReviewQueue.tsx`; **аддитивные** правки `web/src/App.tsx` (роут/NAV/COMING_SOON),
 > `web/src/api/types.ts`, `web/src/api/client.ts`, `web/src/api/fixtures.ts`.
-> **Модель:** 🔵 Sonnet — таблица+экшены против контракта (паттерн Tickets f8); гейт = typecheck + vitest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — таблица+экшены против контракта (паттерн Tickets f8); гейт = typecheck + vitest.
 > **Волна 5.1**, окно 2 (web). Зависит от: b30 (эндпоинты §11.1), f22 (статус-кво `/validation`).
 
 ## Контекст (зачем)

@@ -1,7 +1,7 @@
 # tu-zones · Unit-тесты geozone-risk (идея #14, модуль b19)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.1/§8.4.
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_zones.py`. Инфра — из `t1`. Гонится после `b19`.
 
 ## Цель

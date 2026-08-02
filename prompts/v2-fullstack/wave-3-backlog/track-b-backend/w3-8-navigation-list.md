@@ -1,7 +1,7 @@
 # W3-8 · Домен navigation (список проблемных треков → вход в РЭБ) — снять 501-стаб
 
 > Волна 3 · бэклог. Трек **Backend/Data**. Против `00-CONTRACT.md` **§9** (§9.1/§9.2/§9.3/§9.5) + §7.4 (`/api/reb`).
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = секция Check.
 > **Владеет:** `api/sql/27_v_nav_problem.sql`, `api/services/navigation_service.py`, роутер
 > `api/routers/navigation.py` (сейчас → `501`). **Зависит от** b12 (`/api/reb/{id}` уже реализован). **Не блокирует** P0/P1/P2.
 

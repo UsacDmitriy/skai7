@@ -1,7 +1,7 @@
 # W3-15 · Фронт-тесты «Здоровье парка» + кросс-врезки (vitest)
 
 > Волна 3 · бэклог. Трек **T (tests)**. Против `00-CONTRACT.md` **§9.4** + §7.8-стиль состояний.
-> **Модель:** 🔵 Sonnet — детерминированные тесты против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированные тесты против контракта; гейт = секция Check.
 > **Владеет:** `web/src/pages/FleetHealth.test.tsx`, `FuelCard.test.tsx`, `SensorCard.test.tsx`,
 > и врезочные кейсы в `IncidentCard.test.tsx`/`TripDossier.test.tsx`/`App.test.tsx`. Режим `VITE_USE_FIXTURES=true`.
 > Счёт в гейт web≥80% (Барьер 3). **Зависит от** w3-10..w3-13.

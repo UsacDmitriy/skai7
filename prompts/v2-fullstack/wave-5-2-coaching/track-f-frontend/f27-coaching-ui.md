@@ -2,7 +2,7 @@
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §12.3/§12.4. **Владеет:** **аддитивной** правкой
 > `web/src/pages/Report.tsx` (driver-ветка) + `web/src/api/types.ts`, `web/src/api/client.ts`,
-> `web/src/api/fixtures.ts`. **Модель:** 🔵 Sonnet — секция отчёта против контракта; гейт = typecheck + vitest.
+> `web/src/api/fixtures.ts`. **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — секция отчёта против контракта; гейт = typecheck + vitest.
 > **Волна 5.2**, окно 2 (web). Зависит от: b32 (эндпоинты §12.2).
 
 ## Цель

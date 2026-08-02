@@ -1,7 +1,7 @@
 # T3 · Frontend-тесты (vitest + React Testing Library)
 
 > Track T (Claude Code, `feat/tests`). Против `00-CONTRACT.md` §3.1/§4/§7.5. **Владеет:** `web/vitest.config.ts`,
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > `web/src/test/**`, `web/src/**/*.test.tsx`. Запускается после d2/f2/f4 (и далее по мере f5–f13).
 > Не редактирует продуктовые компоненты — при баге заводит дефект треку D/F.
 

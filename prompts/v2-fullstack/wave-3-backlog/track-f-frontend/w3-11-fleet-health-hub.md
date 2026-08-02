@@ -1,7 +1,7 @@
 # W3-11 · Экраны «Здоровье парка» (хаб + карточки fuel/sensors + список навигации)
 
 > Волна 3 · бэклог. Трек **Frontend**. Против `00-CONTRACT.md` **§9** (§9.0/§9.4) + §7.8-стиль состояний.
-> **Модель:** 🔵 Sonnet — детерминированная вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная вёрстка против контракта; гейт = секция Check.
 > **Владеет:** `web/src/pages/FleetHealth.tsx`, `FuelCard.tsx`, `SensorCard.tsx`, `NavProblemList.tsx`.
 > Использует UI-примитивы d2 (`@/components`, `DataTable`/`Card`/бейджи) и API-клиент w3-10. **Зависит от** w3-10.
 > Маршруты подключает w3-13. **Не блокирует** P0/P1/P2.

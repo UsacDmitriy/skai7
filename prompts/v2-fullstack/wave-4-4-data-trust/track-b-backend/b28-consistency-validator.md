@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §10.0–§10.3, §10.5. **Владеет:** `api/sql/34_v_consistency.sql`,
 > `api/services/consistency_service.py`, `api/domain/consistency.py`, роутер `api/routers/consistency.py`
 > (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`).
-> **Модель:** 🔵 Sonnet — детерминированный SQL/агрегация против контракта; гейт = Check + tu-consistency.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированный SQL/агрегация против контракта; гейт = Check + tu-consistency.
 > **Волна 4.4**, окно 1 (backend), **первый** (затем b29). Зависит от: b1 (ETL/таблицы), §10.
 
 ## Цель

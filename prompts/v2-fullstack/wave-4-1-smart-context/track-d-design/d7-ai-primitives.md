@@ -1,7 +1,7 @@
 # d7 · AI-примитивы (идеи #11/#12/#14)
 
 > Трек **Design**. Против `00-CONTRACT.md` §4/§8.4 + токены d1. **Владеет:** `web/src/components/ai/*`.
-> **Модель:** 🔵 Sonnet — презентационные компоненты против контракта; гейт = typecheck/Storybook.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — презентационные компоненты против контракта; гейт = typecheck/Storybook.
 > **Волна 4.1**, окно 2 (web). Параллельно с backend (кодит против §8.4 типов и фикстур).
 
 ## Цель

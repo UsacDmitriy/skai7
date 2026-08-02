@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §12.0/§12.1. **Владеет:** `api/etl/seed_coaching.py`,
 > `data/seed/training_assignments.csv` (коммитится в git, как `driver_reference.csv`), строка в
-> `Makefile` цели `seed` (аддитивно). **Модель:** 🔵 Sonnet — детерминированная генерация по фиксированным
+> `Makefile` цели `seed` (аддитивно). **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная генерация по фиксированным
 > правилам; гейт = Check + tu-coaching. **Волна 5.2**, окно 1, **первый** (затем b32).
 > Зависит от: таблица алармов (b1), `data/seed/driver_reference.csv` (b7).
 

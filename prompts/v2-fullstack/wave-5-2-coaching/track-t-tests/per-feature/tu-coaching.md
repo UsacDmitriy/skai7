@@ -1,7 +1,7 @@
 # tu-coaching · Unit-тесты цикла обучения (фича #24, модули b31/b32)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §12.0–§12.4.
-> **Модель:** 🔵 Sonnet — детерминированная генерация/агрегация; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная генерация/агрегация; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_coaching.py`. Инфра — из `t1`. Гонится после `b32`.
 
 ## Цель

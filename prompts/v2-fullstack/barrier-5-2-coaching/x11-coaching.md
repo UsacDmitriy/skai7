@@ -1,7 +1,7 @@
 # x11 · Coaching Loop (Волна 5.2) → main
 
 > **Барьер Волны 5.2.** **Владеет:** только запуск/проверки (e2e цикла обучения + полный регресс +
-> продвижение `main`). **Модель:** 🔴 Opus — интеграция/приёмка/продвижение `main`.
+> продвижение `main`). **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — интеграция/приёмка/продвижение `main`.
 > Запускать ПОСЛЕ Волны 5.2 (b31, b32, f27, tu-coaching) и **зелёного x10**.
 
 ## Gate: x10 зелёный, main продвинут

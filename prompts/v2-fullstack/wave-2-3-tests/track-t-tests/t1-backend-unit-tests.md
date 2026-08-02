@@ -1,7 +1,7 @@
 # T1 · Backend unit — инфраструктура (pytest)
 
 > Track T (Claude Code, `feat/tests`). Против `00-CONTRACT.md` §2/§7.1/§7.5.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > **Владеет:** `api/tests/conftest.py`, `api/requirements-dev.txt`, `api/tests/unit/__init__.py`.
 > НЕ авторит сами `test_*.py` модулей — это делает per-feature слой `tu-*` (см. ниже).
 > НЕ редактирует продуктовый код — при найденном баге заводит дефект треку.

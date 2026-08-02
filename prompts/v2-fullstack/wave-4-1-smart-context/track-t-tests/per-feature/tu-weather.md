@@ -1,7 +1,7 @@
 # tu-weather · Unit-тесты weather-crosscheck (идея #11, модуль b17)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.1/§8.2.
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_weather_crosscheck.py`. Инфра — из `t1`. Гонится после `b17`.
 
 ## Цель

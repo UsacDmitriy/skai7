@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.9. **Владеет:** `api/core/security.py` (middleware),
 > `api/core/audit.py`, документ `docs/SLO.md`; **аддитивная** регистрация middleware в `api/main.py`.
-> **Модель:** 🔴 Opus — кросс-режущая безопасность (auth/audit/throttle на всех эндпоинтах), высокие ставки.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — кросс-режущая безопасность (auth/audit/throttle на всех эндпоинтах), высокие ставки.
 > **Волна 4.3** (AI Ops & Trust), окно 1 (backend). Демо-уровень: не ломает текущие эндпоинты (по умолчанию open в dev).
 
 ## Цель

@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/copilot_service.py`,
 > роутер `api/routers/copilot.py` (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`). Расширяет паттерн `nlu_service`.
-> **Модель:** 🔴 Opus — оркестрация LLM tool-use, надёжный фолбэк, двуязычность.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — оркестрация LLM tool-use, надёжный фолбэк, двуязычность.
 > **Волна 4.2**, окно 1 (backend). Зависит от: существующие сервисы (incidents/reports/forecast/zones/fatigue/sabotage);
 > **b24** (Волна 4.1, выполнен) — флаг `copilot` и мета `AiFeatureState` из `api/core/ai_flags.py`/`ai_runtime.py`.
 

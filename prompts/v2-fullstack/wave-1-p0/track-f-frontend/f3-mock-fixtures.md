@@ -1,7 +1,7 @@
 # f3 · Фикстуры (фронт работает до бэка)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §3.1. **Владеет:** `web/src/api/fixtures.ts`.
-> **Модель:** 🟢 Qwen 3.7 max — механическая транскрипция против точной спеки; гейт ловит ошибку.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — механическая транскрипция против точной спеки; гейт ловит ошибку.
 > Источник эталонной формы — `data/mock/incidents.py` (перенести в TS, сохранив поля).
 
 ## Цель

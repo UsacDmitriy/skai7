@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8 + §7.5 (`SabotageEvent`). **Владеет:** **аддитивная**
 > правка `api/sql/23_v_sabotage.sql` и/или `api/services/sabotage_service.py`.
-> **Модель:** 🔵 Sonnet — детерминированное усиление правила; гейт = тесты.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированное усиление правила; гейт = тесты.
 > **Волна 4.2**, окно 1 (backend). Зависит от: существующий `v_sabotage`, b16/b17 (`incident_scene`/`incident_weather`).
 
 ## Цель

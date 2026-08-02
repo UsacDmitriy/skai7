@@ -1,7 +1,7 @@
 # x12 · Driver Value (Волна 5.3) → main · ФИНАЛ Волны 5
 
 > **Барьер Волны 5.3, финал Волны 5.** **Владеет:** только запуск/проверки (e2e скоринга + полный
-> регресс + продвижение `main`). **Модель:** 🔴 Opus — интеграция/приёмка/продвижение `main`.
+> регресс + продвижение `main`). **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — интеграция/приёмка/продвижение `main`.
 > Запускать ПОСЛЕ Волны 5.3 (b33, b34, f28, tu-score) и **зелёного x11**.
 
 ## Gate: x11 зелёный, main продвинут

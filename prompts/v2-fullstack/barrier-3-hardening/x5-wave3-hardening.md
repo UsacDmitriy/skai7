@@ -1,7 +1,7 @@
 # x5 · Барьер 3 — хардненинг Волны 3 (полный регресс + гейт покрытия)
 
 > **Барьер 3 — финал Волны 3 (бэклог + тест-хардненинг).** **Владеет:** только запуск/проверки (regress + coverage).
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > Авторство тестов — Track T (`w3-3`/`w3-4` покрытие, `w3-14`/`w3-15` тесты §9); доработки — `w3-1`
 > (b13/Ticket), `w3-2` (DIAGNOSTIC), `w3-5` (no-video); **целостность MVP (§9)** — backend `w3-6`/`w3-7`/`w3-8`/`w3-9`
 > (домены fuel/sensors/navigation + fleet-health), web `w3-10`…`w3-13` (хаб + кросс-врезки + ComingSoon).

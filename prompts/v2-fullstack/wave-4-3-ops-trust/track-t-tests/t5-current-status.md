@@ -2,7 +2,7 @@
 
 > Трек **Tests/Chores** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.9. **Владеет:** `CURRENT_STATUS.md`,
 > `scripts/gen_status.py`.
-> **Модель:** 🟢 Qwen 3.7 max — механическая генерация документа из тестов/контракта; гейт структурный.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — механическая генерация документа из тестов/контракта; гейт структурный.
 > **Волна 4.3** (AI Ops & Trust), окно 3. Закрывает дрейф README↔RUNBOOK↔contract.
 > **Скелет `scripts/gen_status.py` создаётся в prep `w3-19`** (этот промпт расширяет его до полной генерации).
 

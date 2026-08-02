@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §10.2/§10.3/§10.5. **Владеет:** `api/sql/35_v_speed_check.sql`,
 > `api/services/speed_check_service.py`, `api/domain/speed.py`, роутер `api/routers/speed_check.py`
 > (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`).
-> **Модель:** 🔵 Sonnet — детерминированный SQL против контракта; гейт = Check + tu-consistency.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированный SQL против контракта; гейт = Check + tu-consistency.
 > **Волна 4.4**, окно 1 (backend), **после b28** (последовательно; файлы не пересекаются — §10.6).
 > После создания `v_speed_check` — замени CTE-заглушку `speed_disagreement` в `34_v_consistency.sql` (см. b28).
 

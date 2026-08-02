@@ -1,7 +1,7 @@
 # W3-6 · Домен fuel (топливная сверка ЗИС vs карты) — снять 501-стаб
 
 > Волна 3 · бэклог. Трек **Backend/Data**. Против `00-CONTRACT.md` **§9** (аддендум, contract-change #2)
-> + §9.0/§9.1/§9.2/§9.3/§9.5. **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = секция Check.
+> + §9.0/§9.1/§9.2/§9.3/§9.5. **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = секция Check.
 > **Владеет:** `api/sql/25_v_fuel.sql`, `api/services/fuel_service.py`, роутер `api/routers/fuel.py`
 > (сейчас все пути → `501`). **Паттерн:** как `api/services/reb_service.py` (читать view/таблицы через
 > `rows_to_dicts`, сборку Pydantic делать в сервисе; репозиторного слоя не вводить). **Не блокирует** P0/P1/P2.

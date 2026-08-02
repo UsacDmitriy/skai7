@@ -13,11 +13,11 @@
 > из реальных алармов (паттерн `driver_reference`, §12.0). `repeat_within_30d` — реальный расчёт.
 > UI обязан показывать бейдж «синтетические данные (демо)». HR-интеграцию НЕ обещаем.
 
-| Окно | Промпты | Модель |
+| Окно | Промпты | Исполнение |
 |---|---|---|
-| 1 Backend | **`b31` → `b32` (последовательно)**: b31 генератор `data/seed/training_assignments.csv` → b32 coaching-сервис (`/api/coaching`, `/api/coaching/{plate}`) | 🔵 Sonnet |
-| 2 Web | `f27` секция «Обучение водителя» в отчёте (driver-ветка) + бейдж синтетики | 🔵 Sonnet |
-| 3 Tests | `tu-coaching` (детерминизм генератора, статусы, KPI, 404) | 🔵 Sonnet |
+| 1 Backend | **`b31` → `b32` (последовательно)**: b31 генератор `data/seed/training_assignments.csv` → b32 coaching-сервис (`/api/coaching`, `/api/coaching/{plate}`) | bounded ClinePass · worker · `code` |
+| 2 Web | `f27` секция «Обучение водителя» в отчёте (driver-ветка) + бейдж синтетики | bounded ClinePass · worker · `code` |
+| 3 Tests | `tu-coaching` (детерминизм генератора, статусы, KPI, 404) | bounded ClinePass · worker · `code` |
 
 > **Зависимости:** старт после зелёного **x10**. `b31`→`b32` строго последовательно (сервису нужна
 > таблица). `f27` ∥ `tu-coaching` — после `b32`.

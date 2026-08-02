@@ -1,7 +1,7 @@
 # W3-1 · Синхронизация промпта b13 с contract-change #1 (Ticket)
 
 > Волна 3 · бэклог. Трек **Backend/Data** (владелец `b13`). Против `00-CONTRACT.md`
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > changelog #1 (b) и §7.5. **Владеет:** правкой текста `prompts/v2-fullstack/wave-2-2-applied/track-b-backend/b13-tickets-alerts-trips.md`
 > (и, если `tickets_service.py` уже реализован, — приведением его к новому enum).
 > **Не блокирует** P0/P1/P2. Берётся, как только трек backend свободен; **до** реализации `tickets_service`.

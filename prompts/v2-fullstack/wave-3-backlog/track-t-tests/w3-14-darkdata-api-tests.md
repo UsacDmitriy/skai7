@@ -1,7 +1,7 @@
 # W3-14 · Тесты API тёмных данных (fuel / sensors / navigation / fleet-health)
 
 > Волна 3 · бэклог. Трек **T (tests)**. Против `00-CONTRACT.md` **§9** (§9.1/§9.2/§9.5).
-> **Модель:** 🔵 Sonnet — детерминированные тесты против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированные тесты против контракта; гейт = секция Check.
 > **Владеет:** `api/tests/test_fuel_api.py`, `test_sensors_api.py`, `test_navigation_api.py`,
 > `test_fleet_health_api.py`. Переиспользует существующий conftest/DuckDB-фикстуру (как `test_reb_api.py`).
 > Счёт в гейт покрытия api≥85% (Барьер 3). **Зависит от** w3-6..w3-9.

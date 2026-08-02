@@ -1,7 +1,7 @@
 # tu-riskbreakdown · Unit-тесты risk-breakdown (идея #19, модуль b27)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.8 (+ §2).
-> **Модель:** 🔵 Sonnet — детерминированная декомпозиция против формулы; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная декомпозиция против формулы; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_risk_breakdown.py`. Инфра — из `t1`. Гонится после `b27`.
 
 ## Цель

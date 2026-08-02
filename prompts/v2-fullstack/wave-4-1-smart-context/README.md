@@ -4,11 +4,11 @@
 в окне 3 после готовности модулей. Кодим против `00-CONTRACT.md` **§8**. Внешние API/VLM — **оффлайн
 предрасчёт → кэш** (`data/ai/*.json` + `incident_scene`/`incident_weather`); рантайм читает кэш.
 
-| Окно | Промпты (порядок) | Модель |
+| Окно | Промпты (порядок) | Исполнение |
 |---|---|---|
 | 1 Backend | `b24` ai-governance (флаги/latency/кэш — **runtime-основа** для всех AI-фич, §8.6) → `b16` scene-context (предрасчёт VLM) → `b17` weather-crosscheck → enrichment ; `b18` risk-forecast ∥ `b19` geozone-risk ∥ `b20` fatigue-chain | b24/b17/b20 🔵 · b16/b18/b19 🔴 |
-| 2 Web | `d7` ai-primitives (`SceneContextChip`/`DiscrepancyBadge`/`ForecastSparkline`/`RiskHeatLayer`) | 🔵 Sonnet |
-| 3 Tests | `per-feature/`: `tu-scene` ∥ `tu-weather` ∥ `tu-forecast` ∥ `tu-zones` ∥ `tu-fatigue` | 🔵 Sonnet |
+| 2 Web | `d7` ai-primitives (`SceneContextChip`/`DiscrepancyBadge`/`ForecastSparkline`/`RiskHeatLayer`) | bounded ClinePass · worker · `code` |
+| 3 Tests | `per-feature/`: `tu-scene` ∥ `tu-weather` ∥ `tu-forecast` ∥ `tu-zones` ∥ `tu-fatigue` | bounded ClinePass · worker · `code` |
 
 > **Подготовка Волны 3 (обязательна перед стартом):** ML-зависимости + `data/ai/`-кэш + типы/фикстуры +
 > CI-каркас уже влиты (`wave-3-backlog/` w3-16…w3-19). **Данные:** алярмы только за 2 дня → `b18` —

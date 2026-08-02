@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.8 (+ §2 формула risk_score). **Владеет:**
 > `api/services/risk_breakdown_service.py`, роутер `api/routers/risk_breakdown.py` (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`).
-> **Модель:** 🔵 Sonnet — детерминированная декомпозиция формулы; гейт = тесты.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная декомпозиция формулы; гейт = тесты.
 > **Волна 4.3**, окно 1 (backend). Зависит от: `enrichment.py` (risk_score, §2), b17 (`weather_bonus`, §8.2).
 > Потребитель — `f20` risk-waterfall. **Закрывает «висящий» эндпоинт #19** (раньше владельца не было).
 

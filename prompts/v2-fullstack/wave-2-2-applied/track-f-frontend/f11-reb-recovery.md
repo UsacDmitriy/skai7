@@ -1,7 +1,7 @@
 # f11 · РЭБ-восстановление трека (идея #8)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §7.4 (`GET /api/reb/{id}`), §7.5 (`RebRecovery`),
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > §7.8 (AC «РЭБ»). **Владеет:** `web/src/pages/RebRecovery.tsx`. Использует примитивы карты d4
 > (`@/components/map`: `MapView`, `MarkerLayer`), таймлайн d5 (`@/components/ui/Timeline`), UI-примитивы
 > d2 (`Button`, `VideoPlayer`) и API-клиент f2.

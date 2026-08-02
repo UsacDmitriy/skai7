@@ -1,7 +1,7 @@
 # tu-score · Unit-тесты позитивного и единого скоринга (фичи #25/#26, модули b33/b34)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §13.0–§13.4.
-> **Модель:** 🔵 Sonnet — формулы по контракту; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — формулы по контракту; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_positive_score.py`, `api/tests/unit/test_driver_score.py`.
 > Инфра — из `t1`. Гонится после `b34`.
 

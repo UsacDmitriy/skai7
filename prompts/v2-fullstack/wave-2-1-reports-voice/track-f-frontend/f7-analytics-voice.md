@@ -1,7 +1,7 @@
 # f7 · Аналитика + голос (`/report`)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §3/§6 (killer-feature Оздоева) + §7.3/§7.4/§7.5/§7.8 (voice/NLU/отчёты).
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > **Владеет:** `web/src/pages/Report.tsx` (**полный, заменяет scaffold из f4**), `web/src/api/voice.ts`.
 > Использует voice-примитивы d5 (`VoiceButton`, `ConfirmationModal`), UI d2 (`@/components`),
 > `VideoSlidePanel`/`VideoPlayer` (d2) и API-клиент f2. Идея #2. Иконки — `lucide-react`.

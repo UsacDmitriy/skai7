@@ -1,7 +1,7 @@
 # f9 · Dispatch Alert — алерт критического алярма (идея #5)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §7.4 (`GET /api/alerts/{id}`), §7.5 (`DispatchAlert`),
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > §7.8 (AC «Dispatch alert»). **Владеет:** `web/src/pages/DispatchAlert.tsx` (рендерится как модал
 > поверх текущего экрана). Использует UI-примитивы d2 (`@/components`: `Button`, `SeverityBadge`,
 > `VideoPlayer`, `TelemetryChart`) и API-клиент f2.

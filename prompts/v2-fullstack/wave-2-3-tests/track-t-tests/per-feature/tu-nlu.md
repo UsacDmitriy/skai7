@@ -1,7 +1,7 @@
 # tu-nlu · Unit-тесты NLU regex-fallback (фича #2, модуль b9)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §7.3/§7.5.
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_nlu_fallback.py`. Инфраструктура — из `t1`.
 > Тестируем **детерминированную regex-ветку** `b9` (без сети, без `GROQ_API_KEY`). Баг → дефект треку B.
 

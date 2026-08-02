@@ -1,7 +1,7 @@
 # x6 · smoke умное событие + прогнозы (Волна 4.1)
 
 > **Барьер-волна.** **Владеет:** только запуск/проверки (smoke). Авторство тестов — трек T (`tu-*`).
-> **Модель:** 🔴 Opus — интеграция/приёмка/решение green-red на барьере.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — интеграция/приёмка/решение green-red на барьере.
 > Запускать ПОСЛЕ Волны 4.1 (b16–b20, d7, tu-* готовы и проходят свои check). `main` не трогаем.
 
 ## Перед стартом — склейка Волны 4.1 (main держим стабильным)

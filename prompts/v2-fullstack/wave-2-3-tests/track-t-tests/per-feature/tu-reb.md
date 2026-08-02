@@ -1,7 +1,7 @@
 # tu-reb · Unit-тесты РЭБ-восстановления (фича #8, модуль b12)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §7.5.
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_reb.py`. Инфраструктура — из `t1`.
 > Per-feature слой: гонится, как `b12` лёг на `integration`. Баг → дефект треку B.
 

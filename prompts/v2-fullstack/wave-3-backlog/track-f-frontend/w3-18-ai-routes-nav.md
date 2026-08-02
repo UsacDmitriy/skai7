@@ -1,7 +1,7 @@
 # W3-18 · AI-маршруты + меню: `/copilot`, `/metrics` (подготовка Волны 4, против экранов-сирот)
 
 > Волна 3 · бэклог (**подготовка под Волну 4**). Трек **Frontend** (владелец f1 — роутинг/оболочка).
-> Против `00-CONTRACT.md` §8.3/§8.7. **Модель:** 🔵 Sonnet — маршрутизация/вёрстка; гейт = typecheck.
+> Против `00-CONTRACT.md` §8.3/§8.7. **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — маршрутизация/вёрстка; гейт = typecheck.
 > **Владеет:** `web/src/App.tsx` (маршруты + NAV). Зависит от `w3-13` (`ComingSoon`) и `w3-17` (типы/клиент).
 > Разблокирует **f17** (копилот) и **f21** (`/metrics`) — даёт им маршрут + пункт меню, чтобы не были сиротами.
 

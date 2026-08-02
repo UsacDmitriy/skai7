@@ -1,7 +1,7 @@
 # x10 · Review Queue (Волна 5.1) → main
 
 > **Барьер Волны 5.1.** **Владеет:** только запуск/проверки (e2e очереди + полный регресс + продвижение
-> `main`). **Модель:** 🔴 Opus — интеграция/приёмка/продвижение `main`.
+> `main`). **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — интеграция/приёмка/продвижение `main`.
 > Запускать ПОСЛЕ Волны 5.1 (b30, f26, tu-review) и **зелёного x9**.
 
 ## Gate: x9 зелёный, main продвинут

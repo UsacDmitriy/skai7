@@ -3,8 +3,14 @@
 Промпты по волнам для пересборки SKAI как полноценного продукта: **DuckDB**-данные + **FastAPI**-бэкенд + **React/Vite/Tailwind**-фронт. Заменяет ранний Streamlit-прототип.
 
 > **Правило:** один промпт = один файл. Каждый агент трогает только свои файлы.
-> **Модель-исполнитель** (🟢 Qwen 3.7 max / 🔵 Sonnet / 🔴 Opus) указана в шапке каждого промпта
-> и сведена в `EXECUTION.md` («Модель-исполнитель по промптам» + теги в mermaid).
+> **Routine execution:** активный routine-промпт задаёт bounded ClinePass package,
+> роль `worker` и route category `code`. Exact route alias и model slug разрешаются
+> только из `tools/clinepass-mcp/models.env`; документация не задаёт route-to-model mapping.
+> Если пакет нетривиален, владелец запускает отдельные planner, минимум два worker,
+> reviewer и synthesizer calls с общим `PACKAGE_ID`, а не симулирует роли одним prompt.
+> **Owner-only gates:** Claude/Codex сохраняют contracts, permissions, privacy/security,
+> integration, deterministic acceptance, commits и final response. Эти правила и
+> нейтральные complexity labels сведены в `EXECUTION.md`.
 > **Кодим против `00-CONTRACT.md`, а не против рантайма соседа** — поэтому треки идут параллельно.
 > **Сквозная проработка каждой фичи** (идеи #1–#10: data→backend→web→tests→приёмка) и единый
 > Definition of Done — в [`FEATURES.md`](FEATURES.md) (матрица трассировки).

@@ -1,7 +1,7 @@
 # b10 · Reports — SQL-views + reports_service
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §7.2/§7.4/§7.5 (база — §3.3). **Владеет:** `api/sql/20_v_driver_report.sql`, `api/sql/21_v_fleet.sql`, `api/sql/22_v_vehicle.sql`; расширение `api/services/reports_service.py`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Кодит против контракта. **Зависит от:** b1 (таблицы DuckDB), b3 (`v_incidents`, создаётся первым — порядок `10_` < `20_`), b7 (`driver_reference`), b9 (`nlu_service.parse`). Параллелится по SQL с b11/b12 (разные файлы), но `reports_service.py` — только b10.
 
 ## Цель

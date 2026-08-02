@@ -1,7 +1,7 @@
 # tu-scene · Unit-тесты scene-context (идея #11, модуль b16)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.1.
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_scene_context.py`. Инфра — из `t1`. Гонится после `b16`.
 
 ## Цель

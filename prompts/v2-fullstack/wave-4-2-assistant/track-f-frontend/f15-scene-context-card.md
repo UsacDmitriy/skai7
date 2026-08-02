@@ -4,7 +4,7 @@
 > `web/src/pages/IncidentCard.tsx` + **аддитивная** правка фикстур `web/src/api/fixtures.ts`
 > (id-aware `getFixtureScene` + 1 кейс расхождения — иначе бейдж не на чем показать). Использует
 > готовые d7 (`SceneContextChip`/`DiscrepancyBadge`) и **существующий** клиент `getScene`.
-> **Модель:** 🔵 Sonnet — вёрстка/состояния против контракта; гейт = typecheck.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — вёрстка/состояния против контракта; гейт = typecheck.
 > **Волна 4.2**, окно 2 (web). Зависит от: d7, `GET /api/incidents/{id}/scene`, фикстуры.
 
 ## Цель

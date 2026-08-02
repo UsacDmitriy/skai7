@@ -2,10 +2,10 @@
 
 > Трек **Design**. Против `00-CONTRACT.md` §4/§6 (sync идея #1). **Владеет:** правкой
 > `web/src/components/ui/VideoPlayer.tsx` и `web/src/components/ui/TelemetryChart.tsx`
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > (доработка уже реализованных компонентов d2 — **НЕ переписывает** API пропсов, усиливает синк/cleanup/a11y).
 > **Зависит от:** d2 (готов, Волна 1). **Волна 2.1**, окно 2 (web), параллельно с d5/f7/f14.
-> Возникло из-за того, что d2 выполнен в Волне 1 — Opus-глубина синка не вошла в исходный промпт
+> Возникло из-за того, что d2 выполнен в Волне 1 — owner-only глубина синка не вошла в исходный промпт
 > и вынесена сюда (см. `FEATURES.md`, идея #1). Потребитель синка — f4/f14 (IncidentCard), f7/f9/f10.
 
 ## Цель

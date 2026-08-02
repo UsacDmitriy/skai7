@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.1/§8.4. **Владеет:** `api/etl/scene_precompute.py`,
 > `api/sql/30_incident_scene.sql`, `data/ai/scene_labels.json`.
-> **Модель:** 🔴 Opus — VLM-пайплайн / новый домен / детерминизм оффлайн-предрасчёта.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — VLM-пайплайн / новый домен / детерминизм оффлайн-предрасчёта.
 > **Волна 4.1**, окно 1 (backend). Зависит от: b1 (ETL), b3 (`v_incidents`), видео ch1/ch5.
 
 ## Цель

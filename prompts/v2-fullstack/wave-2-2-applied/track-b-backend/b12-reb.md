@@ -1,7 +1,7 @@
 # b12 · РЭБ / GPS-разрывы — v_reb + сервис + роутер
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §7.2/§7.4/§7.5 (идея #8). **Владеет:** `api/sql/24_v_reb.sql`, `api/services/reb_service.py`, `api/routers/reb.py`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Кодит против контракта. **Зависит от:** b1 (таблицы `navigation__track_periods`, `navigation__track_points`, `video_events__video_files`). Параллелится с b10/b11/b13 (разные файлы). Роутер включается в `api/main.py` (x2/b6). Заменяет стаб `navigation` → `/api/reb` (§7.4).
 
 ## Цель

@@ -1,7 +1,7 @@
 # W3-9 · View «Здоровье парка» (объединение ТС по доменам) + эндпоинт
 
 > Волна 3 · бэклог. Трек **Backend/Data**. Против `00-CONTRACT.md` **§9** (§9.0/§9.3/§9.6).
-> **Модель:** 🔴 Opus — самый рискованный кросс-доменный join (disjoint-популяции, нормализация
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — самый рискованный кросс-доменный join (disjoint-популяции, нормализация
 > госномера, разные ключи). **Владеет:** `api/sql/28_v_fleet_health.sql`,
 > `api/services/fleet_health_service.py`, роутер `api/routers/fleet_health.py` (`GET /api/fleet-health`).
 > **Зависит от** w3-6 (`v_fuel`), w3-7 (`v_sensors`), w3-8 (`v_nav_problem`). **Не блокирует** P0/P1/P2.

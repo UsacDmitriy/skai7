@@ -11,16 +11,17 @@
 
 ## Задачи
 
-> Колонка **Модель** — рекомендуемый исполнитель (см. `EXECUTION.md`): 🔵 Sonnet — рабочая лошадка,
-> 🟢 Qwen — механическая рутина. Правило эскалации (двойной красный Check → Opus) — в `EXECUTION.md`.
+> Колонка **Исполнение** задаёт bounded ClinePass package: role `worker`, route category `code`.
+> Exact route alias и model slug разрешаются только из `tools/clinepass-mcp/models.env`.
+> Двойной красный `Check` эскалирует пакет к owner-only Claude/Codex по `EXECUTION.md`.
 
-| Файл | Что делает | Владеет | Когда | Модель |
+| Файл | Что делает | Владеет | Когда | Исполнение |
 |---|---|---|---|---|
-| `t1-backend-unit-tests.md` | **инфраструктура** unit: `conftest`, `requirements-dev`, раскладка | `api/tests/conftest.py`, `api/requirements-dev.txt`, `api/tests/unit/__init__.py` | до `tu-*` | 🔵 Sonnet |
-| `per-feature/tu-*.md` (6 шт.) | **per-feature unit-авторство**: enrichment/driver/nlu/reports/sabotage/reb — каждый владеет своим `test_*.py` | `api/tests/unit/test_*.py` (по модулю) | каждый — как его фича (b2/b7/b9/b10/b11/b12) легла на `integration` | 🔵 Sonnet |
-| `t2-api-integration-tests.md` | pytest TestClient: все эндпоинты, коды, схемы | `api/tests/integration/**` | после b6 (P0) и b11–b13 (P1/P2) | 🔵 Sonnet |
-| `t3-frontend-tests.md` | vitest + RTL: UI-примитивы, api-клиент, экраны | `web/**/*.test.tsx`, `web/vitest.config.ts`, `web/src/test/**` | после d2/f2/f4 | 🔵 Sonnet |
-| `t4-routine-chores.md` | .env.example, OpenAPI-экспорт, lint/format, run-доки, fixtures-sync | мелкие вспом. файлы (см. внутри) | в любой момент | 🟢 Qwen |
+| `t1-backend-unit-tests.md` | **инфраструктура** unit: `conftest`, `requirements-dev`, раскладка | `api/tests/conftest.py`, `api/requirements-dev.txt`, `api/tests/unit/__init__.py` | до `tu-*` | bounded ClinePass · worker · `code` |
+| `per-feature/tu-*.md` (6 шт.) | **per-feature unit-авторство**: enrichment/driver/nlu/reports/sabotage/reb — каждый владеет своим `test_*.py` | `api/tests/unit/test_*.py` (по модулю) | каждый — как его фича (b2/b7/b9/b10/b11/b12) легла на `integration` | bounded ClinePass · worker · `code` |
+| `t2-api-integration-tests.md` | pytest TestClient: все эндпоинты, коды, схемы | `api/tests/integration/**` | после b6 (P0) и b11–b13 (P1/P2) | bounded ClinePass · worker · `code` |
+| `t3-frontend-tests.md` | vitest + RTL: UI-примитивы, api-клиент, экраны | `web/**/*.test.tsx`, `web/vitest.config.ts`, `web/src/test/**` | после d2/f2/f4 | bounded ClinePass · worker · `code` |
+| `t4-routine-chores.md` | .env.example, OpenAPI-экспорт, lint/format, run-доки, fixtures-sync | мелкие вспом. файлы (см. внутри) | в любой момент | bounded ClinePass · worker · `code` |
 
 > **Шифт-влево:** монолитный `t1` (раньше — 3 модуля в одном файле «после b2/b7/b10») разнесён на
 > инфраструктуру (`t1`) + per-feature `tu-*`. Каждый `tu-*` гонится сразу за своей backend-фичей,

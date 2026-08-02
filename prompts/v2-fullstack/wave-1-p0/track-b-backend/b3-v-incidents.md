@@ -1,7 +1,7 @@
 # b3 · SQL view v_incidents
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §1.3. **Владеет:** `api/sql/10_v_incidents.sql`.
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > View `v_incidents` по контракту §1.3 (DuckDB-синтаксис; ранний SQLite-прототип портирован).
 
 ## Цель

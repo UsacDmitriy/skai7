@@ -1,7 +1,7 @@
 # f13 · Переключатель ролей и фильтрация по роли (идея #10)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §6 (AC «Монитор: ролевой switcher»), §7.6 (роль-токены),
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > §7.8 (AC «Карта по ролям»). **Владеет:** интеграцией `RoleToggle` (d4) в `EventsFeed.tsx` (f5) и
 > `Monitor.tsx` (f6) + сквозной логикой фильтрации по роли (контекст/стор роли + хелперы фильтра).
 > Использует примитив `RoleToggle` (d4), UI-примитивы d2 и API-клиент f2.

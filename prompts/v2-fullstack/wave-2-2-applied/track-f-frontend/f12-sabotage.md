@@ -1,7 +1,7 @@
 # f12 · Виджет детекции саботажа камеры (идея #9)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §7.4 (`GET /api/sabotage`), §7.5 (`SabotageEvent`),
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > §7.8 (AC «Саботаж»). **Владеет:** `web/src/components/SabotageWidget.tsx` + встраивание секции в
 > `Report.tsx` (f7) и `Monitor.tsx` (f6). Использует UI-примитивы d2 (`@/components`: `Card`, `Button`,
 > `SeverityBadge`, `VideoPlayer`) и API-клиент f2.

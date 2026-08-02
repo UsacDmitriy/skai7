@@ -1,7 +1,7 @@
 # f22 · Целостность навигации — редиректы + честные бейджи (исправление сирот-экранов)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §7.8 (+ §9.4 сигнпостинг). **Владеет:** правкой `web/src/App.tsx` (NAV/COMING_SOON/Routes) и `web/src/components/ComingSoon.tsx` (проп вида пилюли).
-> **Модель:** 🔵 Sonnet — детерминированный роутинг/вёрстка против контракта; гейт = typecheck.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированный роутинг/вёрстка против контракта; гейт = typecheck.
 > **Волна 4.3 (Ops & Trust) · целостность экранов.** Аддитивно поверх готового каркаса w3-18; не ломает рабочие экраны.
 
 ## Цель

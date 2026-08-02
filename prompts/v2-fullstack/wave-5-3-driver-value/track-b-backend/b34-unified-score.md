@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §13.0/§13.2/§13.4. **Владеет:**
 > `api/services/driver_score_service.py`, `api/domain/driver_score.py`, роутер
 > `api/routers/driver_score.py` (автодискавери — НЕ редактируй `api/routers/__init__.py`).
-> **Модель:** 🔵 Sonnet — бленд по зафиксированной формуле; гейт = Check + tu-score.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — бленд по зафиксированной формуле; гейт = Check + tu-score.
 > **Волна 5.3**, окно 1, **после b33** (вызывает его сервис). Зависит от: b33, incidents_service
 > (готовый `risk_score` инцидентов — §2 не пересчитывать).
 

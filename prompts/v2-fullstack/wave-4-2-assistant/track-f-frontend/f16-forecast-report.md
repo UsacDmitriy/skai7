@@ -2,7 +2,7 @@
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** **аддитивная** правка
 > `web/src/pages/Report.tsx`; использует d7 (`ForecastSparkline`), f2-клиент.
-> **Модель:** 🔵 Sonnet — вёрстка/состояния против контракта; гейт = typecheck.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — вёрстка/состояния против контракта; гейт = typecheck.
 > **Волна 4.2**, окно 2 (web). Зависит от: d7, `GET /api/reports/forecast/{plate}`, фикстуры.
 
 ## Цель

@@ -1,7 +1,7 @@
 # tu-enrichment · Unit-тесты enrichment (фича #3, модули b2/b14)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §2.
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_enrichment.py`. Инфраструктура (`conftest.py`,
 > `requirements-dev.txt`) — из `t1`. Per-feature слой: гонится сразу, как `b2`(+`b14`) лёг на `integration`.
 > НЕ редактирует продуктовый код — при найденном баге заводит дефект треку B.

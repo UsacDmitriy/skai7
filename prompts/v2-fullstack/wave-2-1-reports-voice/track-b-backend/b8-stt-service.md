@@ -1,7 +1,7 @@
 # b8 · STT-сервис — stt_service.py
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §7.3. **Владеет:** `api/services/stt_service.py`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Кодит против контракта. **Зависит от:** b4 (`faster-whisper` в `api/requirements.txt`, конфиг в `api/core/config.py`). Параллелится с b7/b9/b11/b12 (не пересекаются по файлам). Используется роутером `POST /api/reports/transcribe` (b6+).
 
 ## Цель

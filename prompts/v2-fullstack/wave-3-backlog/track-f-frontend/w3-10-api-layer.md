@@ -1,7 +1,7 @@
 # W3-10 · API-слой fleet-health (types + client + fixtures) — f2/f3
 
 > Волна 3 · бэклог. Трек **Frontend** (владелец f2/f3 — API-клиент и фикстуры). Против `00-CONTRACT.md` **§9** (§9.1/§9.2/§9.4).
-> **Модель:** 🔵 Sonnet — детерминированная типизация против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная типизация против контракта; гейт = секция Check.
 > **Владеет:** `web/src/api/types.ts`, `web/src/api/client.ts`, `web/src/api/fixtures.ts` (строго **аддитивно**).
 > **Граница владения:** этот промпт — единственный, кто правит `api/*` (избегаем кросс-трекового конфликта
 > мерджа); экраны (w3-11) и врезки (w3-12) только **используют** клиент. **Не блокирует** P0/P1/P2.

@@ -1,7 +1,7 @@
 # W3-12 · Кросс-врезки экранов (целостность навигации между экранами)
 
 > Волна 3 · бэклог. Трек **Frontend**. Против `00-CONTRACT.md` **§9.4** (кросс-врезки) + §7.4/§7.5.
-> **Модель:** 🔵 Sonnet — аддитивная вёрстка/навигация против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — аддитивная вёрстка/навигация против контракта; гейт = секция Check.
 > **Владеет (правки строго аддитивные, killer-features не ломать):** `web/src/pages/IncidentCard.tsx`,
 > `TripDossier.tsx`, `Report.tsx`, `EventsFeed.tsx`. Использует клиент w3-10 (`getTickets` уже есть). **Не блокирует** P0/P1/P2.
 

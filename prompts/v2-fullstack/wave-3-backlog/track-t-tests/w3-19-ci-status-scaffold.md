@@ -1,7 +1,7 @@
 # W3-19 · CI + статус-каркас: `.github/workflows/` + `gen_status.py` (подготовка Волны 4)
 
 > Волна 3 · бэклог (**подготовка под Волну 4**). Трек **T (tests/CI/chores)**. Против `00-CONTRACT.md` §8.9.
-> **Модель:** 🔵 Sonnet — пайплайн/скрипт против существующих make-целей; гейт = зелёный прогон.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — пайплайн/скрипт против существующих make-целей; гейт = зелёный прогон.
 > **Владеет:** `.github/workflows/ci.yml` (скелет), `scripts/gen_status.py` (скелет). Зеркалит `scripts/check.sh`.
 > Разблокирует **t5** (CURRENT_STATUS) и **t6** (remote CI + nightly live-smoke) — они **дополняют** каркас. **Не блокирует** P0/P1/P2.
 

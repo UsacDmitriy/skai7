@@ -1,7 +1,7 @@
 # b2 · Enrichment — детерминированное обогащение
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §2. **Владеет:** `api/core/enrichment.py`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Параллельно с b1/b3/b4 (чистые функции, без БД).
 
 ## Цель

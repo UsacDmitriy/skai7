@@ -7,6 +7,33 @@
 
 ---
 
+## Phase 0 — project-scoped ClinePass MCP (owner-only gate)
+
+До подготовки и любой implementation wave владелец Claude/Codex обязан:
+
+1. Проверить canonical bridge package
+   `tools/clinepass-mcp/{server.py,test_server.py,models.env,.env.example,README.md}`;
+   exact model slugs и route mappings хранятся только в `models.env`, credentials и
+   transport overrides — только в ignored `.env`.
+2. Проверить tracked Claude registration в `.mcp.json`; для Codex — слить только
+   `[mcp_servers.clinepass]` из `.codex/config.toml.example` в локальный config, не
+   перезаписывая пользовательские настройки и не добавляя secrets.
+3. Запустить unit tests, `server.py --selftest`, Python compilation, JSON/TOML parsing,
+   прямые MCP stdio `initialize` и `tools/list`.
+4. Вызвать `clinepass_config`, `clinepass_list_models` с явным registry fallback при
+   недоступном endpoint, `clinepass_audit_reset` и `clinepass_audit_report`.
+5. Зафиксировать privacy boundary: ClinePass не получает credentials, private/production
+   data, private media, unrestricted raw corpora, privileged configuration или
+   unrestricted repository context. Нельзя молча переключаться на другого provider.
+
+Phase 0, client registration, permissions, shared contracts, integration, deterministic
+acceptance, commits и final response не делегируются ClinePass. Implementation не
+начинается, пока локальные Phase 0 checks не зелёные; live endpoint outage документируется
+вместе с committed-registry fallback. Политика относится только к development-репозиторию
+`skai_7`, не к SKAI requirements/system-analysis repositories.
+
+---
+
 ## Подготовка
 
 - `git clone` + `git pull`, установка зависимостей (Python 3.12 + Node 18+)

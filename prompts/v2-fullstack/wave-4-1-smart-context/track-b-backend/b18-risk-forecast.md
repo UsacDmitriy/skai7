@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/forecast_service.py`,
 > роутер `api/routers/forecast.py` (автодискавери `api/main.py:_discover_routers` — объяви `router = APIRouter(...)`
 > в своём файле; **НЕ** редактируй общий `api/routers/__init__.py`, иначе гонка с b19/b20).
-> **Модель:** 🔴 Opus — алгоритм прогноза/аномалий + генерация рекомендаций.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — алгоритм прогноза/аномалий + генерация рекомендаций.
 > **Волна 4.1**, окно 1 (backend). Зависит от: enrichment (`events_last_7d`), история алярмов по plate.
 
 ## Цель

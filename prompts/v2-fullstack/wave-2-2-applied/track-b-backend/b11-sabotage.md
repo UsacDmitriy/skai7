@@ -1,7 +1,7 @@
 # b11 · Саботаж камер — v_sabotage + сервис + роутер
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §7.2/§7.4/§7.5 (идея #9). **Владеет:** `api/sql/23_v_sabotage.sql`, `api/services/sabotage_service.py`, `api/routers/sabotage.py`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Кодит против контракта. **Зависит от:** b1 (таблицы `video_events__selected_video_alarms`, `video_events__track_points`, `video_events__video_files`), b7 (`driver_reference` для `driver_name`). Параллелится с b10/b12/b13 (разные файлы). Роутер включается в `api/main.py` (x2/b6).
 
 ## Цель

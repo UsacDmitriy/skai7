@@ -2,7 +2,7 @@
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §8.8. **Владеет:** `web/src/components/ai/RiskWaterfall.tsx`;
 > **аддитивная** правка `IncidentCard.tsx`/`Report.tsx`. Использует f2-клиент.
-> **Модель:** 🔵 Sonnet — вёрстка визуализации против контракта; гейт = typecheck.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — вёрстка визуализации против контракта; гейт = typecheck.
 > **Волна 4.3** (AI Ops & Trust), окно 2 (web). Зависит от: `GET /api/incidents/{id}/risk-breakdown`
 > (детерминированно из enrichment, §8.3/§8.8); типы/клиент/фикстуры — из prep `w3-17`.
 

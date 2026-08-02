@@ -12,11 +12,11 @@
 > **Почему первая в Волне 5:** самый короткий путь до ценности (`WAVE-5-BACKLOG.md` W5-1) —
 > ни одного нового датасета, только сервис + журнал + экран.
 
-| Окно | Промпты | Модель |
+| Окно | Промпты | Исполнение |
 |---|---|---|
-| 1 Backend | `b30` review-сервис + журнал `output/review_queue.csv` + `GET/POST /api/review-queue` | 🔵 Sonnet |
-| 2 Web | `f26` экран `ReviewQueue.tsx` на маршруте `/validation` (снимает «Будущее» f22 — владелец появился) | 🔵 Sonnet |
-| 3 Tests | `tu-review` (статусная модель, перезапись, негативы журнала) | 🔵 Sonnet |
+| 1 Backend | `b30` review-сервис + журнал `output/review_queue.csv` + `GET/POST /api/review-queue` | bounded ClinePass · worker · `code` |
+| 2 Web | `f26` экран `ReviewQueue.tsx` на маршруте `/validation` (снимает «Будущее» f22 — владелец появился) | bounded ClinePass · worker · `code` |
+| 3 Tests | `tu-review` (статусная модель, перезапись, негативы журнала) | bounded ClinePass · worker · `code` |
 
 > **Зависимости:** старт только после зелёного **x9** (нужен `/api/consistency` → `evidence_rate` в
 > ответе очереди). `f26` и `tu-review` — параллельно после `b30`.

@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.7. **Владеет:** `api/services/metrics_service.py`,
 > роутер `api/routers/metrics.py` (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`), таблица `ai_metric_events`.
-> **Модель:** 🔵 Sonnet — детерминированная агрегация/событийная запись; гейт = тесты.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная агрегация/событийная запись; гейт = тесты.
 > **Волна 4.3** (AI Ops & Trust), окно 1 (backend). Зависит от: AI-эндпоинты 4.1/4.2 (источники событий),
 > enrichment; **таблица `ai_metric_events` создаётся пустой в prep `w3-16`** (этот промпт пишет/агрегирует).
 

@@ -1,7 +1,7 @@
 # tu-security · Unit-тесты security baseline (идея #20, модуль b26)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.9.
-> **Модель:** 🔵 Sonnet — детерминированная проверка middleware/политик; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная проверка middleware/политик; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_security.py`. Инфра — из `t1`. Гонится после `b26`.
 
 ## Цель

@@ -1,7 +1,7 @@
 # f14 · IncidentCard hardening — состояния/edge-cases поверх f4 (доработка Волны 1)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §3.1/§6/§7.8. **Владеет:** доработкой `web/src/pages/IncidentCard.tsx`
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > (поверх уже реализованного f4 — **НЕ переписывает**, усиливает состояния/синк/a11y). **Зависит от:** f4
 > (готов, Волна 1), d2/d3. **Волна 2.1**, окно 2 (web), параллельно с d5/f7.
 > Возникло из-за того, что f4 выполнен в Волне 1 — DoD-глубина идеи #1 вынесена сюда (см. `FEATURES.md`, идея #1).

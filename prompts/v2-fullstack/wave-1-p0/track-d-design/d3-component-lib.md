@@ -1,7 +1,7 @@
 # d3 · Сборка библиотеки + витрина (Style Guide)
 
 > Трек **Design**. **Владеет:** `web/src/components/index.ts`, `web/src/pages/_StyleGuide.tsx`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Зависит от контракта компонентов d2 (имена/props), но кодит против него, не против рантайма.
 
 ## Цель

@@ -2,7 +2,7 @@
 
 > Трек **Tests/CI** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.9. **Владеет:** `.github/workflows/ci.yml`,
 > `.github/workflows/nightly-smoke.yml`.
-> **Модель:** 🔵 Sonnet — пайплайн против существующих make/скриптов; гейт = зелёный CI.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — пайплайн против существующих make/скриптов; гейт = зелёный CI.
 > **Волна 4.3** (AI Ops & Trust), окно 3. Поднимает локальный `scripts/check.sh` в remote и страхует от fixture-маскировки.
 > **Каталог `.github/workflows/` + скелет `ci.yml` создаются в prep `w3-19`** (этот промпт доводит CI + nightly live-smoke).
 

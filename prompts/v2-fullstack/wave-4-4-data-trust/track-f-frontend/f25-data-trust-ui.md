@@ -4,7 +4,7 @@
 > `web/src/components/ai/SpeedCheckBadge.tsx`, `web/src/components/ai/ConsistencyPanel.tsx`;
 > **аддитивные** правки `web/src/pages/IncidentCard.tsx`, `web/src/pages/Metrics.tsx`,
 > `web/src/api/types.ts`, `web/src/api/client.ts`, `web/src/api/fixtures.ts`.
-> **Модель:** 🔵 Sonnet — компоненты против контракта; гейт = typecheck + vitest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — компоненты против контракта; гейт = typecheck + vitest.
 > **Волна 4.4**, окно 2 (web). Зависит от: b28/b29 (эндпоинты §10.1), f15 (точка вставки в карточке),
 > f21 (точка вставки в метриках). Запускается после b29.
 

@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §12.2/§12.3/§12.4. **Владеет:**
 > `api/services/coaching_service.py`, `api/domain/coaching.py`, роутер `api/routers/coaching.py`
 > (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`).
-> **Модель:** 🔵 Sonnet — детерминированная агрегация против контракта; гейт = Check + tu-coaching.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная агрегация против контракта; гейт = Check + tu-coaching.
 > **Волна 5.2**, окно 1, **после b31** (нужна таблица `training_assignments`).
 
 ## Цель

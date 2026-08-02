@@ -1,7 +1,7 @@
 # x1 · Выпил Streamlit
 
 > **Барьер-волна** (после D/B/F). **Владеет:** удалением Streamlit-артефактов + `requirements.txt`, `.gitignore`, `.streamlit/`.
-> **Модель:** 🔴 Opus — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — высокие ставки: интеграция / синк / алгоритм / анти-регресс / killer-feature / барьер.
 > Запускать ПОСЛЕ того как `api/` (трек B) и `web/` (трек F) готовы и проходят свои check.
 
 ## Перед стартом — склейка веток (main держим стабильным)

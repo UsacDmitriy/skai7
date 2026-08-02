@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §11.0–§11.2, §11.4. **Владеет:**
 > `api/services/review_service.py`, `api/domain/review.py`, роутер `api/routers/review.py`
 > (автодискавери `api/main.py:_discover_routers` — НЕ редактируй общий `api/routers/__init__.py`),
-> журнал `output/review_queue.csv`. **Модель:** 🔵 Sonnet — журнальная статусная модель против
+> журнал `output/review_queue.csv`. **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — журнальная статусная модель против
 > контракта; гейт = Check + tu-review. **Волна 5.1**, окно 1 (backend).
 > Зависит от: v_incidents (b3), `consistency_service.report()` → `evidence_rate` (b28), эмиттер b25.
 

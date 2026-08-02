@@ -1,7 +1,7 @@
 # tu-review · Unit-тесты очереди верификации (фича #23, модуль b30)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §11.0–§11.4.
-> **Модель:** 🔵 Sonnet — детерминированная статусная модель; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная статусная модель; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_review.py`. Инфра — из `t1`. Гонится после `b30`.
 
 ## Цель

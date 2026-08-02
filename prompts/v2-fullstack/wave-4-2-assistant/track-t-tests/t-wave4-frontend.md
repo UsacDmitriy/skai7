@@ -1,7 +1,7 @@
 # t-wave4-frontend · Vitest по AI-компонентам (Волна 4)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.4.
-> **Модель:** 🔵 Sonnet — тест-авторство против контракта; гейт = vitest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — тест-авторство против контракта; гейт = vitest.
 > **Владеет:** `*.test.tsx` для AI-компонентов Волны 4 — они лежат в РАЗНЫХ папках:
 > `web/src/components/ai/*.test.tsx` (чип/бейдж/спарклайн/heat-слой), `web/src/pages/Copilot.*.test.tsx`
 > (f17), `web/src/components/SabotageWidget.verdict.test.tsx` (f19 — НЕ перезаписывай существующие

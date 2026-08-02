@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.1/§8.2/§8.4. **Владеет:** `api/etl/weather_precompute.py`,
 > `api/sql/31_incident_weather.sql`, `data/ai/weather_cache.json`; **аддитивная** правка `api/core/enrichment.py`.
-> **Модель:** 🔵 Sonnet — детерминированный фетч+кэш+правило; гейт = тесты.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированный фетч+кэш+правило; гейт = тесты.
 > **Волна 4.1**, окно 1 (backend). Зависит от: b3 (`v_incidents` `ts`/`lat`/`lon`), b16 (`incident_scene`).
 
 ## Цель

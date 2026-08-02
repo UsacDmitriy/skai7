@@ -3,7 +3,7 @@
 > Трек **Frontend**. Против `00-CONTRACT.md` §13.1–§13.4. **Владеет:** `web/src/pages/Leaderboard.tsx`;
 > **аддитивные** правки `web/src/App.tsx` (роут `/leaderboard` + NAV-пункт), `web/src/pages/Report.tsx`
 > (блок ПОСЛЕ секции обучения f27), `web/src/api/{types,client,fixtures}.ts`.
-> **Модель:** 🔵 Sonnet — таблица+блок против контракта; гейт = typecheck + vitest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — таблица+блок против контракта; гейт = typecheck + vitest.
 > **Волна 5.3**, окно 2 (web). Зависит от: b33/b34 (схемы §13). Волны последовательны —
 > конфликт с f27 по `Report.tsx` исключён (5.2 уже смержена x11).
 

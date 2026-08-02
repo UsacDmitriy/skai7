@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/fatigue_service.py`,
 > роутер `api/routers/fatigue.py` (автодискавери `api/main.py:_discover_routers` — объяви `router = APIRouter(...)`
 > в своём файле; **НЕ** редактируй общий `api/routers/__init__.py`, иначе гонка с b18/b19).
-> **Модель:** 🔵 Sonnet — детерминированная темпоральная корреляция; гейт = тесты.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная темпоральная корреляция; гейт = тесты.
 > **Волна 4.1**, окно 1 (backend). Зависит от: каталог алярмов (`DMS_YAWNING`/`DMS_DROWSY`/harsh-коды), `ts`/plate.
 
 ## Цель

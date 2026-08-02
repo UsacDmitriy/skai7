@@ -1,7 +1,7 @@
 # W3-13 · Навигация: реальные роуты + честный «ComingSoon» вместо пустого 404
 
 > Волна 3 · бэклог. Трек **Frontend** (владелец f1 — роутинг/оболочка). Против `00-CONTRACT.md` **§9.4**.
-> **Модель:** 🔵 Sonnet — детерминированная маршрутизация/вёрстка; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная маршрутизация/вёрстка; гейт = секция Check.
 > **Владеет:** `web/src/App.tsx` (роуты + NAV + catch-all), `web/src/components/.../ComingSoon.tsx` (новый).
 > **Зависит от** w3-11 (страницы хаба). **Не блокирует** P0/P1/P2.
 

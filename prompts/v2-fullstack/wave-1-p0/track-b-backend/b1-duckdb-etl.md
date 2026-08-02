@@ -1,7 +1,7 @@
 # b1 · DuckDB ETL — build_duckdb.py
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §1. **Владеет:** `api/etl/build_duckdb.py`.
-> **Модель:** 🟢 Qwen 3.7 max — механическая транскрипция против точной спеки; гейт ловит ошибку.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — механическая транскрипция против точной спеки; гейт ловит ошибку.
 > ETL-сборка БД из CSV (логика самодостаточна: см. контракт §1; ранний SQLite-прототип портирован на DuckDB).
 
 ## Цель

@@ -1,7 +1,7 @@
 # T2 · API интеграционные тесты (pytest + TestClient)
 
 > Track T (Claude Code, `feat/tests`). Против `00-CONTRACT.md` §3 (эндпоинты/схемы) + §7.4/§7.5. **Владеет:** `api/tests/integration/**`.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > Запускается после b6 (P0) и b11–b13 (P1/P2). Использует `make db`. Не редактирует продуктовый код.
 
 ## Цель

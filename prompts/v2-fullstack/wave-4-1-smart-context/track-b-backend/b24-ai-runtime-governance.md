@@ -2,7 +2,7 @@
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.6. **Владеет:** `api/core/ai_flags.py`,
 > `api/core/ai_runtime.py` (обёртка latency/cache); **аддитивная** мета в AI-ответах.
-> **Модель:** 🔵 Sonnet — детерминированная конфигурация/обёртка; гейт = тесты.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная конфигурация/обёртка; гейт = тесты.
 > **Волна 4.1**, окно 1 (backend). Кросс-режущая основа для b16–b20 (и b21–b23 в 4.2).
 
 ## Цель

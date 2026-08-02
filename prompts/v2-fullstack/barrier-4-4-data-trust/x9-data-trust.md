@@ -1,7 +1,7 @@
 # x9 · Data Trust (Волна 4.4) → main
 
 > **Барьер Волны 4.4.** **Владеет:** только запуск/проверки (e2e Data Trust + полный регресс + продвижение
-> `main`). Авторство — треки B/F/T. **Модель:** 🔴 Opus — интеграция/приёмка/продвижение `main`.
+> `main`). Авторство — треки B/F/T. **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — интеграция/приёмка/продвижение `main`.
 > Запускать ПОСЛЕ Волны 4.4 (b28, b29, f25, tu-consistency) и **зелёного x8** (`main` уже на финале Волны 4).
 
 ## Gate: x8 зелёный, main продвинут

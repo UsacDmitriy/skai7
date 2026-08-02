@@ -1,7 +1,7 @@
 # tu-forecast · Unit-тесты risk-forecast (идея #12, модуль b18)
 
 > Трек **Tests** (`feat/tests`, окно 3). Против `00-CONTRACT.md` §8.3/§8.4.
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = pytest.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = pytest.
 > **Владеет:** `api/tests/unit/test_forecast.py`. Инфра — из `t1`. Гонится после `b18`.
 
 ## Цель

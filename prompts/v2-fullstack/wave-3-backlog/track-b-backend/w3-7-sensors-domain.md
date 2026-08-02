@@ -1,7 +1,7 @@
 # W3-7 · Домен sensors (диагностика, CAN−GPS разрыв) — снять 501-стаб
 
 > Волна 3 · бэклог. Трек **Backend/Data**. Против `00-CONTRACT.md` **§9** (§9.1/§9.2/§9.3/§9.5).
-> **Модель:** 🔵 Sonnet — детерминированная логика против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика против контракта; гейт = секция Check.
 > **Владеет:** `api/sql/26_v_sensors.sql`, `api/services/sensors_service.py`, роутер
 > `api/routers/sensors.py` (сейчас → `501`). **Паттерн:** как `api/services/reb_service.py`. **Не блокирует** P0/P1/P2.
 

@@ -2,7 +2,7 @@
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §8.7. **Владеет:** `web/src/pages/Metrics.tsx`,
 > `web/src/components/ai/DataQualityPanel.tsx`. Использует d7-примитивы и f2-клиент.
-> **Модель:** 🔵 Sonnet — вёрстка/состояния против контракта; гейт = typecheck.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — вёрстка/состояния против контракта; гейт = typecheck.
 > **Волна 4.3** (AI Ops & Trust), окно 2 (web). Зависит от: `GET /api/metrics/ai`, `GET /api/metrics/data-quality` (b25);
 > маршрут `/metrics` + пункт меню — из prep `w3-18`; типы/клиент/фикстуры — из prep `w3-17`.
 

@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** `api/services/narrative_service.py`;
 > **аддитивно** дополняет `reports_service`/`forecast_service` (логика) **и** `api/domain/reports.py`
 > (поле `narrative` в Pydantic-схемах `DriverReport`/`FleetReport` — иначе FastAPI отбросит его из ответа).
-> **Модель:** 🔵 Sonnet — генерация текста по шаблону + опц. LLM; гейт = тесты.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — генерация текста по шаблону + опц. LLM; гейт = тесты.
 > **Волна 4.2**, окно 1 (backend). Зависит от: b18 (`RiskForecast`), reports (`DriverReport`/`FleetReport`).
 
 ## Цель

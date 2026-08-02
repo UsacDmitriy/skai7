@@ -3,7 +3,7 @@
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §13.0/§13.1/§13.4. **Владеет:**
 > `api/services/positive_score_service.py`, `api/domain/positive.py`, роутер
 > `api/routers/positive_score.py` (автодискавери — НЕ редактируй `api/routers/__init__.py`).
-> **Модель:** 🔵 Sonnet — детерминированная агрегация по зафиксированным формулам; гейт = Check + tu-score.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная агрегация по зафиксированным формулам; гейт = Check + tu-score.
 > **Волна 5.3**, окно 1, **первый** (затем b34). Зависит от: алармы (b1), `driver_reference` (b7),
 > `api/core/enrichment.speed_limit_for` (b2).
 

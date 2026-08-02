@@ -2,7 +2,7 @@
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §8.3/§8.4 + §7.8 (состояния). **Владеет:**
 > `web/src/pages/Copilot.tsx` (или панель-drawer), `web/src/api/copilot.ts`; UI d2, f2-клиент.
-> **Модель:** 🔴 Opus — сложный интерактив (стриминг/состояния/a11y/двуязычность).
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — сложный интерактив (стриминг/состояния/a11y/двуязычность).
 > **Волна 4.2**, окно 2 (web). Зависит от: `POST /api/copilot/chat` (b21), маршрут/панель в `App.tsx`.
 
 ## Цель

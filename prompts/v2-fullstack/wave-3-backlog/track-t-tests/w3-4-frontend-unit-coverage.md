@@ -1,7 +1,7 @@
 # W3-4 · Frontend unit-покрытие всего решения (дозакрытие t3)
 
 > Волна 3 · хардненинг. Track **T** (Claude Code, `feat/tests`). Против `00-CONTRACT.md` §3.1/§4/§7.5.
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > **Владеет:** `web/src/**/*.test.tsx`, `web/src/test/**` (расширение). **Дополняет, а не дублирует**
 > `track-t-tests/t3` (d2/f2/f4 уже покрыты). **НЕ редактирует продуктовые компоненты** — баг → дефект
 > треку D/F. Гейт покрытия проверяется на Барьере 3 (x5). Стек тот же: vitest + RTL + jsdom (из t3).

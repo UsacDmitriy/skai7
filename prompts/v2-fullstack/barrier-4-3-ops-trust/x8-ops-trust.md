@@ -1,7 +1,7 @@
 # x8 · AI Ops & Trust (Волна 4.3) → main · ФИНАЛ Волны 4
 
 > **Барьер-волна, финал всей Волны 4.** **Владеет:** только запуск/проверки (e2e ops/trust + полный
-> регресс + live-smoke + продвижение `main`). Авторство — трек T/Backend. **Модель:** 🔴 Opus — интеграция/
+> регресс + live-smoke + продвижение `main`). Авторство — трек T/Backend. **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — интеграция/
 > приёмка/продвижение `main`. Запускать ПОСЛЕ Волны 4.3 (b25, b26, f20, f21, t5, t6) и зелёного x7.
 
 ## Перед стартом — склейка Волны 4.3 (main держим стабильным)

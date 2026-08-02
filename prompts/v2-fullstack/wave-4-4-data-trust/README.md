@@ -11,11 +11,11 @@
 > видео подтвердило 5 (→ `evidence_rate`); Маслов (Балтика) — дубли терминалов на одном ТС
 > (→ `terminal_duplication`). Конкурентный паттерн — Lytx event-review/data-trust (см. `../COMPETITORS.md`).
 
-| Окно | Промпты | Модель |
+| Окно | Промпты | Исполнение |
 |---|---|---|
-| 1 Backend | **`b28` → `b29` (последовательно)**: b28 валидатор консистентности (`/api/consistency`, 7 проверок) → b29 кросс-сверка скоростей (`/api/incidents/{id}/speed-check`) | 🔵 Sonnet |
-| 2 Web | `f25` Data-Trust UI: `SpeedCheckBadge` (карточка) + `ConsistencyPanel` (метрики) + типы/клиент/фикстуры | 🔵 Sonnet |
-| 3 Tests | `tu-consistency` (b28+b29): пороги/детерминизм/негативы | 🔵 Sonnet |
+| 1 Backend | **`b28` → `b29` (последовательно)**: b28 валидатор консистентности (`/api/consistency`, 7 проверок) → b29 кросс-сверка скоростей (`/api/incidents/{id}/speed-check`) | bounded ClinePass · worker · `code` |
+| 2 Web | `f25` Data-Trust UI: `SpeedCheckBadge` (карточка) + `ConsistencyPanel` (метрики) + типы/клиент/фикстуры | bounded ClinePass · worker · `code` |
+| 3 Tests | `tu-consistency` (b28+b29): пороги/детерминизм/негативы | bounded ClinePass · worker · `code` |
 
 > **Зависимости:** Волна 4.4 стартует только после зелёного **x8** (нужны `IncidentCard` с f15-чипом и
 > `Metrics.tsx` с f21-панелью — точки вставки f25). `b28`→`b29` — последовательно в одном окне

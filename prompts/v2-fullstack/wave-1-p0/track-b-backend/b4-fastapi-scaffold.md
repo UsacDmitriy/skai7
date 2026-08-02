@@ -1,7 +1,7 @@
 # b4 · FastAPI-скелет, config, DuckDB-подключение
 
 > Трек **Backend/Data**. Против `00-CONTRACT.md` §0/§3. **Владеет:**
-> **Модель:** 🟢 Qwen 3.7 max — механическая транскрипция против точной спеки; гейт ловит ошибку.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — механическая транскрипция против точной спеки; гейт ловит ошибку.
 > `api/main.py`, `api/core/config.py`, `api/core/duckdb_conn.py`, `api/requirements.txt`, `api/__init__.py` (+ `api/core/__init__.py`).
 > Параллельно с b1/b2/b3.
 

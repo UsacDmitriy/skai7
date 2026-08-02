@@ -1,7 +1,7 @@
 # f5 · Лента событий (`/`)
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §3 (схемы/эндпоинты) + §7.8 (AC «Лента событий»).
-> **Модель:** 🔵 Sonnet — детерминированная логика/вёрстка против контракта; гейт = секция Check.
+> **Исполнение:** bounded ClinePass package; role `worker`; route category `code`; exact route/model only from `tools/clinepass-mcp/models.env` — детерминированная логика/вёрстка против контракта; гейт = секция Check.
 > **Владеет:** `web/src/pages/EventsFeed.tsx`. Использует UI-примитивы d2 (`@/components`),
 > `RoleToggle` из d4 и API-клиент f2. Идея #4 «Лента событий». Иконки — `lucide-react`.
 

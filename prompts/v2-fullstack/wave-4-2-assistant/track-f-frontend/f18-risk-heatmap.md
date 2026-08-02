@@ -2,7 +2,7 @@
 
 > Трек **Frontend**. Против `00-CONTRACT.md` §8.3/§8.4. **Владеет:** **аддитивная** правка
 > `web/src/pages/Monitor.tsx`; использует d7 (`RiskHeatLayer`), `web/src/components/map/`, f2-клиент.
-> **Модель:** 🔴 Opus — интерактив карты + производительность + кросс-слой фильтры.
+> **Исполнение:** owner-only gate — Claude/Codex; ClinePass excluded from shared contracts, integration, deterministic acceptance, and commit — интерактив карты + производительность + кросс-слой фильтры.
 > **Волна 4.2**, окно 2 (web). Зависит от: d4/f6 (карта), d7 (`RiskHeatLayer`), `GET /api/zones` (b19).
 
 ## Цель
