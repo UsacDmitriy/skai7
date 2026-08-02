@@ -42,8 +42,9 @@
   before accepting it.
 - Recommended routes: `simple` for drafts/classification, `simple-structured` for
   strict structured extraction, `code` for isolated code/test proposals,
-  `synthesis` for broad synthesis, and `review` plus `review-secondary` for
-  independent or high-risk review.
+  `synthesis` for broad synthesis, and `review` for independent review. For a
+  high-risk panel, make two explicit calls: `review` (Kimi K3) and `synthesis`
+  (DeepSeek Pro); do not introduce an additional panel route.
 - A ClinePass prompt should contain `TASK`, `CONTEXT_REFS`, the minimum required
   `CONTEXT`, `OUTPUT_CONTRACT`, `CHECK`, and `STOP` conditions. Never send
   secrets, credentials, private raw datasets, or unnecessary repository dumps.

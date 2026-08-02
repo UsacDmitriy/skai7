@@ -36,7 +36,7 @@ CLINE_URL = os.getenv(
 )
 CLINE_TIMEOUT_SECONDS = float(os.getenv("CLINE_TIMEOUT_SECONDS", "600"))
 _SAFE_MODEL_PREFIX = "cline-pass/"
-_REQUIRED_ROUTES = {"simple", "simple-structured", "code", "synthesis", "review"}
+_CANONICAL_ROUTES = {"simple", "simple-structured", "code", "synthesis", "review"}
 _PRIVATE_KEY_PATTERN = re.compile(
     r"-----BEGIN(?: [A-Z0-9]+)* PRIVATE KEY-----.*?"
     r"-----END(?: [A-Z0-9]+)* PRIVATE KEY-----",
@@ -88,11 +88,17 @@ def load_model_registry(path: Path) -> tuple[dict[str, str], dict[str, str]]:
         raise ValueError("models.env does not define any CLINE_MODEL_* entries")
     if not routes:
         raise ValueError("models.env does not define any CLINE_ROUTE_* entries")
-    missing_routes = sorted(_REQUIRED_ROUTES - set(routes))
+    missing_routes = sorted(_CANONICAL_ROUTES - set(routes))
     if missing_routes:
         raise ValueError(
             "models.env is missing required canonical routes: "
             + ", ".join(missing_routes)
+        )
+    unexpected_routes = sorted(set(routes) - _CANONICAL_ROUTES)
+    if unexpected_routes:
+        raise ValueError(
+            "models.env defines noncanonical routes: "
+            + ", ".join(unexpected_routes)
         )
     missing_aliases = sorted(set(routes.values()) - set(models))
     if missing_aliases:

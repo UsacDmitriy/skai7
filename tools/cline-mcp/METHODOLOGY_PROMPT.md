@@ -42,8 +42,10 @@ Claude/Codex must verify every accepted result.
    - `simple-structured`: requirements or strict structured extraction;
    - `code`: isolated code/test proposals;
    - `synthesis`: broad synthesis over supplied context;
-   - `review`: independent review;
-   - `review-secondary`: second opinion for a high-risk review.
+   - `review`: independent review.
+
+   For a high-risk panel, make two explicit calls: `review` (Kimi K3) and
+   `synthesis` (DeepSeek Pro). Do not create a sixth route.
 4. Build self-contained prompts with these sections:
 
    ```text

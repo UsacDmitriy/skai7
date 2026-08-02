@@ -66,7 +66,10 @@ class ModelRegistryTests(unittest.TestCase):
         self.assertEqual(routes["code"], "kimi-code")
         self.assertEqual(routes["synthesis"], "deepseek-pro")
         self.assertEqual(routes["review"], "kimi-k3")
-        self.assertEqual(routes["review-secondary"], "deepseek-pro")
+        self.assertEqual(
+            set(routes),
+            {"simple", "simple-structured", "code", "synthesis", "review"},
+        )
         self.assertTrue(all(slug.startswith("cline-pass/") for slug in models.values()))
         self.assertTrue(all(alias in models for alias in routes.values()))
 
@@ -91,6 +94,23 @@ class ModelRegistryTests(unittest.TestCase):
             )
 
             with self.assertRaisesRegex(ValueError, "required canonical routes"):
+                self.server.load_model_registry(registry)
+
+    def test_registry_rejects_noncanonical_route(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            registry = Path(directory) / "models.env"
+            registry.write_text(
+                "CLINE_MODEL_MINIMAX=cline-pass/minimax-m3\n"
+                "CLINE_ROUTE_SIMPLE=minimax\n"
+                "CLINE_ROUTE_SIMPLE_STRUCTURED=minimax\n"
+                "CLINE_ROUTE_CODE=minimax\n"
+                "CLINE_ROUTE_SYNTHESIS=minimax\n"
+                "CLINE_ROUTE_REVIEW=minimax\n"
+                "CLINE_ROUTE_REVIEW_SECONDARY=minimax\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ValueError, "noncanonical routes"):
                 self.server.load_model_registry(registry)
 
     def test_server_source_has_no_versioned_model_slugs(self) -> None:
