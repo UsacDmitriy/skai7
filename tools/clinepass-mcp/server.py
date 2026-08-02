@@ -20,6 +20,7 @@ import json
 import os
 from pathlib import Path
 import re
+import sys
 from typing import Any
 
 import httpx
@@ -118,8 +119,8 @@ def _api_key() -> str:
     key = os.getenv("CLINE_API_KEY", "").strip()
     if not key:
         raise RuntimeError(
-            "CLINE_API_KEY is not set. Copy tools/cline-mcp/.env.example to "
-            "tools/cline-mcp/.env and add the project-scoped key."
+            "CLINE_API_KEY is not set. Copy tools/clinepass-mcp/.env.example to "
+            "tools/clinepass-mcp/.env and add the project-scoped key."
         )
     return key
 
@@ -143,6 +144,14 @@ def _purpose(prompt: str) -> str:
     return _prompt_field(prompt, "TASK", 240) or "unspecified"
 
 
+def _package_id(prompt: str) -> str:
+    return _prompt_field(prompt, "PACKAGE_ID", 120) or "atomic-unscoped"
+
+
+def _role(prompt: str) -> str:
+    return _prompt_field(prompt, "ROLE", 80) or "worker"
+
+
 def record_audit(
     *,
     model_alias: str,
@@ -161,6 +170,8 @@ def record_audit(
     _AUDIT_LEDGER.append(
         {
             "call": len(_AUDIT_LEDGER) + 1,
+            "package_id": _package_id(prompt),
+            "role": _role(prompt),
             "model": model_alias,
             "model_slug": model_slug,
             "purpose": task,
@@ -187,6 +198,12 @@ def reset_audit() -> str:
 
 
 @mcp.tool()
+def clinepass_audit_reset() -> str:
+    """Canonical alias for resetting the process-local task ledger."""
+    return reset_audit()
+
+
+@mcp.tool()
 def audit_report() -> str:
     """Return the final-answer delegation report as stable JSON."""
     return json.dumps(
@@ -194,6 +211,12 @@ def audit_report() -> str:
         ensure_ascii=False,
         sort_keys=True,
     )
+
+
+@mcp.tool()
+def clinepass_audit_report() -> str:
+    """Canonical alias for the stable task-scoped audit report."""
+    return audit_report()
 
 
 def _resolve_model(model: str) -> tuple[str, str]:
@@ -287,6 +310,59 @@ def configured_models() -> str:
     lines.append("routes:")
     lines.extend(f"  {route:<18} -> {alias}" for route, alias in ROUTES.items())
     return "\n".join(lines)
+
+
+@mcp.tool()
+def clinepass_config() -> str:
+    """Return secret-free bridge readiness and committed registry metadata."""
+    return configured_models()
+
+
+@mcp.tool()
+def clinepass_list_models() -> str:
+    """List live subscription models or report the committed registry fallback."""
+    try:
+        key = _api_key()
+    except RuntimeError as error:
+        return json.dumps(
+            {
+                "status": "registry_fallback",
+                "reason": str(error),
+                "models": sorted(MODELS),
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+
+    models_url = CLINE_URL.rsplit("/chat/completions", 1)[0] + "/models"
+    try:
+        with httpx.Client(timeout=CLINE_TIMEOUT_SECONDS) as client:
+            response = client.get(
+                models_url,
+                headers={"Authorization": f"Bearer {key}"},
+            )
+            response.raise_for_status()
+            envelope = response.json()
+        body = envelope.get("data", envelope)
+        items = body if isinstance(body, list) else body.get("data", [])
+        model_ids = sorted(
+            item.get("id", "") for item in items if isinstance(item, dict)
+        )
+        return json.dumps(
+            {"status": "live", "models": [item for item in model_ids if item]},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    except Exception as error:  # noqa: BLE001 - fallback is explicit MCP output
+        return json.dumps(
+            {
+                "status": "registry_fallback",
+                "reason": f"{type(error).__name__}: {error}",
+                "models": sorted(MODELS),
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
 
 
 @mcp.tool()
@@ -393,5 +469,46 @@ def ask_qwen(prompt: str, system: str | None = None, max_tokens: int = 4096) -> 
     return _ask("qwen", prompt, system, max_tokens)
 
 
+def selftest() -> int:
+    """Run deterministic registry and audit checks without a network request."""
+    if set(ROUTES) != _CANONICAL_ROUTES:
+        raise RuntimeError("canonical route set mismatch")
+    if any(alias not in MODELS for alias in ROUTES.values()):
+        raise RuntimeError("route references an unknown model alias")
+    if any(not slug.startswith(_SAFE_MODEL_PREFIX) for slug in MODELS.values()):
+        raise RuntimeError("model registry contains a non-subscription slug")
+
+    reset_audit()
+    alias = ROUTES["simple"]
+    record_audit(
+        model_alias=alias,
+        model_slug=MODELS[alias],
+        prompt=(
+            "PACKAGE_ID: selftest\n"
+            "ROLE: worker\n"
+            "TASK: verify audit metadata\n"
+            "CONTEXT_REFS: tools/clinepass-mcp/models.env"
+        ),
+        system=None,
+        max_tokens=1,
+        status="selftest",
+        finish_reason=None,
+        usage=None,
+        response_chars=0,
+    )
+    report = json.loads(audit_report())
+    if report["total_calls"] != 1:
+        raise RuntimeError("audit ledger self-test failed")
+    reset_audit()
+    print(
+        "selftest OK: "
+        f"models={len(MODELS)} routes={len(ROUTES)} "
+        f"api_key_present={bool(os.getenv('CLINE_API_KEY', '').strip())}"
+    )
+    return 0
+
+
 if __name__ == "__main__":
+    if "--selftest" in sys.argv[1:]:
+        raise SystemExit(selftest())
     mcp.run()

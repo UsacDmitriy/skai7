@@ -17,54 +17,70 @@
 
 ## Execution policy
 
-- Claude and Codex are the primary direct executors and orchestrators. They own
-  analysis, implementation, integration, safety decisions, and verification.
-- Use native Claude/Codex agents as much as practical. Delegate independent,
-  well-bounded work to them and run safe independent tracks in parallel. The
-  lead agent remains responsible for reconciling changes and testing the result.
-- Do not decompose work merely to send it through ClinePass. ClinePass is an
-  optional auxiliary layer for suitable simple, repetitive, high-volume, or
-  self-contained tasks when delegation provides a clear benefit.
+- Claude Opus and Codex Sol are the owners and orchestrators. They own
+  requirements, decomposition, shared contracts, permissions, security and
+  privacy gates, integration, deterministic verification, commits, and the
+  final response.
+- Maximize native Claude/Codex subagents for independent reads, isolated
+  non-overlapping write scopes, and fresh review. Give each subagent an exact
+  goal, owned paths, expected output, check, and stop condition; verify every
+  handoff before integration.
+- Routine repository reads, classification, transformation, draft code and
+  tests, and repetitive review default to small bounded ClinePass calls.
+- Direct owner implementation is limited to owner-only gates, high-judgement,
+  privacy/security/integration work, or a verified project-local bridge outage.
 - Keep secrets, destructive actions, permission-sensitive operations, final
   architecture decisions, repository integration, and acceptance verification
-  with Claude/Codex and their native agents.
+  with Claude/Codex. This development policy applies to `skai_7` only; do not
+  apply it to SKAI requirements or system-analysis repositories.
 
 ## ClinePass policy
 
-- The project bridge is `tools/cline-mcp/server.py`.
+- The project bridge is `tools/clinepass-mcp/server.py`.
 - The complete model registry and route selection live only in the committed
-  `tools/cline-mcp/models.env`. Never hardcode model versions in agent files,
+  `tools/clinepass-mcp/models.env`. Never hardcode model versions or
+  route-to-model mappings in agent files,
   prompts, or bridge code.
 - Local connection settings and `CLINE_API_KEY` live only in the ignored
-  `tools/cline-mcp/.env`; never commit or print secrets.
-- At the start of a user task, call `reset_audit()` if the ClinePass bridge is
-  available. Use `ask_route()` for policy routes and verify every useful result
-  before accepting it.
-- Recommended routes: `simple` for drafts/classification, `simple-structured` for
-  strict structured extraction, `code` for isolated code/test proposals,
-  `synthesis` for broad synthesis, and `review` for independent review. For a
-  high-risk panel, make two explicit calls: `review` (Kimi K3) and `synthesis`
-  (DeepSeek Pro); do not introduce an additional panel route.
-- A ClinePass prompt should contain `TASK`, `CONTEXT_REFS`, the minimum required
-  `CONTEXT`, `OUTPUT_CONTRACT`, `CHECK`, and `STOP` conditions. Never send
-  secrets, credentials, private raw datasets, or unnecessary repository dumps.
+  `tools/clinepass-mcp/.env`; never commit or print secrets.
+- Phase 0 is mandatory before every implementation wave. The owner creates or
+  verifies the project-scoped bridge files, Claude and Codex registration,
+  unit tests, selftest, JSON/TOML parsing, MCP `initialize` and `tools/list`,
+  `clinepass_list_models` with model-registry fallback,
+  `clinepass_audit_reset`/`clinepass_audit_report`, and the privacy boundary.
+  Phase 0 configuration, credentials, and client registration are owner-only.
+- At the start of a user task, call `clinepass_audit_reset` if the ClinePass
+  bridge is available. Use the route-based ask tool for policy routes and
+  verify every useful result before accepting it.
+- Documents may name route categories, but every route, alias, and exact model
+  slug must be resolved at runtime only from `models.env`.
+- A ClinePass prompt contains `PACKAGE_ID`, `ROLE`, `TASK`, `CONTEXT_REFS`, the
+  minimum required `CONTEXT`, `OUTPUT_CONTRACT`, `CHECK`, and `STOP` conditions.
+  Never send secrets, credentials, private raw datasets, or unnecessary
+  repository dumps.
+- A non-trivial routine package uses separate audited calls sharing one
+  `package_id`: planner, two or more independent workers, reviewer, and
+  synthesizer. A ClinePass chat completion cannot spawn native agents or call
+  MCP tools; never simulate these roles in one completion. An atomic task may
+  use one worker call followed by owner verification.
 - ClinePass failure never permits a silent fallback or an unverified result.
-  Report the failure and continue directly only when Claude/Codex can safely
-  complete and verify the task.
+  Report the failure and continue directly only as a documented bridge outage
+  when Claude/Codex can safely complete and verify the task.
 
 ## Mandatory final report
 
 Every final Claude/Codex response must include a `ClinePass delegation report`.
-Use `audit_report()` as the factual source when calls were made. Report total
-calls and, for each call, its model, purpose/instruction preview, prompt size or
-hash, token limit, status, finish reason, and usage when available. Redact
+Use `clinepass_audit_report` as the factual source when calls were made. Report total
+calls, including failures and retries, and for each call its `package_id`, role,
+model, bounded purpose/instruction preview, prompt size or hash, token limit,
+status, finish reason, and usage when available. Redact
 secret-like values. The audit preview may contain only redacted `TASK` and
 `CONTEXT_REFS`; raw `CONTEXT`, system prompts, credentials, and private-key data
 must never be retained in the ledger.
 
 If there were no ClinePass calls, explicitly report `Total calls: 0` and the
-reason, for example: direct Claude/Codex work with native agents was sufficient,
-or the task was unsuitable for external delegation. Never invent calls.
+exceptional reason: owner-only gate, privacy restriction, or verified bridge
+outage. Never invent calls. Report native-agent work separately.
 
 ## Verification
 

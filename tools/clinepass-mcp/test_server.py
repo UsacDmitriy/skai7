@@ -161,6 +161,8 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(report["total_calls"], 1)
         call = report["calls"][0]
         self.assertEqual(call["model"], "minimax")
+        self.assertEqual(call["package_id"], "atomic-unscoped")
+        self.assertEqual(call["role"], "worker")
         self.assertEqual(call["purpose"], "classify input")
         self.assertEqual(call["context_refs"], "src/input.json")
         self.assertEqual(
@@ -174,6 +176,56 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(call["finish_reason"], "stop")
         self.assertNotIn("top-secret", json.dumps(report))
         self.assertNotIn("raw-private-context", json.dumps(report))
+
+    def test_audit_records_package_and_role_without_context(self) -> None:
+        prompt = (
+            "PACKAGE_ID: skai7-policy-20260802\n"
+            "ROLE: reviewer\n"
+            "TASK: review policy\n"
+            "CONTEXT_REFS: AGENTS.md\n"
+            "CONTEXT: private-review-input"
+        )
+        self.server.record_audit(
+            model_alias="kimi-k3",
+            model_slug="cline-pass/kimi-k3",
+            prompt=prompt,
+            system=None,
+            max_tokens=500,
+            status="ok",
+            finish_reason="stop",
+            usage=None,
+            response_chars=10,
+        )
+
+        report = json.loads(self.server.audit_report())
+        call = report["calls"][0]
+        self.assertEqual(call["package_id"], "skai7-policy-20260802")
+        self.assertEqual(call["role"], "reviewer")
+        self.assertNotIn("private-review-input", json.dumps(report))
+
+    def test_canonical_audit_aliases_share_one_ledger(self) -> None:
+        self.server.clinepass_audit_reset()
+        self.server.record_audit(
+            model_alias="minimax",
+            model_slug="cline-pass/minimax-m3",
+            prompt="TASK: draft",
+            system=None,
+            max_tokens=100,
+            status="error",
+            finish_reason=None,
+            usage=None,
+            response_chars=0,
+        )
+
+        report = json.loads(self.server.clinepass_audit_report())
+        self.assertEqual(report["total_calls"], 1)
+
+    def test_list_models_reports_registry_fallback_without_key(self) -> None:
+        with mock.patch.dict("os.environ", {}, clear=True):
+            result = json.loads(self.server.clinepass_list_models())
+
+        self.assertEqual(result["status"], "registry_fallback")
+        self.assertIn("kimi-k3", result["models"])
 
     def test_redact_handles_bearer_uri_client_secret_and_private_key(self) -> None:
         raw = (

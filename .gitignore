@@ -58,5 +58,7 @@ skai7_clean/
 # OpenRouter MCP secrets
 tools/openrouter-mcp/.env
 
-# Cline MCP secrets
+# ClinePass MCP secrets
+tools/clinepass-mcp/.env
+# Keep a pre-migration local key ignored until the owner removes or relocates it.
 tools/cline-mcp/.env

@@ -1,0 +1,6 @@
+# Merge only this ClinePass stanza into the local, untracked .codex/config.toml.
+# Do not replace existing project configuration or put credentials in this file.
+
+[mcp_servers.clinepass]
+command = "uv"
+args = ["run", "--script", "tools/clinepass-mcp/server.py"]

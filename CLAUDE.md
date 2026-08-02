@@ -2,7 +2,8 @@
 
 # Claude Code Notes
 
-Work directly as the lead executor. Use native Claude agents aggressively for
-independent repository work and parallel verification, while keeping integration
-and final acceptance in the lead context. ClinePass is optional auxiliary
-capacity under the policy in `AGENTS.md`, not a mandatory decomposition layer.
+Inherit the owner-orchestrator, native-subagent, mandatory Phase 0, and separate
+audited ClinePass-call protocol from `AGENTS.md`. Claude retains shared contracts,
+permissions, privacy and security gates, integration, deterministic acceptance,
+commits, and the final response. Routine bounded work defaults to ClinePass;
+native Claude agents cover independent repository scopes and fresh review.
