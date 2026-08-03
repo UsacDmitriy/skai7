@@ -149,9 +149,10 @@ class ModelRegistryTests(unittest.TestCase):
     def test_registry_rejects_duplicate_slugs(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             registry = Path(directory) / "models.env"
+            shared_slug = self.server.MODELS["kimi-k3"]
             registry.write_text(
-                "CLINE_MODEL_KIMI=cline-pass/kimi-k3\n"
-                "CLINE_MODEL_KIMI_K3=cline-pass/kimi-k3\n"
+                f"CLINE_MODEL_KIMI={shared_slug}\n"
+                f"CLINE_MODEL_KIMI_K3={shared_slug}\n"
                 "CLINE_ROUTE_SIMPLE=kimi\n"
                 "CLINE_ROUTE_SIMPLE_STRUCTURED=kimi\n"
                 "CLINE_ROUTE_CODE=kimi\n"
