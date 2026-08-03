@@ -32,10 +32,15 @@ into SKAI requirements or system-analysis repositories.
    `tools/clinepass-mcp/models.env`. Do not duplicate mappings in documentation.
 4. Every registered model must retain the `cline-pass/` prefix. The bridge
    rejects unsafe usage-billing slugs.
-5. Run unit tests, `server.py --selftest`, JSON/TOML parsing, MCP `initialize`
+5. Only the Kimi, DeepSeek, Qwen and GLM model families are permitted. The bridge
+   rejects any other registered alias or slug, and an unknown or disallowed alias
+   or route fails closed without a silent fallback. A newly announced model,
+   including Qwen3.8, enters the registry only after a successful live ClinePass
+   availability check.
+6. Run unit tests, `server.py --selftest`, JSON/TOML parsing, MCP `initialize`
    and `tools/list`, `clinepass_config`, audit reset/report, and
    `clinepass_list_models`. Record registry fallback and outages.
-6. Reconnect the MCP process after changing `server.py`, `models.env`, or
+7. Reconnect the MCP process after changing `server.py`, `models.env`, or
    `.env`, because configuration is loaded at process start.
 
 Phase 0, credentials, and client configuration cannot be delegated to ClinePass.

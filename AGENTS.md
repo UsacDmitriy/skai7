@@ -41,6 +41,11 @@
   `tools/clinepass-mcp/models.env`. Never hardcode model versions or
   route-to-model mappings in agent files,
   prompts, or bridge code.
+- ClinePass may use only the Kimi, DeepSeek, Qwen and GLM model families. The
+  bridge rejects any other registered family, and an unknown or disallowed alias
+  or route fails closed without a silent fallback. A newly announced model,
+  including Qwen3.8, enters the registry only after a successful live ClinePass
+  availability check.
 - Local connection settings and `CLINE_API_KEY` live only in the ignored
   `tools/clinepass-mcp/.env`; never commit or print secrets.
 - Phase 0 is mandatory before every implementation wave. The owner creates or

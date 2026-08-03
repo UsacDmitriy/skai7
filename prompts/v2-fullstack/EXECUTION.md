@@ -29,6 +29,10 @@ reviewer → synthesizer. Один chat completion не может создав�
 симуляция нескольких ролей одним prompt запрещена. Все route-to-model mappings разрешаются только
 из `tools/clinepass-mcp/models.env`.
 
+ClinePass использует только семейства моделей Kimi, DeepSeek, Qwen и GLM. Неизвестный или
+запрещённый alias/route завершается ошибкой без скрытого fallback; новая объявленная модель
+(включая Qwen3.8) добавляется в реестр только после успешной live-проверки доступности.
+
 Эта политика относится только к development-репозиторию `skai_7`; её нельзя переносить в SKAI
 requirements/system-analysis repositories.
 

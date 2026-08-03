@@ -9,9 +9,12 @@
 """FastMCP bridge to the ClinePass chat-completions API.
 
 Model slugs and task routes are loaded exclusively from the committed
-``models.env`` registry. Secrets and connection overrides stay in the ignored
-``.env`` file. The in-memory audit ledger belongs to the current MCP process;
-reset it at the beginning of each user task and report it in the final answer.
+``models.env`` registry. Only the Kimi, DeepSeek, Qwen and GLM model families are
+permitted; an alias or slug outside that allowlist fails closed at load time and
+an unknown alias or route fails closed at call time, with no silent fallback.
+Secrets and connection overrides stay in the ignored ``.env`` file. The in-memory
+audit ledger belongs to the current MCP process; reset it at the beginning of each
+user task and report it in the final answer.
 """
 from __future__ import annotations
 
@@ -38,6 +41,10 @@ CLINE_URL = os.getenv(
 CLINE_TIMEOUT_SECONDS = float(os.getenv("CLINE_TIMEOUT_SECONDS", "600"))
 _SAFE_MODEL_PREFIX = "cline-pass/"
 _CANONICAL_ROUTES = {"simple", "simple-structured", "code", "synthesis", "review"}
+ALLOWED_MODEL_FAMILIES = ("kimi", "deepseek", "qwen", "glm")
+_ALLOWED_SLUG_PATTERN = re.compile(
+    r"^(kimi|deepseek|qwen|glm)(?:[-0-9.]|$)"
+)
 _PRIVATE_KEY_PATTERN = re.compile(
     r"-----BEGIN(?: [A-Z0-9]+)* PRIVATE KEY-----.*?"
     r"-----END(?: [A-Z0-9]+)* PRIVATE KEY-----",
@@ -74,10 +81,6 @@ def load_model_registry(path: Path) -> tuple[dict[str, str], dict[str, str]]:
         value = value.strip("'\"")
         if key.startswith("CLINE_MODEL_"):
             alias = key.removeprefix("CLINE_MODEL_").lower().replace("_", "-")
-            if not value.startswith(_SAFE_MODEL_PREFIX):
-                raise ValueError(
-                    f"Model {alias!r} must use the {_SAFE_MODEL_PREFIX!r} prefix"
-                )
             models[alias] = value
         elif key.startswith("CLINE_ROUTE_"):
             route = key.removeprefix("CLINE_ROUTE_").lower().replace("_", "-")
@@ -87,6 +90,39 @@ def load_model_registry(path: Path) -> tuple[dict[str, str], dict[str, str]]:
 
     if not models:
         raise ValueError("models.env does not define any CLINE_MODEL_* entries")
+    unsupported_aliases = sorted(
+        alias
+        for alias in models
+        if not any(
+            alias == family or alias.startswith(f"{family}-")
+            for family in ALLOWED_MODEL_FAMILIES
+        )
+    )
+    if unsupported_aliases:
+        raise ValueError(
+            "models.env defines unsupported model aliases outside the family "
+            f"allowlist: {unsupported_aliases}"
+        )
+    unsafe_slugs = sorted(
+        alias for alias, slug in models.items()
+        if not slug.startswith(_SAFE_MODEL_PREFIX)
+    )
+    if unsafe_slugs:
+        raise ValueError(
+            f"Models {unsafe_slugs} must use the {_SAFE_MODEL_PREFIX!r} prefix"
+        )
+    unsupported_slugs = sorted(
+        slug
+        for slug in models.values()
+        if not _ALLOWED_SLUG_PATTERN.match(slug.removeprefix(_SAFE_MODEL_PREFIX))
+    )
+    if unsupported_slugs:
+        raise ValueError(
+            "models.env defines unsupported model slugs outside the family "
+            f"allowlist: {unsupported_slugs}"
+        )
+    if len(set(models.values())) != len(models):
+        raise ValueError("models.env contains duplicate model slugs")
     if not routes:
         raise ValueError("models.env does not define any CLINE_ROUTE_* entries")
     missing_routes = sorted(_CANONICAL_ROUTES - set(routes))
@@ -431,28 +467,6 @@ def ask_deepseek_flash(
 ) -> str:
     """Call the configured DeepSeek flash model."""
     return _ask("deepseek-flash", prompt, system, max_tokens)
-
-
-@mcp.tool()
-def ask_minimax(
-    prompt: str, system: str | None = None, max_tokens: int = 4096
-) -> str:
-    """Call the configured MiniMax model."""
-    return _ask("minimax", prompt, system, max_tokens)
-
-
-@mcp.tool()
-def ask_mimo(prompt: str, system: str | None = None, max_tokens: int = 4096) -> str:
-    """Call the configured MiMo model."""
-    return _ask("mimo", prompt, system, max_tokens)
-
-
-@mcp.tool()
-def ask_mimo_pro(
-    prompt: str, system: str | None = None, max_tokens: int = 4096
-) -> str:
-    """Call the configured MiMo Pro model."""
-    return _ask("mimo-pro", prompt, system, max_tokens)
 
 
 @mcp.tool()

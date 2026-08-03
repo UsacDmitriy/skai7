@@ -69,6 +69,14 @@ Do not overwrite an existing local Codex configuration. Merge only the
 Resolve every route, alias, and exact model slug at runtime only from `models.env`.
 This README does not define or duplicate a route-to-model mapping.
 
+## Model family allowlist
+
+Only the Kimi, DeepSeek, Qwen and GLM families are permitted. The registry loader
+rejects an alias or slug outside that allowlist at process start, and an unknown or
+disallowed alias or route fails closed at call time with no silent fallback to
+another model or provider. A newly announced model, including Qwen3.8, enters
+`models.env` only after a successful live ClinePass availability check.
+
 ## Package protocol
 
 One call owns one bounded objective:

@@ -25,6 +25,11 @@
 5. Зафиксировать privacy boundary: ClinePass не получает credentials, private/production
    data, private media, unrestricted raw corpora, privileged configuration или
    unrestricted repository context. Нельзя молча переключаться на другого provider.
+6. Проверить model family allowlist: разрешены только семейства Kimi, DeepSeek, Qwen и
+   GLM. Любой другой alias или slug отклоняется при загрузке registry, неизвестный или
+   запрещённый alias/route падает с ошибкой без скрытого fallback, а новая объявленная
+   модель (включая Qwen3.8) попадает в `models.env` только после успешной live-проверки
+   доступности ClinePass.
 
 Phase 0, client registration, permissions, shared contracts, integration, deterministic
 acceptance, commits и final response не делегируются ClinePass. Implementation не
