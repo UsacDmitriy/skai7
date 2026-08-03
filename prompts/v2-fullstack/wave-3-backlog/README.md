@@ -21,7 +21,8 @@ wave-3-backlog/
 │   ├── w3-6 fuel-domain               /api/fuel — сверка ЗИС vs карты (снять 501) §9
 │   ├── w3-7 sensors-domain            /api/sensors — CAN−GPS разрыв (снять 501) §9
 │   ├── w3-8 navigation-list           /api/navigation — список проблем → вход в РЭБ §9
-│   └── w3-9 fleet-health-view 🔴      v_fleet_health (объединение 17 ТС) + /api/fleet-health §9
+│   └── w3-9 fleet-health-view owner-only · Claude/Codex
+│                                      v_fleet_health (объединение 17 ТС) + /api/fleet-health §9
 │   └── w3-16 ai-foundation 🆅4        ML-deps + data/ai кэш + ai_metric_events DDL (подготовка В.4)
 ├── track-f-frontend/  🪟 Окно 2 · feat/web — web/src
 │   ├── w3-10 api-layer                types/client/fixtures fleet-health (+fix getReb фикстуры)
@@ -55,7 +56,7 @@ wave-3-backlog/
   w3-6 fuel        ┐│        w3-13 signposting ┘  собой)        w3-15 fleet-front ┘  после доменов)
   w3-7 sensors     ├┘∥
   w3-8 navigation  ┘  (w3-9 после w3-6/7/8)
-  w3-9 fleet-view 🔴
+  w3-9 fleet-view owner-only · Claude/Codex
         └──────────────────────────────┬──────────────────────────────────┘
                                         ▼
                   🧪 БАРЬЕР 3 · barrier-3-hardening/x5-wave3-hardening
@@ -94,7 +95,7 @@ wave-3-backlog/
 | W3-6 | [`track-b-backend/w3-6-fuel-domain.md`](track-b-backend/w3-6-fuel-domain.md) — домен `fuel` (`v_fuel` + сервис + роутер), снять 501 · §9 | b / данные | Высокий |
 | W3-7 | [`track-b-backend/w3-7-sensors-domain.md`](track-b-backend/w3-7-sensors-domain.md) — домен `sensors` (CAN−GPS, спарклайн; без 959k graph_points) · §9 | b / данные | Высокий |
 | W3-8 | [`track-b-backend/w3-8-navigation-list.md`](track-b-backend/w3-8-navigation-list.md) — `navigation`-список → вход в существующий `/api/reb` · §9 | b / данные | Высокий |
-| W3-9 | [`track-b-backend/w3-9-fleet-health-view.md`](track-b-backend/w3-9-fleet-health-view.md) — 🔴 `v_fleet_health` (объединение 17 ТС) + `/api/fleet-health` · §9 | b / данные | Высокий |
+| W3-9 | [`track-b-backend/w3-9-fleet-health-view.md`](track-b-backend/w3-9-fleet-health-view.md) — owner-only · Claude/Codex; `v_fleet_health` (объединение 17 ТС) + `/api/fleet-health` · §9 | b / данные | Высокий |
 | W3-10 | [`track-f-frontend/w3-10-api-layer.md`](track-f-frontend/w3-10-api-layer.md) — types/client/fixtures fleet-health (+fix `getReb`/`getVehicleReport` фикстуры) · §9 | f2/f3 | Высокий |
 | W3-11 | [`track-f-frontend/w3-11-fleet-health-hub.md`](track-f-frontend/w3-11-fleet-health-hub.md) — `FleetHealth` хаб + `FuelCard`/`SensorCard`/`NavProblemList` · §9 | f | Высокий |
 | W3-12 | [`track-f-frontend/w3-12-cross-wiring.md`](track-f-frontend/w3-12-cross-wiring.md) — кросс-врезки: incident↔trip↔tickets, report→incident, feed→trip · §9.4 | f | Высокий |

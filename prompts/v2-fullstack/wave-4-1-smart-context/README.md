@@ -6,7 +6,7 @@
 
 | Окно | Промпты (порядок) | Исполнение |
 |---|---|---|
-| 1 Backend | `b24` ai-governance (флаги/latency/кэш — **runtime-основа** для всех AI-фич, §8.6) → `b16` scene-context (предрасчёт VLM) → `b17` weather-crosscheck → enrichment ; `b18` risk-forecast ∥ `b19` geozone-risk ∥ `b20` fatigue-chain | b24/b17/b20 🔵 · b16/b18/b19 🔴 |
+| 1 Backend | `b24` ai-governance (флаги/latency/кэш — **runtime-основа** для всех AI-фич, §8.6) → `b16` scene-context (предрасчёт VLM) → `b17` weather-crosscheck → enrichment ; `b18` risk-forecast ∥ `b19` geozone-risk ∥ `b20` fatigue-chain | b24/b17/b20: bounded ClinePass · worker · `code`; b16/b18/b19: owner-only · Claude/Codex |
 | 2 Web | `d7` ai-primitives (`SceneContextChip`/`DiscrepancyBadge`/`ForecastSparkline`/`RiskHeatLayer`) | bounded ClinePass · worker · `code` |
 | 3 Tests | `per-feature/`: `tu-scene` ∥ `tu-weather` ∥ `tu-forecast` ∥ `tu-zones` ∥ `tu-fatigue` | bounded ClinePass · worker · `code` |
 

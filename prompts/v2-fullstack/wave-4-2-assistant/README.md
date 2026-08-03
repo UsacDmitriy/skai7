@@ -5,8 +5,8 @@
 
 | Окно | Промпты | Исполнение |
 |---|---|---|
-| 1 Backend | `b21` copilot (tool-use, RU/EN) ∥ `b22` narrative-reports ∥ `b23` sabotage-verdict | b21 🔴 · b22/b23 🔵 |
-| 2 Web | `f15` scene-card → `f16` forecast-report ; `f17` copilot-ui ∥ `f18` risk-heatmap ∥ `f19` sabotage-verdict | f17/f18 🔴 · f15/f16/f19 🔵 |
+| 1 Backend | `b21` copilot (tool-use, RU/EN) ∥ `b22` narrative-reports ∥ `b23` sabotage-verdict | b21: owner-only · Claude/Codex; b22/b23: bounded ClinePass · worker · `code` |
+| 2 Web | `f15` scene-card → `f16` forecast-report ; `f17` copilot-ui ∥ `f18` risk-heatmap ∥ `f19` sabotage-verdict | f17/f18: owner-only · Claude/Codex; f15/f16/f19: bounded ClinePass · worker · `code` |
 | 3 Tests | `per-feature/tu-copilot` (фолбэк) ∥ `t-wave4-frontend` (vitest AI-компоненты) | bounded ClinePass · worker · `code` |
 
 Дальше → **Барьер 4.2** (`../barrier-4-2-assistant/x7-e2e-wave4.md`) — e2e ассистента + регресс 4.1.
