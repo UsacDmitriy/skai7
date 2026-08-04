@@ -77,6 +77,13 @@ disallowed alias or route fails closed at call time with no silent fallback to
 another model or provider. A newly announced model, including Qwen3.8, enters
 `models.env` only after a successful live ClinePass availability check.
 
+Qwen3.8 availability check, 2026-08-04: `cline-pass/qwen3.8-max` answered a bounded live request
+successfully, while `cline-pass/qwen3.8-plus` and the bare `cline-pass/qwen3.8` both returned HTTP 404
+"model not found". `GET /models` was unavailable, so these verdicts come from per-slug live requests,
+not from a catalogue listing. The slugs above are probe inputs, not registry entries: the registry
+deliberately stays at eight models, `cline-pass/qwen3.8-max` is a verified candidate rather than a
+registered model, and registering it remains a separate owner decision.
+
 ## Package protocol
 
 One call owns one bounded objective:
