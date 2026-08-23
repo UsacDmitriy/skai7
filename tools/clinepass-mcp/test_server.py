@@ -19,6 +19,7 @@ EXPECTED_MODEL_ALIASES = {
     "deepseek-pro",
     "deepseek-flash",
     "glm",
+    "glm-53",
     "qwen-max",
     "qwen",
     "qwen-38-max",
@@ -104,7 +105,7 @@ class ModelRegistryTests(unittest.TestCase):
 
         self.assertEqual(set(models), EXPECTED_MODEL_ALIASES)
         self.assertEqual(routes, EXPECTED_ROUTES)
-        self.assertEqual(len(models), 9)
+        self.assertEqual(len(models), 10)
         self.assertEqual(len(routes), 5)
         self.assertTrue(all(slug.startswith("cline-pass/") for slug in models.values()))
         self.assertTrue(all(alias in models for alias in routes.values()))
@@ -276,18 +277,18 @@ class LiveToolMetadataTests(unittest.TestCase):
         for forbidden in ("optional delegation", "optionally", "if available"):
             self.assertNotIn(forbidden, descriptions)
 
-    def test_config_reports_nine_models_and_five_routes(self) -> None:
+    def test_config_reports_ten_models_and_five_routes(self) -> None:
         report = self.server.clinepass_config()
 
         model_lines = [
             line for line in report.splitlines() if line.startswith("  ") and "->" in line
         ]
-        self.assertEqual(len(model_lines), 14)
+        self.assertEqual(len(model_lines), 15)
         for alias in EXPECTED_MODEL_ALIASES:
             self.assertIn(alias, report)
         for route in EXPECTED_ROUTES:
             self.assertIn(route, report)
-        self.assertEqual(len(self.server.MODELS), 9)
+        self.assertEqual(len(self.server.MODELS), 10)
         self.assertEqual(len(self.server.ROUTES), 5)
 
 

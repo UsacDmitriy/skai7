@@ -80,9 +80,23 @@ another model or provider. A newly announced model, including Qwen3.8, enters
 Qwen3.8 availability check, 2026-08-04: `cline-pass/qwen3.8-max` answered a bounded live request
 successfully and is now registered under the alias `qwen-38-max`, while `cline-pass/qwen3.8-plus` and
 the bare `cline-pass/qwen3.8` both returned HTTP 404 "model not found". `GET /models` was unavailable,
-so those verdicts come from per-slug live requests, not from a catalogue listing. The registry
-therefore holds nine models; the five route defaults are unchanged and none of them maps to Qwen, so
-`qwen-38-max` is reached by alias through the generic `ask` tool.
+so those verdicts come from per-slug live requests, not from a catalogue listing. The five route
+defaults are unchanged and none of them maps to Qwen, so `qwen-38-max` is reached by alias through
+the generic `ask` tool.
+
+GLM 5.3 availability check, 2026-08-21: `cline-pass/glm-5.3` answered a bounded live request
+successfully and is now registered under the alias `glm-53`, while `cline-pass/glm-5.3-air` and
+`cline-pass/glm-5.3-flash` both returned HTTP 404 "model not found". `GET /models` returned HTTP 404
+again, so these verdicts also come from per-slug live requests. The registry therefore holds ten
+models and the same five routes. The `glm` alias deliberately still resolves to `cline-pass/glm-5.2`
+so the `ask_glm` tool keeps its current behaviour; `glm-53` is reached by alias through the generic
+`ask` tool.
+
+Gemini 3.7 Flash verdict, 2026-08-21: not registered and not registrable under the current contract.
+Every probed `cline-pass/gemini-3.7*` slug returned HTTP 404, so the model is absent from the
+subscription pool. It does answer on the same gateway as `google/gemini-3.7-flash`, which is a
+usage-billing route. The bridge rejects it on two independent grounds: Gemini is outside the
+Kimi/DeepSeek/Qwen/GLM family allowlist, and every registry slug must carry the `cline-pass/` prefix.
 
 ## Package protocol
 
