@@ -13,3 +13,8 @@ disallowed aliases and routes fail closed without a silent fallback; a newly
 announced model, including Qwen3.8, is added only after a successful live
 availability check. Exact slugs and routes live only in
 `tools/clinepass-mcp/models.env`.
+
+Model routing (owner decision 2026-10-27): DeepSeek is the base —
+`deepseek-flash` is the primary subagent model, `deepseek-pro` handles more
+complex requests; `glm-53` may join frontend research and `glm-53-flash`
+takes simple frontend tasks. Details in `AGENTS.md`.

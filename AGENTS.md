@@ -57,6 +57,11 @@
 - At the start of a user task, call `clinepass_audit_reset` if the ClinePass
   bridge is available. Use the route-based ask tool for policy routes and
   verify every useful result before accepting it.
+- Model routing (owner decision 2026-10-27): DeepSeek is the base.
+  `deepseek-flash` is the primary agent model for subagents and routine
+  packages; `deepseek-pro` is for more complex requests. Frontend research may
+  also use `glm-53`; simple frontend tasks use `glm-53-flash`. Kimi K3 only on
+  explicit user request.
 - Documents may name route categories, but every route, alias, and exact model
   slug must be resolved at runtime only from `models.env`.
 - A ClinePass prompt contains `PACKAGE_ID`, `ROLE`, `TASK`, `CONTEXT_REFS`, the
